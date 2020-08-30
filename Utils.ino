@@ -464,7 +464,7 @@ float SimplexNoise(float x, float y, float z) {
   // Determine which simplex we're in
   int hi = u >= w ? u >= v ? 0 : 1 : v >= w ? 1 : 2;
   int lo = u < w ? u < v ? 0 : 1 : v < w ? 1 : 2;
-   
+  
   return k_fn(hi) + k_fn(3 - hi - lo) + k_fn(lo) + k_fn(0);
 }
 

@@ -38,8 +38,8 @@ int gameMode = 0;
 int pattern[3];
 int pattern_max[3] = {12, 12, 22};
 
-int screen_width = 128;
-int screen_height = 64;
+#define screen_width 127
+#define screen_height 63
 
 int knob1Click = 0;
 int knob2Click = 0;
@@ -81,9 +81,17 @@ int brightness_debounce = 0;
 
 //GAMES
 int playerX = 64;
-int playerY = 32;
+int playerY = 8;
+unsigned int fallios_score = 0;
+unsigned int fallios_score_top = 0;
+int motion = 0;
+int motionHistory = 0;
 byte wall[64];
 byte wallDistance[64];
+
+int tunnel_1[screen_height + 1];
+int tunnel_2[screen_height + 1];
+int tunnelWidth = screen_width / 2;
 
 /***********************************************************
   Simplex Noise Variable Declaration
@@ -149,42 +157,10 @@ int star_y[maxStars];
 int star_yy[maxStars];
 int star_z[maxStars];
 
+
 void setup()
 {
-
-  for (int i = 0; i < maxStars; i++)
-  {
-    star_x[i] = random(0, visualizer_x);
-    star_xx[i] = random(1, 4);
-    star_y[i] = random(0, visualizer_y);
-    star_yy[i] = random(1, 4);
-    star_z[i] = random(1, 4);
-  }
-
-  EEPROM.begin(100);
-
-  MSGEQ7.begin();
-
-  Serial.begin(9600);
-
-  u8g2.begin();
-
-  // SHOW LOGO
-  u8g2.setBitmapMode(true /* transparent*/);
-  u8g2.drawXBMP(32, 0, myBitmap_width, myBitmap_height, myBitmap);
-  u8g2.sendBuffer();
-  delay(1000);
-
-  FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
-  //FastLED.addLeds<LED_TYPE,DATA_PIN,CLK_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
-
-  // set master brightness control
-  FastLED.setBrightness(brightness);
-
-  pinMode(25, INPUT_PULLUP); //Knob 1 Click, internal Pull Up (button connects to ground)
-  pinMode(14, INPUT_PULLUP); //Knob 2 Click, internal Pull Up (button connects to ground)
-
-  pinMode(23, OUTPUT);
+  //Board Status LED Setup
 
   // setting PWM properties
   const int freq = 4000;
@@ -195,11 +171,56 @@ void setup()
   // configure LED PWM functionalitites
   ledcSetup(statusLED, freq, resolution);
 
-  // attach the channel to the GPIO to be controlled
+  //Set Pin to Output mode to send power to LED  
+  pinMode(23, OUTPUT);
+
+  //Attach the channel to the GPIO to be controlled
   ledcAttachPin(23, statusLED);
 
+  //Set the status LED to the lowest brightness
   ledcWrite(statusLED, 1);
-  //digitalWrite(37, HIGH);
+
+
+  //Seed variables
+  for (int i = 0; i < maxStars; i++)
+  {
+    star_x[i] = random(0, visualizer_x);
+    star_xx[i] = random(1, 4);
+    star_y[i] = random(0, visualizer_y);
+    star_yy[i] = random(1, 4);
+    star_z[i] = random(1, 4);
+  }
+
+  //reset game variables, will do this a better way later
+  fallios_reset();
+
+  //Sound library initialization
+  MSGEQ7.begin();
+
+  //For troubleshooting
+  Serial.begin(9600);
+
+  //Display library initialization
+  u8g2.begin();
+
+  //Show logo
+  u8g2.setBitmapMode(true /* transparent*/);
+  u8g2.drawXBMP(32, 0, myBitmap_width, myBitmap_height, myBitmap);
+  u8g2.sendBuffer();
+
+  //wait 1 second
+  delay(1000);
+
+  //FastLED Declation
+  FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+  //FastLED.addLeds<LED_TYPE,DATA_PIN,CLK_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+
+ 
+  //Button input configuration
+  pinMode(25, INPUT_PULLUP); //Knob 1 Click, internal Pull Up (button connects to ground)
+  pinMode(14, INPUT_PULLUP); //Knob 2 Click, internal Pull Up (button connects to ground)
+
+
   /* Load Save Settings
 
     Load variables from EEPROM
@@ -208,10 +229,18 @@ void setup()
     EEPROM may have been used or not at default
 
   --------------------*/
+  EEPROM.begin(100);
+
+  //EEPROM.write(20, 0);
+  //EEPROM.write(21, 0);
+  //EEPROM.commit();
+
+  unsigned int word = EEPROM.read(20) + EEPROM.read(21) * 256;
+
+  fallios_score_top = word;
+
   mode = EEPROM.read(0);
   brightness = EEPROM.read(1);
-
-  //brightness = 128;
 
   //Read the pattern setting for each mode
   for (int i = 0; i <= mode_max; i++)
@@ -230,6 +259,10 @@ void setup()
   {
     mode = 0;
   }
+
+  //Set master brightness control
+  FastLED.setBrightness(brightness);
+
 }
 
 void loop()

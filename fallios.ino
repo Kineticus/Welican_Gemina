@@ -20,10 +20,10 @@ void fallios()
         u8g2.drawPixel(tunnel_2[i-1], i-1);
     }
 
-    //Draw the plauer
+    //Draw the player
     u8g2.drawDisc(playerX, playerY, 2, U8G2_DRAW_ALL);
 
-    //increment simplex noise for tunnel generatioj
+    //increment simplex noise for tunnel generation
     tunnelGenerator += .015;
     motion = SimplexNoise(tunnelGenerator,yoffset,0) * 420;
 
@@ -45,7 +45,7 @@ void fallios()
         tunnel_1[screen_height] = 0;
     }
     
-    //Upper boundry check, can't go off screen to left, including current tunnel width
+    //Upper boundry check, can't go off screen to right, including current tunnel width
     if ((tunnel_1[screen_height] + tunnelWidth) > screen_width)
     {
         tunnel_1[screen_height] = screen_width - tunnelWidth;

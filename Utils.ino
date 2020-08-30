@@ -40,23 +40,40 @@ void updateEncoders()
 
   //Read knob 1 digital pin, button pulls pin low
   tempValue = digitalRead(knob1C);
+
+  //Is the button pulling the pin low and the debounce counter is at 0 (no recent button press) ?
   if ((tempValue==false) && (knob1Click_debounce==0)) 
   {
+    //if yes we should set a debounce variable
     knob1Click_debounce = 3;
+
+    //And set click for Knob 1 to Tru!
     knob1Click = 1;
-    if (knob2Click_debounce == 0)
+
+    //Are we running in normal mode? If not we can skip these checks
+    if (gameMode == 0)
     {
-      mode += 1;
-      saveTime = 100;
-      if (mode > mode_max)
+      //Check to see if the Brightness Knob (#2) is also held down
+      if (knob2Click_debounce == 0)
       {
-        mode = 0;
+        //It's not? Just advance the mode by once
+        mode += 1;
+
+        //Since we have changed the mode we should save it in a bit
+        saveTime = 100;
+
+        //Check to make sure we haven't gone over the maximum amount of modes
+        if (mode > mode_max)
+        {
+          //if we did go over let's roll mode back to 0
+          mode = 0;
+        }
+      } else
+      {
+        //brightness knob is clicked at the same time as the program knob?
+        setGameMode();
       }
-    } else
-    {
-      setGameMode();
     }
-    
   } 
   if ((tempValue==true) && (knob1Click_debounce>0))
   {

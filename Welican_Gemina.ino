@@ -36,6 +36,7 @@ int mode_max = 2;
 int gameMode = 0;
 
 int pattern[3];
+int pattern_temp = 0;
 int pattern_max[3] = {12, 12, 22};
 
 #define screen_width 127
@@ -76,7 +77,8 @@ int dvdBounce_y = random(0, 32);
 int dvdBounce_vx = 1;
 int dvdBounce_vy = 1;
 
-int brightness = 96;
+int brightness = 0;
+int brightness_temp = 0;
 int brightness_debounce = 0;
 
 //GAMES
@@ -92,6 +94,7 @@ byte wallDistance[64];
 int tunnel_1[screen_height + 1];
 int tunnel_2[screen_height + 1];
 int tunnelWidth = screen_width / 2;
+float tunnelGenerator = 0;
 
 /***********************************************************
   Simplex Noise Variable Declaration
@@ -190,9 +193,6 @@ void setup()
     star_yy[i] = random(1, 4);
     star_z[i] = random(1, 4);
   }
-
-  //reset game variables, will do this a better way later
-  fallios_reset();
 
   //Sound library initialization
   MSGEQ7.begin();

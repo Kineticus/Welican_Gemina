@@ -208,6 +208,25 @@ void updateEncoders()
 void setGameMode()
 {
   gameMode = 1;
+  fallios_reset();
+  brightness_temp = brightness;
+  pattern_temp = pattern[mode];
+}
+
+void endGameMode()
+{
+  //Run update encoder to sync encoders
+  updateEncoders();
+  
+  //Set values to right when game mode started in case they got dorked with
+  brightness = brightness_temp;
+  pattern[mode] = pattern_temp;
+
+  //Don't want to see brightness indicator when we leave
+  brightness_debounce = 0;
+
+  //Set gameMode (like Run mode) back to default, 0
+  gameMode = 0;
 }
 
 void showBrightnessDisplay() 

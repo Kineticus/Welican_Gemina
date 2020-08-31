@@ -154,7 +154,6 @@ char function_name_out_str[20];
 
 int testValue = 30;
 
-
 #define maxStars 32
 
 int star_x[maxStars];
@@ -162,7 +161,6 @@ int star_xx[maxStars];
 int star_y[maxStars];
 int star_yy[maxStars];
 int star_z[maxStars];
-
 
 void setup()
 {
@@ -176,7 +174,7 @@ void setup()
   // configure LED PWM functionalitites
   ledcSetup(statusLED, freq, resolution);
 
-  //Set Pin to Output mode to send power to LED  
+  //Set Pin to Output mode to send power to LED
   pinMode(23, OUTPUT);
 
   //Attach the channel to the GPIO to be controlled
@@ -184,7 +182,6 @@ void setup()
 
   //Set the status LED to the lowest brightness
   ledcWrite(statusLED, 100);
-
 
   //Seed variables
   for (int i = 0; i < maxStars; i++)
@@ -217,11 +214,9 @@ void setup()
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   //FastLED.addLeds<LED_TYPE,DATA_PIN,CLK_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 
- 
   //Button input configuration
   pinMode(25, INPUT_PULLUP); //Knob 1 Click, internal Pull Up (button connects to ground)
   pinMode(14, INPUT_PULLUP); //Knob 2 Click, internal Pull Up (button connects to ground)
-
 
   /* Load Save Settings
 
@@ -264,7 +259,6 @@ void setup()
 
   //Set master brightness control
   FastLED.setBrightness(brightness);
-
 }
 
 void loop()
@@ -287,7 +281,7 @@ void loop()
     drawTop();
   }
 
-  //Update varivables compared to current encoder location
+  //Update variables compared to current encoder location
   updateEncoders();
 
   //Write buffer to display
@@ -296,17 +290,18 @@ void loop()
   //future toggle of breathing indicator vs static
   if (breathing == 1)
   {
-    breath = (exp(sin(millis()/4200.0*PI)) - 0.36787944)*108.0;
+    breath = (exp(sin(millis() / 4200.0 * PI)) - 0.36787944) * 108.0;
     breath = breath / 2;
     if (breath <= 4)
     {
       breath = 4;
     }
-  } else
+  }
+  else
   {
     breath = 4;
   }
-  
+
   ledcWrite(statusLED, breath);
 
   testValue += MSGEQ7.get(0) / 16;
@@ -318,16 +313,13 @@ void loop()
   switch (mode)
   {
   case 0:
-    categoryName = "BASIC";
-    basic_mode();
+    basic_mode(pattern[mode]);
     break;
   case 1:
-    categoryName = "MUSIC";
-    music_mode();
+    music_mode(pattern[mode]);
     break;
   case 2:
-    categoryName = "CHILL";
-    chill_mode();
+    chill_mode(pattern[mode]);
     break;
   }
 
@@ -339,34 +331,6 @@ void loop()
   EVERY_N_MILLISECONDS(200) { gHue++; } // slowly cycle the "base color" through the rainbow
 }
 
-void u8g2_disc_circle(uint8_t a)
-{
-  //u8g2.drawStr( 0, 0, "drawDisc");
-  //u8g2.drawDisc(10,18,9);
-  //u8g2.drawDisc(24+a,16,7);
-  //u8g2.drawStr( 0, 30, "drawCircle");
-  u8g2.drawCircle(10, 18 + 30, 9);
-  u8g2.drawCircle(24 + a, 16 + 30, 7);
-}
-void u8g2_bitmap_overlay(uint8_t a)
-{
-  uint8_t frame_size = 28;
-
-  //  u8g2.drawStr(0, frame_size + 12, "Solid / transparent");
-  //  u8g2.setBitmapMode(false /* solid */);
-  //  u8g2.drawFrame(0, 10, frame_size, frame_size);
-  //  u8g2.drawXBMP(2, 12, cross_width, cross_height, cross_bits);
-  //  if(a & 4)
-  //    u8g2.drawXBMP(7, 17, cross_block_width, cross_block_height, cross_block_bits);
-  //
-  u8g2.setBitmapMode(true /* transparent*/);
-  //u8g2.drawFrame(frame_size + 5, 10, frame_size, frame_size);
-  //  u8g2.drawXBMP(frame_size + 7, 12, cross_width, cross_height, cross_bits);
-  //  if(a & 4)
-  //    u8g2.drawXBMP(frame_size + 12, 17, cross_block_width, cross_block_height, cross_block_bits);
-
-  u8g2.drawXBMP(64, 32, myBitmap_width, myBitmap_height, myBitmap);
-}
 /*
 
 void showData() {

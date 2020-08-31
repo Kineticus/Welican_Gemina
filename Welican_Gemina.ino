@@ -55,6 +55,9 @@ int encoderValue = 0;
 int saveTime = 0;
 
 //LEDs
+#define statusLED 0
+float breath = 0;
+int breathing = 1;
 #include <FastLED.h>
 
 FASTLED_USING_NAMESPACE
@@ -166,9 +169,8 @@ void setup()
   //Board Status LED Setup
 
   // setting PWM properties
-  const int freq = 4000;
-  const int statusLED = 0;
-  const int resolution = 8;
+  const int freq = 5000;
+  const int resolution = 13;
 
   //pinMode(ledChannel, OUTPUT); //LED Status Light
   // configure LED PWM functionalitites
@@ -181,7 +183,7 @@ void setup()
   ledcAttachPin(23, statusLED);
 
   //Set the status LED to the lowest brightness
-  ledcWrite(statusLED, 1);
+  ledcWrite(statusLED, 100);
 
 
   //Seed variables
@@ -272,8 +274,7 @@ void loop()
   functionName.toCharArray(function_name_out_str, 20);
   categoryName.toCharArray(category_name_out_str, 20);
 
-  //i2c LCD
-  //showData();
+  //Clear the display buffer so we can draw new stuff
   u8g2.clearBuffer();
 
   if (gameMode == 1)
@@ -286,9 +287,27 @@ void loop()
     drawTop();
   }
 
+  //Update varivables compared to current encoder location
   updateEncoders();
 
+  //Write buffer to display
   u8g2.sendBuffer();
+
+  //future toggle of breathing indicator vs static
+  if (breathing == 1)
+  {
+    breath = (exp(sin(millis()/4200.0*PI)) - 0.36787944)*108.0;
+    breath = breath / 2;
+    if (breath <= 4)
+    {
+      breath = 4;
+    }
+  } else
+  {
+    breath = 4;
+  }
+  
+  ledcWrite(statusLED, breath);
 
   testValue += MSGEQ7.get(0) / 16;
   if (testValue > 255)

@@ -47,7 +47,7 @@ void updateEncoders()
     //if yes we should set a debounce variable
     knob1Click_debounce = 3;
 
-    //And set click for Knob 1 to Tru!
+    //And set click for Knob 1 to True!
     knob1Click = 1;
 
     //Are we running in normal mode? If not we can skip these checks

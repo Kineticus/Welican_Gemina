@@ -29,15 +29,15 @@ int knob2_temp = 0;
 int tempValue = 0;
 //Encoder knob3(26, 27); //
 
-#define maxModes 3
+#define maxModes 4
 int mode = 0;
-int mode_max = 2;
+int mode_max = 3;
 
 int gameMode = 0;
 
-int pattern[3];
+int pattern[4];
 int pattern_temp = 0;
-int pattern_max[3] = {12, 12, 22};
+int pattern_max[4] = {12, 12, 22, 3};
 
 #define screen_width 127
 #define screen_height 63
@@ -105,6 +105,12 @@ float tunnelGenerator = 0;
 //Define simplex noise node for each LED
 const int LEDs_in_strip = NUM_LEDS;
 const int LEDs_for_simplex = 6;
+
+int fadeDirection = 0; // 1 or 0, positive or negative
+
+int palletPosition;
+int colorBarPosition = 1;
+bool clearLEDS = false;
 
 // Extra fake LED at the end, to avoid fencepost problem.
 // It is used by simplex node and interpolation code.
@@ -313,16 +319,18 @@ void loop()
   switch (mode)
   {
   case 0:
-    basic_mode(pattern[mode]);
+    basic_category(pattern[mode]);
     break;
   case 1:
-    music_mode(pattern[mode]);
+    music_category(pattern[mode]);
     break;
   case 2:
-    chill_mode(pattern[mode]);
+    chill_category(pattern[mode]);
+    break;
+  case 3:
+    moving_colors_category(pattern[mode]);
     break;
   }
-
   //WS LED
   FastLED.show();
 

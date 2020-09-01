@@ -1,4 +1,4 @@
-void chill_mode(int patternMode)
+void chill_category(int patternMode)
 {
     categoryName = "CHILL";
 

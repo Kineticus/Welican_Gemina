@@ -1,4 +1,4 @@
-void music_mode(int patternMode)
+void music_category(int patternMode)
 {
     categoryName = "MUSIC";
 

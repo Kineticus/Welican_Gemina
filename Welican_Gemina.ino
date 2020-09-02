@@ -70,7 +70,7 @@ FASTLED_USING_NAMESPACE
 //#define CLK_PIN   4
 #define LED_TYPE WS2811
 #define COLOR_ORDER RGB
-#define NUM_LEDS 50
+#define NUM_LEDS 150
 #define visualizer_x 48
 #define visualizer_y 128
 CRGB leds[NUM_LEDS];

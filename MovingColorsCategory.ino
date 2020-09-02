@@ -78,11 +78,11 @@ void moving_colors_category(int patternMode)
     break;
   case 14:
     functionName = "Candy Cane 2";
-    candyCane(150, 3, 5, CRGB::White, CRGB::Blue, CRGB::Teal);
+    candyCane(250, 3, 5, CRGB::Black, CRGB::Orange, CRGB::Green);
     break;
   case 15:
     functionName = "Candy Cane 3";
-    candyCane(200, 3, 5, CRGB::White, CRGB::Green, CRGB::Yellow);
+    candyCane(200, 3, 5, CRGB::Yellow, CRGB::Green, CRGB::Purple);
     break;
   case 16:
     functionName = "Candy Cane 4";

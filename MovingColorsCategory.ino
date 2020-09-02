@@ -1,12 +1,12 @@
 void moving_colors_category(int patternMode)
 {
-  categoryName = "MOVING COLORED BAR";
+  categoryName = "MOVING COLORS";
 
   switch (patternMode)
   {
   case 0:
   {
-    functionName = "MCB 0";
+    functionName = "MC 0";
     long pattern[] = {CRGB::Green, CRGB::Grey, CRGB::Red, CRGB::Grey, CRGB::Red, CRGB::Grey, CRGB::Red, CRGB::Green, CRGB::Green, CRGB::Green};
     const int numberOfColors = sizeof(pattern) / sizeof(int); //Auto calculate your specified number of color bars
     MovingColoredBars(NUM_LEDS - 1, pattern, numberOfColors);
@@ -14,7 +14,7 @@ void moving_colors_category(int patternMode)
   break;
   case 1:
   {
-    functionName = "MCB 1";
+    functionName = "MC 1";
     long pattern[] = {CRGB::Red, CRGB::Green, CRGB::Red};
     const int numberOfColors = sizeof(pattern) / sizeof(int);
     MovingColoredBars(NUM_LEDS / 2, pattern, numberOfColors);
@@ -22,7 +22,7 @@ void moving_colors_category(int patternMode)
   break;
   case 2:
   {
-    functionName = "MCB 2";
+    functionName = "MC 2";
     long pattern[] = {CRGB::Blue, CRGB::Blue, CRGB::Yellow, CRGB::Purple};
     const int numberOfColors = sizeof(pattern) / sizeof(int);
     MovingColoredBars(NUM_LEDS / numberOfColors, pattern, numberOfColors);
@@ -30,39 +30,48 @@ void moving_colors_category(int patternMode)
   break;
   case 3:
   {
-    functionName = "MCB 2";
+    functionName = "MC 2";
     long pattern[] = {CRGB::Purple, CRGB::Blue, CRGB::Teal, CRGB::Purple};
     const int numberOfColors = sizeof(pattern) / sizeof(int);
     MovingColoredBars(NUM_LEDS / numberOfColors, pattern, numberOfColors);
   }
   break;
-    // case 4:
-    //   DualColorFlowFour();
-    //   break;
-    // case 5:
-    //   DualColorFlowPurpleFast();
-    //   break;
-    // case 6:
-    //   DualColorFlowRedFast();
-    //   break;
-    // case 7:
-    //   DualColorFlowGreenFast();
-    //   break;
-    // case 8:
-    //   DualColorFlowPurpleSlow();
-    //   break;
-    // case 9:
-    //   DualColorFlowPurple();
-    //   break;
-    // case 10:
-    //   DualColorFlowTwo();
-    //   break;
-    // case 11:
-    //   TealPurple();
-    //   break;
-    // case 12:
-    //   DualColorFlowThree();
-    //   break;
+  case 4:
+    functionName = "Breathing 1";
+    BreathingEffect(0.5, true, true, true);
+    break;
+  case 5:
+    functionName = "Breathing 2";
+    BreathingEffect(0.5, true, false, true);
+    break;
+  case 6:
+    functionName = "Breathing 3";
+    BreathingEffect(0.5, true, true, false);
+    break;
+  case 7:
+    functionName = "Breathing 4";
+    BreathingEffect(0.5, false, false, true);
+    break;
+  case 8:
+    functionName = "Breathing 5";
+    BreathingEffect(0.5, true, false, false);
+    break;
+  case 9:
+    functionName = "Breathing 6";
+    BreathingEffect(0.5, false, false, false);
+    break;
+  case 10:
+    functionName = "Breathing 7";
+    BreathingEffect(0.1, true, true, true);
+    break;
+  case 11:
+    functionName = "Breathing 8";
+    BreathingEffect(0.7, true, true, true);
+    break;
+  case 12:
+    functionName = "Breathing 9";
+    BreathingEffect(1, true, true, true);
+    break;
   }
 }
 
@@ -107,6 +116,36 @@ void MovingColoredBars(int colorBarLength, long colorPallete[], int numberOfColo
     }
 
   } //end_EVERY_N
+}
+
+void BreathingEffect(float pulseSpeed, bool red, bool green, bool blue)
+{
+  float dV = ((exp(sin(pulseSpeed * millis() / 2000.0 * PI)) - 0.36787944) * delta);
+  val = valueMin + dV;
+  hue = map(val, valueMin, valueMax, hueA, hueB); // Map hue based on current val
+  sat = map(val, valueMin, valueMax, satA, satB); // Map sat based on current val
+
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    leds[i] = CHSV(hue, sat, val);
+
+    // You can experiment with commenting out these dim8_video lines
+    // to get a different sort of look.
+    if (red)
+    {
+      leds[i].r = dim8_video(leds[i].r);
+    }
+    if (green)
+    {
+
+      leds[i].g = dim8_video(leds[i].g);
+    }
+    if (blue)
+    {
+
+      leds[i].b = dim8_video(leds[i].b);
+    }
+  }
 }
 
 // void DualColorFlow(float _speed, float _spacing)

@@ -37,7 +37,7 @@ int gameMode = 0;
 
 int pattern[4];
 int pattern_temp = 0;
-int pattern_max[4] = {12, 12, 22, 3};
+int pattern_max[4] = {12, 12, 22, 12};
 
 #define screen_width 127
 #define screen_height 63
@@ -111,6 +111,20 @@ int fadeDirection = 0; // 1 or 0, positive or negative
 int palletPosition;
 int colorBarPosition = 1;
 bool clearLEDS = false;
+
+uint8_t hueA = 15;      // Start hue at valueMin.
+uint8_t satA = 230;     // Start saturation at valueMin.
+float valueMin = 120.0; // Pulse minimum value (Should be less then valueMax).
+
+uint8_t hueB = 95;      // End hue at valueMax.
+uint8_t satB = 255;     // End saturation at valueMax.
+float valueMax = 255.0; // Pulse maximum value (Should be larger then valueMin).
+
+uint8_t hue = hueA;                                      // Do Not Edit
+uint8_t sat = satA;                                      // Do Not Edit
+float val = valueMin;                                    // Do Not Edit
+uint8_t hueDelta = hueA - hueB;                          // Do Not Edit
+static float delta = (valueMax - valueMin) / 2.35040238; // Do Not Edit
 
 // Extra fake LED at the end, to avoid fencepost problem.
 // It is used by simplex node and interpolation code.

@@ -373,6 +373,10 @@ void drawBottom()
   case 2:
     gravityWell();
     break;
+  case 3:
+    drawIPAddress();
+    //gravityWell();
+    break;
   }
 }
 

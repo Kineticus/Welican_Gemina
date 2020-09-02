@@ -81,6 +81,21 @@ void drawCircleEQ() {
   u8g2.drawCircle(106, 42, temp1, U8G2_DRAW_ALL);
 }
 
+void drawIPAddress() {
+  u8g2.setFont(u8g2_font_ncenB08_tr);
+  u8g2.setCursor(20, 40);
+  
+  if (WiFi.status() == WL_CONNECTED) {
+    //Convert WiFi.localIP() from 4 bytes to 1 nice pretty string
+    String LocalIP = String() + WiFi.localIP()[0] + "." + WiFi.localIP()[1] + "." + WiFi.localIP()[2] + "." + WiFi.localIP()[3];
+    u8g2.print(LocalIP);
+    //u8g2.print("Connected");
+  } else
+  {
+    u8g2.print("Not Connected");
+  } 
+}
+
 void gravityWell() {
   for (int i = 0; i < maxStars; i ++)
   {

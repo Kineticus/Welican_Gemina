@@ -37,7 +37,7 @@ int gameMode = 0;
 
 int pattern[4];
 int pattern_temp = 0;
-int pattern_max[4] = {12, 12, 22, 12};
+int pattern_max[4] = {12, 12, 22, 17};
 
 #define screen_width 127
 #define screen_height 63

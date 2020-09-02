@@ -34,8 +34,8 @@ int tempValue = 0;
 #include "SPIFFS.h"
 
 // Replace with your network credentials
-const char* ssid = "not_sure";
-const char* password = "ledlights06";
+const char *ssid = "Asus_70_2G";
+const char *password = "camera_3227";
 String returnText;
 
 AsyncWebServer server(80);
@@ -214,13 +214,13 @@ void setup()
   //Set the status LED to the lowest brightness
   ledcWrite(statusLED, 100);
 
-
   //Button input configuration
   pinMode(knob1C, INPUT_PULLUP); //Knob 1 Click, internal Pull Up (button connects to ground)
   pinMode(knob2C, INPUT_PULLUP); //Knob 2 Click, internal Pull Up (button connects to ground)
 
   // Initialize SPIFFS
-  if(!SPIFFS.begin(true)){
+  if (!SPIFFS.begin(true))
+  {
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
   }
@@ -232,23 +232,23 @@ void setup()
   //WiFi.localIP();
 
   // Route for root / web page
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/index.html", String(), false, processor);
   });
-  
+
   // Route to load style.css file
-  server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/style.css", "text/css");
   });
 
   // Route to set GPIO to HIGH
-  server.on("/on", HTTP_GET, [](AsyncWebServerRequest *request){
-    brightness = 255;   
+  server.on("/on", HTTP_GET, [](AsyncWebServerRequest *request) {
+    brightness = 255;
     request->send(SPIFFS, "/index.html", String(), false, processor);
   });
-  
+
   // Route to set GPIO to LOW
-  server.on("/off", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/off", HTTP_GET, [](AsyncWebServerRequest *request) {
     brightness = 0;
     request->send(SPIFFS, "/index.html", String(), false, processor);
   });
@@ -286,8 +286,6 @@ void setup()
   //FastLED Declation
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   //FastLED.addLeds<LED_TYPE,DATA_PIN,CLK_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
-
-
 
   /* Load Save Settings
 

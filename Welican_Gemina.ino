@@ -24,10 +24,21 @@ Encoder knob1(33, 32); //Program Selection, encoder WITH Detents
 Encoder knob2(27, 26); //Brightness Adjustment, encoder WITHOUT Detents
 #define knob1C 25
 #define knob2C 14
+
 int knob1_temp = 0;
 int knob2_temp = 0;
 int tempValue = 0;
-//Encoder knob3(26, 27); //
+
+#include <WiFi.h>
+#include "ESPAsyncWebServer.h"
+#include "SPIFFS.h"
+
+// Replace with your network credentials
+const char* ssid = "not_sure";
+const char* password = "ledlights06";
+String returnText;
+
+AsyncWebServer server(80);
 
 #define maxModes 4
 int mode = 0;
@@ -70,7 +81,7 @@ FASTLED_USING_NAMESPACE
 //#define CLK_PIN   4
 #define LED_TYPE WS2811
 #define COLOR_ORDER RGB
-#define NUM_LEDS 50
+#define NUM_LEDS 100
 #define visualizer_x 48
 #define visualizer_y 128
 CRGB leds[NUM_LEDS];
@@ -147,7 +158,7 @@ uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 //MSGEQ7 Input
 #include <MD_MSGEQ7.h>
 // hardware pin definitions - change to suit circuit
-#define INPUT_PIN 15
+#define INPUT_PIN 35
 #define RESET_PIN 13
 #define STROBE_PIN 2
 
@@ -189,6 +200,48 @@ void setup()
   //Set the status LED to the lowest brightness
   ledcWrite(statusLED, 100);
 
+
+  //Button input configuration
+  pinMode(knob1C, INPUT_PULLUP); //Knob 1 Click, internal Pull Up (button connects to ground)
+  pinMode(knob2C, INPUT_PULLUP); //Knob 2 Click, internal Pull Up (button connects to ground)
+
+  // Initialize SPIFFS
+  if(!SPIFFS.begin(true)){
+    Serial.println("An Error has occurred while mounting SPIFFS");
+    return;
+  }
+
+  WiFi.enableSTA(true);
+
+  WiFi.begin(ssid, password);
+  //WiFi.status();
+  //WiFi.localIP();
+
+  // Route for root / web page
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/index.html", String(), false, processor);
+  });
+  
+  // Route to load style.css file
+  server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/style.css", "text/css");
+  });
+
+  // Route to set GPIO to HIGH
+  server.on("/on", HTTP_GET, [](AsyncWebServerRequest *request){
+    brightness = 255;   
+    request->send(SPIFFS, "/index.html", String(), false, processor);
+  });
+  
+  // Route to set GPIO to LOW
+  server.on("/off", HTTP_GET, [](AsyncWebServerRequest *request){
+    brightness = 0;
+    request->send(SPIFFS, "/index.html", String(), false, processor);
+  });
+
+  // Start server
+  server.begin();
+
   //Seed variables
   for (int i = 0; i < maxStars; i++)
   {
@@ -220,9 +273,7 @@ void setup()
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   //FastLED.addLeds<LED_TYPE,DATA_PIN,CLK_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 
-  //Button input configuration
-  pinMode(25, INPUT_PULLUP); //Knob 1 Click, internal Pull Up (button connects to ground)
-  pinMode(14, INPUT_PULLUP); //Knob 2 Click, internal Pull Up (button connects to ground)
+
 
   /* Load Save Settings
 

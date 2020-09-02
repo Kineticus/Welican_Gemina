@@ -394,6 +394,53 @@ void addGlitter(fract8 chanceOfGlitter)
   }
 }
 
+
+String processor(const String& var){
+  if(var == "BRIGHTNESS"){
+    if (brightness == 0)
+    {
+      returnText = "Off";
+    }
+    else if (brightness == 255)
+    {
+      returnText = "Max";
+    }
+    else if (brightness > 200)
+    {
+      returnText = "Bright";
+    }
+    else if (brightness > 160)
+    {
+      returnText = "Half";
+    }
+    else if (brightness > 120)
+    {
+      returnText = "Third";
+    }
+    else if (brightness > 80)
+    {
+      returnText = "Quarter";
+    }
+    else if (brightness > 40)
+    {
+      returnText = "Dim";
+    }
+    else if (brightness > 0)
+    {
+      returnText = "Moody";
+    }
+    
+    return returnText;
+  }
+  
+  if(var == "MODE"){
+    
+    return returnText;
+  }
+  return String();
+}
+
+
 void confettiCustom(int saturation, int value, int random)
 {
   // random colored speckles that blink in and fade smoothly

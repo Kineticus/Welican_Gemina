@@ -1,12 +1,12 @@
 void moving_colors_category(int patternMode)
 {
-  categoryName = "MOVING COLORED BAR";
+  categoryName = "MOVING COLORS";
 
   switch (patternMode)
   {
   case 0:
   {
-    functionName = "MCB 0";
+    functionName = "MC 0";
     long pattern[] = {CRGB::Green, CRGB::Grey, CRGB::Red, CRGB::Grey, CRGB::Red, CRGB::Grey, CRGB::Red, CRGB::Green, CRGB::Green, CRGB::Green};
     const int numberOfColors = sizeof(pattern) / sizeof(int); //Auto calculate your specified number of color bars
     MovingColoredBars(NUM_LEDS - 1, pattern, numberOfColors);
@@ -14,7 +14,7 @@ void moving_colors_category(int patternMode)
   break;
   case 1:
   {
-    functionName = "MCB 1";
+    functionName = "MC 1";
     long pattern[] = {CRGB::Red, CRGB::Green, CRGB::Red};
     const int numberOfColors = sizeof(pattern) / sizeof(int);
     MovingColoredBars(NUM_LEDS / 2, pattern, numberOfColors);
@@ -22,7 +22,7 @@ void moving_colors_category(int patternMode)
   break;
   case 2:
   {
-    functionName = "MCB 2";
+    functionName = "MC 2";
     long pattern[] = {CRGB::Blue, CRGB::Blue, CRGB::Yellow, CRGB::Purple};
     const int numberOfColors = sizeof(pattern) / sizeof(int);
     MovingColoredBars(NUM_LEDS / numberOfColors, pattern, numberOfColors);
@@ -30,39 +30,68 @@ void moving_colors_category(int patternMode)
   break;
   case 3:
   {
-    functionName = "MCB 2";
+    functionName = "MC 2";
     long pattern[] = {CRGB::Purple, CRGB::Blue, CRGB::Teal, CRGB::Purple};
     const int numberOfColors = sizeof(pattern) / sizeof(int);
     MovingColoredBars(NUM_LEDS / numberOfColors, pattern, numberOfColors);
   }
   break;
-    // case 4:
-    //   DualColorFlowFour();
-    //   break;
-    // case 5:
-    //   DualColorFlowPurpleFast();
-    //   break;
-    // case 6:
-    //   DualColorFlowRedFast();
-    //   break;
-    // case 7:
-    //   DualColorFlowGreenFast();
-    //   break;
-    // case 8:
-    //   DualColorFlowPurpleSlow();
-    //   break;
-    // case 9:
-    //   DualColorFlowPurple();
-    //   break;
-    // case 10:
-    //   DualColorFlowTwo();
-    //   break;
-    // case 11:
-    //   TealPurple();
-    //   break;
-    // case 12:
-    //   DualColorFlowThree();
-    //   break;
+  case 4:
+    functionName = "Breathing 1";
+    BreathingEffect(0.5, true, true, true);
+    break;
+  case 5:
+    functionName = "Breathing 2";
+    BreathingEffect(0.5, true, false, true);
+    break;
+  case 6:
+    functionName = "Breathing 3";
+    BreathingEffect(0.5, true, true, false);
+    break;
+  case 7:
+    functionName = "Breathing 4";
+    BreathingEffect(0.5, false, false, true);
+    break;
+  case 8:
+    functionName = "Breathing 5";
+    BreathingEffect(0.5, true, false, false);
+    break;
+  case 9:
+    functionName = "Breathing 6";
+    BreathingEffect(0.5, false, false, false);
+    break;
+  case 10:
+    functionName = "Breathing 7";
+    BreathingEffect(0.1, true, true, true);
+    break;
+  case 11:
+    functionName = "Breathing 8";
+    BreathingEffect(0.7, true, true, true);
+    break;
+  case 12:
+    functionName = "Breathing 9";
+    BreathingEffect(1, true, true, true);
+    break;
+  case 13:
+    functionName = "Candy Cane 1";
+    candyCane(20, 3, 5, CRGB::White, CRGB::Red, CRGB::Blue);
+    break;
+  case 14:
+    functionName = "Candy Cane 2";
+    candyCane(250, 3, 5, CRGB::Black, CRGB::Orange, CRGB::Green);
+    break;
+  case 15:
+    functionName = "Candy Cane 3";
+    candyCane(200, 3, 5, CRGB::Yellow, CRGB::Green, CRGB::Purple);
+    break;
+  case 16:
+    functionName = "Candy Cane 4";
+    candyCane(250, 3, 5, CRGB::Green, CRGB::Blue, CRGB::Teal);
+    break;
+  case 17:
+    functionName = "Candy Cane 5";
+    candyCane(400, 3, 5, CRGB::Purple, CRGB::Blue, CRGB::White);
+    break;
   }
 }
 
@@ -70,7 +99,7 @@ void moving_colors_category(int patternMode)
 
 void MovingColoredBars(int colorBarLength, long colorPallete[], int numberOfColors)
 {
-
+  //https://github.com/marmilicious/FastLED_examples/blob/master/moving_colored_bars.ino
   EVERY_N_MILLISECONDS(FRAMES_PER_SECOND)
   {
 
@@ -107,6 +136,110 @@ void MovingColoredBars(int colorBarLength, long colorPallete[], int numberOfColo
     }
 
   } //end_EVERY_N
+}
+
+void BreathingEffect(float pulseSpeed, bool red, bool green, bool blue)
+{
+  //https://github.com/marmilicious/FastLED_examples/blob/master/breath_effect_v2.ino
+  float dV = ((exp(sin(pulseSpeed * millis() / 2000.0 * PI)) - 0.36787944) * delta);
+  val = valueMin + dV;
+  hue = map(val, valueMin, valueMax, hueA, hueB); // Map hue based on current val
+  sat = map(val, valueMin, valueMax, satA, satB); // Map sat based on current val
+
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    leds[i] = CHSV(hue, sat, val);
+
+    // You can experiment with commenting out these dim8_video lines
+    // to get a different sort of look.
+    if (red)
+    {
+      leds[i].r = dim8_video(leds[i].r);
+    }
+    if (green)
+    {
+
+      leds[i].g = dim8_video(leds[i].g);
+    }
+    if (blue)
+    {
+
+      leds[i].b = dim8_video(leds[i].b);
+    }
+  }
+}
+
+//Draw alternating bands of color, 2 or 3 colors.
+//When using three colors, color1 is used between the other two colors.
+void candyCane(uint16_t ts, uint8_t numColors, uint8_t stripeLength, CRGB color1, CRGB color2, CRGB color3)
+{
+  //https://github.com/marmilicious/FastLED_examples/blob/master/candy_cane_stripes.ino
+
+  // static uint8_t numColors = 3;    // Can be either 2 or 3
+  // static uint8_t stripeLength = 5; //number of pixels per color
+  int shiftBy = 1; //shiftBy can be positive or negative (to change direction)
+  static int offset;
+  const uint16_t travelSpeed = 150;
+
+  EVERY_N_SECONDS(5)
+  {
+    numColors = 3;
+    stripeLength = 4;
+    // numColors = random8(2, 4);    //picks either 2 or 3
+    // stripeLength = random8(3, 6); //picks random length
+  }
+
+  EVERY_N_MILLISECONDS(ts)
+  {
+    if (numColors == 2)
+    {
+      for (uint8_t i = 0; i < NUM_LEDS; i++)
+      {
+        if ((i + offset) % ((numColors)*stripeLength) < stripeLength)
+        {
+          leds[i] = color2;
+        }
+        else
+        {
+          leds[i] = color1;
+        }
+      }
+    }
+
+    if (numColors == 3)
+    {
+      for (uint8_t i = 0; i < NUM_LEDS; i++)
+      {
+        if ((i + offset) % ((numColors + 1) * stripeLength) < stripeLength)
+        {
+          leds[i] = color2;
+        }
+        else if ((i + offset + (2 * stripeLength)) % ((numColors + 1) * stripeLength) < stripeLength)
+        {
+          leds[i] = color3;
+        }
+        else
+        {
+          leds[i] = color1;
+        }
+      }
+    }
+
+    // FastLED.show();
+
+    offset = offset + shiftBy;
+    if (shiftBy > 0)
+    { //for positive shiftBy
+      if (offset >= NUM_LEDS)
+        offset = 0;
+    }
+    else
+    { //for negitive shiftBy
+      if (offset < 0)
+        offset = NUM_LEDS;
+    }
+
+  } //end EVERY_N
 }
 
 // void DualColorFlow(float _speed, float _spacing)

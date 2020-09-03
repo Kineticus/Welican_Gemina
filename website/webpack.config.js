@@ -1,7 +1,12 @@
+const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
+  output: {
+    path: path.resolve(__dirname, '../data'),
+    filename: '[name].js'
+  },
   module: {
     rules: [
       {
@@ -31,8 +36,16 @@ module.exports = {
       {
         test: /\.(png|svg|jpg|gif)$/,
         use: [
-          'file-loader'
-        ]
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: (url, resourcePath, context) => {
+                return `${url}`;
+              }
+            }
+          }
+        ],
       }
     ]
   },

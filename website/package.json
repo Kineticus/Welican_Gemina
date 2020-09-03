@@ -5,10 +5,7 @@
   "main": "scss/main.scss",
   "scripts": {
     "build": "webpack",
-    "start:dev": "webpack-dev-server",
-    "build-css": "node-sass --omit-source-map-url --include-path scss scss/main.scss ../data/style.min.css",
-    "css-watch": "npm run css-build -- --watch",
-    "start": "npm run css-watch"
+    "start:dev": "webpack-dev-server"
   },
   "repository": {
     "type": "git",
@@ -24,6 +21,7 @@
     "@babel/core": "^7.11.5",
     "@babel/preset-env": "^7.11.5",
     "babel-loader": "^8.1.0",
+    "file-loader": "^6.1.0",
     "html-loader": "^1.3.0",
     "html-webpack-plugin": "^4.4.1",
     "node-sass": "^4.14.1",
@@ -32,7 +30,6 @@
   "dependencies": {
     "bulma": "^0.9.0",
     "css-loader": "^4.2.2",
-    "jquery": "^3.5.1",
     "mini-css-extract-plugin": "^0.11.0",
     "sass-loader": "^10.0.1",
     "style-loader": "^1.2.1",

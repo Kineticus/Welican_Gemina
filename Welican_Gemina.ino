@@ -44,7 +44,11 @@ AsyncWebServer server(80);
 int mode = 0;
 int mode_max = 3;
 
-int gameMode = 0;
+int menu[3];
+int menu_max[3] = {2, 1, 2};
+int menu_cur = 0;
+
+int runMode = 0;
 
 int pattern[4];
 int pattern_temp = 0;
@@ -340,14 +344,18 @@ void loop()
   //Clear the display buffer so we can draw new stuff
   u8g2.clearBuffer();
 
-  if (gameMode == 1)
+  switch(runMode)
   {
-    fallios();
-  }
-  else
-  {
-    drawBottom();
-    drawTop();
+    case 0:
+      drawBottom();
+      drawTop();
+      break;
+    case 1:
+      drawMenu();
+      break;
+    case 2:
+      fallios();
+      break;
   }
 
   //Update variables compared to current encoder location

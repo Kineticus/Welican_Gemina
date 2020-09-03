@@ -8,6 +8,7 @@ Brian Schimke, 2020
 void fallios()
 { 
     //Display current score
+    u8g2.setFont(u8g2_font_profont12_mf);
     u8g2.setCursor(0, screen_height);
     u8g2.print(fallios_score);
 

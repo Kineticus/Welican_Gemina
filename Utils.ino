@@ -51,7 +51,7 @@ void updateEncoders()
     knob1Click = 1;
 
     //Are we running in normal mode? If not we can skip these checks
-    if (gameMode == 0)
+    if (runMode == 0)
     {
       //Check to see if the Brightness Knob (#2) is also held down
       if (knob2Click_debounce == 0)
@@ -72,7 +72,11 @@ void updateEncoders()
       else
       {
         //brightness knob is clicked at the same time as the program knob?
-        setGameMode();
+        //setGameMode();
+        runMode = 1;
+        menu_cur = 0;
+        knob1Click = 0;
+        knob2Click = 0;
       }
     }
   }
@@ -109,7 +113,7 @@ void updateEncoders()
 
   tempValue = knob1.read() - knob1_temp; //Read current knob position vs. last time we checked
 
-  if (gameMode == 0)
+  if (runMode == 0)
   {
     while (tempValue >= 4)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
@@ -138,7 +142,32 @@ void updateEncoders()
       pattern[mode] = 0;
     }
   }
-  else if (gameMode == 1)
+  else if (runMode == 1)
+  {
+    while (tempValue >= 4)
+    { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
+      tempValue -= 4;
+      knob1_temp += 4;
+      menu[menu_cur] += 1;
+    }
+    while (tempValue <= -4)
+    {
+      tempValue += 4;
+      knob1_temp -= 4;
+      menu[menu_cur] -= 1;
+    }
+    if (menu[menu_cur] > menu_max[menu_cur])
+    {
+      //Mode 1 - constrain
+      menu[menu_cur] = menu_max[menu_cur];
+    }
+    else if (menu[menu_cur] < 0)
+    {
+      //Mode 1 - constrain
+      menu[menu_cur] = 0;
+    }
+  }
+  else if (runMode == 2)
   {
     while (tempValue >= 4)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
@@ -159,7 +188,7 @@ void updateEncoders()
   tempValue = knob2.read() - knob2_temp; //Read current knob position vs. last time we checked
   knob2_temp = knob2.read();             //Store this position to compare next time around
 
-  if (gameMode == 0)
+  if (runMode == 0)
   {
     //Determine "acceleration" based on change amount. Large change = fast turn of knob
     //There are 96 pulses per revolution
@@ -203,7 +232,7 @@ void updateEncoders()
 
     showBrightnessDisplay();
   }
-  else if (gameMode == 1)
+  else if (runMode == 2)
   {
     while (tempValue > 0)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
@@ -237,7 +266,7 @@ void updateEncoders()
 
 void setGameMode()
 {
-  gameMode = 1;
+  runMode = 2;
   fallios_reset();
   brightness_temp = brightness;
   pattern_temp = pattern[mode];
@@ -255,8 +284,8 @@ void endGameMode()
   //Don't want to see brightness indicator when we leave
   brightness_debounce = 0;
 
-  //Set gameMode (like Run mode) back to default, 0
-  gameMode = 0;
+  //Set runMode (like Run mode) back to default, 0
+  runMode = 0;
 }
 
 void showBrightnessDisplay()
@@ -377,6 +406,79 @@ void drawBottom()
     drawIPAddress();
     //gravityWell();
     break;
+  }
+}
+
+void drawMenu()
+{
+  u8g2.setFont(u8g2_font_ncenB08_tr);
+  u8g2.setCursor(0, 8);
+  u8g2.print("This is a Menu!");
+  u8g2.setCursor(0, 32);
+
+  switch(menu_cur)
+  {
+    case 0:
+      switch(menu[menu_cur])
+      {
+        case 0:
+          u8g2.print("Games");
+          break;
+        case 1:
+          u8g2.print("Settings");
+          break;
+        case 2:
+          u8g2.print("Exit");
+      }
+      break;
+    case 1: //games menu
+      switch(menu[menu_cur])
+      {
+        case 0:
+          u8g2.print("Back");
+          break;
+        case 1:
+          u8g2.print("Fallios");
+          break;
+      }
+      break;
+  }
+
+  if (knob2Click == 1)
+  {
+    runMode = 0;
+  }
+
+  if (knob1Click == 1)
+  {
+    switch(menu_cur)
+    {
+      case 0: //main menu
+        switch(menu[menu_cur])
+        {
+          case 0:
+            menu_cur = 1; //games
+            break;
+          case 1:
+            menu_cur = 2; //settings
+            break;
+          case 2:
+            runMode = 0;  //exit
+            break;
+        }
+        break;
+      case 1: // games menu click
+        switch(menu[menu_cur])
+        {
+          case 0:
+            menu_cur = 0; //back to main menu
+            break;
+          case 1:
+            runMode = 2; //fallios
+            setGameMode();
+        }
+    }
+    
   }
 }
 

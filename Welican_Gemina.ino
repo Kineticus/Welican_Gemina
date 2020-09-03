@@ -34,8 +34,8 @@ int tempValue = 0;
 #include "SPIFFS.h"
 
 // Replace with your network credentials
-const char *ssid = "Asus_70_2G";
-const char *password = "camera_3227";
+const char *ssid = "";
+const char *password = "";
 String returnText;
 
 AsyncWebServer server(80);
@@ -245,6 +245,13 @@ void setup()
     request->send(SPIFFS, "/style.css", "text/css");
   });
 
+  server.on("/main.js", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(SPIFFS, "/main.js", "text/javascript");
+  });
+
+  server.on("/obama_not_bad.jpg", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/obama_not_bad.jpg", "image/jpg");
+  });
   // Route to set GPIO to HIGH
   server.on("/on", HTTP_GET, [](AsyncWebServerRequest *request) {
     brightness = 255;

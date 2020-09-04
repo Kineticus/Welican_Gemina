@@ -53,12 +53,14 @@ This project requires the [Arduino IDE](https://www.arduino.cc/en/Main/Software)
 ### Install Arduino Libraries to work with this project.
 
 6. Libraries `Tools > Manage Libraries` (Location is User Directory\Documents\Arduino\libraries)
-  - [Encoder](https://github.com/PaulStoffregen/Encoder/)
+  - [ESP32Encoder](https://github.com/madhephaestus/ESP32Encoder)
   - [FastLED](https://github.com/FastLED/FastLED/wiki)
   - [MD_MSGEQ7](https://github.com/MajicDesigns/MD_MSGEQ7)
   - [U8g2](https://github.com/olikraus/u8g2/wiki/u8g2reference)
+  - [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer)
+  - [ASyncTCP](https://github.com/me-no-dev/AsyncTCP)
 
-
+  
 ## Related Documents
 
 - [Welican Project Doc](https://docs.google.com/document/d/e/2PACX-1vS1qt4seWkiZLkJHX4LD_V3VYEt1su2fU610a7UOJ1a_LkRgppqzjMMRaHVzRj_jQmDRsJIRdGVeDGK/pub) - The brain-dump file created by @Kinectus

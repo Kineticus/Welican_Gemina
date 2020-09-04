@@ -57,8 +57,8 @@ This project requires the [Arduino IDE](https://www.arduino.cc/en/Main/Software)
   - [FastLED](https://github.com/FastLED/FastLED/wiki)
   - [MD_MSGEQ7](https://github.com/MajicDesigns/MD_MSGEQ7)
   - [U8g2](https://github.com/olikraus/u8g2/wiki/u8g2reference)
-  - [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer)
-  - [ASyncTCP](https://github.com/me-no-dev/AsyncTCP)
+  - [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) *Must be installed manually
+  - [ASyncTCP](https://github.com/me-no-dev/AsyncTCP) *Must be installed manually
 
   
 ## Related Documents

@@ -18,12 +18,13 @@
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
 
 //ENCODER
-#include <Encoder.h>
+#include <ESP32Encoder.h>
 
-Encoder knob1(33, 32); //Program Selection, encoder WITH Detents
-Encoder knob2(27, 26); //Brightness Adjustment, encoder WITHOUT Detents
-#define knob1C 25
-#define knob2C 14
+ESP32Encoder encoder;
+ESP32Encoder encoder2;
+
+#define knob1C 25 //Program
+#define knob2C 14 //Brightness
 
 int knob1_temp = 0;
 int knob2_temp = 0;
@@ -218,9 +219,24 @@ void setup()
   //Set the status LED to the lowest brightness
   ledcWrite(statusLED, 100);
 
-  //Button input configuration
+  // Enabke internal pull up resistors for buttons
   pinMode(knob1C, INPUT_PULLUP); //Knob 1 Click, internal Pull Up (button connects to ground)
   pinMode(knob2C, INPUT_PULLUP); //Knob 2 Click, internal Pull Up (button connects to ground)
+
+  // Enable the weak pull up resistors for encoders
+	ESP32Encoder::useInternalWeakPullResistors=UP;
+
+	//Program Selection, encoder WITH Detents
+	encoder.attachFullQuad(33, 32);
+  
+  //Brightness Adjustment, encoder WITHOUT Detents
+	encoder2.attachFullQuad(27, 26); 
+		
+	// set starting count value after attaching
+	encoder.clearCount();
+
+	// clear the encoder's raw count and set the tracked count to zero
+	encoder2.clearCount();
 
   // Initialize SPIFFS
   if (!SPIFFS.begin(true))

@@ -5,7 +5,7 @@ void drawDebug()
   u8g2.print(VERSION_INFO);
   u8g2.setCursor(0, 24);
   u8g2.print("Knob 1: ");
-  u8g2.print(knob1.read());
+  //u8g2.print(encoder.getCount());
   u8g2.setCursor(80, 24);
   u8g2.print(pattern[mode]);
 
@@ -16,7 +16,7 @@ void drawDebug()
   }
   u8g2.setCursor(0, 48);
   u8g2.print("Knob 2: ");
-  u8g2.print(knob2.read());
+  //u8g2.print(encoder2.getCount());
   if (knob2Click == true)
   {
     u8g2.setCursor(0, 60);
@@ -111,7 +111,7 @@ void updateEncoders()
 
   //--PATTERN ENCODER--
 
-  tempValue = knob1.read() - knob1_temp; //Read current knob position vs. last time we checked
+  tempValue = encoder.getCount() - knob1_temp; //Read current knob position vs. last time we checked
 
   if (runMode == 0)
   {
@@ -185,8 +185,8 @@ void updateEncoders()
 
   //--BRIGHTNESS ENCODER--
 
-  tempValue = knob2.read() - knob2_temp; //Read current knob position vs. last time we checked
-  knob2_temp = knob2.read();             //Store this position to compare next time around
+  tempValue = encoder2.getCount() - knob2_temp; //Read current knob position vs. last time we checked
+  knob2_temp = encoder2.getCount();             //Store this position to compare next time around
 
   if (runMode == 0)
   {

@@ -163,6 +163,18 @@ void moving_colors_category(int patternMode)
     functionName = "RepeatingPattern 3";
     RepeatingPattern(200, 155, 20, 500);
     break;
+  case 34:
+    functionName = "RepeatingBlockPattern 1";
+    RepeatingBlockPattern(100, 80, 5, 0, 5);
+    break;
+  case 35:
+    functionName = "RepeatingBlockPattern 2";
+    RepeatingBlockPattern(10, 120, 10, 20, 10);
+    break;
+  case 36:
+    functionName = "RepeatingBlockPattern 3";
+    RepeatingBlockPattern(200, 155, 20, 40, 20);
+    break;
   }
 }
 
@@ -590,6 +602,58 @@ void RepeatingPattern(uint8_t hue, uint8_t saturation, uint16_t repeatEvery, uin
     }
 
   } //end_every_n
+}
+
+void RepeatingBlockPattern(uint8_t hue, uint8_t saturation, uint8_t blockSize, uint16_t loopStart, uint16_t loopEnd)
+{
+  loopStart = count * blockSize;
+  loopEnd = blockSize + count * blockSize;
+
+  // Trying to write data to pixels that don't exit is bad.
+  // Check to make sure we are still within our NUM_LEDS range
+  // and clamp to NUM_LEDS if needed.
+  if (loopEnd > NUM_LEDS)
+  {
+    loopEnd = NUM_LEDS; // limit maximum to NUM_LEDS
+  }
+
+  hue = hue + random8(8, 17); // for fun, pick a new color for each block
+
+  EVERY_N_MILLISECONDS(250)
+  {
+    for (uint16_t i = loopStart; i < loopEnd; i++)
+    {
+      leds[i] = CHSV(hue, saturation, 255);
+    }
+
+    FastLED.show();
+
+    for (uint16_t i = loopStart; i < loopEnd; i++)
+    {
+      leds[i].fadeToBlackBy(220); // fade down
+    }
+
+    count++; // increase count by one
+
+    // reset count if we have come to the end of the strip
+    if ((count * blockSize) >= NUM_LEDS)
+    {
+      count = 0;
+      // Only change the block size when starting over on the strip
+      // and after the minimum time has passed (from timer below).
+      if (sizeUpdate)
+      {
+        blockSize = random8(2, 9); // for fun, pick a new random block size
+        sizeUpdate = false;
+      }
+    }
+
+  } //end_every_n
+
+  EVERY_N_SECONDS(5)
+  {
+    sizeUpdate = true; // trigger size update
+  }
 }
 
 // void DualColorFlow(float _speed, float _spacing)

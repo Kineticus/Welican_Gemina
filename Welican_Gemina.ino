@@ -53,7 +53,7 @@ int runMode = 0;
 
 int pattern[4];
 int pattern_temp = 0;
-int pattern_max[4] = {12, 12, 22, 33};
+int pattern_max[4] = {12, 12, 22, 36};
 
 #define screen_width 127
 #define screen_height 63
@@ -148,6 +148,8 @@ boolean moving = 1;
 uint8_t pos;                    // stores a position for color being blended in
 uint8_t posR, posG, posB;       // positions of moving R,G,B dots
 bool gReverseDirection = false; //false = center outward, true = from ends inward
+uint8_t count;
+bool sizeUpdate;
 
 // COOLING: How much does the air cool as it rises?
 // Less cooling = taller flames.  More cooling = shorter flames.

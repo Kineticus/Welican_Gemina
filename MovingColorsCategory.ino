@@ -606,6 +606,7 @@ void RepeatingPattern(uint8_t hue, uint8_t saturation, uint16_t repeatEvery, uin
 
 void RepeatingBlockPattern(uint8_t hue, uint8_t saturation, uint8_t blockSize, uint16_t loopStart, uint16_t loopEnd)
 {
+  // https://github.com/marmilicious/FastLED_examples/blob/master/repeating_block_pattern.ino
   loopStart = count * blockSize;
   loopEnd = blockSize + count * blockSize;
 

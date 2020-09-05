@@ -151,6 +151,18 @@ void moving_colors_category(int patternMode)
 
     mirror2ndHalf(); // copy and mirror data from leds_temp to leds
     break;
+  case 31:
+    functionName = "RepeatingPattern 1";
+    RepeatingPattern(100, 80, 5, 1000);
+    break;
+  case 32:
+    functionName = "RepeatingPattern 2";
+    RepeatingPattern(10, 120, 10, FRAMES_PER_SECOND);
+    break;
+  case 33:
+    functionName = "RepeatingPattern 3";
+    RepeatingPattern(200, 155, 20, 500);
+    break;
   }
 }
 
@@ -541,6 +553,44 @@ void mirror2ndHalf()
 }
 // End Fire Effect
 //---------------------------------------------------------------
+
+void RepeatingPattern(uint8_t hue, uint8_t saturation, uint16_t repeatEvery, uint8_t interval)
+{
+  // https://github.com/marmilicious/FastLED_examples/blob/master/repeating_pattern.ino
+  static uint16_t numberOfRepeats = NUM_LEDS / repeatEvery;
+
+  EVERY_N_MILLISECONDS(50)
+  {
+    fadeToBlackBy(leds, NUM_LEDS, 1); // slowly fade out pixels
+  }
+
+  EVERY_N_MILLISECONDS(interval)
+  {
+    static uint8_t offset;
+    static uint8_t shift;
+
+    hue = ((255 / repeatEvery) * offset) + shift; // Change the hue for each pixel set.
+    // hue = (20 * offset) + shift; // Change the hue for each pixel set.
+
+    for (uint16_t x = 0; x < numberOfRepeats + 1; x++)
+    {
+      static uint16_t i;
+      i = (repeatEvery * (x - 1)) + repeatEvery + offset; // The pixel number to draw
+      if (i < NUM_LEDS)
+      { // Only draw pixel numbers within NUM_LEDS
+        leds[i] = CHSV(hue, saturation, 255);
+      }
+    }
+
+    offset++;
+    if (offset == repeatEvery)
+    {
+      offset = 0;
+      shift = shift + random8(55, 77);
+    }
+
+  } //end_every_n
+}
 
 // void DualColorFlow(float _speed, float _spacing)
 // {

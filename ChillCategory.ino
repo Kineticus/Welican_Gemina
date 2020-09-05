@@ -191,7 +191,6 @@ void RainbowTwoYoffset()
     spaceinc = 0.07;
     timeinc = (0.000025 * currSpeed);
     yoffset += timeinc;
-    ;
     //xoffset += timeinc;
     SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
 }
@@ -228,7 +227,6 @@ void RainbowBigYoffset()
     spaceinc = 0.12;
     timeinc = (0.000025 * currSpeed);
     yoffset += timeinc;
-    ;
     //xoffset += timeinc;
     SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
 }

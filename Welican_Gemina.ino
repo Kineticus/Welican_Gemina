@@ -53,7 +53,7 @@ int runMode = 0;
 
 int pattern[4];
 int pattern_temp = 0;
-int pattern_max[4] = {12, 12, 22, 17};
+int pattern_max[4] = {12, 12, 22, 30};
 
 #define screen_width 127
 #define screen_height 63
@@ -121,6 +121,8 @@ float tunnelGenerator = 0;
 //Define simplex noise node for each LED
 const int LEDs_in_strip = NUM_LEDS;
 const int LEDs_for_simplex = 6;
+CRGB temp[NUM_LEDS];
+CRGB leds_temp[NUM_LEDS / 2]; // half the total number of pixels
 
 int fadeDirection = 0; // 1 or 0, positive or negative
 
@@ -137,10 +139,30 @@ uint8_t satB = 255;     // End saturation at valueMax.
 float valueMax = 255.0; // Pulse maximum value (Should be larger then valueMin).
 
 uint8_t hue = hueA;                                      // Do Not Edit
+uint8_t hue2 = hueB;                                     // Do Not Edit
 uint8_t sat = satA;                                      // Do Not Edit
 float val = valueMin;                                    // Do Not Edit
 uint8_t hueDelta = hueA - hueB;                          // Do Not Edit
 static float delta = (valueMax - valueMin) / 2.35040238; // Do Not Edit
+boolean moving = 1;
+uint8_t pos;                    // stores a position for color being blended in
+uint8_t posR, posG, posB;       // positions of moving R,G,B dots
+bool gReverseDirection = false; //false = center outward, true = from ends inward
+// COOLING: How much does the air cool as it rises?
+// Less cooling = taller flames.  More cooling = shorter flames.
+// Default 50, suggested range 20-100
+#define COOLING 90
+
+// SPARKING: What chance (out of 255) is there that a new spark will be lit?
+// Higher chance = more roaring fire.  Lower chance = more flickery fire.
+// Default 120, suggested range 50-200.
+#define SPARKING 50
+
+int flowDirection = -1;      // Use either 1 or -1 to set flow direction
+uint16_t cycleLength = 1500; // Lover values = continuous flow, higher values = distinct pulses.
+uint16_t pulseLength = 150;  // How long the pulse takes to fade out.  Higher value is longer.
+uint16_t pulseOffset = 200;  // Delay before second pulse.  Higher value is more delay.
+uint8_t baseBrightness = 10; // Brightness of LEDs when not pulsing. Set to 0 for off.
 
 // Extra fake LED at the end, to avoid fencepost problem.
 // It is used by simplex node and interpolation code.
@@ -224,19 +246,19 @@ void setup()
   pinMode(knob2C, INPUT_PULLUP); //Knob 2 Click, internal Pull Up (button connects to ground)
 
   // Enable the weak pull up resistors for encoders
-	ESP32Encoder::useInternalWeakPullResistors=UP;
+  ESP32Encoder::useInternalWeakPullResistors = UP;
 
-	//Program Selection, encoder WITH Detents
-	encoder.attachFullQuad(33, 32);
-  
+  //Program Selection, encoder WITH Detents
+  encoder.attachFullQuad(33, 32);
+
   //Brightness Adjustment, encoder WITHOUT Detents
-	encoder2.attachFullQuad(27, 26); 
-		
-	// set starting count value after attaching
-	encoder.clearCount();
+  encoder2.attachFullQuad(27, 26);
 
-	// clear the encoder's raw count and set the tracked count to zero
-	encoder2.clearCount();
+  // set starting count value after attaching
+  encoder.clearCount();
+
+  // clear the encoder's raw count and set the tracked count to zero
+  encoder2.clearCount();
 
   // Initialize SPIFFS
   if (!SPIFFS.begin(true))
@@ -265,7 +287,7 @@ void setup()
     request->send(SPIFFS, "/main.js", "text/javascript");
   });
 
-  server.on("/obama_not_bad.jpg", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/obama_not_bad.jpg", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/obama_not_bad.jpg", "image/jpg");
   });
   // Route to set GPIO to HIGH
@@ -367,18 +389,18 @@ void loop()
   //Clear the display buffer so we can draw new stuff
   u8g2.clearBuffer();
 
-  switch(runMode)
+  switch (runMode)
   {
-    case 0:
-      drawBottom();
-      drawTop();
-      break;
-    case 1:
-      drawMenu();
-      break;
-    case 2:
-      fallios();
-      break;
+  case 0:
+    drawBottom();
+    drawTop();
+    break;
+  case 1:
+    drawMenu();
+    break;
+  case 2:
+    fallios();
+    break;
   }
 
   //Update variables compared to current encoder location

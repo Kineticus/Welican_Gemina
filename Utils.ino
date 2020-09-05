@@ -416,32 +416,32 @@ void drawMenu()
   u8g2.print("This is a Menu!");
   u8g2.setCursor(0, 32);
 
-  switch(menu_cur)
+  switch (menu_cur)
   {
+  case 0:
+    switch (menu[menu_cur])
+    {
     case 0:
-      switch(menu[menu_cur])
-      {
-        case 0:
-          u8g2.print("Games");
-          break;
-        case 1:
-          u8g2.print("Settings");
-          break;
-        case 2:
-          u8g2.print("Exit");
-      }
+      u8g2.print("Games");
       break;
-    case 1: //games menu
-      switch(menu[menu_cur])
-      {
-        case 0:
-          u8g2.print("Back");
-          break;
-        case 1:
-          u8g2.print("Fallios");
-          break;
-      }
+    case 1:
+      u8g2.print("Settings");
       break;
+    case 2:
+      u8g2.print("Exit");
+    }
+    break;
+  case 1: //games menu
+    switch (menu[menu_cur])
+    {
+    case 0:
+      u8g2.print("Back");
+      break;
+    case 1:
+      u8g2.print("Fallios");
+      break;
+    }
+    break;
   }
 
   if (knob2Click == 1)
@@ -451,34 +451,33 @@ void drawMenu()
 
   if (knob1Click == 1)
   {
-    switch(menu_cur)
+    switch (menu_cur)
     {
-      case 0: //main menu
-        switch(menu[menu_cur])
-        {
-          case 0:
-            menu_cur = 1; //games
-            break;
-          case 1:
-            menu_cur = 2; //settings
-            break;
-          case 2:
-            runMode = 0;  //exit
-            break;
-        }
+    case 0: //main menu
+      switch (menu[menu_cur])
+      {
+      case 0:
+        menu_cur = 1; //games
         break;
-      case 1: // games menu click
-        switch(menu[menu_cur])
-        {
-          case 0:
-            menu_cur = 0; //back to main menu
-            break;
-          case 1:
-            runMode = 2; //fallios
-            setGameMode();
-        }
+      case 1:
+        menu_cur = 2; //settings
+        break;
+      case 2:
+        runMode = 0; //exit
+        break;
+      }
+      break;
+    case 1: // games menu click
+      switch (menu[menu_cur])
+      {
+      case 0:
+        menu_cur = 0; //back to main menu
+        break;
+      case 1:
+        runMode = 2; //fallios
+        setGameMode();
+      }
     }
-    
   }
 }
 
@@ -500,9 +499,10 @@ void addGlitter(fract8 chanceOfGlitter)
   }
 }
 
-
-String processor(const String& var){
-  if(var == "BRIGHTNESS"){
+String processor(const String &var)
+{
+  if (var == "BRIGHTNESS")
+  {
     if (brightness == 0)
     {
       returnText = "Off";
@@ -535,17 +535,17 @@ String processor(const String& var){
     {
       returnText = "Moody";
     }
-    
+
     return returnText;
   }
-  
-  if(var == "MODE"){
-    
+
+  if (var == "MODE")
+  {
+
     return returnText;
   }
   return String();
 }
-
 
 void confettiCustom(int saturation, int value, int random)
 {

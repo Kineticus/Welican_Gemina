@@ -74,28 +74,112 @@ void moving_colors_category(int patternMode)
     break;
   case 13:
     functionName = "Candy Cane 1";
-    candyCane(20, 3, 5, CRGB::White, CRGB::Red, CRGB::Blue);
+    CandyCane(20, 3, 5, CRGB::White, CRGB::Red, CRGB::Blue);
     break;
   case 14:
     functionName = "Candy Cane 2";
-    candyCane(250, 3, 5, CRGB::Black, CRGB::Orange, CRGB::Green);
+    CandyCane(250, 3, 5, CRGB::Black, CRGB::Orange, CRGB::Green);
     break;
   case 15:
     functionName = "Candy Cane 3";
-    candyCane(200, 3, 5, CRGB::Yellow, CRGB::Green, CRGB::Purple);
+    CandyCane(200, 3, 5, CRGB::Yellow, CRGB::Green, CRGB::Purple);
     break;
   case 16:
     functionName = "Candy Cane 4";
-    candyCane(250, 3, 5, CRGB::Green, CRGB::Blue, CRGB::Teal);
+    CandyCane(250, 3, 5, CRGB::Green, CRGB::Blue, CRGB::Teal);
     break;
   case 17:
     functionName = "Candy Cane 5";
-    candyCane(400, 3, 5, CRGB::Purple, CRGB::Blue, CRGB::White);
+    CandyCane(400, 3, 5, CRGB::Purple, CRGB::Blue, CRGB::White);
+    break;
+  case 18:
+    functionName = "Blend Rainbow 1";
+    BlendIntoRainbow(CRGB::Purple, CRGB::Blue, CRGB::Green);
+    break;
+  case 19:
+    functionName = "Blend Rainbow 2";
+    BlendIntoRainbow(CRGB::Red, CRGB::Blue, CRGB::White);
+    break;
+  case 20:
+    functionName = "Blend Rainbow 3";
+    BlendIntoRainbow(CRGB::Purple, CRGB::Orange, CRGB::White);
+    break;
+  case 21:
+    functionName = "Blend Rainbow 4";
+    BlendIntoRainbow(CRGB::Green, CRGB::Blue, CRGB::Yellow);
+    break;
+  case 22:
+    functionName = "Blend Rainbow 5";
+    BlendIntoRainbow(CRGB::Orange, CRGB::Purple, CRGB::Green);
+    break;
+  case 23:
+    functionName = "HeartBeat 1";
+    HeartBeat(100, 255);
+    break;
+  case 24:
+    functionName = "HeartBeat 2";
+    HeartBeat(20, 255);
+    break;
+  case 25:
+    functionName = "HeartBeat 3";
+    HeartBeat(155, 255);
+    break;
+  case 26:
+    functionName = "HeartBeat 4";
+    HeartBeat(75, 255);
+    break;
+  case 27:
+    functionName = "HeartBeat 5";
+    HeartBeat(225, 255);
+    break;
+  case 28:
+    functionName = "Fire 1";
+    FireHalfStrip(); // draw fire data to leds_temp
+
+    mirror2ndHalf(); // copy and mirror data from leds_temp to leds
+    break;
+  case 29:
+    functionName = "Fire 2";
+    FireFullStrip(); // draw fire data to leds_temp
+
+    mirror2ndHalf(); // copy and mirror data from leds_temp to leds
+    break;
+  case 30:
+    functionName = "Fire 3";
+    gReverseDirection = true;
+    FireHalfStrip(); // draw fire data to leds_temp
+
+    mirror2ndHalf(); // copy and mirror data from leds_temp to leds
     break;
   }
 }
 
 // FUNCTIONS
+
+//===============================================================
+// Modified helper function that blends one uint8_t toward another,
+// based on function from Mark Kriegsman's fadeTowardColor example:
+// https://gist.github.com/kriegsman/d0a5ed3c8f38c64adcb4837dafb6e690
+void nblendU8TowardU8(uint8_t &current, const uint8_t target)
+{
+  if (current == target)
+  {
+    return;
+  }
+
+  if (current < target)
+  {
+    uint8_t delta = target - current;
+    delta = scale8_video(delta, 1);
+    current += delta;
+  }
+  else
+  {
+    uint8_t delta = current - target;
+    delta = scale8_video(delta, 1);
+    current -= delta;
+  }
+}
 
 void MovingColoredBars(int colorBarLength, long colorPallete[], int numberOfColors)
 {
@@ -171,7 +255,7 @@ void BreathingEffect(float pulseSpeed, bool red, bool green, bool blue)
 
 //Draw alternating bands of color, 2 or 3 colors.
 //When using three colors, color1 is used between the other two colors.
-void candyCane(uint16_t ts, uint8_t numColors, uint8_t stripeLength, CRGB color1, CRGB color2, CRGB color3)
+void CandyCane(uint16_t ts, uint8_t numColors, uint8_t stripeLength, CRGB color1, CRGB color2, CRGB color3)
 {
   //https://github.com/marmilicious/FastLED_examples/blob/master/candy_cane_stripes.ino
 
@@ -241,6 +325,222 @@ void candyCane(uint16_t ts, uint8_t numColors, uint8_t stripeLength, CRGB color1
 
   } //end EVERY_N
 }
+
+void BlendIntoRainbow(CRGB color1, CRGB color2, CRGB color3)
+{
+  //https://github.com/marmilicious/FastLED_examples/blob/master/blend_into_rainbow_v2.ino
+  EVERY_N_MILLISECONDS(60)
+  {
+    hue++;
+  }
+
+  fill_rainbow(leds, NUM_LEDS, hue, 255 / NUM_LEDS / 4); // draw part of the rainbow into the strip
+  fadeToBlackBy(leds, NUM_LEDS, 128);                    // fade the whole rainbow down some
+
+  EVERY_N_MILLISECONDS(150)
+  {
+    if (moving)
+    {
+      pos++;
+      if (pos == NUM_LEDS)
+      {
+        pos = 0;
+      } // reset to begining
+    }
+  }
+
+  EVERY_N_MILLISECONDS(5)
+  {
+    if (!moving)
+    {
+      hue2 = hue2 - 1;
+    }
+  }
+
+  // colors to blend into background
+  CRGB blendThisIn = CHSV(hue2, 140, 255);
+  CRGB blendThisIn2 = CHSV(hue2, 170, 255);
+  CRGB blendThisIn3 = CHSV(hue2, 210, 255);
+  CRGB blendThisIn4 = CHSV(hue2, 255, 255);
+
+  static uint8_t blendAmount = 128; // amount of blend  [range: 0-255]
+
+  // https://www.reddit.com/r/FastLED/comments/dhoce6/nblend_function_explanation/
+  // nblend (CRGB &existing, const CRGB &overlay, fract8 amountOfOverlay)
+  nblend(leds[pos], blendThisIn4, blendAmount / 3);
+  nblend(leds[mod8(pos + 1, NUM_LEDS)], blendThisIn3, blendAmount / 2);
+  nblend(leds[mod8(pos + 2, NUM_LEDS)], blendThisIn2, blendAmount);
+  nblend(leds[mod8(pos + 3, NUM_LEDS)], blendThisIn, blendAmount);
+  nblend(leds[mod8(pos + 4, NUM_LEDS)], blendThisIn2, blendAmount);
+  nblend(leds[mod8(pos + 5, NUM_LEDS)], blendThisIn3, blendAmount / 2);
+  nblend(leds[mod8(pos + 6, NUM_LEDS)], blendThisIn4, blendAmount / 3);
+
+  posR = beatsin8(5, 0, (NUM_LEDS - 1));
+  posG = beatsin8(7, 0, (NUM_LEDS - 1));
+  posB = beatsin8(9, 0, (NUM_LEDS - 1));
+
+  CRGB tempColor = color1;
+  temp[posR] = tempColor;
+  tempColor = color2;
+  nblend(temp[posG], tempColor, 128);
+  tempColor = color3;
+  nblend(temp[posB], tempColor, 128);
+
+  EVERY_N_MILLISECONDS(2)
+  {
+    fadeToBlackBy(temp, NUM_LEDS, 1); // create fading tail effect
+  }
+
+  for (uint8_t i = 0; i < NUM_LEDS; i++)
+  {
+    nblend(leds[i], temp[i], 128);
+  }
+
+  nblend(leds[mod8(posR, NUM_LEDS)], color1, 90);
+  nblend(leds[mod8(posR + 1, NUM_LEDS)], color1, 128);
+  nblend(leds[mod8(posR + 2, NUM_LEDS)], color1, 90);
+
+  nblend(leds[mod8(posG, NUM_LEDS)], color2, 90);
+  nblend(leds[mod8(posG + 1, NUM_LEDS)], color2, 128);
+  nblend(leds[mod8(posG + 2, NUM_LEDS)], color2, 90);
+
+  nblend(leds[mod8(posB, NUM_LEDS)], color3, 90);
+  nblend(leds[mod8(posB + 1, NUM_LEDS)], color3, 128);
+  nblend(leds[mod8(posB + 2, NUM_LEDS)], color3, 90);
+}
+
+//===============================================================
+// Heart Beat Functions
+// https://github.com/marmilicious/FastLED_examples/blob/master/heart_pulse_blood_flowing.ino
+void HeartBeat(uint8_t bloodHue, uint8_t bloodSat)
+{
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    uint8_t bloodVal = sumPulse((5 / NUM_LEDS / 2) + (NUM_LEDS / 2) * i * flowDirection);
+    leds[i] = CHSV(bloodHue, bloodSat, bloodVal);
+  }
+}
+
+int sumPulse(int time_shift)
+{
+  //time_shift = 0;  //Uncomment to heart beat/pulse all LEDs together
+  int pulse1 = pulseWave8(millis() + time_shift, cycleLength, pulseLength);
+  int pulse2 = pulseWave8(millis() + time_shift + pulseOffset, cycleLength, pulseLength);
+  return qadd8(pulse1, pulse2); // Add pulses together without overflow
+}
+
+uint8_t pulseWave8(uint32_t ms, uint16_t cycleLength, uint16_t pulseLength)
+{
+  uint16_t T = ms % cycleLength;
+  if (T > pulseLength)
+    return baseBrightness;
+  uint16_t halfPulse = pulseLength / 2;
+  if (T <= halfPulse)
+  {
+    return (T * 255) / halfPulse; //first half = going up
+  }
+  else
+  {
+    return ((pulseLength - T) * 255) / halfPulse; //second half = going down
+  }
+}
+//End_heart_beat_functions
+//---------------------------------------------------------------
+
+//---------------------------------------------------------------
+// Fire Effect
+// https://github.com/marmilicious/FastLED_examples/blob/master/mirrored_Fire2012.ino
+void FireFullStrip()
+{
+  // Fuction only operates on half the number of pixels (NUM_LEDS/2)
+
+  // Array of temperature readings at each simulation cell
+  static byte heat[NUM_LEDS];
+
+  // Step 1.  Cool down every cell a little
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    heat[i] = qsub8(heat[i], random8(0, ((COOLING * 10) / (NUM_LEDS)) + 2));
+  }
+
+  // Step 2.  Heat from each cell drifts 'up' and diffuses a little
+  for (int k = (NUM_LEDS)-1; k >= 2; k--)
+  {
+    heat[k] = (heat[k - 1] + heat[k - 2] + heat[k - 2]) / 3;
+  }
+
+  // Step 3.  Randomly ignite new 'sparks' of heat near the bottom
+  if (random8() < SPARKING)
+  {
+    int y = random8(7);
+    heat[y] = qadd8(heat[y], random8(160, 255));
+  }
+
+  // Step 4.  Map from heat cells to LED colors
+  for (int j = 0; j < NUM_LEDS; j++)
+  {
+    CRGB color = HeatColor(heat[j]);
+    leds_temp[j] = color;
+  }
+}
+
+void FireHalfStrip()
+{
+  // Fuction only operates on half the number of pixels (NUM_LEDS/2)
+
+  // Array of temperature readings at each simulation cell
+  static byte heat[NUM_LEDS / 2];
+
+  // Step 1.  Cool down every cell a little
+  for (int i = 0; i < NUM_LEDS / 2; i++)
+  {
+    heat[i] = qsub8(heat[i], random8(0, ((COOLING * 10) / (NUM_LEDS / 2)) + 2));
+  }
+
+  // Step 2.  Heat from each cell drifts 'up' and diffuses a little
+  for (int k = (NUM_LEDS / 2) - 1; k >= 2; k--)
+  {
+    heat[k] = (heat[k - 1] + heat[k - 2] + heat[k - 2]) / 3;
+  }
+
+  // Step 3.  Randomly ignite new 'sparks' of heat near the bottom
+  if (random8() < SPARKING)
+  {
+    int y = random8(7);
+    heat[y] = qadd8(heat[y], random8(160, 255));
+  }
+
+  // Step 4.  Map from heat cells to LED colors
+  for (int j = 0; j < NUM_LEDS / 2; j++)
+  {
+    CRGB color = HeatColor(heat[j]);
+    leds_temp[j] = color;
+  }
+}
+
+void mirror2ndHalf()
+{
+  //copy and mirror pixel data from leds_temp to leds array.
+
+  if (gReverseDirection == false)
+  { //false is center outward
+    for (uint8_t i = 0; i < NUM_LEDS / 2; i++)
+    {
+      leds[(NUM_LEDS / 2) - 1 - i] = leds_temp[i];
+      leds[(NUM_LEDS / 2) + i] = leds_temp[i];
+    }
+  }
+  else
+  { //true is from ends inward
+    for (uint8_t i = 0; i < NUM_LEDS / 2; i++)
+    {
+      leds[i] = leds_temp[i];
+      leds[(NUM_LEDS - 1) - i] = leds_temp[i];
+    }
+  }
+}
+// End Fire Effect
+//---------------------------------------------------------------
 
 // void DualColorFlow(float _speed, float _spacing)
 // {

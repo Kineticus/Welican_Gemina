@@ -52,7 +52,8 @@ int mode = 0;
 int mode_max = maxModes;
 int pattern[5];
 int pattern_temp = 0;
-int pattern_max[5] = {12, 12, 22, 65, 11};
+// basic, music, chill, moving colors, legacy
+int pattern_max[5] = {12, 12, 22, 65, 30};
 int pixelNumber = 0;
 unsigned long startMillis;
 unsigned long currentMillis;
@@ -171,6 +172,9 @@ uint8_t ran1;
 uint8_t ran2;
 // -------------------
 
+int red, green, blue;                                    // used in hsv2rgb color functions
+int red2, green2, blue2;                                 // used in hsv2rgb color functions
+int red3, green3, blue3;                                 // used in hsv2rgb color functions
 uint8_t hue = hueA;                                      // Do Not Edit
 uint8_t hue2 = hueB;                                     // Do Not Edit
 uint8_t sat = satA;                                      // Do Not Edit

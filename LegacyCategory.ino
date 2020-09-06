@@ -52,18 +52,82 @@ void legacy_category(int patternMode)
     functionName = "RbowX 0.0025, 0.1";
     RainbowXoffset(0.0025, 0.1, true);
     break;
-    // case 12:
-    //   functionName = "LGBlueWhite 2";
-    //   LargeGroupBlueWhite(2);
-    //   break;
-    // case 13:
-    //   functionName = "LGBlueWhite 5";
-    //   LargeGroupBlueWhite(5);
-    //   break;
-    // case 14:
-    //   functionName = "LGRedGreen 2";
-    //   LargeGroupRedGreen(2);
-    //   break;
+  case 12:
+    functionName = "SteadyRGB 2";
+    SteadyRGB(2);
+    break;
+  case 13:
+    functionName = "SteadyRGB 4";
+    SteadyRGB(4);
+    break;
+  case 14:
+    functionName = "SteadyAltClrs RG";
+    SteadyAlternatingColors(CRGB::Red, CRGB::Green);
+    break;
+  case 15:
+    functionName = "SteadyAltClrs BW";
+    SteadyAlternatingColors(CRGB::Blue, CRGB::White);
+    break;
+  case 16:
+    functionName = "SteadyAltClrs PB";
+    SteadyAlternatingColors(CRGB::Purple, CRGB::Blue);
+    break;
+  case 17:
+    functionName = "SteadyAltClrs YP";
+    SteadyAlternatingColors(CRGB::Yellow, CRGB::Purple);
+    break;
+  case 18:
+    functionName = "SteadyAltClrs RW";
+    SteadyAlternatingColors(CRGB::Red, CRGB::White);
+    break;
+  case 19:
+    functionName = "SteadyAltClrs OB";
+    SteadyAlternatingColors(CRGB::Orange, CRGB::Blue);
+    break;
+  case 20:
+    functionName = "SteadyAltClrs OP";
+    SteadyAlternatingColors(CRGB::Orange, CRGB::Purple);
+    break;
+  case 21:
+    functionName = "MovingHue 85.002";
+    MovingHue(85, .002);
+    break;
+  case 22:
+    functionName = "MovingHue 42.008";
+    MovingHue(42, .008);
+    break;
+  case 23:
+    functionName = "MovingHue 128.016";
+    MovingHue(128, .025);
+    break;
+  case 24:
+    functionName = "MovingHue 85.3";
+    MovingHue(85, .3);
+    break;
+  case 25:
+    functionName = "MovingHue 42.5";
+    MovingHue(42, .5);
+    break;
+  case 26:
+    functionName = "MovingHue 128.7";
+    MovingHue(128, .7);
+    break;
+  case 27:
+    functionName = "MovingHue 85.3.9";
+    MovingHue(85, .3, .9);
+    break;
+  case 28:
+    functionName = "MovingHue 42.5.4";
+    MovingHue(42, .5, .4);
+    break;
+  case 29:
+    functionName = "MovingHue 128.7.1";
+    MovingHue(128, .7, .1);
+    break;
+  case 30:
+    functionName = "MovingHue 128.7 3";
+    MovingHue(128, .7, 3);
+    break;
   }
 }
 
@@ -169,76 +233,106 @@ void RainbowBigYoffset()
   SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
 }
 
-void LargeGroupBlueWhite(int ledSpacing)
+void MovingHue(uint8_t hStart, float hMod)
 {
-  for (uint16_t i = 0; i < NUM_LEDS; i = i + ledSpacing)
+  h = hStart;
+
+  float hTemp = h;
+
+  for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
-    setPixel(i, 0, 0, 255);
-    setPixel(i + 1, 0, 0, 255);
-    setPixel(i + 2, 0, 0, 255);
-    setPixel(i + 3, 0, 0, 255);
-    setPixel(i + 4, 0, 0, 255);
-    setPixel(i + 5, 0, 0, 255);
 
-    setPixel(i + 6, 0, 0, 255);
-    setPixel(i + 7, 0, 0, 255);
-    setPixel(i + 8, 0, 0, 255);
-    setPixel(i + 9, 0, 0, 255);
-    setPixel(i + 10, 0, 0, 255);
-    setPixel(i + 11, 0, 0, 255);
+    hsv2rgb(float(hTemp), 1, (float(brightness) / 255.0), red, green, blue);
+    setPixel(i, red, green, blue);
 
-    // if (useFade == true)
-    // {
-    //   fadeLightBy(i, brightness);
-    //   fadeLightBy(i + 1, brightness);
-    //   fadeLightBy(i + 2, brightness);
-    //   fadeLightBy(i + 3, brightness);
-    //   fadeLightBy(i + 4, brightness);
-    //   fadeLightBy(i + 5, brightness);
+    // slowly increment 'h' by small increments to make color flow
+    hTemp += hMod; // decrease to space out the colors
 
-    //   fadeLightBy(i + 6, brightness);
-    //   fadeLightBy(i + 7, brightness);
-    //   fadeLightBy(i + 8, brightness);
-    //   fadeLightBy(i + 9, brightness);
-    //   fadeLightBy(i + 10, brightness);
-    //   fadeLightBy(i + 11, brightness);
-    // }
+    if (hTemp > 1)
+    {
+      hTemp -= 1;
+    }
+    if (hTemp < 0)
+    {
+      hTemp += 1;
+    }
   }
 }
-void LargeGroupRedGreen(int ledSpacing)
+void MovingHue(uint8_t hStart, float hMod, float spacing)
 {
-  for (uint16_t i = 0; i < NUM_LEDS; i = i + ledSpacing)
+  h = hStart;
+
+  float hTemp = h + spacing;
+
+  for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
-    leds[i].setRGB(255, 0, 0);
-    leds[i + 1].setRGB(255, 0, 0);
-    leds[i + 2].setRGB(255, 0, 0);
-    leds[i + 3].setRGB(255, 0, 0);
-    leds[i + 4].setRGB(255, 0, 0);
-    leds[i + 5].setRGB(255, 0, 0);
 
-    leds[i + 6].setRGB(0, 255, 0);
-    leds[i + 7].setRGB(0, 255, 0);
-    leds[i + 8].setRGB(0, 255, 0);
-    leds[i + 9].setRGB(0, 255, 0);
-    leds[i + 10].setRGB(0, 255, 0);
-    leds[i + 11].setRGB(0, 255, 0);
+    hsv2rgb(float(hTemp), 1, (float(brightness) / 255.0), red, green, blue);
+    setPixel(i, red, green, blue);
 
-    // if (useFade == true)
-    // {
+    // slowly increment 'h' by small increments to make color flow
+    hTemp += hMod; // decrease to space out the colors
 
-    //   leds[i].fadeLightBy(brightness);
-    //   leds[i + 1].fadeLightBy(brightness);
-    //   leds[i + 2].fadeLightBy(brightness);
-    //   leds[i + 3].fadeLightBy(brightness);
-    //   leds[i + 4].fadeLightBy(brightness);
-    //   leds[i + 5].fadeLightBy(brightness);
+    if (hTemp > 1)
+    {
+      hTemp -= 1;
+    }
+    if (hTemp < 0)
+    {
+      hTemp += 1;
+    }
+  }
+}
 
-    //   leds[i + 6].fadeLightBy(brightness);
-    //   leds[i + 7].fadeLightBy(brightness);
-    //   leds[i + 8].fadeLightBy(brightness);
-    //   leds[i + 9].fadeLightBy(brightness);
-    //   leds[i + 10].fadeLightBy(brightness);
-    //   leds[i + 11].fadeLightBy(brightness);
-    // }
+void SteadyRGB(int ledSpacing)
+{
+  for (uint16_t i = 0; i < NUM_LEDS; i = i + 3)
+  {
+    setPixel(i, 255, 0, 0);
+    setPixel(i + 1, 0, 255, 0);
+    setPixel(i + 2, 0, 0, 255);
+    // setPixel(i + 1, 0, 255, 0);
+    // setPixel(i + 2, 0, 0, 255);
+    // setPixel(i + 3, 0, 0, 255);
+    // setPixel(i + 4, 0, 0, 255);
+    // setPixel(i + 5, 0, 0, 255);
+
+    // setPixel(i + 6, 255, 255, 255);
+    // setPixel(i + 7, 255, 255, 255);
+    // setPixel(i + 8, 255, 255, 255);
+    // setPixel(i + 9, 255, 255, 255);
+    // setPixel(i + 10, 255, 255, 255);
+    // setPixel(i + 11, 255, 255, 255);
+
+    if (useFade == true)
+    {
+      fadeLightBy(i, brightness);
+      fadeLightBy(i + 1, brightness);
+      fadeLightBy(i + 2, brightness);
+      // fadeLightBy(i + 3, brightness);
+      // fadeLightBy(i + 4, brightness);
+      // fadeLightBy(i + 5, brightness);
+
+      // fadeLightBy(i + 6, brightness);
+      // fadeLightBy(i + 7, brightness);
+      // fadeLightBy(i + 8, brightness);
+      // fadeLightBy(i + 9, brightness);
+      // fadeLightBy(i + 10, brightness);
+      // fadeLightBy(i + 11, brightness);
+    }
+  }
+}
+void SteadyAlternatingColors(CRGB color1, CRGB color2)
+{
+  for (uint16_t i = 0; i < NUM_LEDS; i++)
+  {
+    if ((i % 2) == 0)
+    {
+      setPixel(i, color1);
+    }
+    else
+    {
+      setPixel(i, color2);
+    }
   }
 }

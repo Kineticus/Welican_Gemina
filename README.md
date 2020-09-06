@@ -15,6 +15,8 @@ This repository contains:
 
 - [Background](#background)
 - [Install](#install)
+  - [Install Arduino Libraries](#install-arduino-libraries)
+  - [VS Code & C++](#vs-code-&-c++)
 - [Related Documents](#related-documents)
 - [Maintainers](#maintainers)
 - [Contributing](#contributing)
@@ -23,9 +25,9 @@ This repository contains:
 - [License](#license)
 
 ## Background
-
-  - TODO add stuff
-
+```
+  // TODO add stuff
+```
 ## Install
 
 This project requires the [Arduino IDE](https://www.arduino.cc/en/Main/Software).
@@ -52,7 +54,7 @@ This project requires the [Arduino IDE](https://www.arduino.cc/en/Main/Software)
 
     - That’s it! Make sure to change the Board under the Tools menu to “ESP32 Dev Module”
 
-### Install Arduino Libraries to work with this project.
+### Install Arduino Libraries
 
 6. Libraries `Tools > Manage Libraries` (Location is User Directory\Documents\Arduino\libraries)
   - [ESP32Encoder](https://github.com/madhephaestus/ESP32Encoder)
@@ -62,7 +64,12 @@ This project requires the [Arduino IDE](https://www.arduino.cc/en/Main/Software)
   - [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) *Must be installed manually
   - [ASyncTCP](https://github.com/me-no-dev/AsyncTCP) *Must be installed manually
 
-  
+### VS Code & C++
+  - [.vscode/c_app_properties.json](https://code.visualstudio.com/docs/cpp/customize-default-settings-cpp)
+  - [Arduino Extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.vscode-arduino)
+  - [C++ Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
+  - [GitLens Extension](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+
 ## Related Documents
 
 - [Welican Project Doc](https://docs.google.com/document/d/e/2PACX-1vS1qt4seWkiZLkJHX4LD_V3VYEt1su2fU610a7UOJ1a_LkRgppqzjMMRaHVzRj_jQmDRsJIRdGVeDGK/pub) - The brain-dump file created by @Kinectus

@@ -564,12 +564,35 @@ void setPixel(int pixel, byte red, byte green, byte blue)
 #ifndef ADAFRUIT_NEOPIXEL_H
 
   // FastLED
+  leds[pixel] = CRGB(red, green, blue);
 
-  leds[pixel].r = red;
+  // leds[pixel].setRGB(red, green, blue);
 
-  leds[pixel].g = green;
+  // leds[pixel].r = red;
 
-  leds[pixel].b = blue;
+  // leds[pixel].g = green;
+
+  // leds[pixel].b = blue;
+
+#endif
+}
+void setPixel(int pixel, CRGB color)
+{
+
+  // #ifdef ADAFRUIT_NEOPIXEL_H
+
+  //   // NeoPixel
+
+  //   strip.setPixelColor(pixel, strip.Color(red, green, blue));
+
+  // #endif
+
+#ifndef ADAFRUIT_NEOPIXEL_H
+
+  // FastLED
+  leds[pixel] = CRGB(color);
+
+  // leds[pixel].setRGB(color);
 
 #endif
 }

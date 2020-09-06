@@ -181,7 +181,7 @@ void moving_colors_category(int patternMode)
     break;
   case 38:
     functionName = "Twinkle 2";
-    Twinkle(8, 100, 125, 100, brightness, true);
+    Twinkle(8, 20, 125, 100, brightness, true);
     break;
   case 39:
     functionName = "Twinkle 3";
@@ -743,9 +743,10 @@ void Mover(uint8_t thisfade, uint8_t thisdelay, uint8_t hue)
     leds[i] += CHSV(hue, 255, 255);
     leds[(i + 5) % NUM_LEDS] += CHSV(hue + 85, 255, 255);   // We use modulus so that the location is between 0 and NUM_LEDS
     leds[(i + 10) % NUM_LEDS] += CHSV(hue + 170, 255, 255); // Same here.
-    show_at_max_brightness_for_power();
-    fadeToBlackBy(leds, NUM_LEDS, thisfade); // Low values = slower fade.
-    delay(thisdelay);                        // UGH!!! A blocking delay. If you want to add controls, they may not work reliably.
+    fadeToBlackBy(leds, NUM_LEDS, thisfade);                // Low values = slower fade.
+
+    // TODO: remove this delay
+    delay(thisdelay); // UGH!!! A blocking delay. If you want to add controls, they may not work reliably.
   }
 }
 

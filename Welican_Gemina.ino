@@ -52,7 +52,7 @@ int mode = 0;
 int mode_max = maxModes;
 int pattern[5];
 int pattern_temp = 0;
-int pattern_max[5] = {12, 12, 22, 56, 11};
+int pattern_max[5] = {12, 12, 22, 65, 11};
 
 #define screen_width 127
 #define screen_height 63
@@ -156,6 +156,16 @@ float valueMin = 120.0; // Pulse minimum value (Should be less then valueMax).
 uint8_t hueB = 95;      // End hue at valueMax.
 uint8_t satB = 255;     // End saturation at valueMax.
 float valueMax = 255.0; // Pulse maximum value (Should be larger then valueMin).
+
+// used in Blendwave
+CRGB clr1;
+CRGB clr2;
+uint8_t speed;
+uint8_t loc1;
+uint8_t loc2;
+uint8_t ran1;
+uint8_t ran2;
+// -------------------
 
 uint8_t hue = hueA;                                      // Do Not Edit
 uint8_t hue2 = hueB;                                     // Do Not Edit

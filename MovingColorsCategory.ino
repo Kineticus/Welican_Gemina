@@ -255,6 +255,42 @@ void moving_colors_category(int patternMode)
     functionName = "Plasma 3";
     Plasma(RainbowColors_p, PartyColors_p, LINEARBLEND);
     break;
+  case 57:
+    functionName = "RainbowMarch 1";
+    RainbowMarch(200, 10);
+    break;
+  case 58:
+    functionName = "RainbowMarch 2";
+    RainbowMarch(100, 10);
+    break;
+  case 59:
+    functionName = "RainbowMarch 3";
+    RainbowMarch(50, 100);
+    break;
+  case 60:
+    functionName = "BlendWave 1";
+    BlendWave(60, 10);
+    break;
+  case 61:
+    functionName = "BlendWave 2";
+    BlendWave(60, 100);
+    break;
+  case 62:
+    functionName = "BlendWave 3";
+    BlendWave(50, 50);
+    break;
+  case 63:
+    functionName = "BeatWave 1";
+    BeatWave(RainbowColors_p, PartyColors_p, LINEARBLEND);
+    break;
+  case 64:
+    functionName = "BeatWave 2";
+    BeatWave(OceanColors_p, LavaColors_p, LINEARBLEND);
+    break;
+  case 65:
+    functionName = "BeatWave 3";
+    BeatWave(ForestColors_p, CloudColors_p, LINEARBLEND);
+    break;
   }
 }
 
@@ -912,8 +948,7 @@ void Sawtooth(int bpm, CRGBPalette16 currentPalette, TBlendType currentBlending)
     fill_solid(leds, NUM_LEDS, CRGB::Black);
   else
     leds[cur_led] = ColorFromPalette(currentPalette, 0, 255, currentBlending); // I prefer to use palettes instead of CHSV or CRGB assignments.
-
-} // sawtooth()
+}
 
 void Plasma(CRGBPalette16 currentPalette, CRGBPalette16 targetPalette, TBlendType currentBlending)
 {
@@ -934,6 +969,48 @@ void Plasma(CRGBPalette16 currentPalette, CRGBPalette16 targetPalette, TBlendTyp
     uint8_t baseC = random8(); // You can use this as a baseline colour if you want similar hues in the next line.
     targetPalette = CRGBPalette16(CHSV(baseC + random8(32), 192, random8(128, 255)), CHSV(baseC + random8(32), 255, random8(128, 255)), CHSV(baseC + random8(32), 192, random8(128, 255)), CHSV(baseC + random8(32), 255, random8(128, 255)));
   }
+}
+
+void RainbowMarch(uint8_t thisdelay, uint8_t deltahue)
+{ // The fill_rainbow call doesn't support brightness levels.
+
+  uint8_t thishue = millis() * (255 - thisdelay) / 255; // To change the rate, add a beat or something to the result. 'thisdelay' must be a fixed value.
+
+  // thishue = beat8(50);                                       // This uses a FastLED sawtooth generator. Again, the '50' should not change on the fly.
+  // thishue = beatsin8(50,0,255);                              // This can change speeds on the fly. You can also add these to each other.
+
+  fill_rainbow(leds, NUM_LEDS, thishue, deltahue); // Use FastLED's fill_rainbow routine.
+}
+
+void BeatWave(CRGBPalette16 currentPalette, CRGBPalette16 targetPalette, TBlendType currentBlending)
+{
+  // https://github.com/atuline/FastLED-Demos/blob/master/beatwave/beatwave.ino
+  beatwave(currentPalette, currentBlending);
+
+  EVERY_N_MILLISECONDS(100)
+  {
+    uint8_t maxChanges = 24;
+    nblendPaletteTowardPalette(currentPalette, targetPalette, maxChanges); // AWESOME palette blending capability.
+  }
+
+  EVERY_N_SECONDS(5)
+  { // Change the target palette to a random one every 5 seconds.
+    targetPalette = CRGBPalette16(CHSV(random8(), 255, random8(128, 255)), CHSV(random8(), 255, random8(128, 255)), CHSV(random8(), 192, random8(128, 255)), CHSV(random8(), 255, random8(128, 255)));
+  }
+}
+
+void BlendWave(accum88 bpm, accum88 bpm2)
+{
+  // https://github.com/atuline/FastLED-Demos/blob/master/blendwave/blendwave.ino
+  speed = beatsin8(bpm, 0, 255);
+
+  clr1 = blend(CHSV(beatsin8(3, 0, 255), 255, 255), CHSV(beatsin8(4, 0, 255), 255, 255), speed);
+  clr2 = blend(CHSV(beatsin8(4, 0, 255), 255, 255), CHSV(beatsin8(3, 0, 255), 255, 255), speed);
+
+  loc1 = beatsin8(bpm2, 0, NUM_LEDS - 1);
+
+  fill_gradient_RGB(leds, 0, clr2, loc1, clr1);
+  fill_gradient_RGB(leds, loc1, clr2, NUM_LEDS - 1, clr1);
 }
 
 // void DualColorFlow(float _speed, float _spacing)

@@ -522,8 +522,20 @@ void plasma(CRGBPalette16 currentPalette, TBlendType currentBlending)
 
     leds[k] = ColorFromPalette(currentPalette, colorIndex, thisBright, currentBlending); // Let's now add the foreground colour.
   }
+}
+void beatwave(CRGBPalette16 currentPalette, TBlendType currentBlending)
+{
 
-} // plasma()
+  // https://github.com/atuline/FastLED-Demos/blob/master/beatwave/beatwave.ino  uint8_t wave1 = beatsin8(9, 0, 255); // That's the same as beatsin8(9);
+  uint8_t wave2 = beatsin8(8, 0, 255);
+  uint8_t wave3 = beatsin8(7, 0, 255);
+  uint8_t wave4 = beatsin8(6, 0, 255);
+
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    leds[i] = ColorFromPalette(currentPalette, i + wave1 + wave2 + wave3 + wave4, 255, currentBlending);
+  }
+}
 
 void setPixel(int pixel, byte red, byte green, byte blue)
 {

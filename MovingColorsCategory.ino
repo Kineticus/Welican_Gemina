@@ -185,7 +185,7 @@ void moving_colors_category(int patternMode)
     break;
   case 39:
     functionName = "Twinkle 3";
-    Twinkle(16, 100, 200, 100, brightness, false);
+    Twinkle(16, 200, 200, 100, brightness, false);
     break;
   case 40:
     functionName = "Mover 1";
@@ -200,7 +200,7 @@ void moving_colors_category(int patternMode)
     Mover(8, 60, 155);
     break;
   case 43:
-    functionName = "Marquee 2";
+    functionName = "Marqueev2 2";
     Marqueev2(2, 250);
     break;
   case 44:

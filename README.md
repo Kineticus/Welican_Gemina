@@ -84,6 +84,7 @@ Standard Readme follows the [Contributor Covenant](http://contributor-covenant.o
 [C++ Classes](https://www.stroustrup.com/C++11FAQ.html#member-init)
 [Arduino C++ & VSCode](https://learn.sparkfun.com/tutorials/efficient-arduino-programming-with-arduino-cli-and-visual-studio-code/all)
 [Arduino Intellisense VSCode](https://cuneyt.aliustaoglu.biz/en/enabling-arduino-intellisense-with-visual-studio-code/)
+[Experimental FastLED RGBSet](https://github.com/FastLED/FastLED/wiki/RGBSet-Reference)
 
 ## License
 

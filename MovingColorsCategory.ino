@@ -188,16 +188,16 @@ void moving_colors_category(int patternMode)
     Twinkle(16, 200, 200, 100, brightness, false);
     break;
   case 40:
-    functionName = "Mover 1";
-    Mover(8, 60, 0);
+    functionName = "Twinkle 4";
+    Twinkle(32, 500, 70, 100, brightness, true);
     break;
   case 41:
-    functionName = "Mover 2";
-    Mover(8, 60, 75);
+    functionName = "Mover 1";
+    Mover(10, 200);
     break;
   case 42:
-    functionName = "Mover 3";
-    Mover(8, 60, 155);
+    functionName = "Meteor 1";
+    Meteor(255, 0, 255);
     break;
   case 43:
     functionName = "Marqueev2 2";
@@ -795,18 +795,229 @@ void Twinkle(uint8_t thisfade, int twinkrate, uint8_t thishue, uint8_t thissat, 
   }
 }
 
-void Mover(uint8_t thisfade, uint8_t thisdelay, uint8_t hue)
+void BouncingBalls(byte red, byte green, byte blue, int BallCount)
+{
+  // https://www.tweaking4all.com/hardware/arduino/adruino-led-strip-effects/#LEDStripEffectBouncingBalls
+  float Gravity = -9.81;
+  int StartHeight = 1;
+
+  float Height[BallCount];
+  float ImpactVelocityStart = sqrt(-2 * Gravity * StartHeight);
+  float ImpactVelocity[BallCount];
+  float TimeSinceLastBounce[BallCount];
+  int Position[BallCount];
+  long ClockTimeSinceLastBounce[BallCount];
+  float Dampening[BallCount];
+
+  for (int i = 0; i < BallCount; i++)
+  {
+    ClockTimeSinceLastBounce[i] = millis();
+    Height[i] = StartHeight;
+    Position[i] = 0;
+    ImpactVelocity[i] = ImpactVelocityStart;
+    TimeSinceLastBounce[i] = 0;
+    Dampening[i] = 0.90 - float(i) / pow(BallCount, 2);
+  }
+
+  while (true)
+  {
+    for (int i = 0; i < BallCount; i++)
+    {
+      TimeSinceLastBounce[i] = millis() - ClockTimeSinceLastBounce[i];
+      Height[i] = 0.5 * Gravity * pow(TimeSinceLastBounce[i] / 1000, 2.0) + ImpactVelocity[i] * TimeSinceLastBounce[i] / 1000;
+
+      if (Height[i] < 0)
+      {
+        Height[i] = 0;
+        ImpactVelocity[i] = Dampening[i] * ImpactVelocity[i];
+        ClockTimeSinceLastBounce[i] = millis();
+
+        if (ImpactVelocity[i] < 0.01)
+        {
+          ImpactVelocity[i] = ImpactVelocityStart;
+        }
+      }
+      Position[i] = round(Height[i] * (NUM_LEDS - 1) / StartHeight);
+    }
+
+    for (int i = 0; i < BallCount; i++)
+    {
+      setPixel(Position[i], red, green, blue);
+    }
+
+    showStrip();
+    setAll(0, 0, 0);
+  }
+}
+
+void BouncingColoredBalls(int BallCount, byte colors[][3])
+{
+  // https://www.tweaking4all.com/hardware/arduino/adruino-led-strip-effects/#LEDStripEffectBouncingBalls
+  float Gravity = -9.81;
+  int StartHeight = 1;
+
+  float Height[BallCount];
+  float ImpactVelocityStart = sqrt(-2 * Gravity * StartHeight);
+  float ImpactVelocity[BallCount];
+  float TimeSinceLastBounce[BallCount];
+  int Position[BallCount];
+  long ClockTimeSinceLastBounce[BallCount];
+  float Dampening[BallCount];
+
+  for (int i = 0; i < BallCount; i++)
+  {
+    ClockTimeSinceLastBounce[i] = millis();
+    Height[i] = StartHeight;
+    Position[i] = 0;
+    ImpactVelocity[i] = ImpactVelocityStart;
+    TimeSinceLastBounce[i] = 0;
+    Dampening[i] = 0.90 - float(i) / pow(BallCount, 2);
+  }
+
+  while (true)
+  {
+    for (int i = 0; i < BallCount; i++)
+    {
+      TimeSinceLastBounce[i] = millis() - ClockTimeSinceLastBounce[i];
+      Height[i] = 0.5 * Gravity * pow(TimeSinceLastBounce[i] / 1000, 2.0) + ImpactVelocity[i] * TimeSinceLastBounce[i] / 1000;
+
+      if (Height[i] < 0)
+      {
+        Height[i] = 0;
+        ImpactVelocity[i] = Dampening[i] * ImpactVelocity[i];
+        ClockTimeSinceLastBounce[i] = millis();
+
+        if (ImpactVelocity[i] < 0.01)
+        {
+          ImpactVelocity[i] = ImpactVelocityStart;
+        }
+      }
+      Position[i] = round(Height[i] * (NUM_LEDS - 1) / StartHeight);
+    }
+
+    for (int i = 0; i < BallCount; i++)
+    {
+      setPixel(Position[i], colors[i][0], colors[i][1], colors[i][2]);
+    }
+
+    showStrip();
+    setAll(0, 0, 0);
+  }
+}
+
+void Mover(uint8_t thisfade, uint8_t hue)
 {
   // https://forum.makerforums.info/t/still-a-newbie-with-newbie-questions/64143/2
-  for (int i = 0; i < NUM_LEDS; i++)
-  {
-    leds[i] += CHSV(hue, 255, 255);
-    leds[(i + 5) % NUM_LEDS] += CHSV(hue + 85, 255, 255);   // We use modulus so that the location is between 0 and NUM_LEDS
-    leds[(i + 10) % NUM_LEDS] += CHSV(hue + 170, 255, 255); // Same here.
-    fadeToBlackBy(leds, NUM_LEDS, thisfade);                // Low values = slower fade.
 
-    // TODO: remove this delay
-    delay(thisdelay); // UGH!!! A blocking delay. If you want to add controls, they may not work reliably.
+  currentMillis = millis();
+  // if (currentMillis - startMillis >= period)
+  if (currentMillis - startMillis >= beatsin8(15, 25, 100))
+  {
+    startMillis = currentMillis;
+    leds[pixelNumber] += CHSV(hue, 255, 255);
+    leds[(pixelNumber + 5) % NUM_LEDS] += CHSV(hue + 85, 255, 255);   // We use modulus so that the location is between 0 and NUM_LEDS
+    leds[(pixelNumber + 10) % NUM_LEDS] += CHSV(hue + 170, 255, 255); // Same here.
+    fadeToBlackBy(leds, NUM_LEDS, thisfade);                          // Low values = slower fade.
+
+    if (++pixelNumber >= NUM_LEDS)
+    {
+      pixelNumber = 0;
+    }
+  }
+}
+
+void RunningLights(uint8_t red, uint8_t green, uint8_t blue, int WaveDelay)
+{
+  int Position = 0;
+
+  for (int j = 0; j < NUM_LEDS * 2; j++)
+  {
+    Position++; // = 0; //Position + Rate;
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      // sine wave, 3 offset waves make a rainbow!
+      //float level = sin(i+Position) * 127 + 128;
+      //setPixel(i,level,0,0);
+      //float level = sin(i+Position) * 127 + 128;
+      setPixel(i, ((sin(i + Position) * 127 + 128) / 255) * red,
+               ((sin(i + Position) * 127 + 128) / 255) * green,
+               ((sin(i + Position) * 127 + 128) / 255) * blue);
+    }
+
+    showStrip();
+    delay(WaveDelay);
+  }
+}
+
+void RunningLights2Colors(byte red1, byte green1, byte blue1, byte red2, byte green2, byte blue2, int WaveDelay)
+{
+  int Position = 0;
+
+  for (int j = 0; j < NUM_LEDS * 2; j = j + 2)
+  {
+    Position++; // = 0; //Position + Rate;
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      setPixel(i, ((sin(i + Position) * 127 + 128) / 255) * red1,
+               ((sin(i + Position) * 127 + 128) / 255) * green1,
+               ((sin(i + Position) * 127 + 128) / 255) * blue1);
+      setPixel(i + 1, ((sin(i + Position) * 127 + 128) / 255) * red2,
+               ((sin(i + Position) * 127 + 128) / 255) * green2,
+               ((sin(i + Position) * 127 + 128) / 255) * blue2);
+    }
+
+    showStrip();
+    delay(WaveDelay);
+  }
+}
+
+void MeteorRain(byte red, byte green, byte blue, byte meteorSize, byte meteorTrailDecay, boolean meteorRandomDecay, int SpeedDelay)
+{
+
+  setAll(0, 0, 0);
+  for (int i = 0; i < NUM_LEDS + NUM_LEDS; i++)
+  {
+
+    // fade brightness all LEDs one step
+    for (int j = 0; j < NUM_LEDS; j++)
+    {
+      if ((!meteorRandomDecay) || (random(10) > 5))
+      {
+        fadeToBlack(j, meteorTrailDecay);
+      }
+    }
+
+    // draw meteor
+    for (int j = 0; j < meteorSize; j++)
+    {
+      if ((pixelNumber - j < NUM_LEDS) && (pixelNumber - j >= 0))
+      {
+        setPixel(pixelNumber - j, red, green, blue);
+      }
+    }
+
+    showStrip();
+    delay(SpeedDelay);
+  }
+}
+
+void Meteor(uint8_t red, uint8_t green, uint8_t blue)
+{
+  // https://www.reddit.com/r/FastLED/comments/gbhpcq/meteor_sketches_with_millis/
+  currentMillis = millis();
+  if (currentMillis - startMillis >= beatsin8(15, 25, 100))
+  {
+    startMillis = currentMillis;
+
+    leds[pixelNumber] = CRGB(red, green, blue);
+    blur1d(leds, NUM_LEDS, beatsin8(7, 20, 80));
+
+    FastLED.show();
+    leds[pixelNumber] = CRGB::Black;
+    if (++pixelNumber >= NUM_LEDS)
+    {
+      pixelNumber = 0;
+    }
   }
 }
 

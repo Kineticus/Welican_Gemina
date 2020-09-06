@@ -538,6 +538,18 @@ void beatwave(CRGBPalette16 currentPalette, TBlendType currentBlending)
   }
 }
 
+void showStrip()
+{
+// #ifdef ADAFRUIT_NEOPIXEL_H
+//   // NeoPixel
+//   strip.show();
+// #endif
+#ifndef ADAFRUIT_NEOPIXEL_H
+  // FastLED
+  FastLED.show();
+#endif
+}
+
 void setPixel(int pixel, byte red, byte green, byte blue)
 {
 
@@ -562,6 +574,15 @@ void setPixel(int pixel, byte red, byte green, byte blue)
 #endif
 }
 
+void setAll(byte red, byte green, byte blue)
+{
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    setPixel(i, red, green, blue);
+  }
+  showStrip();
+}
+
 void fadeLightBy(int pixel, int brightness)
 {
 
@@ -572,6 +593,32 @@ void fadeLightBy(int pixel, int brightness)
   leds[pixel].fadeLightBy(brightness);
 #endif
 }
+
+void fadeToBlack(int ledNo, byte fadeValue)
+{
+// #ifdef ADAFRUIT_NEOPIXEL_H
+//   // NeoPixel
+//   uint32_t oldColor;
+//   uint8_t r, g, b;
+//   int value;
+
+//   oldColor = strip.getPixelColor(ledNo);
+//   r = (oldColor & 0x00ff0000UL) >> 16;
+//   g = (oldColor & 0x0000ff00UL) >> 8;
+//   b = (oldColor & 0x000000ffUL);
+
+//   r = (r <= 10) ? 0 : (int)r - (r * fadeValue / 256);
+//   g = (g <= 10) ? 0 : (int)g - (g * fadeValue / 256);
+//   b = (b <= 10) ? 0 : (int)b - (b * fadeValue / 256);
+
+//   strip.setPixelColor(ledNo, r, g, b);
+// #endif
+#ifndef ADAFRUIT_NEOPIXEL_H
+  // FastLED
+  leds[ledNo].fadeToBlackBy(fadeValue);
+#endif
+}
+
 void DetermineFadeDirection()
 {
   if (yoffset > yoffsetMAX)

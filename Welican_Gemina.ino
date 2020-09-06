@@ -53,6 +53,10 @@ int mode_max = maxModes;
 int pattern[5];
 int pattern_temp = 0;
 int pattern_max[5] = {12, 12, 22, 65, 11};
+int pixelNumber = 0;
+unsigned long startMillis;
+unsigned long currentMillis;
+const unsigned long period = 1000;
 
 #define screen_width 127
 #define screen_height 63
@@ -486,7 +490,7 @@ void loop()
     break;
   }
   //WS LED
-  FastLED.show();
+  showStrip();
 
   if (useFade == true)
   {

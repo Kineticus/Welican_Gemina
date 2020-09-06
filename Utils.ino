@@ -360,7 +360,6 @@ void drawTop()
   {
   case 0:
     u8g2.drawXBMP(0, 0, star_width, star_height, star);
-    // u8g2.drawXBMP(0,0,heart_width, heart_height, heart);
     break;
   case 1:
     u8g2.drawXBMP(0, 0, wave_width, wave_height, wave);
@@ -368,10 +367,12 @@ void drawTop()
     break;
   case 2:
     u8g2.drawXBMP(0, 0, hashtag_width, hashtag_height, hashtag);
-    // u8g2.drawXBMP(0,0,donut_width, donut_height, donut);
     break;
   case 3:
     u8g2.drawXBMP(0, 0, donut_width, donut_height, donut);
+    break;
+  case 4:
+    u8g2.drawXBMP(0, 0, heart_width, heart_height, heart);
     break;
   }
 
@@ -405,6 +406,9 @@ void drawBottom()
   case 3:
     drawIPAddress();
     //gravityWell();
+    break;
+  case 4:
+    starBounce();
     break;
   }
 }
@@ -496,6 +500,57 @@ void addGlitter(fract8 chanceOfGlitter)
   if (random8() < chanceOfGlitter)
   {
     leds[random16(NUM_LEDS)] += CRGB::White;
+  }
+}
+
+void customColor(int r, int g, int b)
+{
+  fill_solid(leds, LEDs_in_strip, CRGB(r, g, b));
+}
+
+void setPixel(int pixel, byte red, byte green, byte blue)
+{
+
+  // #ifdef ADAFRUIT_NEOPIXEL_H
+
+  //   // NeoPixel
+
+  //   strip.setPixelColor(pixel, strip.Color(red, green, blue));
+
+  // #endif
+
+#ifndef ADAFRUIT_NEOPIXEL_H
+
+  // FastLED
+
+  leds[pixel].r = red;
+
+  leds[pixel].g = green;
+
+  leds[pixel].b = blue;
+
+#endif
+}
+
+void fadeLightBy(int pixel, int brightness)
+{
+
+#ifndef ADAFRUIT_NEOPIXEL_H
+
+  // FastLED
+
+  leds[pixel].fadeLightBy(brightness);
+#endif
+}
+void DetermineFadeDirection()
+{
+  if (yoffset > yoffsetMAX)
+  {
+    fadeDirection2 = 0;
+  }
+  if (yoffset < 0)
+  {
+    fadeDirection2 = 1;
   }
 }
 

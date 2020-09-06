@@ -60,8 +60,3 @@ void basic_category(int patternMode)
 }
 
 // FUNCTIONS
-
-void customColor(int r, int g, int b)
-{
-    fill_solid(leds, NUM_LEDS, CRGB(r, g, b));
-}

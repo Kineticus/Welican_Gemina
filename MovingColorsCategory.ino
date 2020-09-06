@@ -175,6 +175,62 @@ void moving_colors_category(int patternMode)
     functionName = "RepeatingBlockPattern 3";
     RepeatingBlockPattern(200, 155, 20, 40, 20);
     break;
+  case 37:
+    functionName = "Twinkle 1";
+    Twinkle(8, 100, 50, 100, brightness, false);
+    break;
+  case 38:
+    functionName = "Twinkle 2";
+    Twinkle(8, 100, 125, 100, brightness, true);
+    break;
+  case 39:
+    functionName = "Twinkle 3";
+    Twinkle(16, 100, 200, 100, brightness, false);
+    break;
+  case 40:
+    functionName = "Mover 1";
+    Mover(8, 60, 0);
+    break;
+  case 41:
+    functionName = "Mover 2";
+    Mover(8, 60, 75);
+    break;
+  case 42:
+    functionName = "Mover 3";
+    Mover(8, 60, 155);
+    break;
+  case 43:
+    functionName = "Marquee 2";
+    Marqueev2(2, 250);
+    break;
+  case 44:
+    functionName = "Marqueev2 4";
+    Marqueev2(4, 250);
+    break;
+  case 45:
+    functionName = "Marqueev2 7";
+    Marqueev2(7, 250);
+    break;
+  case 46:
+    functionName = "Marqueev2 10";
+    Marqueev2(10, 250);
+    break;
+  case 47:
+    functionName = "Marqueev3 2";
+    Marqueev3(2, 250, 2, 20);
+    break;
+  case 48:
+    functionName = "Marqueev3 4";
+    Marqueev3(4, 250, 3, 40);
+    break;
+  case 49:
+    functionName = "Marqueev3 7";
+    Marqueev3(7, 250, 5, 80);
+    break;
+  case 50:
+    functionName = "Marqueev3 10";
+    Marqueev3(10, 250, 7, 100);
+    break;
   }
 }
 
@@ -655,6 +711,167 @@ void RepeatingBlockPattern(uint8_t hue, uint8_t saturation, uint8_t blockSize, u
   {
     sizeUpdate = true; // trigger size update
   }
+}
+
+void Twinkle(uint8_t thisfade, int twinkrate, uint8_t thishue, uint8_t thissat, uint8_t thisbri, bool randhue)
+{
+  // https://forum.makerforums.info/t/still-a-newbie-with-newbie-questions/64143/2
+  if (twinkrate < NUM_LEDS)
+  {
+    twinkrate = NUM_LEDS; // Makes sure the twinkrate will cover ALL of the LED’s as it’s used as the maximum LED index value.
+  }
+  int i = random16(twinkrate); // A random number based on twinkrate. Higher number => fewer twinkles.
+  if (randhue)
+  {
+    thishue = random16(0, 255); // Randomize every LED if TRUE
+  }
+  if (i < NUM_LEDS)
+  {
+    leds[i] = CHSV(thishue, thissat, thisbri); // Only the lowest probability twinkles will do. You could even randomize the hue/saturation.
+  }
+  for (int j = 0; j < NUM_LEDS; j++)
+  {
+    leds[j].fadeToBlackBy(thisfade); // Use the FastLED fade method.
+  }
+}
+
+void Mover(uint8_t thisfade, uint8_t thisdelay, uint8_t hue)
+{
+  // https://forum.makerforums.info/t/still-a-newbie-with-newbie-questions/64143/2
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    leds[i] += CHSV(hue, 255, 255);
+    leds[(i + 5) % NUM_LEDS] += CHSV(hue + 85, 255, 255);   // We use modulus so that the location is between 0 and NUM_LEDS
+    leds[(i + 10) % NUM_LEDS] += CHSV(hue + 170, 255, 255); // Same here.
+    show_at_max_brightness_for_power();
+    fadeToBlackBy(leds, NUM_LEDS, thisfade); // Low values = slower fade.
+    delay(thisdelay);                        // UGH!!! A blocking delay. If you want to add controls, they may not work reliably.
+  }
+}
+
+void Marqueev2(uint8_t spacing, uint16_t holdTime)
+{
+  // https://github.com/marmilicious/FastLED_examples/blob/master/marquee_v2.ino
+  EVERY_N_SECONDS(40)
+  { // Change direction every N seconds.
+    delta2 = -1 * delta2;
+  }
+  EVERY_N_SECONDS(40)
+  { // Change direction every N seconds.
+    delta2 = -1 * delta2;
+  }
+
+  EVERY_N_SECONDS(10)
+  { // Demo changing the pixel spacing every N seconds.
+    spacing = spacing + 1;
+    if (spacing == 9)
+    {
+      spacing = 2;
+    } // Reset spacing to 2
+    if (spacing > 4)
+    {
+      spacing = 8;
+    }                            // Jump spacing up to 8
+    hue = hue + random8(30, 61); // Shift the hue to something new.
+  }
+
+  EVERY_N_MILLISECONDS(holdTime)
+  {
+    // holdTime = Milliseconds to hold position before advancing
+    // Advance pixels to next position.
+
+    for (uint8_t i = 0; i < (NUM_LEDS / spacing); i++)
+    {
+      pos = (spacing * (i - 1) + spacing + advance) % NUM_LEDS;
+      leds[pos] = CHSV(hue, 255, 255);
+    }
+
+    FastLED.show();
+
+    // Fade out tail or set back to black for next loop around.
+    if (fadingTail == 1)
+    {
+      fadeToBlackBy(leds, NUM_LEDS, fadeRate);
+    }
+    else
+    {
+      for (uint8_t i = 0; i < (NUM_LEDS / spacing); i++)
+      {
+        pos = (spacing * (i - 1) + spacing + advance) % NUM_LEDS;
+        leds[pos] = CRGB::Black;
+      }
+    }
+
+    // Advance pixel postion down strip, and rollover if needed.
+    advance = (advance + delta2 + NUM_LEDS) % NUM_LEDS;
+  }
+}
+
+void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Shift)
+{
+  //https: //github.com/marmilicious/FastLED_examples/blob/master/marquee_v3.ino
+  EVERY_N_SECONDS(10)
+  { // Demo: Change direction every N seconds.
+    delta2 = -1 * delta2;
+  }
+
+  //EVERY_N_SECONDS(10){  // Demo: Changing the pixel spacing every N seconds.
+  //  spacing = spacing + 1;
+  //  if (spacing == 9) { spacing = 2; }  // Reset spacing to 2
+  //  if (spacing >4) { spacing = 8; }  // Jump spacing up to 8
+  //}
+
+  EVERY_N_SECONDS(10)
+  {                              // Demo: Change the hue every N seconds.
+    hue = hue + random8(30, 61); // Shift the hue to something new.
+  }
+
+  EVERY_N_MILLISECONDS(holdTime)
+  { // Advance pixels to next position.
+
+    // Advance pixel postion down strip, and rollover if needed.
+    advance = (advance + delta2 + NUM_LEDS) % NUM_LEDS;
+
+    // Fade out tail or set back to black for next loop around.
+    if (fadingTail == 1)
+    {
+      fadeToBlackBy(leds, NUM_LEDS, fadeRate);
+    }
+    else
+    {
+      for (uint8_t i = 0; i < (NUM_LEDS / spacing); i++)
+      {
+        for (uint8_t w = 0; w < width; w++)
+        {
+          //pos = (spacing * (i-1) + spacing + advance + w) % NUM_LEDS;
+          pos = (spacing * (i - 1) + spacing + advance + w - 1) % NUM_LEDS;
+          leds[pos] = CRGB::Black;
+        }
+      }
+    }
+
+    // Update pixels down the strip.
+    for (uint8_t i = 0; i < (NUM_LEDS / spacing); i++)
+    {
+      for (uint8_t w = 0; w < width; w++)
+      {
+        pos = (spacing * (i - 1) + spacing + advance + w) % NUM_LEDS;
+        if (w % 2 == 0)
+        { // Is w even or odd?
+          colorStorage = hue;
+        }
+        else
+        {
+          colorStorage = hue + hue2Shift;
+        }
+
+        leds[pos] = CHSV(colorStorage, 255, 255);
+      }
+    }
+
+    FastLED.show();
+
+  } //end_every_n
 }
 
 // void DualColorFlow(float _speed, float _spacing)

@@ -41,19 +41,18 @@ String returnText;
 
 AsyncWebServer server(80);
 
-#define maxModes 4
-int mode = 0;
-int mode_max = 3;
-
 int menu[3];
 int menu_max[3] = {2, 1, 2};
 int menu_cur = 0;
 
 int runMode = 0;
 
-int pattern[4];
+#define maxModes 5
+int mode = 0;
+int mode_max = maxModes;
+int pattern[5];
 int pattern_temp = 0;
-int pattern_max[4] = {12, 12, 22, 36};
+int pattern_max[5] = {12, 12, 22, 50, 11};
 
 #define screen_width 127
 #define screen_height 63
@@ -96,6 +95,16 @@ int dvdBounce_y = random(0, 32);
 int dvdBounce_vx = 1;
 int dvdBounce_vy = 1;
 
+int dvdBounce2_x = random(0, 32);
+int dvdBounce2_y = random(0, 32);
+int dvdBounce2_vx = 1;
+int dvdBounce2_vy = 1;
+
+int dvdBounce3_x = random(0, 32);
+int dvdBounce3_y = random(0, 32);
+int dvdBounce3_vx = 1;
+int dvdBounce3_vy = 1;
+
 int brightness = 0;
 int brightness_temp = 0;
 int brightness_debounce = 0;
@@ -124,7 +133,14 @@ const int LEDs_for_simplex = 6;
 CRGB temp[NUM_LEDS];
 CRGB leds_temp[NUM_LEDS / 2]; // half the total number of pixels
 
-int fadeDirection = 0; // 1 or 0, positive or negative
+int fadeDirection = 0;  // 1 or 0, positive or negative
+int fadeDirection2 = 0; // 1 or 0, positive or negative
+int fadeAmount = 5;     // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
+bool useFade = false;
+boolean fadingTail = 0; // Add fading tail? [1=true, 0=falue]
+uint8_t fadeRate = 170; // How fast to fade out tail. [0-255]
+
+int8_t delta2 = 1; // Sets forward or backwards direction amount. (Can be negative.)
 
 int palletPosition;
 int colorBarPosition = 1;
@@ -146,6 +162,8 @@ uint8_t hueDelta = hueA - hueB;                          // Do Not Edit
 static float delta = (valueMax - valueMin) / 2.35040238; // Do Not Edit
 boolean moving = 1;
 uint8_t pos;                    // stores a position for color being blended in
+int8_t advance;                 // Stores the advance amount
+uint8_t colorStorage;           // Stores a hue color.
 uint8_t posR, posG, posB;       // positions of moving R,G,B dots
 bool gReverseDirection = false; //false = center outward, true = from ends inward
 uint8_t count;
@@ -190,6 +208,7 @@ int intensity_r = 734;
 int intensity_g = 734;
 int intensity_b = 734;
 float yoffset = 0.0;
+float yoffsetMAX = 15000;
 float xoffset = 0.0;
 int currSpeed = 10;
 
@@ -449,10 +468,24 @@ void loop()
   case 3:
     moving_colors_category(pattern[mode]);
     break;
+  case 4:
+    legacy_category(pattern[mode]);
+    break;
   }
   //WS LED
   FastLED.show();
 
+  if (useFade == true)
+  {
+    brightness = brightness + fadeAmount;
+    // reverse the direction of the fading at the ends of the fade:
+    if (brightness == 0 || brightness == 255)
+    {
+      fadeAmount = -fadeAmount;
+    }
+
+    delay(9); // This delay sets speed of the fade. I usually do from 5-75 but you can always go higher.
+  }
   //FastLED.delay(1000/FRAMES_PER_SECOND);
 
   EVERY_N_MILLISECONDS(200) { gHue++; } // slowly cycle the "base color" through the rainbow

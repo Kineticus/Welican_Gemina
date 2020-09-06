@@ -273,11 +273,11 @@ void moving_colors_category(int patternMode)
     break;
   case 61:
     functionName = "BlendWave 2";
-    BlendWave(60, 100);
+    BlendWave(40, 20);
     break;
   case 62:
     functionName = "BlendWave 3";
-    BlendWave(50, 50);
+    BlendWave(20, 20);
     break;
   case 63:
     functionName = "BeatWave 1";

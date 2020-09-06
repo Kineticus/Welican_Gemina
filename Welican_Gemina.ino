@@ -52,7 +52,7 @@ int mode = 0;
 int mode_max = maxModes;
 int pattern[5];
 int pattern_temp = 0;
-int pattern_max[5] = {12, 12, 22, 50, 11};
+int pattern_max[5] = {12, 12, 22, 53, 11};
 
 #define screen_width 127
 #define screen_height 63

@@ -231,6 +231,30 @@ void moving_colors_category(int patternMode)
     functionName = "Marqueev3 10";
     Marqueev3(10, 250, 7, 100);
     break;
+  case 51:
+    functionName = "Sawtooth 60";
+    Sawtooth(60, OceanColors_p, LINEARBLEND);
+    break;
+  case 52:
+    functionName = "Sawtooth 30";
+    Sawtooth(30, LavaColors_p, LINEARBLEND);
+    break;
+  case 53:
+    functionName = "Sawtooth 110";
+    Sawtooth(110, ForestColors_p, LINEARBLEND);
+    break;
+  case 54:
+    functionName = "Plasma";
+    Sawtooth(OceanColors_p, LavaColors_p);
+    break;
+  case 55:
+    functionName = "Plasma";
+    Sawtooth(ForestColors_p, CloudColors_p);
+    break;
+  case 56:
+    functionName = "Plasma";
+    Sawtooth(RainbowColors_p, PartyColors_p);
+    break;
   }
 }
 
@@ -873,6 +897,42 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
     FastLED.show();
 
   } //end_every_n
+}
+
+void Sawtooth(int bpm, CRGBPalette16 currentPalette, TBlendType currentBlending)
+{
+
+  int ms_per_beat = 60000 / bpm; // 500ms per beat, where 60,000 = 60 seconds * 1000 ms
+  int ms_per_led = 60000 / bpm / NUM_LEDS;
+
+  int cur_led = ((millis() % ms_per_beat) / ms_per_led) % (NUM_LEDS); // Using millis to count up the strand, with %NUM_LEDS at the end as a safety factor.
+
+  if (cur_led == 0)
+    fill_solid(leds, NUM_LEDS, CRGB::Black);
+  else
+    leds[cur_led] = ColorFromPalette(currentPalette, 0, 255, currentBlending); // I prefer to use palettes instead of CHSV or CRGB assignments.
+
+} // sawtooth()
+
+void Plasma(CRGBPalette16 currentPalette, CRGBPalette16 targetPalette)
+{
+
+  EVERY_N_MILLISECONDS(50)
+  { // FastLED based non-blocking delay to update/display the sequence.
+    plasma();
+  }
+
+  EVERY_N_MILLISECONDS(100)
+  {
+    uint8_t maxChanges = 24;
+    nblendPaletteTowardPalette(currentPalette, targetPalette, maxChanges); // AWESOME palette blending capability.
+  }
+
+  EVERY_N_SECONDS(5)
+  {                            // Change the target palette to a random one every 5 seconds.
+    uint8_t baseC = random8(); // You can use this as a baseline colour if you want similar hues in the next line.
+    targetPalette = CRGBPalette16(CHSV(baseC + random8(32), 192, random8(128, 255)), CHSV(baseC + random8(32), 255, random8(128, 255)), CHSV(baseC + random8(32), 192, random8(128, 255)), CHSV(baseC + random8(32), 255, random8(128, 255)));
+  }
 }
 
 // void DualColorFlow(float _speed, float _spacing)

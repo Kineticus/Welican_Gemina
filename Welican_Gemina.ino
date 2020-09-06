@@ -41,22 +41,24 @@ String returnText;
 
 AsyncWebServer server(80);
 
-#define maxModes 4
-int mode = 0;
-int mode_max = 3;
-
 int menu[3];
 int menu_max[3] = {2, 1, 2};
 int menu_cur = 0;
 
 int runMode = 0;
 
-int pattern[4];
+#define maxModes 5
+int mode = 0;
+int mode_max = maxModes;
+int pattern[5];
 int pattern_temp = 0;
-int pattern_max[4] = {12, 12, 22, 17};
+int pattern_max[5] = {12, 12, 22, 65, 11};
 
 #define screen_width 127
 #define screen_height 63
+
+#define qsubd(x, b) ((x > b) ? b : 0)     // Digital unsigned subtraction macro. if result <0, then => 0. Otherwise, take on fixed value.
+#define qsuba(x, b) ((x > b) ? x - b : 0) // Analog Unsigned subtraction macro. if result <0, then => 0
 
 int knob1Click = 0;
 int knob2Click = 0;
@@ -96,6 +98,16 @@ int dvdBounce_y = random(0, 32);
 int dvdBounce_vx = 1;
 int dvdBounce_vy = 1;
 
+int dvdBounce2_x = random(0, 32);
+int dvdBounce2_y = random(0, 32);
+int dvdBounce2_vx = 1;
+int dvdBounce2_vy = 1;
+
+int dvdBounce3_x = random(0, 32);
+int dvdBounce3_y = random(0, 32);
+int dvdBounce3_vx = 1;
+int dvdBounce3_vy = 1;
+
 int brightness = 0;
 int brightness_temp = 0;
 int brightness_debounce = 0;
@@ -121,8 +133,17 @@ float tunnelGenerator = 0;
 //Define simplex noise node for each LED
 const int LEDs_in_strip = NUM_LEDS;
 const int LEDs_for_simplex = 6;
+CRGB temp[NUM_LEDS];
+CRGB leds_temp[NUM_LEDS / 2]; // half the total number of pixels
 
-int fadeDirection = 0; // 1 or 0, positive or negative
+int fadeDirection = 0;  // 1 or 0, positive or negative
+int fadeDirection2 = 0; // 1 or 0, positive or negative
+int fadeAmount = 5;     // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
+bool useFade = false;
+boolean fadingTail = 0; // Add fading tail? [1=true, 0=falue]
+uint8_t fadeRate = 170; // How fast to fade out tail. [0-255]
+
+int8_t delta2 = 1; // Sets forward or backwards direction amount. (Can be negative.)
 
 int palletPosition;
 int colorBarPosition = 1;
@@ -136,11 +157,46 @@ uint8_t hueB = 95;      // End hue at valueMax.
 uint8_t satB = 255;     // End saturation at valueMax.
 float valueMax = 255.0; // Pulse maximum value (Should be larger then valueMin).
 
+// used in Blendwave
+CRGB clr1;
+CRGB clr2;
+uint8_t speed;
+uint8_t loc1;
+uint8_t loc2;
+uint8_t ran1;
+uint8_t ran2;
+// -------------------
+
 uint8_t hue = hueA;                                      // Do Not Edit
+uint8_t hue2 = hueB;                                     // Do Not Edit
 uint8_t sat = satA;                                      // Do Not Edit
 float val = valueMin;                                    // Do Not Edit
 uint8_t hueDelta = hueA - hueB;                          // Do Not Edit
 static float delta = (valueMax - valueMin) / 2.35040238; // Do Not Edit
+boolean moving = 1;
+uint8_t pos;                    // stores a position for color being blended in
+int8_t advance;                 // Stores the advance amount
+uint8_t colorStorage;           // Stores a hue color.
+uint8_t posR, posG, posB;       // positions of moving R,G,B dots
+bool gReverseDirection = false; //false = center outward, true = from ends inward
+uint8_t count;
+bool sizeUpdate;
+
+// COOLING: How much does the air cool as it rises?
+// Less cooling = taller flames.  More cooling = shorter flames.
+// Default 50, suggested range 20-100
+#define COOLING 90
+
+// SPARKING: What chance (out of 255) is there that a new spark will be lit?
+// Higher chance = more roaring fire.  Lower chance = more flickery fire.
+// Default 120, suggested range 50-200.
+#define SPARKING 50
+
+int flowDirection = -1;      // Use either 1 or -1 to set flow direction
+uint16_t cycleLength = 1500; // Lover values = continuous flow, higher values = distinct pulses.
+uint16_t pulseLength = 150;  // How long the pulse takes to fade out.  Higher value is longer.
+uint16_t pulseOffset = 200;  // Delay before second pulse.  Higher value is more delay.
+uint8_t baseBrightness = 10; // Brightness of LEDs when not pulsing. Set to 0 for off.
 
 // Extra fake LED at the end, to avoid fencepost problem.
 // It is used by simplex node and interpolation code.
@@ -165,6 +221,7 @@ int intensity_r = 734;
 int intensity_g = 734;
 int intensity_b = 734;
 float yoffset = 0.0;
+float yoffsetMAX = 15000;
 float xoffset = 0.0;
 int currSpeed = 10;
 
@@ -224,19 +281,19 @@ void setup()
   pinMode(knob2C, INPUT_PULLUP); //Knob 2 Click, internal Pull Up (button connects to ground)
 
   // Enable the weak pull up resistors for encoders
-	ESP32Encoder::useInternalWeakPullResistors=UP;
+  ESP32Encoder::useInternalWeakPullResistors = UP;
 
-	//Program Selection, encoder WITH Detents
-	encoder.attachFullQuad(33, 32);
-  
+  //Program Selection, encoder WITH Detents
+  encoder.attachFullQuad(33, 32);
+
   //Brightness Adjustment, encoder WITHOUT Detents
-	encoder2.attachFullQuad(27, 26); 
-		
-	// set starting count value after attaching
-	encoder.clearCount();
+  encoder2.attachFullQuad(27, 26);
 
-	// clear the encoder's raw count and set the tracked count to zero
-	encoder2.clearCount();
+  // set starting count value after attaching
+  encoder.clearCount();
+
+  // clear the encoder's raw count and set the tracked count to zero
+  encoder2.clearCount();
 
   // Initialize SPIFFS
   if (!SPIFFS.begin(true))
@@ -265,7 +322,7 @@ void setup()
     request->send(SPIFFS, "/main.js", "text/javascript");
   });
 
-  server.on("/obama_not_bad.jpg", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("/obama_not_bad.jpg", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/obama_not_bad.jpg", "image/jpg");
   });
   // Route to set GPIO to HIGH
@@ -367,18 +424,18 @@ void loop()
   //Clear the display buffer so we can draw new stuff
   u8g2.clearBuffer();
 
-  switch(runMode)
+  switch (runMode)
   {
-    case 0:
-      drawBottom();
-      drawTop();
-      break;
-    case 1:
-      drawMenu();
-      break;
-    case 2:
-      fallios();
-      break;
+  case 0:
+    drawBottom();
+    drawTop();
+    break;
+  case 1:
+    drawMenu();
+    break;
+  case 2:
+    fallios();
+    break;
   }
 
   //Update variables compared to current encoder location
@@ -424,10 +481,24 @@ void loop()
   case 3:
     moving_colors_category(pattern[mode]);
     break;
+  case 4:
+    legacy_category(pattern[mode]);
+    break;
   }
   //WS LED
   FastLED.show();
 
+  if (useFade == true)
+  {
+    brightness = brightness + fadeAmount;
+    // reverse the direction of the fading at the ends of the fade:
+    if (brightness == 0 || brightness == 255)
+    {
+      fadeAmount = -fadeAmount;
+    }
+
+    delay(9); // This delay sets speed of the fade. I usually do from 5-75 but you can always go higher.
+  }
   //FastLED.delay(1000/FRAMES_PER_SECOND);
 
   EVERY_N_MILLISECONDS(200) { gHue++; } // slowly cycle the "base color" through the rainbow

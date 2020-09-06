@@ -5,77 +5,95 @@ void chill_category(int patternMode)
     switch (patternMode)
     {
     case 0:
+        functionName = "redHsv";
         redHsv();
         break;
     case 1:
+        functionName = "aquaHsv";
         aquaHsv();
         break;
     case 2:
+        functionName = "yellowHsv";
         yellowHsv();
         break;
     case 3:
+        functionName = "purpleHsv";
         purpleHsv();
         break;
     case 4:
+        functionName = "redGlitterHsv";
         redGlitterHsv();
         break;
     case 5:
+        functionName = "aquaGlitterHsv";
         aquaGlitterHsv();
         break;
     case 6:
+        functionName = "yellowGlitterHsv";
         yellowGlitterHsv();
         break;
     case 7:
+        functionName = "purpleGlitterHsv";
         purpleGlitterHsv();
         break;
     case 8:
+        functionName = "confettiOne";
         confettiOne();
         break;
     case 9:
+        functionName = "confettiTwo";
         confettiTwo();
         break;
     case 10:
+        functionName = "confettiThree";
         confettiThree();
         break;
     case 11:
+        functionName = "confettiFour";
         confettiFour();
         break;
     case 12:
+        functionName = "confettiFive";
         confettiFive();
         break;
     case 13:
+        functionName = "sinelonOne";
         sinelonOne();
         break;
     case 14:
+        functionName = "sinelonTwo";
         sinelonTwo();
         break;
     case 15:
+        functionName = "sinelonThree";
         sinelonThree();
         break;
     case 16:
+        functionName = "sinelonFour";
         sinelonFour();
         break;
     case 17:
+        functionName = "sinelonFive";
         sinelonFive();
         break;
-    case 18:
-        RainbowOneYoffset();
-        break;
-    case 19:
-        RainbowTwoYoffset();
-        break;
-    case 20:
-        RainbowThreeXoffset();
-        break;
-    case 21:
-        RainbowFourXoffset();
-        break;
-    case 22:
-        RainbowBigXoffset();
-        break;
-    case 23:
-        RainbowBigYoffset();
-        break;
+        // case 18:
+        //     RainbowOneYoffset();
+        //     break;
+        // case 19:
+        //     RainbowTwoYoffset();
+        //     break;
+        // case 20:
+        //     RainbowThreeXoffset();
+        //     break;
+        // case 21:
+        //     RainbowFourXoffset();
+        //     break;
+        // case 22:
+        //     RainbowBigXoffset();
+        //     break;
+        // case 23:
+        //     RainbowBigYoffset();
+        //     break;
     }
 }
 
@@ -176,59 +194,57 @@ void sinelonFive()
     sinelonCustom(32, 255, 1, 12);
 }
 
-void RainbowOneYoffset()
-{
-    functionName = "RainbowOneYoffset";
-    spaceinc = 0.03;
-    timeinc = (0.000025 * currSpeed);
-    yoffset += timeinc;
-    //xoffset += timeinc;
-    SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
-}
-void RainbowTwoYoffset()
-{
-    functionName = "RainbowTwoYoffset";
-    spaceinc = 0.07;
-    timeinc = (0.000025 * currSpeed);
-    yoffset += timeinc;
-    ;
-    //xoffset += timeinc;
-    SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
-}
-void RainbowThreeXoffset()
-{
-    functionName = "RainbowThreeXoffset";
-    spaceinc = 0.07;
-    timeinc = (0.000025 * currSpeed);
-    //yoffset += timeinc;
-    xoffset += timeinc;
-    SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
-}
-void RainbowFourXoffset()
-{
-    functionName = "RainbowFourXoffset";
-    spaceinc = 0.03;
-    timeinc = (0.000025 * currSpeed);
-    //yoffset += timeinc;
-    xoffset += timeinc;
-    SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
-}
-void RainbowBigXoffset()
-{
-    functionName = "RainbowBigXoffset";
-    spaceinc = 0.12;
-    timeinc = (0.000025 * currSpeed);
-    //yoffset += timeinc;
-    xoffset += timeinc;
-    SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
-}
-void RainbowBigYoffset()
-{
-    functionName = "RainbowBigYoffset";
-    spaceinc = 0.12;
-    timeinc = (0.000025 * currSpeed);
-    yoffset += timeinc;
-    ;
-    //xoffset += timeinc;
-    SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
-}
+// void RainbowOneYoffset()
+// {
+//     functionName = "RainbowOneYoffset";
+//     spaceinc = 0.03;
+//     timeinc = (0.000025 * currSpeed);
+//     yoffset += timeinc;
+//     //xoffset += timeinc;
+//     SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
+// }
+// void RainbowTwoYoffset()
+// {
+//     functionName = "RainbowTwoYoffset";
+//     spaceinc = 0.07;
+//     timeinc = (0.000025 * currSpeed);
+//     yoffset += timeinc;
+//     //xoffset += timeinc;
+//     SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
+// }
+// void RainbowThreeXoffset()
+// {
+//     functionName = "RainbowThreeXoffset";
+//     spaceinc = 0.07;
+//     timeinc = (0.000025 * currSpeed);
+//     //yoffset += timeinc;
+//     xoffset += timeinc;
+//     SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
+// }
+// void RainbowFourXoffset()
+// {
+//     functionName = "RainbowFourXoffset";
+//     spaceinc = 0.03;
+//     timeinc = (0.000025 * currSpeed);
+//     //yoffset += timeinc;
+//     xoffset += timeinc;
+//     SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
+// }
+// void RainbowBigXoffset()
+// {
+//     functionName = "RainbowBigXoffset";
+//     spaceinc = 0.12;
+//     timeinc = (0.000025 * currSpeed);
+//     //yoffset += timeinc;
+//     xoffset += timeinc;
+//     SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
+// }
+// void RainbowBigYoffset()
+// {
+//     functionName = "RainbowBigYoffset";
+//     spaceinc = 0.12;
+//     timeinc = (0.000025 * currSpeed);
+//     yoffset += timeinc;
+//     //xoffset += timeinc;
+//     SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
+// }

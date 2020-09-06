@@ -74,28 +74,252 @@ void moving_colors_category(int patternMode)
     break;
   case 13:
     functionName = "Candy Cane 1";
-    candyCane(20, 3, 5, CRGB::White, CRGB::Red, CRGB::Blue);
+    CandyCane(20, 3, 5, CRGB::White, CRGB::Red, CRGB::Blue);
     break;
   case 14:
     functionName = "Candy Cane 2";
-    candyCane(250, 3, 5, CRGB::Black, CRGB::Orange, CRGB::Green);
+    CandyCane(250, 3, 5, CRGB::Black, CRGB::Orange, CRGB::Green);
     break;
   case 15:
     functionName = "Candy Cane 3";
-    candyCane(200, 3, 5, CRGB::Yellow, CRGB::Green, CRGB::Purple);
+    CandyCane(200, 3, 5, CRGB::Yellow, CRGB::Green, CRGB::Purple);
     break;
   case 16:
     functionName = "Candy Cane 4";
-    candyCane(250, 3, 5, CRGB::Green, CRGB::Blue, CRGB::Teal);
+    CandyCane(250, 3, 5, CRGB::Green, CRGB::Blue, CRGB::Teal);
     break;
   case 17:
     functionName = "Candy Cane 5";
-    candyCane(400, 3, 5, CRGB::Purple, CRGB::Blue, CRGB::White);
+    CandyCane(400, 3, 5, CRGB::Purple, CRGB::Blue, CRGB::White);
+    break;
+  case 18:
+    functionName = "Blend Rainbow 1";
+    BlendIntoRainbow(CRGB::Purple, CRGB::Blue, CRGB::Green);
+    break;
+  case 19:
+    functionName = "Blend Rainbow 2";
+    BlendIntoRainbow(CRGB::Red, CRGB::Blue, CRGB::White);
+    break;
+  case 20:
+    functionName = "Blend Rainbow 3";
+    BlendIntoRainbow(CRGB::Purple, CRGB::Orange, CRGB::White);
+    break;
+  case 21:
+    functionName = "Blend Rainbow 4";
+    BlendIntoRainbow(CRGB::Green, CRGB::Blue, CRGB::Yellow);
+    break;
+  case 22:
+    functionName = "Blend Rainbow 5";
+    BlendIntoRainbow(CRGB::Orange, CRGB::Purple, CRGB::Green);
+    break;
+  case 23:
+    functionName = "HeartBeat 1";
+    HeartBeat(100, 255);
+    break;
+  case 24:
+    functionName = "HeartBeat 2";
+    HeartBeat(20, 255);
+    break;
+  case 25:
+    functionName = "HeartBeat 3";
+    HeartBeat(155, 255);
+    break;
+  case 26:
+    functionName = "HeartBeat 4";
+    HeartBeat(75, 255);
+    break;
+  case 27:
+    functionName = "HeartBeat 5";
+    HeartBeat(225, 255);
+    break;
+  case 28:
+    functionName = "Fire 1";
+    FireHalfStrip(); // draw fire data to leds_temp
+
+    mirror2ndHalf(); // copy and mirror data from leds_temp to leds
+    break;
+  case 29:
+    functionName = "Fire 2";
+    FireFullStrip(); // draw fire data to leds_temp
+
+    mirror2ndHalf(); // copy and mirror data from leds_temp to leds
+    break;
+  case 30:
+    functionName = "Fire 3";
+    gReverseDirection = true;
+    FireHalfStrip(); // draw fire data to leds_temp
+
+    mirror2ndHalf(); // copy and mirror data from leds_temp to leds
+    break;
+  case 31:
+    functionName = "RepeatingPattern 1";
+    RepeatingPattern(100, 80, 5, 1000);
+    break;
+  case 32:
+    functionName = "RepeatingPattern 2";
+    RepeatingPattern(10, 120, 10, FRAMES_PER_SECOND);
+    break;
+  case 33:
+    functionName = "RepeatingPattern 3";
+    RepeatingPattern(200, 155, 20, 500);
+    break;
+  case 34:
+    functionName = "RepeatingBlockPattern 1";
+    RepeatingBlockPattern(100, 80, 5, 0, 5);
+    break;
+  case 35:
+    functionName = "RepeatingBlockPattern 2";
+    RepeatingBlockPattern(10, 120, 10, 20, 10);
+    break;
+  case 36:
+    functionName = "RepeatingBlockPattern 3";
+    RepeatingBlockPattern(200, 155, 20, 40, 20);
+    break;
+  case 37:
+    functionName = "Twinkle 1";
+    Twinkle(8, 100, 50, 100, brightness, false);
+    break;
+  case 38:
+    functionName = "Twinkle 2";
+    Twinkle(8, 20, 125, 100, brightness, true);
+    break;
+  case 39:
+    functionName = "Twinkle 3";
+    Twinkle(16, 200, 200, 100, brightness, false);
+    break;
+  case 40:
+    functionName = "Mover 1";
+    Mover(8, 60, 0);
+    break;
+  case 41:
+    functionName = "Mover 2";
+    Mover(8, 60, 75);
+    break;
+  case 42:
+    functionName = "Mover 3";
+    Mover(8, 60, 155);
+    break;
+  case 43:
+    functionName = "Marqueev2 2";
+    Marqueev2(2, 250);
+    break;
+  case 44:
+    functionName = "Marqueev2 4";
+    Marqueev2(4, 250);
+    break;
+  case 45:
+    functionName = "Marqueev2 7";
+    Marqueev2(7, 250);
+    break;
+  case 46:
+    functionName = "Marqueev2 10";
+    Marqueev2(10, 250);
+    break;
+  case 47:
+    functionName = "Marqueev3 2";
+    Marqueev3(2, 250, 2, 20);
+    break;
+  case 48:
+    functionName = "Marqueev3 4";
+    Marqueev3(4, 250, 3, 40);
+    break;
+  case 49:
+    functionName = "Marqueev3 7";
+    Marqueev3(7, 250, 5, 80);
+    break;
+  case 50:
+    functionName = "Marqueev3 10";
+    Marqueev3(10, 250, 7, 100);
+    break;
+  case 51:
+    functionName = "Sawtooth 60";
+    Sawtooth(60, OceanColors_p, LINEARBLEND);
+    break;
+  case 52:
+    functionName = "Sawtooth 92";
+    Sawtooth(92, LavaColors_p, LINEARBLEND);
+    break;
+  case 53:
+    functionName = "Sawtooth 110";
+    Sawtooth(128, ForestColors_p, LINEARBLEND);
+    break;
+  case 54:
+    functionName = "Plasma 1";
+    Plasma(OceanColors_p, LavaColors_p, LINEARBLEND);
+    break;
+  case 55:
+    functionName = "Plasma 2";
+    Plasma(ForestColors_p, CloudColors_p, LINEARBLEND);
+    break;
+  case 56:
+    functionName = "Plasma 3";
+    Plasma(RainbowColors_p, PartyColors_p, LINEARBLEND);
+    break;
+  case 57:
+    functionName = "RainbowMarch 1";
+    RainbowMarch(200, 10);
+    break;
+  case 58:
+    functionName = "RainbowMarch 2";
+    RainbowMarch(100, 10);
+    break;
+  case 59:
+    functionName = "RainbowMarch 3";
+    RainbowMarch(50, 100);
+    break;
+  case 60:
+    functionName = "BlendWave 1";
+    BlendWave(60, 10);
+    break;
+  case 61:
+    functionName = "BlendWave 2";
+    BlendWave(60, 100);
+    break;
+  case 62:
+    functionName = "BlendWave 3";
+    BlendWave(50, 50);
+    break;
+  case 63:
+    functionName = "BeatWave 1";
+    BeatWave(RainbowColors_p, PartyColors_p, LINEARBLEND);
+    break;
+  case 64:
+    functionName = "BeatWave 2";
+    BeatWave(OceanColors_p, LavaColors_p, LINEARBLEND);
+    break;
+  case 65:
+    functionName = "BeatWave 3";
+    BeatWave(ForestColors_p, CloudColors_p, LINEARBLEND);
     break;
   }
 }
 
 // FUNCTIONS
+
+//===============================================================
+// Modified helper function that blends one uint8_t toward another,
+// based on function from Mark Kriegsman's fadeTowardColor example:
+// https://gist.github.com/kriegsman/d0a5ed3c8f38c64adcb4837dafb6e690
+void nblendU8TowardU8(uint8_t &current, const uint8_t target)
+{
+  if (current == target)
+  {
+    return;
+  }
+
+  if (current < target)
+  {
+    uint8_t delta = target - current;
+    delta = scale8_video(delta, 1);
+    current += delta;
+  }
+  else
+  {
+    uint8_t delta = current - target;
+    delta = scale8_video(delta, 1);
+    current -= delta;
+  }
+}
 
 void MovingColoredBars(int colorBarLength, long colorPallete[], int numberOfColors)
 {
@@ -171,7 +395,7 @@ void BreathingEffect(float pulseSpeed, bool red, bool green, bool blue)
 
 //Draw alternating bands of color, 2 or 3 colors.
 //When using three colors, color1 is used between the other two colors.
-void candyCane(uint16_t ts, uint8_t numColors, uint8_t stripeLength, CRGB color1, CRGB color2, CRGB color3)
+void CandyCane(uint16_t ts, uint8_t numColors, uint8_t stripeLength, CRGB color1, CRGB color2, CRGB color3)
 {
   //https://github.com/marmilicious/FastLED_examples/blob/master/candy_cane_stripes.ino
 
@@ -240,6 +464,553 @@ void candyCane(uint16_t ts, uint8_t numColors, uint8_t stripeLength, CRGB color1
     }
 
   } //end EVERY_N
+}
+
+void BlendIntoRainbow(CRGB color1, CRGB color2, CRGB color3)
+{
+  //https://github.com/marmilicious/FastLED_examples/blob/master/blend_into_rainbow_v2.ino
+  EVERY_N_MILLISECONDS(60)
+  {
+    hue++;
+  }
+
+  fill_rainbow(leds, NUM_LEDS, hue, 255 / NUM_LEDS / 4); // draw part of the rainbow into the strip
+  fadeToBlackBy(leds, NUM_LEDS, 128);                    // fade the whole rainbow down some
+
+  EVERY_N_MILLISECONDS(150)
+  {
+    if (moving)
+    {
+      pos++;
+      if (pos == NUM_LEDS)
+      {
+        pos = 0;
+      } // reset to begining
+    }
+  }
+
+  EVERY_N_MILLISECONDS(5)
+  {
+    if (!moving)
+    {
+      hue2 = hue2 - 1;
+    }
+  }
+
+  // colors to blend into background
+  CRGB blendThisIn = CHSV(hue2, 140, 255);
+  CRGB blendThisIn2 = CHSV(hue2, 170, 255);
+  CRGB blendThisIn3 = CHSV(hue2, 210, 255);
+  CRGB blendThisIn4 = CHSV(hue2, 255, 255);
+
+  static uint8_t blendAmount = 128; // amount of blend  [range: 0-255]
+
+  // https://www.reddit.com/r/FastLED/comments/dhoce6/nblend_function_explanation/
+  // nblend (CRGB &existing, const CRGB &overlay, fract8 amountOfOverlay)
+  nblend(leds[pos], blendThisIn4, blendAmount / 3);
+  nblend(leds[mod8(pos + 1, NUM_LEDS)], blendThisIn3, blendAmount / 2);
+  nblend(leds[mod8(pos + 2, NUM_LEDS)], blendThisIn2, blendAmount);
+  nblend(leds[mod8(pos + 3, NUM_LEDS)], blendThisIn, blendAmount);
+  nblend(leds[mod8(pos + 4, NUM_LEDS)], blendThisIn2, blendAmount);
+  nblend(leds[mod8(pos + 5, NUM_LEDS)], blendThisIn3, blendAmount / 2);
+  nblend(leds[mod8(pos + 6, NUM_LEDS)], blendThisIn4, blendAmount / 3);
+
+  posR = beatsin8(5, 0, (NUM_LEDS - 1));
+  posG = beatsin8(7, 0, (NUM_LEDS - 1));
+  posB = beatsin8(9, 0, (NUM_LEDS - 1));
+
+  CRGB tempColor = color1;
+  temp[posR] = tempColor;
+  tempColor = color2;
+  nblend(temp[posG], tempColor, 128);
+  tempColor = color3;
+  nblend(temp[posB], tempColor, 128);
+
+  EVERY_N_MILLISECONDS(2)
+  {
+    fadeToBlackBy(temp, NUM_LEDS, 1); // create fading tail effect
+  }
+
+  for (uint8_t i = 0; i < NUM_LEDS; i++)
+  {
+    nblend(leds[i], temp[i], 128);
+  }
+
+  nblend(leds[mod8(posR, NUM_LEDS)], color1, 90);
+  nblend(leds[mod8(posR + 1, NUM_LEDS)], color1, 128);
+  nblend(leds[mod8(posR + 2, NUM_LEDS)], color1, 90);
+
+  nblend(leds[mod8(posG, NUM_LEDS)], color2, 90);
+  nblend(leds[mod8(posG + 1, NUM_LEDS)], color2, 128);
+  nblend(leds[mod8(posG + 2, NUM_LEDS)], color2, 90);
+
+  nblend(leds[mod8(posB, NUM_LEDS)], color3, 90);
+  nblend(leds[mod8(posB + 1, NUM_LEDS)], color3, 128);
+  nblend(leds[mod8(posB + 2, NUM_LEDS)], color3, 90);
+}
+
+//===============================================================
+// Heart Beat Functions
+// https://github.com/marmilicious/FastLED_examples/blob/master/heart_pulse_blood_flowing.ino
+void HeartBeat(uint8_t bloodHue, uint8_t bloodSat)
+{
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    uint8_t bloodVal = sumPulse((5 / NUM_LEDS / 2) + (NUM_LEDS / 2) * i * flowDirection);
+    leds[i] = CHSV(bloodHue, bloodSat, bloodVal);
+  }
+}
+
+int sumPulse(int time_shift)
+{
+  //time_shift = 0;  //Uncomment to heart beat/pulse all LEDs together
+  int pulse1 = pulseWave8(millis() + time_shift, cycleLength, pulseLength);
+  int pulse2 = pulseWave8(millis() + time_shift + pulseOffset, cycleLength, pulseLength);
+  return qadd8(pulse1, pulse2); // Add pulses together without overflow
+}
+
+uint8_t pulseWave8(uint32_t ms, uint16_t cycleLength, uint16_t pulseLength)
+{
+  uint16_t T = ms % cycleLength;
+  if (T > pulseLength)
+    return baseBrightness;
+  uint16_t halfPulse = pulseLength / 2;
+  if (T <= halfPulse)
+  {
+    return (T * 255) / halfPulse; //first half = going up
+  }
+  else
+  {
+    return ((pulseLength - T) * 255) / halfPulse; //second half = going down
+  }
+}
+//End_heart_beat_functions
+//---------------------------------------------------------------
+
+//---------------------------------------------------------------
+// Fire Effect
+// https://github.com/marmilicious/FastLED_examples/blob/master/mirrored_Fire2012.ino
+void FireFullStrip()
+{
+  // Fuction only operates on half the number of pixels (NUM_LEDS/2)
+
+  // Array of temperature readings at each simulation cell
+  static byte heat[NUM_LEDS];
+
+  // Step 1.  Cool down every cell a little
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    heat[i] = qsub8(heat[i], random8(0, ((COOLING * 10) / (NUM_LEDS)) + 2));
+  }
+
+  // Step 2.  Heat from each cell drifts 'up' and diffuses a little
+  for (int k = (NUM_LEDS)-1; k >= 2; k--)
+  {
+    heat[k] = (heat[k - 1] + heat[k - 2] + heat[k - 2]) / 3;
+  }
+
+  // Step 3.  Randomly ignite new 'sparks' of heat near the bottom
+  if (random8() < SPARKING)
+  {
+    int y = random8(7);
+    heat[y] = qadd8(heat[y], random8(160, 255));
+  }
+
+  // Step 4.  Map from heat cells to LED colors
+  for (int j = 0; j < NUM_LEDS; j++)
+  {
+    CRGB color = HeatColor(heat[j]);
+    leds_temp[j] = color;
+  }
+}
+
+void FireHalfStrip()
+{
+  // Fuction only operates on half the number of pixels (NUM_LEDS/2)
+
+  // Array of temperature readings at each simulation cell
+  static byte heat[NUM_LEDS / 2];
+
+  // Step 1.  Cool down every cell a little
+  for (int i = 0; i < NUM_LEDS / 2; i++)
+  {
+    heat[i] = qsub8(heat[i], random8(0, ((COOLING * 10) / (NUM_LEDS / 2)) + 2));
+  }
+
+  // Step 2.  Heat from each cell drifts 'up' and diffuses a little
+  for (int k = (NUM_LEDS / 2) - 1; k >= 2; k--)
+  {
+    heat[k] = (heat[k - 1] + heat[k - 2] + heat[k - 2]) / 3;
+  }
+
+  // Step 3.  Randomly ignite new 'sparks' of heat near the bottom
+  if (random8() < SPARKING)
+  {
+    int y = random8(7);
+    heat[y] = qadd8(heat[y], random8(160, 255));
+  }
+
+  // Step 4.  Map from heat cells to LED colors
+  for (int j = 0; j < NUM_LEDS / 2; j++)
+  {
+    CRGB color = HeatColor(heat[j]);
+    leds_temp[j] = color;
+  }
+}
+
+void mirror2ndHalf()
+{
+  //copy and mirror pixel data from leds_temp to leds array.
+
+  if (gReverseDirection == false)
+  { //false is center outward
+    for (uint8_t i = 0; i < NUM_LEDS / 2; i++)
+    {
+      leds[(NUM_LEDS / 2) - 1 - i] = leds_temp[i];
+      leds[(NUM_LEDS / 2) + i] = leds_temp[i];
+    }
+  }
+  else
+  { //true is from ends inward
+    for (uint8_t i = 0; i < NUM_LEDS / 2; i++)
+    {
+      leds[i] = leds_temp[i];
+      leds[(NUM_LEDS - 1) - i] = leds_temp[i];
+    }
+  }
+}
+// End Fire Effect
+//---------------------------------------------------------------
+
+void RepeatingPattern(uint8_t hue, uint8_t saturation, uint16_t repeatEvery, uint8_t interval)
+{
+  // https://github.com/marmilicious/FastLED_examples/blob/master/repeating_pattern.ino
+  static uint16_t numberOfRepeats = NUM_LEDS / repeatEvery;
+
+  EVERY_N_MILLISECONDS(50)
+  {
+    fadeToBlackBy(leds, NUM_LEDS, 1); // slowly fade out pixels
+  }
+
+  EVERY_N_MILLISECONDS(interval)
+  {
+    static uint8_t offset;
+    static uint8_t shift;
+
+    hue = ((255 / repeatEvery) * offset) + shift; // Change the hue for each pixel set.
+    // hue = (20 * offset) + shift; // Change the hue for each pixel set.
+
+    for (uint16_t x = 0; x < numberOfRepeats + 1; x++)
+    {
+      static uint16_t i;
+      i = (repeatEvery * (x - 1)) + repeatEvery + offset; // The pixel number to draw
+      if (i < NUM_LEDS)
+      { // Only draw pixel numbers within NUM_LEDS
+        leds[i] = CHSV(hue, saturation, 255);
+      }
+    }
+
+    offset++;
+    if (offset == repeatEvery)
+    {
+      offset = 0;
+      shift = shift + random8(55, 77);
+    }
+
+  } //end_every_n
+}
+
+void RepeatingBlockPattern(uint8_t hue, uint8_t saturation, uint8_t blockSize, uint16_t loopStart, uint16_t loopEnd)
+{
+  // https://github.com/marmilicious/FastLED_examples/blob/master/repeating_block_pattern.ino
+  loopStart = count * blockSize;
+  loopEnd = blockSize + count * blockSize;
+
+  // Trying to write data to pixels that don't exit is bad.
+  // Check to make sure we are still within our NUM_LEDS range
+  // and clamp to NUM_LEDS if needed.
+  if (loopEnd > NUM_LEDS)
+  {
+    loopEnd = NUM_LEDS; // limit maximum to NUM_LEDS
+  }
+
+  hue = hue + random8(8, 17); // for fun, pick a new color for each block
+
+  EVERY_N_MILLISECONDS(250)
+  {
+    for (uint16_t i = loopStart; i < loopEnd; i++)
+    {
+      leds[i] = CHSV(hue, saturation, 255);
+    }
+
+    FastLED.show();
+
+    for (uint16_t i = loopStart; i < loopEnd; i++)
+    {
+      leds[i].fadeToBlackBy(220); // fade down
+    }
+
+    count++; // increase count by one
+
+    // reset count if we have come to the end of the strip
+    if ((count * blockSize) >= NUM_LEDS)
+    {
+      count = 0;
+      // Only change the block size when starting over on the strip
+      // and after the minimum time has passed (from timer below).
+      if (sizeUpdate)
+      {
+        blockSize = random8(2, 9); // for fun, pick a new random block size
+        sizeUpdate = false;
+      }
+    }
+
+  } //end_every_n
+
+  EVERY_N_SECONDS(5)
+  {
+    sizeUpdate = true; // trigger size update
+  }
+}
+
+void Twinkle(uint8_t thisfade, int twinkrate, uint8_t thishue, uint8_t thissat, uint8_t thisbri, bool randhue)
+{
+  // https://forum.makerforums.info/t/still-a-newbie-with-newbie-questions/64143/2
+  if (twinkrate < NUM_LEDS)
+  {
+    twinkrate = NUM_LEDS; // Makes sure the twinkrate will cover ALL of the LED’s as it’s used as the maximum LED index value.
+  }
+  int i = random16(twinkrate); // A random number based on twinkrate. Higher number => fewer twinkles.
+  if (randhue)
+  {
+    thishue = random16(0, 255); // Randomize every LED if TRUE
+  }
+  if (i < NUM_LEDS)
+  {
+    leds[i] = CHSV(thishue, thissat, thisbri); // Only the lowest probability twinkles will do. You could even randomize the hue/saturation.
+  }
+  for (int j = 0; j < NUM_LEDS; j++)
+  {
+    leds[j].fadeToBlackBy(thisfade); // Use the FastLED fade method.
+  }
+}
+
+void Mover(uint8_t thisfade, uint8_t thisdelay, uint8_t hue)
+{
+  // https://forum.makerforums.info/t/still-a-newbie-with-newbie-questions/64143/2
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    leds[i] += CHSV(hue, 255, 255);
+    leds[(i + 5) % NUM_LEDS] += CHSV(hue + 85, 255, 255);   // We use modulus so that the location is between 0 and NUM_LEDS
+    leds[(i + 10) % NUM_LEDS] += CHSV(hue + 170, 255, 255); // Same here.
+    fadeToBlackBy(leds, NUM_LEDS, thisfade);                // Low values = slower fade.
+
+    // TODO: remove this delay
+    delay(thisdelay); // UGH!!! A blocking delay. If you want to add controls, they may not work reliably.
+  }
+}
+
+void Marqueev2(uint8_t spacing, uint16_t holdTime)
+{
+  // https://github.com/marmilicious/FastLED_examples/blob/master/marquee_v2.ino
+  EVERY_N_SECONDS(40)
+  { // Change direction every N seconds.
+    delta2 = -1 * delta2;
+  }
+  EVERY_N_SECONDS(40)
+  { // Change direction every N seconds.
+    delta2 = -1 * delta2;
+  }
+
+  EVERY_N_SECONDS(10)
+  { // Demo changing the pixel spacing every N seconds.
+    spacing = spacing + 1;
+    if (spacing == 9)
+    {
+      spacing = 2;
+    } // Reset spacing to 2
+    if (spacing > 4)
+    {
+      spacing = 8;
+    }                            // Jump spacing up to 8
+    hue = hue + random8(30, 61); // Shift the hue to something new.
+  }
+
+  EVERY_N_MILLISECONDS(holdTime)
+  {
+    // holdTime = Milliseconds to hold position before advancing
+    // Advance pixels to next position.
+
+    for (uint8_t i = 0; i < (NUM_LEDS / spacing); i++)
+    {
+      pos = (spacing * (i - 1) + spacing + advance) % NUM_LEDS;
+      leds[pos] = CHSV(hue, 255, 255);
+    }
+
+    FastLED.show();
+
+    // Fade out tail or set back to black for next loop around.
+    if (fadingTail == 1)
+    {
+      fadeToBlackBy(leds, NUM_LEDS, fadeRate);
+    }
+    else
+    {
+      for (uint8_t i = 0; i < (NUM_LEDS / spacing); i++)
+      {
+        pos = (spacing * (i - 1) + spacing + advance) % NUM_LEDS;
+        leds[pos] = CRGB::Black;
+      }
+    }
+
+    // Advance pixel postion down strip, and rollover if needed.
+    advance = (advance + delta2 + NUM_LEDS) % NUM_LEDS;
+  }
+}
+
+void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Shift)
+{
+  //https: //github.com/marmilicious/FastLED_examples/blob/master/marquee_v3.ino
+  EVERY_N_SECONDS(10)
+  { // Demo: Change direction every N seconds.
+    delta2 = -1 * delta2;
+  }
+
+  //EVERY_N_SECONDS(10){  // Demo: Changing the pixel spacing every N seconds.
+  //  spacing = spacing + 1;
+  //  if (spacing == 9) { spacing = 2; }  // Reset spacing to 2
+  //  if (spacing >4) { spacing = 8; }  // Jump spacing up to 8
+  //}
+
+  EVERY_N_SECONDS(10)
+  {                              // Demo: Change the hue every N seconds.
+    hue = hue + random8(30, 61); // Shift the hue to something new.
+  }
+
+  EVERY_N_MILLISECONDS(holdTime)
+  { // Advance pixels to next position.
+
+    // Advance pixel postion down strip, and rollover if needed.
+    advance = (advance + delta2 + NUM_LEDS) % NUM_LEDS;
+
+    // Fade out tail or set back to black for next loop around.
+    if (fadingTail == 1)
+    {
+      fadeToBlackBy(leds, NUM_LEDS, fadeRate);
+    }
+    else
+    {
+      for (uint8_t i = 0; i < (NUM_LEDS / spacing); i++)
+      {
+        for (uint8_t w = 0; w < width; w++)
+        {
+          //pos = (spacing * (i-1) + spacing + advance + w) % NUM_LEDS;
+          pos = (spacing * (i - 1) + spacing + advance + w - 1) % NUM_LEDS;
+          leds[pos] = CRGB::Black;
+        }
+      }
+    }
+
+    // Update pixels down the strip.
+    for (uint8_t i = 0; i < (NUM_LEDS / spacing); i++)
+    {
+      for (uint8_t w = 0; w < width; w++)
+      {
+        pos = (spacing * (i - 1) + spacing + advance + w) % NUM_LEDS;
+        if (w % 2 == 0)
+        { // Is w even or odd?
+          colorStorage = hue;
+        }
+        else
+        {
+          colorStorage = hue + hue2Shift;
+        }
+
+        leds[pos] = CHSV(colorStorage, 255, 255);
+      }
+    }
+
+    FastLED.show();
+
+  } //end_every_n
+}
+
+void Sawtooth(int bpm, CRGBPalette16 currentPalette, TBlendType currentBlending)
+{
+
+  // https://github.com/atuline/FastLED-Demos/blob/master/sawtooth/sawtooth.ino
+  int ms_per_beat = 60000 / bpm; // 500ms per beat, where 60,000 = 60 seconds * 1000 ms
+  int ms_per_led = 60000 / bpm / NUM_LEDS;
+
+  int cur_led = ((millis() % ms_per_beat) / ms_per_led) % (NUM_LEDS); // Using millis to count up the strand, with %NUM_LEDS at the end as a safety factor.
+
+  if (cur_led == 0)
+    fill_solid(leds, NUM_LEDS, CRGB::Black);
+  else
+    leds[cur_led] = ColorFromPalette(currentPalette, 0, 255, currentBlending); // I prefer to use palettes instead of CHSV or CRGB assignments.
+}
+
+void Plasma(CRGBPalette16 currentPalette, CRGBPalette16 targetPalette, TBlendType currentBlending)
+{
+  //https://github.com/atuline/FastLED-Demos/blob/master/plasma/plasma.ino
+  EVERY_N_MILLISECONDS(50)
+  { // FastLED based non-blocking delay to update/display the sequence.
+    plasma(currentPalette, currentBlending);
+  }
+
+  EVERY_N_MILLISECONDS(100)
+  {
+    uint8_t maxChanges = 24;
+    nblendPaletteTowardPalette(currentPalette, targetPalette, maxChanges); // AWESOME palette blending capability.
+  }
+
+  EVERY_N_SECONDS(5)
+  {                            // Change the target palette to a random one every 5 seconds.
+    uint8_t baseC = random8(); // You can use this as a baseline colour if you want similar hues in the next line.
+    targetPalette = CRGBPalette16(CHSV(baseC + random8(32), 192, random8(128, 255)), CHSV(baseC + random8(32), 255, random8(128, 255)), CHSV(baseC + random8(32), 192, random8(128, 255)), CHSV(baseC + random8(32), 255, random8(128, 255)));
+  }
+}
+
+void RainbowMarch(uint8_t thisdelay, uint8_t deltahue)
+{ // The fill_rainbow call doesn't support brightness levels.
+
+  uint8_t thishue = millis() * (255 - thisdelay) / 255; // To change the rate, add a beat or something to the result. 'thisdelay' must be a fixed value.
+
+  // thishue = beat8(50);                                       // This uses a FastLED sawtooth generator. Again, the '50' should not change on the fly.
+  // thishue = beatsin8(50,0,255);                              // This can change speeds on the fly. You can also add these to each other.
+
+  fill_rainbow(leds, NUM_LEDS, thishue, deltahue); // Use FastLED's fill_rainbow routine.
+}
+
+void BeatWave(CRGBPalette16 currentPalette, CRGBPalette16 targetPalette, TBlendType currentBlending)
+{
+  // https://github.com/atuline/FastLED-Demos/blob/master/beatwave/beatwave.ino
+  beatwave(currentPalette, currentBlending);
+
+  EVERY_N_MILLISECONDS(100)
+  {
+    uint8_t maxChanges = 24;
+    nblendPaletteTowardPalette(currentPalette, targetPalette, maxChanges); // AWESOME palette blending capability.
+  }
+
+  EVERY_N_SECONDS(5)
+  { // Change the target palette to a random one every 5 seconds.
+    targetPalette = CRGBPalette16(CHSV(random8(), 255, random8(128, 255)), CHSV(random8(), 255, random8(128, 255)), CHSV(random8(), 192, random8(128, 255)), CHSV(random8(), 255, random8(128, 255)));
+  }
+}
+
+void BlendWave(accum88 bpm, accum88 bpm2)
+{
+  // https://github.com/atuline/FastLED-Demos/blob/master/blendwave/blendwave.ino
+  speed = beatsin8(bpm, 0, 255);
+
+  clr1 = blend(CHSV(beatsin8(3, 0, 255), 255, 255), CHSV(beatsin8(4, 0, 255), 255, 255), speed);
+  clr2 = blend(CHSV(beatsin8(4, 0, 255), 255, 255), CHSV(beatsin8(3, 0, 255), 255, 255), speed);
+
+  loc1 = beatsin8(bpm2, 0, NUM_LEDS - 1);
+
+  fill_gradient_RGB(leds, 0, clr2, loc1, clr1);
+  fill_gradient_RGB(leds, loc1, clr2, NUM_LEDS - 1, clr1);
 }
 
 // void DualColorFlow(float _speed, float _spacing)

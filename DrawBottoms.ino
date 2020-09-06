@@ -1,103 +1,125 @@
-void drawDiscEQ() {
-  int temp1 = MSGEQ7.get(1)/64;
+void drawDiscEQ()
+{
+  int temp1 = MSGEQ7.get(1) / 64;
   temp1 -= 7;
-  if (temp1 < 2){
+  if (temp1 < 2)
+  {
     temp1 = 2;
   }
-  if (temp1 > 20){
+  if (temp1 > 20)
+  {
     temp1 = 20;
   }
   u8g2.drawDisc(106, 22, temp1, U8G2_DRAW_ALL);
 }
 
-void drawDiscSectionsEQ() {
-  int temp1 = MSGEQ7.get(1)/64;
+void drawDiscSectionsEQ()
+{
+  int temp1 = MSGEQ7.get(1) / 64;
   temp1 -= 7;
-  if (temp1 < 0){
+  if (temp1 < 0)
+  {
     temp1 = 0;
   }
-  if (temp1 > 12){
+  if (temp1 > 12)
+  {
     temp1 = 12;
   }
   u8g2.drawDisc(106, 42, temp1, U8G2_DRAW_LOWER_LEFT);
 
-  int temp2 = MSGEQ7.get(4)/64;
+  int temp2 = MSGEQ7.get(4) / 64;
   temp2 -= 7;
-  if (temp2 < 0){
+  if (temp2 < 0)
+  {
     temp2 = 0;
   }
-  if (temp2 > 12){
+  if (temp2 > 12)
+  {
     temp2 = 12;
   }
   u8g2.drawDisc(106, 42, temp2, U8G2_DRAW_UPPER_RIGHT);
 }
 
-void drawEQ() {
+void drawEQ()
+{
   int pos = 32;
   int min = 0;
   int max = 80;
 
-  int temp1 = MSGEQ7.get(0)/32;
+  int temp1 = MSGEQ7.get(0) / 32;
   temp1 -= 7;
-  if (temp1 < min){
+  if (temp1 < min)
+  {
     temp1 = min;
   }
-  if (temp1 > max){
+  if (temp1 > max)
+  {
     temp1 = max;
   }
   u8g2.setDrawColor(1);
-  u8g2.drawBox(0,pos,temp1,7);
+  u8g2.drawBox(0, pos, temp1, 7);
 
-  int temp2 = MSGEQ7.get(3)/32;
+  int temp2 = MSGEQ7.get(3) / 32;
   temp2 -= 7;
-  if (temp2 < min){
+  if (temp2 < min)
+  {
     temp2 = min;
   }
-  if (temp2 > max){
+  if (temp2 > max)
+  {
     temp2 = max;
   }
-  u8g2.drawBox(0,pos+8,temp2,7);
+  u8g2.drawBox(0, pos + 8, temp2, 7);
 
-  int temp3 = MSGEQ7.get(5)/32;
+  int temp3 = MSGEQ7.get(5) / 32;
   temp3 -= 7;
-  if (temp3 < min){
+  if (temp3 < min)
+  {
     temp3 = min;
   }
-  if (temp3 > max){
+  if (temp3 > max)
+  {
     temp3 = max;
   }
-  u8g2.drawBox(0,pos+16,temp3,7);
+  u8g2.drawBox(0, pos + 16, temp3, 7);
 }
 
-void drawCircleEQ() {
-  int temp1 = MSGEQ7.get(2)/64;
+void drawCircleEQ()
+{
+  int temp1 = MSGEQ7.get(2) / 64;
   temp1 -= 7;
-  if (temp1 < 5){
+  if (temp1 < 5)
+  {
     temp1 = 5;
   }
-  if (temp1 > 20){
+  if (temp1 > 20)
+  {
     temp1 = 20;
   }
   u8g2.drawCircle(106, 42, temp1, U8G2_DRAW_ALL);
 }
 
-void drawIPAddress() {
+void drawIPAddress()
+{
   u8g2.setFont(u8g2_font_ncenB08_tr);
   u8g2.setCursor(20, 40);
-  
-  if (WiFi.status() == WL_CONNECTED) {
+
+  if (WiFi.status() == WL_CONNECTED)
+  {
     //Convert WiFi.localIP() from 4 bytes to 1 nice pretty string
     String LocalIP = String() + WiFi.localIP()[0] + "." + WiFi.localIP()[1] + "." + WiFi.localIP()[2] + "." + WiFi.localIP()[3];
     u8g2.print(LocalIP);
     //u8g2.print("Connected");
-  } else
+  }
+  else
   {
     u8g2.print("Not Connected");
-  } 
+  }
 }
 
-void gravityWell() {
-  for (int i = 0; i < maxStars; i ++)
+void gravityWell()
+{
+  for (int i = 0; i < maxStars; i++)
   {
     if (star_xx[i] > -7)
     {
@@ -106,20 +128,20 @@ void gravityWell() {
 
     star_y[i] += star_yy[i];
     star_x[i] += star_xx[i];
-    
 
     if (star_x[i] < 0)
     {
       if (star_xx[i] == -1)
       {
         star_xx[i] = 1;
-      } else
+      }
+      else
       {
-        star_xx[i] = abs(star_xx[i]) -1;
+        star_xx[i] = abs(star_xx[i]) - 1;
       }
       star_x[i] = 0;
     }
-    
+
     if (star_x[i] < 0)
     {
       star_xx[i] = abs(star_xx[i]);
@@ -136,13 +158,13 @@ void gravityWell() {
       star_z[i] = random(1, 5);
     }
 
-
-    u8g2.drawDisc(star_y[i], (visualizer_x - star_x[i]) + (14 - star_z[i] ), star_z[i], U8G2_DRAW_ALL);
+    u8g2.drawDisc(star_y[i], (visualizer_x - star_x[i]) + (14 - star_z[i]), star_z[i], U8G2_DRAW_ALL);
   }
 }
 
-void movingCircles() {
-  for (int i = 0; i < 8; i ++)
+void movingCircles()
+{
+  for (int i = 0; i < 8; i++)
   {
     star_y[i] += star_z[i];
     if (star_y[i] > visualizer_y)
@@ -155,24 +177,98 @@ void movingCircles() {
   }
 }
 
-void dvdBounce() {
+void dvdBounce()
+{
   dvdBounce_y += dvdBounce_vy;
   dvdBounce_x += dvdBounce_vx;
 
-  if (dvdBounce_y <= 0) {
+  if (dvdBounce_y <= 0)
+  {
     dvdBounce_vy = 1;
   }
-  if (dvdBounce_y >= (visualizer_y - DVD_width)) {
+  if (dvdBounce_y >= (visualizer_y - DVD_width))
+  {
     dvdBounce_vy = -1;
   }
 
-  if (dvdBounce_x <= 0) {
+  if (dvdBounce_x <= 0)
+  {
     dvdBounce_vx = 1;
   }
-  if (dvdBounce_x >= (visualizer_x - DVD_height)) {
+  if (dvdBounce_x >= (visualizer_x - DVD_height))
+  {
     dvdBounce_vx = -1;
   }
 
   //u8g2.drawDisc(dvdBounce_y, dvdBounce_x + 18, 2, U8G2_DRAW_ALL);
-  u8g2.drawXBMP(dvdBounce_y,dvdBounce_x + 16,DVD_width, DVD_height,DVD);
+  u8g2.drawXBMP(dvdBounce_y, dvdBounce_x + 16, DVD_width, DVD_height, DVD);
+}
+void starBounce()
+{
+  dvdBounce_y += dvdBounce_vy;
+  dvdBounce_x += dvdBounce_vx;
+
+  if (dvdBounce_y <= 0)
+  {
+    dvdBounce_vy = 1;
+  }
+  if (dvdBounce_y >= (visualizer_y - DVD_width))
+  {
+    dvdBounce_vy = -1;
+  }
+
+  if (dvdBounce_x <= 0)
+  {
+    dvdBounce_vx = 1;
+  }
+  if (dvdBounce_x >= (visualizer_x - DVD_height))
+  {
+    dvdBounce_vx = -1;
+  }
+
+  dvdBounce2_y += dvdBounce2_vy;
+  dvdBounce2_x += dvdBounce2_vx;
+
+  if (dvdBounce2_y <= 0)
+  {
+    dvdBounce2_vy = 1;
+  }
+  if (dvdBounce2_y >= (visualizer_y - DVD_width))
+  {
+    dvdBounce2_vy = -1;
+  }
+
+  if (dvdBounce2_x <= 0)
+  {
+    dvdBounce2_vx = 1;
+  }
+  if (dvdBounce2_x >= (visualizer_x - DVD_height))
+  {
+    dvdBounce2_vx = -1;
+  }
+
+  dvdBounce3_y += dvdBounce3_vy;
+  dvdBounce3_x += dvdBounce3_vx;
+
+  if (dvdBounce3_y <= 0)
+  {
+    dvdBounce3_vy = 1;
+  }
+  if (dvdBounce3_y >= (visualizer_y - DVD_width))
+  {
+    dvdBounce3_vy = -1;
+  }
+
+  if (dvdBounce3_x <= 0)
+  {
+    dvdBounce3_vx = 1;
+  }
+  if (dvdBounce3_x >= (visualizer_x - DVD_height))
+  {
+    dvdBounce3_vx = -1;
+  }
+
+  u8g2.drawXBMP(dvdBounce_y, dvdBounce_x + 16, star_width, star_height, star);
+  u8g2.drawXBMP(dvdBounce2_y, dvdBounce2_x + 16, star_width, star_height, star);
+  u8g2.drawXBMP(dvdBounce3_y, dvdBounce3_x + 16, star_width, star_height, star);
 }

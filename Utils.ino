@@ -360,7 +360,6 @@ void drawTop()
   {
   case 0:
     u8g2.drawXBMP(0, 0, star_width, star_height, star);
-    // u8g2.drawXBMP(0,0,heart_width, heart_height, heart);
     break;
   case 1:
     u8g2.drawXBMP(0, 0, wave_width, wave_height, wave);
@@ -368,10 +367,12 @@ void drawTop()
     break;
   case 2:
     u8g2.drawXBMP(0, 0, hashtag_width, hashtag_height, hashtag);
-    // u8g2.drawXBMP(0,0,donut_width, donut_height, donut);
     break;
   case 3:
     u8g2.drawXBMP(0, 0, donut_width, donut_height, donut);
+    break;
+  case 4:
+    u8g2.drawXBMP(0, 0, heart_width, heart_height, heart);
     break;
   }
 
@@ -406,6 +407,9 @@ void drawBottom()
     drawIPAddress();
     //gravityWell();
     break;
+  case 4:
+    starBounce();
+    break;
   }
 }
 
@@ -416,32 +420,32 @@ void drawMenu()
   u8g2.print("This is a Menu!");
   u8g2.setCursor(0, 32);
 
-  switch(menu_cur)
+  switch (menu_cur)
   {
+  case 0:
+    switch (menu[menu_cur])
+    {
     case 0:
-      switch(menu[menu_cur])
-      {
-        case 0:
-          u8g2.print("Games");
-          break;
-        case 1:
-          u8g2.print("Settings");
-          break;
-        case 2:
-          u8g2.print("Exit");
-      }
+      u8g2.print("Games");
       break;
-    case 1: //games menu
-      switch(menu[menu_cur])
-      {
-        case 0:
-          u8g2.print("Back");
-          break;
-        case 1:
-          u8g2.print("Fallios");
-          break;
-      }
+    case 1:
+      u8g2.print("Settings");
       break;
+    case 2:
+      u8g2.print("Exit");
+    }
+    break;
+  case 1: //games menu
+    switch (menu[menu_cur])
+    {
+    case 0:
+      u8g2.print("Back");
+      break;
+    case 1:
+      u8g2.print("Fallios");
+      break;
+    }
+    break;
   }
 
   if (knob2Click == 1)
@@ -451,34 +455,33 @@ void drawMenu()
 
   if (knob1Click == 1)
   {
-    switch(menu_cur)
+    switch (menu_cur)
     {
-      case 0: //main menu
-        switch(menu[menu_cur])
-        {
-          case 0:
-            menu_cur = 1; //games
-            break;
-          case 1:
-            menu_cur = 2; //settings
-            break;
-          case 2:
-            runMode = 0;  //exit
-            break;
-        }
+    case 0: //main menu
+      switch (menu[menu_cur])
+      {
+      case 0:
+        menu_cur = 1; //games
         break;
-      case 1: // games menu click
-        switch(menu[menu_cur])
-        {
-          case 0:
-            menu_cur = 0; //back to main menu
-            break;
-          case 1:
-            runMode = 2; //fallios
-            setGameMode();
-        }
+      case 1:
+        menu_cur = 2; //settings
+        break;
+      case 2:
+        runMode = 0; //exit
+        break;
+      }
+      break;
+    case 1: // games menu click
+      switch (menu[menu_cur])
+      {
+      case 0:
+        menu_cur = 0; //back to main menu
+        break;
+      case 1:
+        runMode = 2; //fallios
+        setGameMode();
+      }
     }
-    
   }
 }
 
@@ -500,9 +503,91 @@ void addGlitter(fract8 chanceOfGlitter)
   }
 }
 
+void customColor(int r, int g, int b)
+{
+  fill_solid(leds, LEDs_in_strip, CRGB(r, g, b));
+}
 
-String processor(const String& var){
-  if(var == "BRIGHTNESS"){
+void plasma(CRGBPalette16 currentPalette, TBlendType currentBlending)
+{ // This is the heart of this program. Sure is short. . . and fast.
+
+  int thisPhase = beatsin8(6, -64, 64); // Setting phase change for a couple of waves.
+  int thatPhase = beatsin8(7, -64, 64);
+
+  for (int k = 0; k < NUM_LEDS; k++)
+  { // For each of the LED's in the strand, set a brightness based on a wave as follows:
+
+    int colorIndex = cubicwave8((k * 23) + thisPhase) / 2 + cos8((k * 15) + thatPhase) / 2; // Create a wave and add a phase change and add another wave with its own phase change.. Hey, you can even change the frequencies if you wish.
+    int thisBright = qsuba(colorIndex, beatsin8(7, 0, 96));                                 // qsub gives it a bit of 'black' dead space by setting sets a minimum value. If colorIndex < current value of beatsin8(), then bright = 0. Otherwise, bright = colorIndex..
+
+    leds[k] = ColorFromPalette(currentPalette, colorIndex, thisBright, currentBlending); // Let's now add the foreground colour.
+  }
+}
+void beatwave(CRGBPalette16 currentPalette, TBlendType currentBlending)
+{
+  // https://github.com/atuline/FastLED-Demos/blob/master/beatwave/beatwave.ino
+
+  uint8_t wave1 = beatsin8(9, 0, 255); // That's the same as beatsin8(9);
+  uint8_t wave2 = beatsin8(8, 0, 255);
+  uint8_t wave3 = beatsin8(7, 0, 255);
+  uint8_t wave4 = beatsin8(6, 0, 255);
+
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    leds[i] = ColorFromPalette(currentPalette, i + wave1 + wave2 + wave3 + wave4, 255, currentBlending);
+  }
+}
+
+void setPixel(int pixel, byte red, byte green, byte blue)
+{
+
+  // #ifdef ADAFRUIT_NEOPIXEL_H
+
+  //   // NeoPixel
+
+  //   strip.setPixelColor(pixel, strip.Color(red, green, blue));
+
+  // #endif
+
+#ifndef ADAFRUIT_NEOPIXEL_H
+
+  // FastLED
+
+  leds[pixel].r = red;
+
+  leds[pixel].g = green;
+
+  leds[pixel].b = blue;
+
+#endif
+}
+
+void fadeLightBy(int pixel, int brightness)
+{
+
+#ifndef ADAFRUIT_NEOPIXEL_H
+
+  // FastLED
+
+  leds[pixel].fadeLightBy(brightness);
+#endif
+}
+void DetermineFadeDirection()
+{
+  if (yoffset > yoffsetMAX)
+  {
+    fadeDirection2 = 0;
+  }
+  if (yoffset < 0)
+  {
+    fadeDirection2 = 1;
+  }
+}
+
+String processor(const String &var)
+{
+  if (var == "BRIGHTNESS")
+  {
     if (brightness == 0)
     {
       returnText = "Off";
@@ -535,17 +620,17 @@ String processor(const String& var){
     {
       returnText = "Moody";
     }
-    
+
     return returnText;
   }
-  
-  if(var == "MODE"){
-    
+
+  if (var == "MODE")
+  {
+
     return returnText;
   }
   return String();
 }
-
 
 void confettiCustom(int saturation, int value, int random)
 {

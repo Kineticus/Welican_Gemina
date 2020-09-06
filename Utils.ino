@@ -525,8 +525,9 @@ void plasma(CRGBPalette16 currentPalette, TBlendType currentBlending)
 }
 void beatwave(CRGBPalette16 currentPalette, TBlendType currentBlending)
 {
+  // https://github.com/atuline/FastLED-Demos/blob/master/beatwave/beatwave.ino
 
-  // https://github.com/atuline/FastLED-Demos/blob/master/beatwave/beatwave.ino  uint8_t wave1 = beatsin8(9, 0, 255); // That's the same as beatsin8(9);
+  uint8_t wave1 = beatsin8(9, 0, 255); // That's the same as beatsin8(9);
   uint8_t wave2 = beatsin8(8, 0, 255);
   uint8_t wave3 = beatsin8(7, 0, 255);
   uint8_t wave4 = beatsin8(6, 0, 255);

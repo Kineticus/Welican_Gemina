@@ -245,15 +245,15 @@ void moving_colors_category(int patternMode)
     break;
   case 54:
     functionName = "Plasma";
-    Plasma(OceanColors_p, LavaColors_p);
+    Plasma(OceanColors_p, LavaColors_p, LINEARBLEND);
     break;
   case 55:
     functionName = "Plasma";
-    Plasma(ForestColors_p, CloudColors_p);
+    Plasma(ForestColors_p, CloudColors_p, LINEARBLEND);
     break;
   case 56:
     functionName = "Plasma";
-    Plasma(RainbowColors_p, PartyColors_p);
+    Plasma(RainbowColors_p, PartyColors_p, LINEARBLEND);
     break;
   }
 }
@@ -902,6 +902,7 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
 void Sawtooth(int bpm, CRGBPalette16 currentPalette, TBlendType currentBlending)
 {
 
+  // https://github.com/atuline/FastLED-Demos/blob/master/sawtooth/sawtooth.ino
   int ms_per_beat = 60000 / bpm; // 500ms per beat, where 60,000 = 60 seconds * 1000 ms
   int ms_per_led = 60000 / bpm / NUM_LEDS;
 
@@ -914,12 +915,12 @@ void Sawtooth(int bpm, CRGBPalette16 currentPalette, TBlendType currentBlending)
 
 } // sawtooth()
 
-void Plasma(CRGBPalette16 currentPalette, CRGBPalette16 targetPalette)
+void Plasma(CRGBPalette16 currentPalette, CRGBPalette16 targetPalette, TBlendType currentBlending)
 {
-
+  //https://github.com/atuline/FastLED-Demos/blob/master/plasma/plasma.ino
   EVERY_N_MILLISECONDS(50)
   { // FastLED based non-blocking delay to update/display the sequence.
-    plasma();
+    plasma(currentPalette, currentBlending);
   }
 
   EVERY_N_MILLISECONDS(100)

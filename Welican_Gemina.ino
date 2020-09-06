@@ -52,10 +52,13 @@ int mode = 0;
 int mode_max = maxModes;
 int pattern[5];
 int pattern_temp = 0;
-int pattern_max[5] = {12, 12, 22, 53, 11};
+int pattern_max[5] = {12, 12, 22, 56, 11};
 
 #define screen_width 127
 #define screen_height 63
+
+#define qsubd(x, b) ((x > b) ? b : 0)     // Digital unsigned subtraction macro. if result <0, then => 0. Otherwise, take on fixed value.
+#define qsuba(x, b) ((x > b) ? x - b : 0) // Analog Unsigned subtraction macro. if result <0, then => 0
 
 int knob1Click = 0;
 int knob2Click = 0;

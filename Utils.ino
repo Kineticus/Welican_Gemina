@@ -508,7 +508,7 @@ void customColor(int r, int g, int b)
   fill_solid(leds, LEDs_in_strip, CRGB(r, g, b));
 }
 
-void plasma()
+void plasma(CRGBPalette16 currentPalette, TBlendType currentBlending)
 { // This is the heart of this program. Sure is short. . . and fast.
 
   int thisPhase = beatsin8(6, -64, 64); // Setting phase change for a couple of waves.

@@ -236,12 +236,12 @@ void moving_colors_category(int patternMode)
     Sawtooth(60, OceanColors_p, LINEARBLEND);
     break;
   case 52:
-    functionName = "Sawtooth 30";
-    Sawtooth(30, LavaColors_p, LINEARBLEND);
+    functionName = "Sawtooth 92";
+    Sawtooth(92, LavaColors_p, LINEARBLEND);
     break;
   case 53:
     functionName = "Sawtooth 110";
-    Sawtooth(110, ForestColors_p, LINEARBLEND);
+    Sawtooth(128, ForestColors_p, LINEARBLEND);
     break;
   case 54:
     functionName = "Plasma";

@@ -53,7 +53,7 @@ int mode_max = maxModes;
 int pattern[5];
 int pattern_temp = 0;
 // basic, music, chill, moving colors, legacy
-int pattern_max[5] = {12, 12, 22, 65, 30};
+int pattern_max[5] = {12, 12, 22, 65, 80};
 int pixelNumber = 0;
 unsigned long startMillis;
 unsigned long currentMillis;
@@ -141,9 +141,12 @@ const int LEDs_for_simplex = 6;
 CRGB temp[NUM_LEDS];
 CRGB leds_temp[NUM_LEDS / 2]; // half the total number of pixels
 
-int fadeDirection = 0;  // 1 or 0, positive or negative
-int fadeDirection2 = 0; // 1 or 0, positive or negative
-int fadeAmount = 5;     // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
+long tempTimer;
+int ledPosition;
+int fadeDirection = 0;      // 1 or 0, positive or negative
+int fadeDirection2 = 0;     // 1 or 0, positive or negative
+int fadeDirectionHTemp = 0; // 1 or 0, positive or negative
+int fadeAmount = 5;         // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
 bool useFade = false;
 boolean fadingTail = 0; // Add fading tail? [1=true, 0=falue]
 uint8_t fadeRate = 170; // How fast to fade out tail. [0-255]

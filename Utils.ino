@@ -642,6 +642,55 @@ void fadeToBlack(int ledNo, byte fadeValue)
 #endif
 }
 
+float GetH_BouncingWithLimits(float _speed, float _hHigh, float _hLow)
+{
+  if (h > _hHigh)
+  {
+    h = _hHigh;
+    fadeDirection = 0;
+  }
+  if (h < _hLow)
+  {
+    h = _hLow;
+    fadeDirection = 1;
+  }
+
+  if (fadeDirection == 1)
+  {
+    h += _speed; // increment to make faster
+  }
+  if (fadeDirection == 0)
+  {
+    h -= _speed; // decrement to make faster
+  }
+
+  return h;
+}
+float GetHTemp_BouncingWithLimits(float _speed, float _hHigh, float _hLow)
+{
+  if (hTemp > _hHigh)
+  {
+    hTemp = _hHigh;
+    fadeDirectionHTemp = 0;
+  }
+  if (hTemp < _hLow)
+  {
+    hTemp = _hLow;
+    fadeDirectionHTemp = 1;
+  }
+
+  if (fadeDirectionHTemp == 1)
+  {
+    hTemp += _speed; // increment to make faster
+  }
+  if (fadeDirectionHTemp == 0)
+  {
+    hTemp -= _speed; // decrement to make faster
+  }
+
+  return hTemp;
+}
+
 void DetermineFadeDirection()
 {
   if (yoffset > yoffsetMAX)
@@ -972,29 +1021,4 @@ void hsv2rgb(float H, float S, float V, int &R, int &G, int &B)
     G = (var_g)*255;
     B = (var_b)*255;
   }
-}
-
-float GetH_BouncingWithLimits(float _speed, float _hHigh, float _hLow)
-{
-  if (h > _hHigh)
-  {
-    h = _hHigh;
-    fadeDirection = 0;
-  }
-  if (h < _hLow)
-  {
-    h = _hLow;
-    fadeDirection = 1;
-  }
-
-  if (fadeDirection == 1)
-  {
-    h += _speed; // increment to make faster
-  }
-  if (fadeDirection == 0)
-  {
-    h -= _speed; // decrement to make faster
-  }
-
-  return h;
 }

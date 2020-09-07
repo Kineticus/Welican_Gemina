@@ -89,18 +89,19 @@ Standard Readme follows the [Contributor Covenant](http://contributor-covenant.o
 
 ## Helpful Links
 
-[C++ Classes](https://www.stroustrup.com/C++11FAQ.html#member-init)
-[Arduino C++ & VSCode](https://learn.sparkfun.com/tutorials/efficient-arduino-programming-with-arduino-cli-and-visual-studio-code/all)
-[Arduino Intellisense VSCode](https://cuneyt.aliustaoglu.biz/en/enabling-arduino-intellisense-with-visual-studio-code/)
-[Experimental FastLED RGBSet](https://github.com/FastLED/FastLED/wiki/RGBSet-Reference)
-[Refactoring out DELAY](https://forum.arduino.cc/index.php?topic=537644.0)
+  - [C++ Classes](https://www.stroustrup.com/C++11FAQ.html#member-init)
+  - [Arduino C++ & VSCode](https://learn.sparkfun.com/tutorials/efficient-arduino-programming-with-arduino-cli-and-visual-studio-code/all)
+  - [Arduino Intellisense VSCode](https://cuneyt.aliustaoglu.biz/en/enabling-arduino-intellisense-with-visual-studio-code/)
+  - [Experimental FastLED RGBSet](https://github.com/FastLED/FastLED/wiki/RGBSet-Reference)
+  - [Refactoring out DELAY](https://forum.arduino.cc/index.php?topic=537644.0)
 
 ## FastLED Examples
-[Demos](https://github.com/atuline/FastLED-Demos)
-[Demos 2](https://github.com/marmilicious/FastLED_examples)
-[Demos 3](https://www.tweaking4all.com/hardware/arduino/adruino-led-strip-effects/)
-[Flagpole](https://github.com/chemdoc77/CD77_FastLED_Projects/tree/master/CD77_Flagpole_Project)
-[Chase Demo](https://github.com/chemdoc77/CD77_FastLED/tree/master/CD77_Chase_Demo)
+
+  - [Demos](https://github.com/atuline/FastLED-Demos)
+  - [Demos 2](https://github.com/marmilicious/FastLED_examples)
+  - [Demos 3](https://www.tweaking4all.com/hardware/arduino/adruino-led-strip-effects/)
+  - [Flagpole](https://github.com/chemdoc77/CD77_FastLED_Projects/tree/master/CD77_Flagpole_Project)
+  - [Chase Demo](https://github.com/chemdoc77/CD77_FastLED/tree/master/CD77_Chase_Demo)
 
 ## License
 

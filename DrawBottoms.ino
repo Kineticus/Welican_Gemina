@@ -212,7 +212,7 @@ void starBounce()
   {
     dvdBounce_vy = 1;
   }
-  if (dvdBounce_y >= (visualizer_y - DVD_width))
+  if (dvdBounce_y >= (visualizer_y - star_width))
   {
     dvdBounce_vy = -1;
   }
@@ -221,7 +221,7 @@ void starBounce()
   {
     dvdBounce_vx = 1;
   }
-  if (dvdBounce_x >= (visualizer_x - DVD_height))
+  if (dvdBounce_x >= (visualizer_x - star_height))
   {
     dvdBounce_vx = -1;
   }
@@ -233,7 +233,7 @@ void starBounce()
   {
     dvdBounce2_vy = 1;
   }
-  if (dvdBounce2_y >= (visualizer_y - DVD_width))
+  if (dvdBounce2_y >= (visualizer_y - star_width))
   {
     dvdBounce2_vy = -1;
   }
@@ -242,7 +242,7 @@ void starBounce()
   {
     dvdBounce2_vx = 1;
   }
-  if (dvdBounce2_x >= (visualizer_x - DVD_height))
+  if (dvdBounce2_x >= (visualizer_x - star_height))
   {
     dvdBounce2_vx = -1;
   }
@@ -254,7 +254,7 @@ void starBounce()
   {
     dvdBounce3_vy = 1;
   }
-  if (dvdBounce3_y >= (visualizer_y - DVD_width))
+  if (dvdBounce3_y >= (visualizer_y - star_width))
   {
     dvdBounce3_vy = -1;
   }
@@ -263,7 +263,7 @@ void starBounce()
   {
     dvdBounce3_vx = 1;
   }
-  if (dvdBounce3_x >= (visualizer_x - DVD_height))
+  if (dvdBounce3_x >= (visualizer_x - star_height))
   {
     dvdBounce3_vx = -1;
   }

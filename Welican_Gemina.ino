@@ -35,8 +35,8 @@ int tempValue = 0;
 #include "SPIFFS.h"
 
 // Replace with your network credentials
-const char *ssid = "";
-const char *password = "";
+const char *ssid = "MPABG";
+const char *password = "MPABG006";
 String returnText;
 
 AsyncWebServer server(80);
@@ -47,7 +47,7 @@ int menu_cur = 0;
 
 int runMode = 0;
 
-#define maxModes 5
+#define maxModes 4
 int mode = 0;
 int mode_max = maxModes;
 int pattern[5];

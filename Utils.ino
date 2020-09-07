@@ -538,6 +538,18 @@ void beatwave(CRGBPalette16 currentPalette, TBlendType currentBlending)
   }
 }
 
+void showStrip()
+{
+// #ifdef ADAFRUIT_NEOPIXEL_H
+//   // NeoPixel
+//   strip.show();
+// #endif
+#ifndef ADAFRUIT_NEOPIXEL_H
+  // FastLED
+  FastLED.show();
+#endif
+}
+
 void setPixel(int pixel, byte red, byte green, byte blue)
 {
 
@@ -552,14 +564,46 @@ void setPixel(int pixel, byte red, byte green, byte blue)
 #ifndef ADAFRUIT_NEOPIXEL_H
 
   // FastLED
+  leds[pixel] = CRGB(red, green, blue);
 
-  leds[pixel].r = red;
+  // leds[pixel].setRGB(red, green, blue);
 
-  leds[pixel].g = green;
+  // leds[pixel].r = red;
 
-  leds[pixel].b = blue;
+  // leds[pixel].g = green;
+
+  // leds[pixel].b = blue;
 
 #endif
+}
+void setPixel(int pixel, CRGB color)
+{
+
+  // #ifdef ADAFRUIT_NEOPIXEL_H
+
+  //   // NeoPixel
+
+  //   strip.setPixelColor(pixel, strip.Color(red, green, blue));
+
+  // #endif
+
+#ifndef ADAFRUIT_NEOPIXEL_H
+
+  // FastLED
+  leds[pixel] = CRGB(color);
+
+  // leds[pixel].setRGB(color);
+
+#endif
+}
+
+void setAll(byte red, byte green, byte blue)
+{
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    setPixel(i, red, green, blue);
+  }
+  showStrip();
 }
 
 void fadeLightBy(int pixel, int brightness)
@@ -572,6 +616,81 @@ void fadeLightBy(int pixel, int brightness)
   leds[pixel].fadeLightBy(brightness);
 #endif
 }
+
+void fadeToBlack(int ledNo, byte fadeValue)
+{
+// #ifdef ADAFRUIT_NEOPIXEL_H
+//   // NeoPixel
+//   uint32_t oldColor;
+//   uint8_t r, g, b;
+//   int value;
+
+//   oldColor = strip.getPixelColor(ledNo);
+//   r = (oldColor & 0x00ff0000UL) >> 16;
+//   g = (oldColor & 0x0000ff00UL) >> 8;
+//   b = (oldColor & 0x000000ffUL);
+
+//   r = (r <= 10) ? 0 : (int)r - (r * fadeValue / 256);
+//   g = (g <= 10) ? 0 : (int)g - (g * fadeValue / 256);
+//   b = (b <= 10) ? 0 : (int)b - (b * fadeValue / 256);
+
+//   strip.setPixelColor(ledNo, r, g, b);
+// #endif
+#ifndef ADAFRUIT_NEOPIXEL_H
+  // FastLED
+  leds[ledNo].fadeToBlackBy(fadeValue);
+#endif
+}
+
+float GetH_BouncingWithLimits(float _speed, float _hHigh, float _hLow)
+{
+  if (h > _hHigh)
+  {
+    h = _hHigh;
+    fadeDirection = 0;
+  }
+  if (h < _hLow)
+  {
+    h = _hLow;
+    fadeDirection = 1;
+  }
+
+  if (fadeDirection == 1)
+  {
+    h += _speed; // increment to make faster
+  }
+  if (fadeDirection == 0)
+  {
+    h -= _speed; // decrement to make faster
+  }
+
+  return h;
+}
+float GetHTemp_BouncingWithLimits(float _speed, float _hHigh, float _hLow)
+{
+  if (hTemp > _hHigh)
+  {
+    hTemp = _hHigh;
+    fadeDirectionHTemp = 0;
+  }
+  if (hTemp < _hLow)
+  {
+    hTemp = _hLow;
+    fadeDirectionHTemp = 1;
+  }
+
+  if (fadeDirectionHTemp == 1)
+  {
+    hTemp += _speed; // increment to make faster
+  }
+  if (fadeDirectionHTemp == 0)
+  {
+    hTemp -= _speed; // decrement to make faster
+  }
+
+  return hTemp;
+}
+
 void DetermineFadeDirection()
 {
   if (yoffset > yoffsetMAX)
@@ -902,29 +1021,4 @@ void hsv2rgb(float H, float S, float V, int &R, int &G, int &B)
     G = (var_g)*255;
     B = (var_b)*255;
   }
-}
-
-float GetH_BouncingWithLimits(float _speed, float _hHigh, float _hLow)
-{
-  if (h > _hHigh)
-  {
-    h = _hHigh;
-    fadeDirection = 0;
-  }
-  if (h < _hLow)
-  {
-    h = _hLow;
-    fadeDirection = 1;
-  }
-
-  if (fadeDirection == 1)
-  {
-    h += _speed; // increment to make faster
-  }
-  if (fadeDirection == 0)
-  {
-    h -= _speed; // decrement to make faster
-  }
-
-  return h;
 }

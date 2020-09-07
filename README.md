@@ -15,16 +15,19 @@ This repository contains:
 
 - [Background](#background)
 - [Install](#install)
+  - [Install Arduino Libraries](#install-arduino-libraries)
+  - [VS Code & C++](#vs-code-&-c++)
 - [Related Documents](#related-documents)
 - [Maintainers](#maintainers)
 - [Contributing](#contributing)
 - [Helpful Links](#helpful-links)
+- [FastLed Examples](#fastled-examples)
 - [License](#license)
 
 ## Background
-
-  - TODO add stuff
-
+```
+  // TODO add stuff
+```
 ## Install
 
 This project requires the [Arduino IDE](https://www.arduino.cc/en/Main/Software).
@@ -51,7 +54,7 @@ This project requires the [Arduino IDE](https://www.arduino.cc/en/Main/Software)
 
     - That’s it! Make sure to change the Board under the Tools menu to “ESP32 Dev Module”
 
-### Install Arduino Libraries to work with this project.
+### Install Arduino Libraries
 
 6. Libraries `Tools > Manage Libraries` (Location is User Directory\Documents\Arduino\libraries)
   - [ESP32Encoder](https://github.com/madhephaestus/ESP32Encoder)
@@ -61,7 +64,12 @@ This project requires the [Arduino IDE](https://www.arduino.cc/en/Main/Software)
   - [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) *Must be installed manually
   - [ASyncTCP](https://github.com/me-no-dev/AsyncTCP) *Must be installed manually
 
-  
+### VS Code & C++
+  - [.vscode/c_app_properties.json](https://code.visualstudio.com/docs/cpp/customize-default-settings-cpp)
+  - [Arduino Extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.vscode-arduino)
+  - [C++ Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
+  - [GitLens Extension](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+
 ## Related Documents
 
 - [Welican Project Doc](https://docs.google.com/document/d/e/2PACX-1vS1qt4seWkiZLkJHX4LD_V3VYEt1su2fU610a7UOJ1a_LkRgppqzjMMRaHVzRj_jQmDRsJIRdGVeDGK/pub) - The brain-dump file created by @Kinectus
@@ -85,6 +93,14 @@ Standard Readme follows the [Contributor Covenant](http://contributor-covenant.o
 [Arduino C++ & VSCode](https://learn.sparkfun.com/tutorials/efficient-arduino-programming-with-arduino-cli-and-visual-studio-code/all)
 [Arduino Intellisense VSCode](https://cuneyt.aliustaoglu.biz/en/enabling-arduino-intellisense-with-visual-studio-code/)
 [Experimental FastLED RGBSet](https://github.com/FastLED/FastLED/wiki/RGBSet-Reference)
+[Refactoring out DELAY](https://forum.arduino.cc/index.php?topic=537644.0)
+
+## FastLED Examples
+[Demos](https://github.com/atuline/FastLED-Demos)
+[Demos 2](https://github.com/marmilicious/FastLED_examples)
+[Demos 3](https://www.tweaking4all.com/hardware/arduino/adruino-led-strip-effects/)
+[Flagpole](https://github.com/chemdoc77/CD77_FastLED_Projects/tree/master/CD77_Flagpole_Project)
+[Chase Demo](https://github.com/chemdoc77/CD77_FastLED/tree/master/CD77_Chase_Demo)
 
 ## License
 

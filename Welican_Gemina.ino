@@ -52,7 +52,12 @@ int mode = 0;
 int mode_max = maxModes;
 int pattern[5];
 int pattern_temp = 0;
-int pattern_max[5] = {12, 12, 22, 65, 11};
+// basic, music, chill, moving colors, legacy
+int pattern_max[5] = {12, 12, 22, 65, 80};
+int pixelNumber = 0;
+unsigned long startMillis;
+unsigned long currentMillis;
+const unsigned long period = 1000;
 
 #define screen_width 127
 #define screen_height 63
@@ -136,9 +141,12 @@ const int LEDs_for_simplex = 6;
 CRGB temp[NUM_LEDS];
 CRGB leds_temp[NUM_LEDS / 2]; // half the total number of pixels
 
-int fadeDirection = 0;  // 1 or 0, positive or negative
-int fadeDirection2 = 0; // 1 or 0, positive or negative
-int fadeAmount = 5;     // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
+long tempTimer;
+int ledPosition;
+int fadeDirection = 0;      // 1 or 0, positive or negative
+int fadeDirection2 = 0;     // 1 or 0, positive or negative
+int fadeDirectionHTemp = 0; // 1 or 0, positive or negative
+int fadeAmount = 5;         // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
 bool useFade = false;
 boolean fadingTail = 0; // Add fading tail? [1=true, 0=falue]
 uint8_t fadeRate = 170; // How fast to fade out tail. [0-255]
@@ -167,6 +175,9 @@ uint8_t ran1;
 uint8_t ran2;
 // -------------------
 
+int red, green, blue;                                    // used in hsv2rgb color functions
+int red2, green2, blue2;                                 // used in hsv2rgb color functions
+int red3, green3, blue3;                                 // used in hsv2rgb color functions
 uint8_t hue = hueA;                                      // Do Not Edit
 uint8_t hue2 = hueB;                                     // Do Not Edit
 uint8_t sat = satA;                                      // Do Not Edit
@@ -486,7 +497,7 @@ void loop()
     break;
   }
   //WS LED
-  FastLED.show();
+  showStrip();
 
   if (useFade == true)
   {

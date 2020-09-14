@@ -38,6 +38,13 @@ void updateEncoders()
   knob1Click = 0;
   knob2Click = 0;
 
+
+  //Let the FFT Task know we are going to utilize the input function
+  knobReading = 1;
+  int tempTime = micros();
+  //Wait a moment for the task to finish up
+  while (micros() < (newTime + 15)) { /* chill */ }
+
   //Read knob 1 digital pin, button pulls pin low
   tempValue = digitalRead(knob1C);
 
@@ -97,18 +104,9 @@ void updateEncoders()
     knob2Click_debounce -= 1;
   }
 
-  /* BOTH CLICK AT ONCE
-  if (knobBothClick_debounce > 0)
-  {
-    knobBothClick_debounce -= 1;
-  }
-  if ((knob1Click_debounce > 0) && (knob2Click_debounce > 0))
-  {
-    knobBothClick_debounce = 3;
-    knobBothClick = 1;
-  } 
-  */
-
+  //Let task know we are done reading inputs
+  knobReading = 0;
+  
   //--PATTERN ENCODER--
 
   tempValue = encoder.getCount() - knob1_temp; //Read current knob position vs. last time we checked

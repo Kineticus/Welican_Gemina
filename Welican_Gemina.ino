@@ -30,13 +30,38 @@ int knob1_temp = 0;
 int knob2_temp = 0;
 int tempValue = 0;
 
+
+//AUDIO INPUT
+#include <arduinoFFT.h>
+
+#define SAMPLES         512     // Must be a power of 2
+#define SAMPLING_FREQ   40000         // Hz, must be 40000 or less due to ADC conversion time. Determines maximum frequency that can be analysed by the FFT Fmax=sampleF/2.
+#define AMPLITUDE       3000          // Depending on your audio source level, you may need to alter this value. Can be used as a 'sensitivity' control.
+#define AUDIO_IN_PIN    35            // Signal in on this pin
+#define NUM_BANDS       8            // To change this, you will need to change the bunch of if statements describing the mapping from bins to bands
+#define NOISE           500           // Used as a crude noise filter, values below this are ignored
+#define TOP             32
+
+unsigned int sampling_period_us;
+int peak[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};              // The length of these arrays must be >= NUM_BANDS
+int oldBarHeights[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int bandValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+double vReal[SAMPLES];
+double vImag[SAMPLES];
+unsigned long newTime;
+byte knobReading = 0;
+unsigned long tempTime;
+arduinoFFT FFT = arduinoFFT(vReal, vImag, SAMPLES, SAMPLING_FREQ);
+
+
+//WiFi, Web Server, and storage for web assets
 #include <WiFi.h>
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
 
 // Replace with your network credentials
-const char *ssid = "MPABG";
-const char *password = "MPABG006";
+const char *ssid = "";
+const char *password = "";
 String returnText;
 
 AsyncWebServer server(80);
@@ -116,6 +141,10 @@ int dvdBounce3_vy = 1;
 int brightness = 0;
 int brightness_temp = 0;
 int brightness_debounce = 0;
+
+int temp1 = 0;
+int temp2 = 0;
+int temp3 = 0;
 
 //GAMES
 int playerX = 64;
@@ -242,15 +271,6 @@ unsigned long frameRateCounter = 0;
 
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 
-//MSGEQ7 Input
-#include <MD_MSGEQ7.h>
-// hardware pin definitions - change to suit circuit
-#define INPUT_PIN 35
-#define RESET_PIN 13
-#define STROBE_PIN 2
-
-MD_MSGEQ7 MSGEQ7(RESET_PIN, STROBE_PIN, INPUT_PIN);
-
 String categoryName = "";
 String functionName = "";
 char category_name_out_str[20];
@@ -361,9 +381,6 @@ void setup()
     star_z[i] = random(1, 4);
   }
 
-  //Sound library initialization
-  MSGEQ7.begin();
-
   //For troubleshooting
   Serial.begin(9600);
 
@@ -423,11 +440,20 @@ void setup()
 
   //Set master brightness control
   FastLED.setBrightness(brightness);
+
+  xTaskCreatePinnedToCore(
+    fftCompute,         /* Function to implement the task */
+    "fftCompute Task",  /* Name of the task */
+    50000,              /* Stack size in words */
+    NULL,               /* Task input parameter */
+    0,                  /* Priority of the task */
+    NULL,               /* Task handle. */
+    0);
 }
 
 void loop()
 {
-  MSGEQ7.read();
+  //fftCompute();
 
   functionName.toCharArray(function_name_out_str, 20);
   categoryName.toCharArray(category_name_out_str, 20);
@@ -472,7 +498,7 @@ void loop()
 
   ledcWrite(statusLED, breath);
 
-  testValue += MSGEQ7.get(0) / 16;
+  //testValue += MSGEQ7.get(0) / 16;
   if (testValue > 255)
   {
     testValue = 255;
@@ -560,3 +586,82 @@ void showData() {
   display.display();
 }
 */
+
+
+void fftCompute(void * parameter)
+{
+//Audio Stuff
+  for(;;){ 
+    // Sample the audio pin
+    for (int i = 0; i < SAMPLES; i++) {
+      newTime = micros();
+      if (knobReading == 0) //Can't read analog input at same time as another task, or main thread in this case
+      {
+        vReal[i] = analogRead(AUDIO_IN_PIN); // A conversion takes about 9.7uS on an ESP32
+        vImag[i] = 0;
+      } else
+      {
+        i--;
+      }
+      while (micros() < (newTime + sampling_period_us)) { /* chill */ }
+    }
+
+    // Compute FFT
+    FFT.DCRemoval();
+    FFT.Windowing(FFT_WIN_TYP_HAMMING, FFT_FORWARD);
+    FFT.Compute(FFT_FORWARD);
+    FFT.ComplexToMagnitude();
+
+    // Reset bandValues[]
+    for (int i = 0; i<NUM_BANDS; i++){
+      bandValues[i] = 0;
+    }
+
+    // Analyse FFT results
+    for (int i = 2; i < (SAMPLES/2); i++){       // Don't use sample 0 and only first SAMPLES/2 are usable. Each array element represents a frequency bin and its value the amplitude.
+      if (vReal[i] > NOISE) {                    // Add a crude noise filter
+        
+      //8 bands, 12kHz top band
+        if (i<=3 )           bandValues[0]  += (int)vReal[i];
+        if (i>3   && i<=6  ) bandValues[1]  += (int)vReal[i];
+        if (i>6   && i<=13 ) bandValues[2]  += (int)vReal[i];
+        if (i>13  && i<=27 ) bandValues[3]  += (int)vReal[i];
+        if (i>27  && i<=55 ) bandValues[4]  += (int)vReal[i];
+        if (i>55  && i<=112) bandValues[5]  += (int)vReal[i];
+        if (i>112 && i<=229) bandValues[6]  += (int)vReal[i];
+        if (i>229          ) bandValues[7]  += (int)vReal[i];
+
+      /*16 bands, 12kHz top band 
+        if (i<=2 )           bandValues[0]  += (int)vReal[i];
+        if (i>2   && i<=3  ) bandValues[1]  += (int)vReal[i];
+        if (i>3   && i<=5  ) bandValues[2]  += (int)vReal[i];
+        if (i>5   && i<=7  ) bandValues[3]  += (int)vReal[i];
+        if (i>7   && i<=9  ) bandValues[4]  += (int)vReal[i];
+        if (i>9   && i<=13 ) bandValues[5]  += (int)vReal[i];
+        if (i>13  && i<=18 ) bandValues[6]  += (int)vReal[i];
+        if (i>18  && i<=25 ) bandValues[7]  += (int)vReal[i];
+        if (i>25  && i<=36 ) bandValues[8]  += (int)vReal[i];
+        if (i>36  && i<=50 ) bandValues[9]  += (int)vReal[i];
+        if (i>50  && i<=69 ) bandValues[10] += (int)vReal[i];
+        if (i>69  && i<=97 ) bandValues[11] += (int)vReal[i];
+        if (i>97  && i<=135) bandValues[12] += (int)vReal[i];
+        if (i>135 && i<=189) bandValues[13] += (int)vReal[i];
+        if (i>189 && i<=264) bandValues[14] += (int)vReal[i];
+        if (i>264          ) bandValues[15] += (int)vReal[i];*/
+      }
+    }
+
+    // Process the FFT data into bar heights
+    for (byte band = 0; band < NUM_BANDS; band++) {
+      
+      if (bandValues[band] > peak[band])
+      {
+        peak[band] = bandValues[band];
+      }
+
+      // Decay peak
+      for (byte band = 0; band < NUM_BANDS; band++) 
+        if (peak[band] > 500) peak[band] -= 500;
+    }
+  }
+}

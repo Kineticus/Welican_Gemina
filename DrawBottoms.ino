@@ -1,6 +1,6 @@
 void drawDiscEQ()
 {
-  int temp1 = MSGEQ7.get(1) / 64;
+  temp1 = bandValues[1] / AMPLITUDE;
   temp1 -= 7;
   if (temp1 < 2)
   {
@@ -15,7 +15,7 @@ void drawDiscEQ()
 
 void drawDiscSectionsEQ()
 {
-  int temp1 = MSGEQ7.get(1) / 64;
+  temp1 = bandValues[0] / AMPLITUDE;
   temp1 -= 7;
   if (temp1 < 0)
   {
@@ -27,7 +27,7 @@ void drawDiscSectionsEQ()
   }
   u8g2.drawDisc(106, 42, temp1, U8G2_DRAW_LOWER_LEFT);
 
-  int temp2 = MSGEQ7.get(4) / 64;
+  temp2 = bandValues[1] / AMPLITUDE;
   temp2 -= 7;
   if (temp2 < 0)
   {
@@ -42,11 +42,11 @@ void drawDiscSectionsEQ()
 
 void drawEQ()
 {
-  int pos = 32;
+  int pos = 16;
   int min = 0;
   int max = 80;
 
-  int temp1 = MSGEQ7.get(0) / 32;
+  temp1 = bandValues[0] / AMPLITUDE;
   temp1 -= 7;
   if (temp1 < min)
   {
@@ -58,8 +58,11 @@ void drawEQ()
   }
   u8g2.setDrawColor(1);
   u8g2.drawBox(0, pos, temp1, 7);
+  temp3 = peak[0] / AMPLITUDE;
+  u8g2.drawBox(temp3, pos, 1, 7);
 
-  int temp2 = MSGEQ7.get(3) / 32;
+
+  temp2 = bandValues[1] / AMPLITUDE;
   temp2 -= 7;
   if (temp2 < min)
   {
@@ -70,8 +73,11 @@ void drawEQ()
     temp2 = max;
   }
   u8g2.drawBox(0, pos + 8, temp2, 7);
+  temp3 = peak[1] / AMPLITUDE;
+  u8g2.drawBox(temp3, pos + 8, 1, 7);
 
-  int temp3 = MSGEQ7.get(5) / 32;
+
+  temp3 = bandValues[3] / AMPLITUDE;
   temp3 -= 7;
   if (temp3 < min)
   {
@@ -82,11 +88,59 @@ void drawEQ()
     temp3 = max;
   }
   u8g2.drawBox(0, pos + 16, temp3, 7);
+  temp3 = peak[3] / AMPLITUDE;
+  u8g2.drawBox(temp3, pos + 16, 1, 7);
+
+
+  temp3 = bandValues[4] / AMPLITUDE;
+  temp3 -= 7;
+  if (temp3 < min)
+  {
+    temp3 = min;
+  }
+  if (temp3 > max)
+  {
+    temp3 = max;
+  }
+  u8g2.drawBox(0, pos + 24, temp3, 7);
+
+  temp3 = peak[4] / AMPLITUDE;
+  u8g2.drawBox(temp3, pos + 24, 1, 7);
+
+  temp3 = bandValues[5] / AMPLITUDE;
+  temp3 -= 7;
+  if (temp3 < min)
+  {
+    temp3 = min;
+  }
+  if (temp3 > max)
+  {
+    temp3 = max;
+  }
+  u8g2.drawBox(0, pos + 32, temp3, 7);
+  temp3 = peak[5] / AMPLITUDE;
+  u8g2.drawBox(temp3, pos + 32, 1, 7);
+
+
+  temp3 = bandValues[6] / AMPLITUDE;
+  temp3 -= 7;
+  if (temp3 < min)
+  {
+    temp3 = min;
+  }
+  if (temp3 > max)
+  {
+    temp3 = max;
+  }
+  u8g2.drawBox(0, pos + 40, temp3, 7);
+  temp3 = peak[6] / AMPLITUDE;
+  u8g2.drawBox(temp3, pos +40, 1, 7);
+
 }
 
 void drawCircleEQ()
 {
-  int temp1 = MSGEQ7.get(2) / 64;
+  temp1 = bandValues[2] / AMPLITUDE;
   temp1 -= 7;
   if (temp1 < 5)
   {

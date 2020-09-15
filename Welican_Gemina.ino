@@ -30,21 +30,22 @@ int knob1_temp = 0;
 int knob2_temp = 0;
 int tempValue = 0;
 
-
 //AUDIO INPUT
 #include <arduinoFFT.h>
 
-#define SAMPLES         512     // Must be a power of 2
+#define SAMPLES         512           // Must be a power of 2. FAST 256 (40fps), NORMAL 512 (20fps), ACCURATE 1024 (10fps)
 #define SAMPLING_FREQ   40000         // Hz, must be 40000 or less due to ADC conversion time. Determines maximum frequency that can be analysed by the FFT Fmax=sampleF/2.
 #define AMPLITUDE       3000          // Depending on your audio source level, you may need to alter this value. Can be used as a 'sensitivity' control.
 #define AUDIO_IN_PIN    35            // Signal in on this pin
-#define NUM_BANDS       8            // To change this, you will need to change the bunch of if statements describing the mapping from bins to bands
+#define NUM_BANDS       8             // To change this, you will need to change the bunch of if statements describing the mapping from bins to bands
 #define NOISE           500           // Used as a crude noise filter, values below this are ignored
 #define TOP             32
 
+int fftps = 0; //dev, speed tracking for fft task
 unsigned int sampling_period_us;
 int peak[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};              // The length of these arrays must be >= NUM_BANDS
-int oldBarHeights[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int tempBandValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int oldBandValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 int bandValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 double vReal[SAMPLES];
 double vImag[SAMPLES];
@@ -54,14 +55,16 @@ unsigned long tempTime;
 arduinoFFT FFT = arduinoFFT(vReal, vImag, SAMPLES, SAMPLING_FREQ);
 
 
+TaskHandle_t fftComputeTask = NULL;
+
 //WiFi, Web Server, and storage for web assets
 #include <WiFi.h>
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
 
 // Replace with your network credentials
-const char *ssid = "";
-const char *password = "";
+const char *ssid = "not_sure";
+const char *password = "ledlights06";
 String returnText;
 
 AsyncWebServer server(80);
@@ -382,7 +385,7 @@ void setup()
   }
 
   //For troubleshooting
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   //Display library initialization
   u8g2.begin();
@@ -441,19 +444,23 @@ void setup()
   //Set master brightness control
   FastLED.setBrightness(brightness);
 
+
+  //Begin a task named 'fftComputeTask' to handle FFT on the other core
+  //https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/freertos.html
   xTaskCreatePinnedToCore(
     fftCompute,         /* Function to implement the task */
     "fftCompute Task",  /* Name of the task */
     50000,              /* Stack size in words */
     NULL,               /* Task input parameter */
-    0,                  /* Priority of the task */
-    NULL,               /* Task handle. */
-    0);
+    0,                  /* Priority of the task, lower is lower */
+    &fftComputeTask,    /* Task handle. */
+    0);                 /* Pin to specific CPU Core, main Loop runs on 1*/
+
 }
 
 void loop()
 {
-  //fftCompute();
+  //fftCompute();   //Only needed if not using task
 
   functionName.toCharArray(function_name_out_str, 20);
   categoryName.toCharArray(category_name_out_str, 20);
@@ -475,9 +482,20 @@ void loop()
     break;
   }
 
+
+  //Pause the fft task to prevent analogRead contention issues during encoder updates 
+  vTaskSuspend(fftComputeTask);
+
+  int tempTime = micros();
+  //Wait a moment for the task to finish up
+  while (micros() < (newTime + 15)) { /* chill */ }
+
   //Update variables compared to current encoder location
   updateEncoders();
 
+  //start fft processing again
+  vTaskResume(fftComputeTask);
+  
   //Write buffer to display
   u8g2.sendBuffer();
 
@@ -495,14 +513,8 @@ void loop()
   {
     breath = 4;
   }
-
+  //Write current breath value to status LED
   ledcWrite(statusLED, breath);
-
-  //testValue += MSGEQ7.get(0) / 16;
-  if (testValue > 255)
-  {
-    testValue = 255;
-  }
 
   switch (mode)
   {
@@ -541,56 +553,9 @@ void loop()
   EVERY_N_MILLISECONDS(200) { gHue++; } // slowly cycle the "base color" through the rainbow
 }
 
-/*
-
-void showData() {
-  display.clearDisplay();
-
-  display.setTextSize(1);             // Draw 2X-scale text
-  display.setTextColor(SH110X_WHITE);
-  display.setCursor(0,0);             // Start at top-left corner
-  display.println(F("#1 #2 #3"));
-  display.setCursor(0,20);
-  testValue = knob1.read()/4;
-  if (testValue < 0) {
-    knob1.write(0);
-    testValue = 0;
-  }
-  display.println(testValue);
-  testValue += MSGEQ7.get(0)/16;
-  if (testValue > 255) {
-    testValue = 255;
-  }
-  FastLED.setBrightness(testValue);
-  display.setCursor(40,20);
-  testValue = knob2.read()/4;
-    if (testValue < 0) {
-    knob1.write(0);
-    testValue = 0;
-  }
-  display.println(testValue);
-  display.setCursor(80,20);
-  testValue = knob3.read()/4;
-    if (testValue < 0) {
-    knob1.write(0);
-    testValue = 0;
-  }
-  display.println(testValue);
-
-  display.setCursor(20,40);
-  display.print(1000/(millis() - frameRateCounter));
-  frameRateCounter = millis();
-
-  display.setCursor(60,40);
-  display.print(MSGEQ7.get(0));
-  display.display();
-}
-*/
-
-
 void fftCompute(void * parameter)
 {
-//Audio Stuff
+//Create an infinite for loop as this is a task and we want it to keep repeating
   for(;;){ 
     // Sample the audio pin
     for (int i = 0; i < SAMPLES; i++) {
@@ -612,9 +577,9 @@ void fftCompute(void * parameter)
     FFT.Compute(FFT_FORWARD);
     FFT.ComplexToMagnitude();
 
-    // Reset bandValues[]
+    // Reset temp variables
     for (int i = 0; i<NUM_BANDS; i++){
-      bandValues[i] = 0;
+      tempBandValues[i] = 0;
     }
 
     // Analyse FFT results
@@ -622,36 +587,41 @@ void fftCompute(void * parameter)
       if (vReal[i] > NOISE) {                    // Add a crude noise filter
         
       //8 bands, 12kHz top band
-        if (i<=3 )           bandValues[0]  += (int)vReal[i];
-        if (i>3   && i<=6  ) bandValues[1]  += (int)vReal[i];
-        if (i>6   && i<=13 ) bandValues[2]  += (int)vReal[i];
-        if (i>13  && i<=27 ) bandValues[3]  += (int)vReal[i];
-        if (i>27  && i<=55 ) bandValues[4]  += (int)vReal[i];
-        if (i>55  && i<=112) bandValues[5]  += (int)vReal[i];
-        if (i>112 && i<=229) bandValues[6]  += (int)vReal[i];
-        if (i>229          ) bandValues[7]  += (int)vReal[i];
+        if (i<=3 )           tempBandValues[0]  += (int)vReal[i];
+        if (i>3   && i<=6  ) tempBandValues[1]  += (int)vReal[i];
+        if (i>6   && i<=13 ) tempBandValues[2]  += (int)vReal[i];
+        if (i>13  && i<=27 ) tempBandValues[3]  += (int)vReal[i];
+        if (i>27  && i<=55 ) tempBandValues[4]  += (int)vReal[i];
+        if (i>55  && i<=112) tempBandValues[5]  += (int)vReal[i];
+        if (i>112 && i<=229) tempBandValues[6]  += (int)vReal[i];
+        if (i>229          ) tempBandValues[7]  += (int)vReal[i];
 
       /*16 bands, 12kHz top band 
-        if (i<=2 )           bandValues[0]  += (int)vReal[i];
-        if (i>2   && i<=3  ) bandValues[1]  += (int)vReal[i];
-        if (i>3   && i<=5  ) bandValues[2]  += (int)vReal[i];
-        if (i>5   && i<=7  ) bandValues[3]  += (int)vReal[i];
-        if (i>7   && i<=9  ) bandValues[4]  += (int)vReal[i];
-        if (i>9   && i<=13 ) bandValues[5]  += (int)vReal[i];
-        if (i>13  && i<=18 ) bandValues[6]  += (int)vReal[i];
-        if (i>18  && i<=25 ) bandValues[7]  += (int)vReal[i];
-        if (i>25  && i<=36 ) bandValues[8]  += (int)vReal[i];
-        if (i>36  && i<=50 ) bandValues[9]  += (int)vReal[i];
-        if (i>50  && i<=69 ) bandValues[10] += (int)vReal[i];
-        if (i>69  && i<=97 ) bandValues[11] += (int)vReal[i];
-        if (i>97  && i<=135) bandValues[12] += (int)vReal[i];
-        if (i>135 && i<=189) bandValues[13] += (int)vReal[i];
-        if (i>189 && i<=264) bandValues[14] += (int)vReal[i];
-        if (i>264          ) bandValues[15] += (int)vReal[i];*/
+        if (i<=2 )           tempBandValues[0]  += (int)vReal[i];
+        if (i>2   && i<=3  ) tempBandValues[1]  += (int)vReal[i];
+        if (i>3   && i<=5  ) tempBandValues[2]  += (int)vReal[i];
+        if (i>5   && i<=7  ) tempBandValues[3]  += (int)vReal[i];
+        if (i>7   && i<=9  ) tempBandValues[4]  += (int)vReal[i];
+        if (i>9   && i<=13 ) tempBandValues[5]  += (int)vReal[i];
+        if (i>13  && i<=18 ) tempBandValues[6]  += (int)vReal[i];
+        if (i>18  && i<=25 ) tempBandValues[7]  += (int)vReal[i];
+        if (i>25  && i<=36 ) tempBandValues[8]  += (int)vReal[i];
+        if (i>36  && i<=50 ) tempBandValues[9]  += (int)vReal[i];
+        if (i>50  && i<=69 ) tempBandValues[10] += (int)vReal[i];
+        if (i>69  && i<=97 ) tempBandValues[11] += (int)vReal[i];
+        if (i>97  && i<=135) tempBandValues[12] += (int)vReal[i];
+        if (i>135 && i<=189) tempBandValues[13] += (int)vReal[i];
+        if (i>189 && i<=264) tempBandValues[14] += (int)vReal[i];
+        if (i>264          ) tempBandValues[15] += (int)vReal[i];*/
       }
     }
 
-    // Process the FFT data into bar heights
+    //Refresh main variables with temp data
+    for (int i = 0; i<NUM_BANDS; i++){
+      bandValues[i] = tempBandValues[i];
+    }
+
+    //Look for Peaks
     for (byte band = 0; band < NUM_BANDS; band++) {
       
       if (bandValues[band] > peak[band])
@@ -663,5 +633,7 @@ void fftCompute(void * parameter)
       for (byte band = 0; band < NUM_BANDS; band++) 
         if (peak[band] > 500) peak[band] -= 500;
     }
+    //fftps++;
+    //Serial.println(fftps / (millis() / 1000));
   }
 }

@@ -218,7 +218,6 @@ void updateEncoders()
     // set master brightness control
     FastLED.setBrightness(brightness);
 
-    showBrightnessDisplay();
   }
   else if (runMode == 2)
   {
@@ -283,7 +282,7 @@ void showBrightnessDisplay()
   int frameW = 38;
   int frameH = 39;
 
-  if ((tempValue != 0) || (brightness_debounce > 0))
+  if ((tempValue != 0) || (brightness_debounce > millis()))
   {
     u8g2.setDrawColor(0);
     u8g2.drawBox(frameX, frameY - 1, frameW, frameH);
@@ -323,13 +322,9 @@ void showBrightnessDisplay()
       u8g2.drawXBMP(frameX, frameY, brightness2_width, brightness2_height, brightness2);
     }
 
-    if (brightness_debounce > 0)
-    {
-      brightness_debounce -= 1;
-    }
     if (tempValue != 0)
     {
-      brightness_debounce = 30;
+      brightness_debounce = millis() + 1420;
     }
   }
 }

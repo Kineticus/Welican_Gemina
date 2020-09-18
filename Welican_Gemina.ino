@@ -1,10 +1,16 @@
 /**************************************************************************
-
+ * 
+ * Collaborative Project for a Next Generation WS LED Control Box
+ * 
+ * Beta Version
+ * 
+ * August 2020
+ * 
+ * Brian Schimke (brs0906@gmail.com)
  * Matt Taylor (maylortaylor@gmail.com)
-
-
+ * 
  **************************************************************************/
-#define VERSION_INFO "Build 0.2 - 08/23/20"
+#define VERSION_INFO "Build 0.420 - 09/16/20"
 
 #include "images.h"
 
@@ -24,7 +30,7 @@ ESP32Encoder encoder;
 ESP32Encoder encoder2;
 
 #define knob1C 25 //Program
-#define knob2C 14 //Brightness
+#define knob2C 4 //Brightness 14
 
 int knob1_temp = 0;
 int knob2_temp = 0;
@@ -55,7 +61,7 @@ unsigned long tempTime;
 arduinoFFT FFT = arduinoFFT(vReal, vImag, SAMPLES, SAMPLING_FREQ);
 
 
-TaskHandle_t fftComputeTask = NULL;
+TaskHandle_t inputComputeTask = NULL;
 
 //WiFi, Web Server, and storage for web assets
 #include <WiFi.h>
@@ -63,8 +69,8 @@ TaskHandle_t fftComputeTask = NULL;
 #include "SPIFFS.h"
 
 // Replace with your network credentials
-const char *ssid = "not_sure";
-const char *password = "ledlights06";
+const char *ssid = "";
+const char *password = "";
 String returnText;
 
 AsyncWebServer server(80);
@@ -118,6 +124,7 @@ FASTLED_USING_NAMESPACE
 #endif
 
 #define DATA_PIN 18
+#define DATA_PIN_A 12
 //#define CLK_PIN   4
 #define LED_TYPE WS2811
 #define COLOR_ORDER RGB
@@ -143,7 +150,7 @@ int dvdBounce3_vy = 1;
 
 int brightness = 0;
 int brightness_temp = 0;
-int brightness_debounce = 0;
+unsigned long brightness_debounce = 0;
 
 int temp1 = 0;
 int temp2 = 0;
@@ -321,7 +328,8 @@ void setup()
   encoder.attachFullQuad(33, 32);
 
   //Brightness Adjustment, encoder WITHOUT Detents
-  encoder2.attachFullQuad(27, 26);
+  //encoder2.attachFullQuad(27, 26);
+  encoder2.attachFullQuad(16, 17);
 
   // set starting count value after attaching
   encoder.clearCount();
@@ -399,7 +407,8 @@ void setup()
   delay(1000);
 
   //FastLED Declation
-  FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+  FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
+  FastLED.addLeds<LED_TYPE, DATA_PIN_A, COLOR_ORDER>(leds, NUM_LEDS);
   //FastLED.addLeds<LED_TYPE,DATA_PIN,CLK_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 
   /* Load Save Settings
@@ -446,14 +455,15 @@ void setup()
 
 
   //Begin a task named 'fftComputeTask' to handle FFT on the other core
+  //This task also takes care of reading the button inputs and computing encoder positions
   //https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/freertos.html
   xTaskCreatePinnedToCore(
-    fftCompute,         /* Function to implement the task */
-    "fftCompute Task",  /* Name of the task */
+    inputCompute,         /* Function to implement the task */
+    "Input Compute Task",  /* Name of the task */
     50000,              /* Stack size in words */
     NULL,               /* Task input parameter */
     0,                  /* Priority of the task, lower is lower */
-    &fftComputeTask,    /* Task handle. */
+    &inputComputeTask,    /* Task handle. */
     0);                 /* Pin to specific CPU Core, main Loop runs on 1*/
 
 }
@@ -473,6 +483,7 @@ void loop()
   case 0:
     drawBottom();
     drawTop();
+    showBrightnessDisplay();
     break;
   case 1:
     drawMenu();
@@ -484,17 +495,15 @@ void loop()
 
 
   //Pause the fft task to prevent analogRead contention issues during encoder updates 
-  vTaskSuspend(fftComputeTask);
+  //vTaskSuspend(fftComputeTask);
 
-  int tempTime = micros();
+  //int tempTime = micros();
   //Wait a moment for the task to finish up
-  while (micros() < (newTime + 15)) { /* chill */ }
+  //while (micros() < (newTime + 1000)) { /* chill */ }
 
-  //Update variables compared to current encoder location
-  updateEncoders();
 
   //start fft processing again
-  vTaskResume(fftComputeTask);
+  //vTaskResume(fftComputeTask);
   
   //Write buffer to display
   u8g2.sendBuffer();
@@ -553,21 +562,15 @@ void loop()
   EVERY_N_MILLISECONDS(200) { gHue++; } // slowly cycle the "base color" through the rainbow
 }
 
-void fftCompute(void * parameter)
+void inputCompute(void * parameter)
 {
 //Create an infinite for loop as this is a task and we want it to keep repeating
   for(;;){ 
     // Sample the audio pin
     for (int i = 0; i < SAMPLES; i++) {
       newTime = micros();
-      if (knobReading == 0) //Can't read analog input at same time as another task, or main thread in this case
-      {
-        vReal[i] = analogRead(AUDIO_IN_PIN); // A conversion takes about 9.7uS on an ESP32
-        vImag[i] = 0;
-      } else
-      {
-        i--;
-      }
+      vReal[i] = analogRead(AUDIO_IN_PIN); // A conversion takes about 9.7uS on an ESP32
+      vImag[i] = 0;
       while (micros() < (newTime + sampling_period_us)) { /* chill */ }
     }
 
@@ -633,6 +636,9 @@ void fftCompute(void * parameter)
       for (byte band = 0; band < NUM_BANDS; band++) 
         if (peak[band] > 500) peak[band] -= 500;
     }
+    
+    //Update variables compared to current encoder location
+    updateEncoders();
     //fftps++;
     //Serial.println(fftps / (millis() / 1000));
   }

@@ -34,10 +34,6 @@ void updateEncoders()
 {
   //--CLICK--
 
-  //Clear active button clicks
-  knob1Click = 0;
-  knob2Click = 0;
-
   //Read knob 1 digital pin, button pulls pin low
   tempValue = digitalRead(knob1C);
 

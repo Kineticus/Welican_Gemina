@@ -47,12 +47,13 @@ int tempValue = 0;
 #define NOISE           500           // Used as a crude noise filter, values below this are ignored
 #define TOP             32
 
+int fps = 0; //dev, speed tracking for main loop
 int fftps = 0; //dev, speed tracking for fft task
 unsigned int sampling_period_us;
-int peak[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};              // The length of these arrays must be >= NUM_BANDS
+volatile int peak[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};              // The length of these arrays must be >= NUM_BANDS
 int tempBandValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 int oldBandValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-int bandValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+volatile int bandValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 double vReal[SAMPLES];
 double vImag[SAMPLES];
 unsigned long newTime;
@@ -128,7 +129,7 @@ FASTLED_USING_NAMESPACE
 //#define CLK_PIN   4
 #define LED_TYPE WS2811
 #define COLOR_ORDER RGB
-#define NUM_LEDS 150
+#define NUM_LEDS 100
 #define visualizer_x 48
 #define visualizer_y 128
 CRGB leds[NUM_LEDS];
@@ -329,7 +330,7 @@ void setup()
 
   //Brightness Adjustment, encoder WITHOUT Detents
   //encoder2.attachFullQuad(27, 26);
-  encoder2.attachFullQuad(16, 17);
+  encoder2.attachFullQuad(16, 17); //RX2 and TX2
 
   // set starting count value after attaching
   encoder.clearCount();
@@ -460,7 +461,7 @@ void setup()
   xTaskCreatePinnedToCore(
     inputCompute,         /* Function to implement the task */
     "Input Compute Task",  /* Name of the task */
-    50000,              /* Stack size in words */
+    2000,              /* Stack size in words */
     NULL,               /* Task input parameter */
     0,                  /* Priority of the task, lower is lower */
     &inputComputeTask,    /* Task handle. */
@@ -493,6 +494,9 @@ void loop()
     break;
   }
 
+  //Clear active button clicks
+  knob1Click = 0;
+  knob2Click = 0;
 
   //Pause the fft task to prevent analogRead contention issues during encoder updates 
   //vTaskSuspend(fftComputeTask);
@@ -504,7 +508,6 @@ void loop()
 
   //start fft processing again
   //vTaskResume(fftComputeTask);
-  
   //Write buffer to display
   u8g2.sendBuffer();
 
@@ -559,7 +562,26 @@ void loop()
   }
   //FastLED.delay(1000/FRAMES_PER_SECOND);
 
+  //Debug Serial Logging
+  EVERY_N_MILLISECONDS(1000) {    
+    Serial.print("FPS: ");
+    Serial.println(fps);
+    fps = 0;
+    Serial.print("IPS: ");
+    Serial.println(fftps);
+    fftps = 0;
+    Serial.print("State: ");
+    Serial.println(eTaskGetState(inputComputeTask));
+    Serial.print("newTime: ");
+    Serial.println(newTime);
+    Serial.print("micros:  ");
+    Serial.println(micros());
+    Serial.print("Minutes: ");
+    Serial.println(((millis() / 1000) / 60));
+  }
+
   EVERY_N_MILLISECONDS(200) { gHue++; } // slowly cycle the "base color" through the rainbow
+  fps++;   //For debug logging
 }
 
 void inputCompute(void * parameter)
@@ -567,12 +589,20 @@ void inputCompute(void * parameter)
 //Create an infinite for loop as this is a task and we want it to keep repeating
   for(;;){ 
     // Sample the audio pin
-    for (int i = 0; i < SAMPLES; i++) {
+    for (int i = 0; i < SAMPLES; i++) 
+    {
       newTime = micros();
       vReal[i] = analogRead(AUDIO_IN_PIN); // A conversion takes about 9.7uS on an ESP32
       vImag[i] = 0;
-      while (micros() < (newTime + sampling_period_us)) { /* chill */ }
+      while ((micros() - newTime) < sampling_period_us)
+      {
+         /* chill */ 
+      }
     }
+
+    //Serial.print("A ");
+    //Serial.println(millis());
+    //updateEncoders();
 
     // Compute FFT
     FFT.DCRemoval();
@@ -639,7 +669,10 @@ void inputCompute(void * parameter)
     
     //Update variables compared to current encoder location
     updateEncoders();
-    //fftps++;
-    //Serial.println(fftps / (millis() / 1000));
+    fftps++;
+    
+
+    //Serial.println(xPortGetFreeHeapSize());
+    //vTaskDelay(50);
   }
 }

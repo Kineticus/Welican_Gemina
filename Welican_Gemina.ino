@@ -35,6 +35,7 @@ ESP32Encoder encoder2;
 int knob1_temp = 0;
 int knob2_temp = 0;
 int tempValue = 0;
+int encoder_unstick = 0;
 
 //AUDIO INPUT
 #include <arduinoFFT.h>
@@ -77,7 +78,7 @@ String returnText;
 AsyncWebServer server(80);
 
 int menu[3];
-int menu_max[3] = {2, 1, 2};
+int menu_max[3] = {2, 2, 2}; //Root Menu Items, Game Menu Items, Settings Menu Items
 int menu_cur = 0;
 
 int runMode = 0;
@@ -160,17 +161,33 @@ int temp3 = 0;
 //GAMES
 int playerX = 64;
 int playerY = 8;
+
+//FALLIOS
 unsigned int fallios_score = 0;
 unsigned int fallios_score_top = 0;
-int motion = 0;
-int motionHistory = 0;
-byte wall[64];
-byte wallDistance[64];
+int fallios_motion = 0;
+int fallios_motionHistory = 0;
+int fallios_Y = 8;
+byte fallios_wall[64];
+byte fallios_wallDistance[64];
 
-int tunnel_1[screen_height + 1];
-int tunnel_2[screen_height + 1];
-int tunnelWidth = screen_width / 2;
-float tunnelGenerator = 0;
+int fallios_tunnel_1[screen_height + 1];
+int fallios_tunnel_2[screen_height + 1];
+int fallios_tunnelWidth = screen_width / 2;
+float fallios_tunnelGenerator = 0;
+
+//BLOCKBREAKER
+int blockbreaker_score;
+int blockbreaker_ballX;
+int blockbreaker_ballY;
+int blockbreaker_ballXvel;
+int blockbreaker_ballYvel; 
+int blockbreaker_ballWidth = 4;
+int blockbreaker_paddleHeight = 2;
+int blockbreaker_paddleWidth = 16;
+int blockbreaker_message = 0;
+int blockbreaker_messageTimer = 0;
+int blockbreaker_running = 0;
 
 /***********************************************************
   Simplex Noise Variable Declaration
@@ -481,17 +498,25 @@ void loop()
 
   switch (runMode)
   {
-  case 0:
-    drawBottom();
-    drawTop();
-    showBrightnessDisplay();
-    break;
-  case 1:
-    drawMenu();
-    break;
-  case 2:
-    fallios();
-    break;
+    case 0: //Main run mode
+      drawBottom();
+      drawTop();
+      showBrightnessDisplay();
+      break;
+    case 1: //Menu mode
+      drawMenu();
+      break;
+    case 2: //Game mode
+      switch(menu[1])
+      {
+        case 1:
+          fallios();
+          break;
+        case 2:
+          blockbreaker();
+          break;
+      } 
+      break;
   }
 
   //Clear active button clicks
@@ -573,11 +598,11 @@ void loop()
     Serial.print("State: ");
     Serial.println(eTaskGetState(inputComputeTask));
     Serial.print("newTime: ");
-    Serial.println(newTime);
-    Serial.print("micros:  ");
-    Serial.println(micros());
+    Serial.println(micros() - newTime);
     Serial.print("Minutes: ");
     Serial.println(((millis() / 1000) / 60));
+    Serial.print("Encoder: ");
+    Serial.println(int((abs(encoder.getCount())) % 4));
   }
 
   EVERY_N_MILLISECONDS(200) { gHue++; } // slowly cycle the "base color" through the rainbow

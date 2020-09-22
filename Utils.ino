@@ -140,6 +140,7 @@ void updateEncoders()
       knob1_temp -= 4;
       menu[menu_cur] -= 1;
     }
+
     if (menu[menu_cur] > menu_max[menu_cur])
     {
       //Mode 1 - constrain
@@ -167,6 +168,20 @@ void updateEncoders()
     }
   }
 
+  //check for out of sync condition (knob is reseting at value that is not divisible by 4)
+  if ((abs(encoder.getCount()) % 4) > 0)
+  {
+    encoder_unstick++;
+  } else
+  {
+    encoder_unstick = 0;
+  }
+  if (encoder_unstick > 200)
+  {
+    encoder.clearCount();
+    knob1_temp = 0;
+  }
+
   //--BRIGHTNESS ENCODER--
 
   tempValue = encoder2.getCount() - knob2_temp; //Read current knob position vs. last time we checked
@@ -174,6 +189,11 @@ void updateEncoders()
 
   if (runMode == 0)
   {
+    if (tempValue != 0)
+    {
+      brightness_debounce = millis() + 1420;
+    }
+
     //Determine "acceleration" based on change amount. Large change = fast turn of knob
     //There are 96 pulses per revolution
 
@@ -220,12 +240,12 @@ void updateEncoders()
     while (tempValue > 0)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
       tempValue -= 1;
-      playerX += 1;
+      playerY += 1;
     }
     while (tempValue < 0)
     {
       tempValue += 1;
-      playerX -= 1;
+      playerY -= 1;
     }
   }
 
@@ -249,10 +269,19 @@ void updateEncoders()
 
 void setGameMode()
 {
-  runMode = 2;
-  fallios_reset();
-  brightness_temp = brightness;
-  pattern_temp = pattern[mode];
+  runMode = 2; //game mode 
+  brightness_temp = brightness; //save brightness
+  pattern_temp = pattern[mode]; //and program in case they get messed up
+
+  switch(menu[1]) //Call reset code for whatever game we're about to run
+  {
+    case 1:
+      fallios_reset();
+      break;
+    case 2:
+      blockbreaker_reset();
+      break;
+  } 
 }
 
 void endGameMode()
@@ -278,7 +307,7 @@ void showBrightnessDisplay()
   int frameW = 38;
   int frameH = 39;
 
-  if ((tempValue != 0) || (brightness_debounce > millis()))
+  if (brightness_debounce > millis())
   {
     u8g2.setDrawColor(0);
     u8g2.drawBox(frameX, frameY - 1, frameW, frameH);
@@ -318,10 +347,6 @@ void showBrightnessDisplay()
       u8g2.drawXBMP(frameX, frameY, brightness2_width, brightness2_height, brightness2);
     }
 
-    if (tempValue != 0)
-    {
-      brightness_debounce = millis() + 1420;
-    }
   }
 }
 
@@ -423,6 +448,9 @@ void drawMenu()
     case 1:
       u8g2.print("Fallios");
       break;
+    case 2:
+      u8g2.print("Block Breaker");
+      break;
     }
     break;
   }
@@ -457,8 +485,13 @@ void drawMenu()
         menu_cur = 0; //back to main menu
         break;
       case 1:
-        runMode = 2; //fallios
+        runMode = 2; //game mode
         setGameMode();
+        break;
+      case 2:
+        runMode = 2; //game mode
+        setGameMode();
+        break;
       }
     }
   }

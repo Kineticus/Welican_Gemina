@@ -172,7 +172,8 @@ void updateEncoders()
   if ((abs(encoder.getCount()) % 4) > 0)
   {
     encoder_unstick++;
-  } else
+  }
+  else
   {
     encoder_unstick = 0;
   }
@@ -233,7 +234,6 @@ void updateEncoders()
 
     // set master brightness control
     FastLED.setBrightness(brightness);
-
   }
   else if (runMode == 2)
   {
@@ -269,19 +269,19 @@ void updateEncoders()
 
 void setGameMode()
 {
-  runMode = 2; //game mode 
+  runMode = 2;                  //game mode
   brightness_temp = brightness; //save brightness
   pattern_temp = pattern[mode]; //and program in case they get messed up
 
-  switch(menu[1]) //Call reset code for whatever game we're about to run
+  switch (menu[1]) //Call reset code for whatever game we're about to run
   {
-    case 1:
-      fallios_reset();
-      break;
-    case 2:
-      blockbreaker_reset();
-      break;
-  } 
+  case 1:
+    fallios_reset();
+    break;
+  case 2:
+    blockbreaker_reset();
+    break;
+  }
 }
 
 void endGameMode()
@@ -346,7 +346,6 @@ void showBrightnessDisplay()
     {
       u8g2.drawXBMP(frameX, frameY, brightness2_width, brightness2_height, brightness2);
     }
-
   }
 }
 
@@ -428,6 +427,7 @@ void drawMenu()
   switch (menu_cur)
   {
   case 0:
+    // DRAW IMAGE
     switch (menu[menu_cur])
     {
     case 0:
@@ -440,7 +440,8 @@ void drawMenu()
       u8g2.print("Exit");
     }
     break;
-  case 1: //games menu
+  case 1:
+    // DRAW GAMES MENU
     switch (menu[menu_cur])
     {
     case 0:
@@ -451,6 +452,21 @@ void drawMenu()
       break;
     case 2:
       u8g2.print("Block Breaker");
+      break;
+    }
+    break;
+  case 2:
+    // DRAW SETTINGS MENU
+    switch (menu[menu_cur])
+    {
+    case 0:
+      u8g2.print("LED Count");
+      break;
+    case 1:
+      u8g2.print("WIFI");
+      break;
+    case 2:
+      u8g2.print("IP Address");
       break;
     }
     break;
@@ -1033,5 +1049,22 @@ void hsv2rgb(float H, float S, float V, int &R, int &G, int &B)
     R = (var_r)*255;
     G = (var_g)*255;
     B = (var_b)*255;
+  }
+}
+
+void loadConfigData(void)
+{
+  File file = FileFS.open(CONFIG_FILENAME, "r");
+  LOGERROR(F("LoadWiFiCfgFile "));
+
+  if (file)
+  {
+    file.readBytes((char *)&WM_config, sizeof(WM_config));
+    file.close();
+    LOGERROR(F("OK"));
+  }
+  else
+  {
+    LOGERROR(F("failed"));
   }
 }

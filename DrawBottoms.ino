@@ -235,26 +235,36 @@ void movingTriangles()
   t1.y3 = (t1.y + t1.radius * cos(t1.point3));
   */
 
-  t1.x1 = t1.x + (t1.radius * sin(t1.point1));
-  t1.y1 = t1.y + (t1.radius * cos(t1.point1));
+  t1.x1 = t1.x + (t1.radius * sin(t1.point1)) + .5;
+  t1.y1 = t1.y + (t1.radius * cos(t1.point1)) + .5;
 
-  t1.x2 = t1.x + (t1.radius * sin(t1.point2));
-  t1.y2 = t1.y + (t1.radius * cos(t1.point2));
+  t1.x2 = t1.x + (t1.radius * sin(t1.point2)) + .5;
+  t1.y2 = t1.y + (t1.radius * cos(t1.point2)) + .5;
 
-  t1.x3 = t1.x + (t1.radius * sin(t1.point3));
-  t1.y3 = t1.y + (t1.radius * cos(t1.point3));
+  t1.x3 = t1.x + (t1.radius * sin(t1.point3)) + .5;
+  t1.y3 = t1.y + (t1.radius * cos(t1.point3)) + .5;
 
   //u8g2.drawTriangle(t1.x1,t1.y1, 30,30, 20,20);
 
-  u8g2.drawTriangle(t1.x1,t1.y1, t1.x2,t1.y2, t1.x3,t1.y3);
+  //Triangle
+  //u8g2.drawTriangle(t1.x1,t1.y1, t1.x2,t1.y2, t1.x3,t1.y3);
 
+  //Dots
   //u8g2.drawDisc(t1.x1, t1.y1, 2, U8G2_DRAW_ALL);
   //u8g2.drawDisc(t1.x2, t1.y2, 2, U8G2_DRAW_ALL);
   //u8g2.drawDisc(t1.x3, t1.y3, 2, U8G2_DRAW_ALL);
+
+  //Circle
+  u8g2.drawCircle(t1.x, t1.y, t1.radius, U8G2_DRAW_ALL);
   
-  t1.point1 += 0.1;
-  t1.point2 += 0.1;
-  t1.point3 += 0.1;
+  //Lines
+  u8g2.drawLine(t1.x1, t1.y1, t1.x2, t1.y2);
+  u8g2.drawLine(t1.x2, t1.y2, t1.x3, t1.y3);
+  u8g2.drawLine(t1.x3, t1.y3, t1.x1, t1.y1);
+
+  t1.point1 += 0.02;
+  t1.point2 += 0.02;
+  t1.point3 += 0.02;
 
   if (t1.point1 > 6.24)
   {

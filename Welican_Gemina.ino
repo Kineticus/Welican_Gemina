@@ -311,14 +311,14 @@ int star_y[maxStars];
 int star_yy[maxStars];
 int star_z[maxStars];
 
-typedef struct visualizer_triangle
+struct visualizer_triangle
 {
   int x, y;
   int radius;
   float point1, point2, point3;
   int x1, x2, x3;
   int y1, y2, y3;
-}visualizer_triangle;
+};
   
 visualizer_triangle t1 = {64, 42, 18, 0.0, 2.1, 4.2, 0, 0, 0, 0, 0, 0};
 

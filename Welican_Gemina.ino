@@ -319,14 +319,13 @@ typedef struct visualizer_triangle
   float point1, point2, point3;
   int x1, x2, x3;
   int y1, y2, y3;
-}visualizer_triangle;
-  
+} visualizer_triangle;
+
 visualizer_triangle t1 = {64, 42, 18, 0.0, 2.1, 4.2, 0, 0, 0, 0, 0, 0};
 
 int temp1 = 0;
 int temp2 = 0;
 int temp3 = 0;
-
 
 void setup()
 {
@@ -335,8 +334,6 @@ void setup()
   // setting PWM properties
   const int freq = 5000;
   const int resolution = 13;
-
-  loadConfigData();
 
   //pinMode(ledChannel, OUTPUT); //LED Status Light
   // configure LED PWM functionalitites
@@ -425,7 +422,6 @@ void setup()
     star_yy[i] = random(1, 4);
     star_z[i] = random(1, 4);
   }
-
 
   //For troubleshooting
   Serial.begin(115200);

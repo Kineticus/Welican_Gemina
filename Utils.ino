@@ -1051,20 +1051,3 @@ void hsv2rgb(float H, float S, float V, int &R, int &G, int &B)
     B = (var_b)*255;
   }
 }
-
-void loadConfigData(void)
-{
-  File file = FileFS.open(CONFIG_FILENAME, "r");
-  LOGERROR(F("LoadWiFiCfgFile "));
-
-  if (file)
-  {
-    file.readBytes((char *)&WM_config, sizeof(WM_config));
-    file.close();
-    LOGERROR(F("OK"));
-  }
-  else
-  {
-    LOGERROR(F("failed"));
-  }
-}

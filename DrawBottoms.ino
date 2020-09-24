@@ -216,6 +216,62 @@ void gravityWell()
   }
 }
 
+void movingTriangles()
+{
+
+  //calc circle points
+  // x = cx + r * cos(a)
+  // y = cy + r * sin(a)
+  // Where r is the radius, cx,cy the origin, and a the angle.
+
+  /*
+  t1.x1 = (t1.x + t1.radius * cos(t1.point1));
+  t1.y1 = (t1.y + t1.radius * cos(t1.point1));
+  
+  t1.x2 = (t1.x + t1.radius * cos(t1.point2));
+  t1.y2 = (t1.y + t1.radius * cos(t1.point2));
+  
+  t1.x3 = (t1.x + t1.radius * cos(t1.point3));
+  t1.y3 = (t1.y + t1.radius * cos(t1.point3));
+  */
+
+  t1.x1 = t1.x + (t1.radius * sin(t1.point1));
+  t1.y1 = t1.y + (t1.radius * cos(t1.point1));
+
+  t1.x2 = t1.x + (t1.radius * sin(t1.point2));
+  t1.y2 = t1.y + (t1.radius * cos(t1.point2));
+
+  t1.x3 = t1.x + (t1.radius * sin(t1.point3));
+  t1.y3 = t1.y + (t1.radius * cos(t1.point3));
+
+  //u8g2.drawTriangle(t1.x1,t1.y1, 30,30, 20,20);
+
+  u8g2.drawTriangle(t1.x1,t1.y1, t1.x2,t1.y2, t1.x3,t1.y3);
+
+  //u8g2.drawDisc(t1.x1, t1.y1, 2, U8G2_DRAW_ALL);
+  //u8g2.drawDisc(t1.x2, t1.y2, 2, U8G2_DRAW_ALL);
+  //u8g2.drawDisc(t1.x3, t1.y3, 2, U8G2_DRAW_ALL);
+  
+  t1.point1 += 0.1;
+  t1.point2 += 0.1;
+  t1.point3 += 0.1;
+
+  if (t1.point1 > 6.24)
+  {
+    t1.point1 = 0;
+  }
+
+
+  if (t1.point2 > 6.24)
+  {
+    t1.point2 = 0;
+  }
+  if (t1.point3 > 6.24)
+  {
+    t1.point3 = 0;
+  }
+}
+
 void movingCircles()
 {
   for (int i = 0; i < 8; i++)
@@ -257,6 +313,7 @@ void dvdBounce()
   //u8g2.drawDisc(dvdBounce_y, dvdBounce_x + 18, 2, U8G2_DRAW_ALL);
   u8g2.drawXBMP(dvdBounce_y, dvdBounce_x + 16, DVD_width, DVD_height, DVD);
 }
+
 void starBounce()
 {
   dvdBounce_y += dvdBounce_vy;

@@ -135,29 +135,6 @@ FASTLED_USING_NAMESPACE
 #define visualizer_y 128
 CRGB leds[NUM_LEDS];
 
-int dvdBounce_x = random(0, 32);
-int dvdBounce_y = random(0, 32);
-int dvdBounce_vx = 1;
-int dvdBounce_vy = 1;
-
-int dvdBounce2_x = random(0, 32);
-int dvdBounce2_y = random(0, 32);
-int dvdBounce2_vx = 1;
-int dvdBounce2_vy = 1;
-
-int dvdBounce3_x = random(0, 32);
-int dvdBounce3_y = random(0, 32);
-int dvdBounce3_vx = 1;
-int dvdBounce3_vy = 1;
-
-int brightness = 0;
-int brightness_temp = 0;
-unsigned long brightness_debounce = 0;
-
-int temp1 = 0;
-int temp2 = 0;
-int temp3 = 0;
-
 //GAMES
 int playerX = 64;
 int playerY = 8;
@@ -306,6 +283,26 @@ char function_name_out_str[20];
 
 int testValue = 30;
 
+//VISUALIZERS
+int dvdBounce_x = random(0, 32);
+int dvdBounce_y = random(0, 32);
+int dvdBounce_vx = 1;
+int dvdBounce_vy = 1;
+
+int dvdBounce2_x = random(0, 32);
+int dvdBounce2_y = random(0, 32);
+int dvdBounce2_vx = 1;
+int dvdBounce2_vy = 1;
+
+int dvdBounce3_x = random(0, 32);
+int dvdBounce3_y = random(0, 32);
+int dvdBounce3_vx = 1;
+int dvdBounce3_vy = 1;
+
+int brightness = 0;
+int brightness_temp = 0;
+unsigned long brightness_debounce = 0;
+
 #define maxStars 32
 
 int star_x[maxStars];
@@ -313,6 +310,22 @@ int star_xx[maxStars];
 int star_y[maxStars];
 int star_yy[maxStars];
 int star_z[maxStars];
+
+typedef struct visualizer_triangle
+{
+  int x, y;
+  int radius;
+  float point1, point2, point3;
+  int x1, x2, x3;
+  int y1, y2, y3;
+}visualizer_triangle;
+  
+visualizer_triangle t1 = {64, 42, 18, 0.0, 2.1, 4.2, 0, 0, 0, 0, 0, 0};
+
+int temp1 = 0;
+int temp2 = 0;
+int temp3 = 0;
+
 
 void setup()
 {
@@ -409,6 +422,7 @@ void setup()
     star_yy[i] = random(1, 4);
     star_z[i] = random(1, 4);
   }
+
 
   //For troubleshooting
   Serial.begin(115200);

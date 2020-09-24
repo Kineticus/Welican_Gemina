@@ -397,7 +397,8 @@ void drawBottom()
   switch (mode)
   {
   case 0:
-    dvdBounce();
+    //dvdBounce();
+    movingTriangles();
     break;
   case 1:
     drawCircleEQ();

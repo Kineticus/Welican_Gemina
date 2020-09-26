@@ -76,8 +76,10 @@ String returnText;
 
 AsyncWebServer server(80);
 
+int NUM_FAVORITES = 25; //Max 50, loads all 50 at program load, dynamically assignable
+
 int menu[10];
-int menu_max[11] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 30}; //Root Menu Items, Game Menu Items, Settings Menu Items
+int menu_max[11] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, NUM_FAVORITES}; //Root Menu Items, Game Menu Items, Settings Menu Items
 int menu_cur = 0;
 
 int runMode = 0;
@@ -87,11 +89,11 @@ int mode = 0;
 int mode_max = maxModes;
 int pattern[6];
 int pattern_temp = 0;
-int favorite_mode[30];
-int favorite_pattern[30];
+int favorite_mode[50];
+int favorite_pattern[50];
 int favorite_slot;
 // basic, music, chill, moving colors, legacy
-int pattern_max[6] = {12, 12, 22, 65, 80, 30};
+int pattern_max[6] = {12, 12, 22, 65, 80, NUM_FAVORITES};
 int pixelNumber = 0;
 unsigned long startMillis;
 unsigned long currentMillis;
@@ -493,14 +495,14 @@ void setup()
   FastLED.setBrightness(brightness);
 
   //Read the favorites
-  for (int i = 0; i < 31; i++)
+  for (int i = 0; i < 50; i++)
   {
     Serial.print(i);
     Serial.print(" ");
     favorite_pattern[i] = EEPROM.read(100 + i);
     Serial.print(favorite_pattern[i]);
     Serial.print(" ");
-    favorite_mode[i] = EEPROM.read(130 + i);
+    favorite_mode[i] = EEPROM.read(150 + i);
     Serial.println(favorite_mode[i]);
 
     if (favorite_pattern[i] == 255)

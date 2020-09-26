@@ -77,7 +77,7 @@ String returnText;
 AsyncWebServer server(80);
 
 int menu[10];
-int menu_max[10] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 30}; //Root Menu Items, Game Menu Items, Settings Menu Items
+int menu_max[11] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 30}; //Root Menu Items, Game Menu Items, Settings Menu Items
 int menu_cur = 0;
 
 int runMode = 0;
@@ -458,7 +458,7 @@ void setup()
     EEPROM may have been used or not at default
 
   --------------------*/
-  EEPROM.begin(512);
+  EEPROM.begin(511);
 
   //EEPROM.write(20, 0);
   //EEPROM.write(21, 0);
@@ -493,7 +493,7 @@ void setup()
   FastLED.setBrightness(brightness);
 
   //Read the favorites
-  for (int i = 0; i < 30; i++)
+  for (int i = 0; i < 31; i++)
   {
     Serial.print(i);
     Serial.print(" ");

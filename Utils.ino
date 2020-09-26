@@ -97,12 +97,13 @@ void updateEncoders()
     knob2.debounce -= 1;
   }
 
-  if (knob2.heldTime > 69)
+  if ((knob2.heldTime > 69) && (mode != 5)) //Can't set a favorite of a favorite
   {
     //Save Favorite
     knob2.heldTime = 0;
     runMode = 1;   //enter Menu Mode
     menu_cur = 10; //Select the 10th menu, New Favorite
+    menu[10] = 0;
   }
 
   //--PATTERN ENCODER--
@@ -429,7 +430,14 @@ void drawTop()
 
 void drawBottom()
 {
-  switch (mode)
+  int tempMode = mode;
+
+  if (mode == 5) //favorites
+  {
+    tempMode = favorite_mode[pattern[mode]];
+  }
+
+  switch (tempMode)
   {
   case 0:
     //dvdBounce();
@@ -580,13 +588,13 @@ void drawMenu()
         setGameMode();
         break;
       }
-
+      break;
     case 10:                                            //New Favorite click
-      EEPROM.write(99 + menu[menu_cur], pattern[mode]); //the pattern we're on
-      EEPROM.write(129 + menu[menu_cur], mode);         //the mode we're on
-      Serial.println("WRITE THAT SHIT");
-      Serial.println(99 + menu[menu_cur]);
-      Serial.println(129 + menu[menu_cur]);
+      EEPROM.write(100 + menu[menu_cur], pattern[mode]); //the pattern we're on
+      EEPROM.write(130 + menu[menu_cur], mode);         //the mode we're on
+      //Serial.println("WRITE THAT SHIT");
+      //Serial.println(99 + menu[menu_cur]);
+      //Serial.println(129 + menu[menu_cur]);
       EEPROM.commit();
       favorite_mode[menu[menu_cur]] = mode;
       favorite_pattern[menu[menu_cur]] = pattern[mode];

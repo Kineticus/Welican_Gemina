@@ -218,23 +218,8 @@ void gravityWell()
 
 void movingTriangles()
 {
-
-  //calc circle points
-  // x = cx + r * cos(a)
-  // y = cy + r * sin(a)
-  // Where r is the radius, cx,cy the origin, and a the angle.
-
-  /*
-  t1.x1 = (t1.x + t1.radius * cos(t1.point1));
-  t1.y1 = (t1.y + t1.radius * cos(t1.point1));
-  
-  t1.x2 = (t1.x + t1.radius * cos(t1.point2));
-  t1.y2 = (t1.y + t1.radius * cos(t1.point2));
-  
-  t1.x3 = (t1.x + t1.radius * cos(t1.point3));
-  t1.y3 = (t1.y + t1.radius * cos(t1.point3));
-  */
-
+  //Calculate Points on a Circle
+  //point is in Radians, range is 0 - 2pi (1pi = 180*)
   t1.x1 = t1.x + (t1.radius * sin(t1.point1)) + .5;
   t1.y1 = t1.y + (t1.radius * cos(t1.point1)) + .5;
 
@@ -243,8 +228,6 @@ void movingTriangles()
 
   t1.x3 = t1.x + (t1.radius * sin(t1.point3)) + .5;
   t1.y3 = t1.y + (t1.radius * cos(t1.point3)) + .5;
-
-  //u8g2.drawTriangle(t1.x1,t1.y1, 30,30, 20,20);
 
   //Triangle
   //u8g2.drawTriangle(t1.x1,t1.y1, t1.x2,t1.y2, t1.x3,t1.y3);
@@ -262,23 +245,36 @@ void movingTriangles()
   u8g2.drawLine(t1.x2, t1.y2, t1.x3, t1.y3);
   u8g2.drawLine(t1.x3, t1.y3, t1.x1, t1.y1);
 
-  t1.point1 += 0.02;
-  t1.point2 += 0.02;
-  t1.point3 += 0.02;
 
-  if (t1.point1 > 6.24)
+  //Increase rad of each point a little 
+  t1.point1 -= 0.02;
+  t1.point2 -= 0.02;
+  t1.point3 -= 0.02;
+
+  if (t1.point1 > 6.28)
   {
-    t1.point1 = 0;
+    t1.point1 -= 6.28;
+  }
+  if (t1.point2 > 6.28)
+  {
+    t1.point2 -= 6.28;
+  }
+  if (t1.point3 > 6.28)
+  {
+    t1.point3 -= 6.28;
   }
 
-
-  if (t1.point2 > 6.24)
+  if (t1.point1 < 0)
   {
-    t1.point2 = 0;
+    t1.point1 += 6.28;
   }
-  if (t1.point3 > 6.24)
+  if (t1.point2 < 0)
   {
-    t1.point3 = 0;
+    t1.point2 += 6.28;
+  }
+  if (t1.point3 < 0)
+  {
+    t1.point3 += 6.28;
   }
 }
 

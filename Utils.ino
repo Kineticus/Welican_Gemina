@@ -103,7 +103,7 @@ void updateEncoders()
     knob2.heldTime = 0;
     runMode = 1;   //enter Menu Mode
     menu_cur = 10; //Select the 10th menu, New Favorite
-    menu[10] = 0;
+    //menu[10] = 0;
   }
 
   //--PATTERN ENCODER--
@@ -598,7 +598,6 @@ void drawMenu()
       EEPROM.commit();
       favorite_mode[menu[menu_cur]] = mode;
       favorite_pattern[menu[menu_cur]] = pattern[mode];
-      menu[menu_cur] = 0;
       runMode = 0;
       break;
     }

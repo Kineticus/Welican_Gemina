@@ -64,6 +64,9 @@ void updateEncoders()
           //if we did go over let's roll mode back to 0
           mode = 0;
         }
+
+        //Clear up some other variables
+        knob2.heldTime = 0;
       }
       else
       {

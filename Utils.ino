@@ -104,8 +104,8 @@ void updateEncoders()
     knob2Click_time = 0;
 
     EEPROM.write(100, pattern[i]);
-    EEPROM.wirte(130, mode);
-    
+    EEPROM.write(130, mode);
+
   }
 
   //--PATTERN ENCODER--

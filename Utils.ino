@@ -102,10 +102,8 @@ void updateEncoders()
   {
     //Save Favorite
     knob2Click_time = 0;
-
-    EEPROM.write(100, pattern[i]);
-    EEPROM.write(130, mode);
-
+    runMode = 1; //enter Menu Mode
+    menu_cur = 10; //Select the 10th menu, New Favorite
   }
 
   //--PATTERN ENCODER--
@@ -135,7 +133,7 @@ void updateEncoders()
       //Mode 1 - constrain
       pattern[mode] = pattern_max[mode];
     }
-    else if (pattern[mode] < 0)
+    if (pattern[mode] <= 0)
     {
       //Mode 1 - constrain
       pattern[mode] = 0;
@@ -289,19 +287,19 @@ void favorites_category(int patternMode)
   switch (favorite_mode[patternMode])
   {
     case 0:
-      basic_category(favorite_pattern[favorite_mode[patternMode]]);
+      basic_category(favorite_pattern[patternMode]);
       break;
     case 1:
-      music_category(favorite_pattern[favorite_mode[patternMode]]);
+      music_category(favorite_pattern[patternMode]);
       break;
     case 2:
-      chill_category(favorite_pattern[favorite_mode[patternMode]]);
+      chill_category(favorite_pattern[patternMode]);
       break;
     case 3:
-      moving_colors_category(favorite_pattern[favorite_mode[patternMode]]);
+      moving_colors_category(favorite_pattern[patternMode]);
       break;
     case 4:
-      legacy_category(favorite_pattern[favorite_mode[patternMode]]);
+      legacy_category(favorite_pattern[patternMode]);
       break;
   }
 }
@@ -533,6 +531,16 @@ void drawMenu()
   case 4:
     // IP ADDRESS MENU
     break;
+  
+  case 10:
+    //ADD NEW FAVORITE
+    u8g2.setCursor(0, 24);
+    u8g2.print("Add New Favorite");
+
+    u8g2.setCursor(12, 42);
+    u8g2.print("Slot: ");
+    u8g2.print(menu[menu_cur]);
+    break;
   }
 
   if (knob2Click == 1)
@@ -573,6 +581,19 @@ void drawMenu()
         setGameMode();
         break;
       }
+
+    case 10: //New Favorite click
+      EEPROM.write(99 + menu[menu_cur], pattern[mode]); //the pattern we're on
+      EEPROM.write(129 + menu[menu_cur], mode); //the mode we're on
+      Serial.println("WRITE THAT SHIT");
+      Serial.println(99 + menu[menu_cur]);
+      Serial.println(129 + menu[menu_cur]);
+      EEPROM.commit();
+      favorite_mode[menu[menu_cur]] = mode;
+      favorite_pattern[menu[menu_cur]] = pattern[mode];
+      menu[menu_cur] = 0;
+      runMode = 0;
+      break;
     }
   }
 }

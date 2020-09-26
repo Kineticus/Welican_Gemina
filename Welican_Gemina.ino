@@ -79,7 +79,7 @@ String returnText;
 AsyncWebServer server(80);
 
 int menu[10];
-int menu_max[10] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3}; //Root Menu Items, Game Menu Items, Settings Menu Items
+int menu_max[10] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 30}; //Root Menu Items, Game Menu Items, Settings Menu Items
 int menu_cur = 0;
 
 int runMode = 0;
@@ -87,12 +87,13 @@ int runMode = 0;
 #define maxModes 5
 int mode = 0;
 int mode_max = maxModes;
-int pattern[5];
+int pattern[6];
 int pattern_temp = 0;
 int favorite_mode[30];
 int favorite_pattern[30];
+int favorite_slot;
 // basic, music, chill, moving colors, legacy
-int pattern_max[5] = {12, 12, 22, 65, 80};
+int pattern_max[6] = {12, 12, 22, 65, 80, 30};
 int pixelNumber = 0;
 unsigned long startMillis;
 unsigned long currentMillis;
@@ -453,7 +454,7 @@ void setup()
     EEPROM may have been used or not at default
 
   --------------------*/
-  EEPROM.begin(100);
+  EEPROM.begin(512);
 
   //EEPROM.write(20, 0);
   //EEPROM.write(21, 0);
@@ -488,15 +489,27 @@ void setup()
   FastLED.setBrightness(brightness);
 
   //Read the favorites
-  for (int i = 0; i <= 30; i++)
+  for (int i = 0; i < 30; i++)
   {
+    Serial.print(i);
+    Serial.print(" ");
     favorite_pattern[i] = EEPROM.read(100 + i);
-    favorite_mode[i] = EEPROM.read(130 + i );
-    //check for out of range data
-    if (pattern[i] > pattern_max[i])
+    Serial.print(favorite_pattern[i]);
+    Serial.print(" ");
+    favorite_mode[i] = EEPROM.read(130 + i);
+    Serial.println(favorite_mode[i]);
+
+    if (favorite_pattern[i] == 255)
     {
-      pattern[i] = 0;
+      favorite_pattern[i] = 0;
     }
+
+    if (favorite_mode[i] == 255)
+    {
+      favorite_mode[i] = 0;
+    }
+
+    //check for out of range data
   }
 
   //Begin a task named 'fftComputeTask' to handle FFT on the other core

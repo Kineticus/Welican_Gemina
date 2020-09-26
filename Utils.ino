@@ -87,10 +87,25 @@ void updateEncoders()
   {
     knob2Click_debounce = 3;
     knob2Click = 1;
+  } else if ((tempValue == false) && (knob2Click_debounce > 0))
+  {
+    knob2Click_time += 1;
   }
   if ((tempValue == true) && (knob2Click_debounce > 0))
   {
     knob2Click_debounce -= 1;
+  }
+  
+  
+
+  if (knob2Click_time > 100)
+  {
+    //Save Favorite
+    knob2Click_time = 0;
+
+    EEPROM.write(100, pattern[i]);
+    EEPROM.wirte(130, mode);
+    
   }
 
   //--PATTERN ENCODER--
@@ -264,6 +279,30 @@ void updateEncoders()
       EEPROM.write(2 + i, pattern[i]);
     }
     EEPROM.commit();
+  }
+}
+
+void favorites_category(int patternMode)
+{
+  categoryName = "FAVORITES";
+
+  switch (favorite_mode[patternMode])
+  {
+    case 0:
+      basic_category(favorite_pattern[favorite_mode[patternMode]]);
+      break;
+    case 1:
+      music_category(favorite_pattern[favorite_mode[patternMode]]);
+      break;
+    case 2:
+      chill_category(favorite_pattern[favorite_mode[patternMode]]);
+      break;
+    case 3:
+      moving_colors_category(favorite_pattern[favorite_mode[patternMode]]);
+      break;
+    case 4:
+      legacy_category(favorite_pattern[favorite_mode[patternMode]]);
+      break;
   }
 }
 

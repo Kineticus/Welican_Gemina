@@ -84,11 +84,13 @@ int menu_cur = 0;
 
 int runMode = 0;
 
-#define maxModes 4
+#define maxModes 5
 int mode = 0;
 int mode_max = maxModes;
 int pattern[5];
 int pattern_temp = 0;
+int favorite_mode[30];
+int favorite_pattern[30];
 // basic, music, chill, moving colors, legacy
 int pattern_max[5] = {12, 12, 22, 65, 80};
 int pixelNumber = 0;
@@ -108,6 +110,7 @@ int knobBothClick = 0;
 
 int knob1Click_debounce = 0;
 int knob2Click_debounce = 0;
+int knob2Click_time = 0;
 int knobBothClick_debounce = 0;
 
 int encoderValue = 0;
@@ -484,6 +487,18 @@ void setup()
   //Set master brightness control
   FastLED.setBrightness(brightness);
 
+  //Read the favorites
+  for (int i = 0; i <= 30; i++)
+  {
+    favorite_pattern[i] = EEPROM.read(100 + i);
+    favorite_mode[i] = EEPROM.read(130 + i );
+    //check for out of range data
+    if (pattern[i] > pattern_max[i])
+    {
+      pattern[i] = 0;
+    }
+  }
+
   //Begin a task named 'fftComputeTask' to handle FFT on the other core
   //This task also takes care of reading the button inputs and computing encoder positions
   //https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/freertos.html
@@ -565,21 +580,24 @@ void loop()
 
   switch (mode)
   {
-  case 0:
-    basic_category(pattern[mode]);
-    break;
-  case 1:
-    music_category(pattern[mode]);
-    break;
-  case 2:
-    chill_category(pattern[mode]);
-    break;
-  case 3:
-    moving_colors_category(pattern[mode]);
-    break;
-  case 4:
-    legacy_category(pattern[mode]);
-    break;
+    case 0:
+      basic_category(pattern[mode]);
+      break;
+    case 1:
+      music_category(pattern[mode]);
+      break;
+    case 2:
+      chill_category(pattern[mode]);
+      break;
+    case 3:
+      moving_colors_category(pattern[mode]);
+      break;
+    case 4:
+      legacy_category(pattern[mode]);
+      break;
+    case 5:
+      favorites_category(pattern[mode]);
+      break;
   }
   //WS LED
   showStrip();
@@ -593,7 +611,7 @@ void loop()
       fadeAmount = -fadeAmount;
     }
 
-    delay(9); // This delay sets speed of the fade. I usually do from 5-75 but you can always go higher.
+    //delay(9); // This delay sets speed of the fade. I usually do from 5-75 but you can always go higher.
   }
   //FastLED.delay(1000/FRAMES_PER_SECOND);
 

@@ -34,8 +34,6 @@ ESP32Encoder encoder2;
 #define knob1C 25 //Program
 #define knob2C 4  //Brightness 14
 
-int knob1_temp = 0;
-int knob2_temp = 0;
 int tempValue = 0;
 int encoder_unstick = 0;
 
@@ -105,13 +103,9 @@ const unsigned long period = 1000;
 #define qsubd(x, b) ((x > b) ? b : 0)     // Digital unsigned subtraction macro. if result <0, then => 0. Otherwise, take on fixed value.
 #define qsuba(x, b) ((x > b) ? x - b : 0) // Analog Unsigned subtraction macro. if result <0, then => 0
 
-int knob1Click = 0;
-int knob2Click = 0;
 int knobBothClick = 0;
 
 int knob1Click_debounce = 0;
-int knob2Click_debounce = 0;
-int knob2Click_time = 0;
 int knobBothClick_debounce = 0;
 
 int encoderValue = 0;
@@ -315,6 +309,16 @@ int star_xx[maxStars];
 int star_y[maxStars];
 int star_yy[maxStars];
 int star_z[maxStars];
+struct Knob
+{
+  int click;
+  int temp;
+  int debounce;
+  int click int heldTime;
+  bool heldDown;
+};
+Knob knob1;
+Knob knob2;
 
 struct visualizer_triangle
 {
@@ -559,8 +563,8 @@ void loop()
   }
 
   //Clear active button clicks
-  knob1Click = 0;
-  knob2Click = 0;
+  knob1.click = 0;
+  knob2.click = 0;
 
   //Pause the fft task to prevent analogRead contention issues during encoder updates
   //vTaskSuspend(fftComputeTask);
@@ -593,24 +597,24 @@ void loop()
 
   switch (mode)
   {
-    case 0:
-      basic_category(pattern[mode]);
-      break;
-    case 1:
-      music_category(pattern[mode]);
-      break;
-    case 2:
-      chill_category(pattern[mode]);
-      break;
-    case 3:
-      moving_colors_category(pattern[mode]);
-      break;
-    case 4:
-      legacy_category(pattern[mode]);
-      break;
-    case 5:
-      favorites_category(pattern[mode]);
-      break;
+  case 0:
+    basic_category(pattern[mode]);
+    break;
+  case 1:
+    music_category(pattern[mode]);
+    break;
+  case 2:
+    chill_category(pattern[mode]);
+    break;
+  case 3:
+    moving_colors_category(pattern[mode]);
+    break;
+  case 4:
+    legacy_category(pattern[mode]);
+    break;
+  case 5:
+    favorites_category(pattern[mode]);
+    break;
   }
   //WS LED
   showStrip();

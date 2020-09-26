@@ -9,7 +9,7 @@ void drawDebug()
   u8g2.setCursor(80, 24);
   u8g2.print(pattern[mode]);
 
-  if (knob1Click == true)
+  if (knob1.click == true)
   {
     u8g2.setCursor(0, 36);
     u8g2.print("CLICK");
@@ -17,7 +17,7 @@ void drawDebug()
   u8g2.setCursor(0, 48);
   u8g2.print("Knob 2: ");
   //u8g2.print(encoder2.getCount());
-  if (knob2Click == true)
+  if (knob2.click == true)
   {
     u8g2.setCursor(0, 60);
     u8g2.print("CLICK");
@@ -38,19 +38,19 @@ void updateEncoders()
   tempValue = digitalRead(knob1C);
 
   //Is the button pulling the pin low and the debounce counter is at 0 (no recent button press) ?
-  if ((tempValue == false) && (knob1Click_debounce == 0))
+  if ((tempValue == false) && (knob1.debounce == 0))
   {
     //if yes we should set a debounce variable
-    knob1Click_debounce = 3;
+    knob1.debounce = 3;
 
     //And set click for Knob 1 to True!
-    knob1Click = 1;
+    knob1.click = 1;
 
     //Are we running in normal mode? If not we can skip these checks
     if (runMode == 0)
     {
       //Check to see if the Brightness Knob (#2) is also held down
-      if (knob2Click_debounce == 0)
+      if (knob2.debounce == 0)
       {
         //It's not? Just advance the mode by once
         mode += 1;
@@ -71,58 +71,57 @@ void updateEncoders()
         //setGameMode();
         runMode = 1;
         menu_cur = 0;
-        knob1Click = 0;
-        knob2Click = 0;
+        knob1.click = 0;
+        knob2.click = 0;
       }
     }
   }
-  if ((tempValue == true) && (knob1Click_debounce > 0))
+  if ((tempValue == true) && (knob1.debounce > 0))
   {
-    knob1Click_debounce -= 1;
+    knob1.debounce -= 1;
   }
 
   //Read knob 2 digital pin, button pulls pin low
   tempValue = digitalRead(knob2C);
-  if ((tempValue == false) && (knob2Click_debounce == 0))
+  if ((tempValue == false) && (knob2.debounce == 0))
   {
-    knob2Click_debounce = 3;
-    knob2Click = 1;
-  } else if ((tempValue == false) && (knob2Click_debounce > 0))
-  {
-    knob2Click_time += 1;
+    knob2.debounce = 3;
+    knob2.click = 1;
   }
-  if ((tempValue == true) && (knob2Click_debounce > 0))
+  else if ((tempValue == false) && (knob2.debounce > 0))
   {
-    knob2Click_debounce -= 1;
+    knob2.heldTime += 1;
   }
-  
-  
+  if ((tempValue == true) && (knob2.debounce > 0))
+  {
+    knob2.debounce -= 1;
+  }
 
-  if (knob2Click_time > 100)
+  if (knob2.heldTime > 69)
   {
     //Save Favorite
-    knob2Click_time = 0;
-    runMode = 1; //enter Menu Mode
+    knob2.heldTime = 0;
+    runMode = 1;   //enter Menu Mode
     menu_cur = 10; //Select the 10th menu, New Favorite
   }
 
   //--PATTERN ENCODER--
 
-  tempValue = encoder.getCount() - knob1_temp; //Read current knob position vs. last time we checked
+  tempValue = encoder.getCount() - knob1.temp; //Read current knob position vs. last time we checked
 
   if (runMode == 0)
   {
     while (tempValue >= 4)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
       tempValue -= 4;
-      knob1_temp += 4;
+      knob1.temp += 4;
       pattern[mode] += 1;
       saveTime = 100;
     }
     while (tempValue <= -4)
     {
       tempValue += 4;
-      knob1_temp -= 4;
+      knob1.temp -= 4;
       pattern[mode] -= 1;
       saveTime = 100;
     }
@@ -144,13 +143,13 @@ void updateEncoders()
     while (tempValue >= 4)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
       tempValue -= 4;
-      knob1_temp += 4;
+      knob1.temp += 4;
       menu[menu_cur] += 1;
     }
     while (tempValue <= -4)
     {
       tempValue += 4;
-      knob1_temp -= 4;
+      knob1.temp -= 4;
       menu[menu_cur] -= 1;
     }
 
@@ -170,13 +169,13 @@ void updateEncoders()
     while (tempValue >= 4)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
       tempValue -= 4;
-      knob1_temp += 4;
+      knob1.temp += 4;
       playerX += 4;
     }
     while (tempValue <= -4)
     {
       tempValue += 4;
-      knob1_temp -= 4;
+      knob1.temp -= 4;
       playerX -= 4;
     }
   }
@@ -193,13 +192,13 @@ void updateEncoders()
   if (encoder_unstick > 200)
   {
     encoder.clearCount();
-    knob1_temp = 0;
+    knob1.temp = 0;
   }
 
   //--BRIGHTNESS ENCODER--
 
-  tempValue = encoder2.getCount() - knob2_temp; //Read current knob position vs. last time we checked
-  knob2_temp = encoder2.getCount();             //Store this position to compare next time around
+  tempValue = encoder2.getCount() - knob2.temp; //Read current knob position vs. last time we checked
+  knob2.temp = encoder2.getCount();             //Store this position to compare next time around
 
   if (runMode == 0)
   {
@@ -286,21 +285,21 @@ void favorites_category(int patternMode)
 
   switch (favorite_mode[patternMode])
   {
-    case 0:
-      basic_category(favorite_pattern[patternMode]);
-      break;
-    case 1:
-      music_category(favorite_pattern[patternMode]);
-      break;
-    case 2:
-      chill_category(favorite_pattern[patternMode]);
-      break;
-    case 3:
-      moving_colors_category(favorite_pattern[patternMode]);
-      break;
-    case 4:
-      legacy_category(favorite_pattern[patternMode]);
-      break;
+  case 0:
+    basic_category(favorite_pattern[patternMode]);
+    break;
+  case 1:
+    music_category(favorite_pattern[patternMode]);
+    break;
+  case 2:
+    chill_category(favorite_pattern[patternMode]);
+    break;
+  case 3:
+    moving_colors_category(favorite_pattern[patternMode]);
+    break;
+  case 4:
+    legacy_category(favorite_pattern[patternMode]);
+    break;
   }
 }
 
@@ -531,7 +530,7 @@ void drawMenu()
   case 4:
     // IP ADDRESS MENU
     break;
-  
+
   case 10:
     //ADD NEW FAVORITE
     u8g2.setCursor(0, 24);
@@ -543,12 +542,12 @@ void drawMenu()
     break;
   }
 
-  if (knob2Click == 1)
+  if (knob2.click == 1)
   {
     runMode = 0;
   }
 
-  if (knob1Click == 1)
+  if (knob1.click == 1)
   {
     switch (menu_cur)
     {
@@ -582,9 +581,9 @@ void drawMenu()
         break;
       }
 
-    case 10: //New Favorite click
+    case 10:                                            //New Favorite click
       EEPROM.write(99 + menu[menu_cur], pattern[mode]); //the pattern we're on
-      EEPROM.write(129 + menu[menu_cur], mode); //the mode we're on
+      EEPROM.write(129 + menu[menu_cur], mode);         //the mode we're on
       Serial.println("WRITE THAT SHIT");
       Serial.println(99 + menu[menu_cur]);
       Serial.println(129 + menu[menu_cur]);

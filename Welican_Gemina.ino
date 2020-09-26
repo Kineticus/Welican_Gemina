@@ -78,8 +78,8 @@ String returnText;
 
 AsyncWebServer server(80);
 
-int menu[4];
-int menu_max[4] = {2, 2, 2, 2}; //Root Menu Items, Game Menu Items, Settings Menu Items
+int menu[10];
+int menu_max[10] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3}; //Root Menu Items, Game Menu Items, Settings Menu Items
 int menu_cur = 0;
 
 int runMode = 0;

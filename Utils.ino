@@ -460,23 +460,39 @@ void drawMenu()
 {
   u8g2.setFont(u8g2_font_ncenB08_tr);
   u8g2.setCursor(0, 8);
-  u8g2.print("This is a Menu!");
-  u8g2.setCursor(0, 32);
+  u8g2.print("Menu");
+  u8g2_horizontal_line(9);
 
   switch (menu_cur)
   {
   case 0:
     // DRAW IMAGE
+    u8g2.setCursor(5, 24);
+    u8g2.print("Games");
+    u8g2.setCursor(69, 24);
+    u8g2.print("Settings");
+    u8g2.setCursor(5, 44);
+    u8g2.print("Stuff");
+    u8g2.setCursor(69, 44);
+    u8g2.print("Exit");
+
     switch (menu[menu_cur])
     {
     case 0:
-      u8g2.print("Games");
+      // u8g2.print("Games");
+      u8g2.drawRFrame(0, 12, 64, 16, 7);
       break;
     case 1:
-      u8g2.print("Settings");
+      // u8g2.print("Settings");
+      u8g2.drawRFrame(64, 12, 64, 16, 7);
       break;
     case 2:
-      u8g2.print("Exit");
+      u8g2.drawRFrame(0, 32, 64, 16, 7);
+      // u8g2.print("Exit");
+      break;
+    case 3:
+      u8g2.drawRFrame(64, 32, 64, 16, 7);
+      break;
     }
     break;
   case 1:
@@ -508,6 +524,14 @@ void drawMenu()
       u8g2.print("IP Address");
       break;
     }
+    break;
+  case 3:
+    // LED COUNT MENU
+    u8g2.print("LED Count");
+
+    break;
+  case 4:
+    // IP ADDRESS MENU
     break;
   }
 

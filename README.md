@@ -121,6 +121,7 @@ Standard Readme follows the [Contributor Covenant](http://contributor-covenant.o
   - [Arduino Intellisense VSCode](https://cuneyt.aliustaoglu.biz/en/enabling-arduino-intellisense-with-visual-studio-code/)
   - [Experimental FastLED RGBSet](https://github.com/FastLED/FastLED/wiki/RGBSet-Reference)
   - [Refactoring out DELAY](https://forum.arduino.cc/index.php?topic=537644.0)
+  - [UG82 Screen Library](https://github.com/olikraus/u8g2)
 
 ## FastLED Examples
 

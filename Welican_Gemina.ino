@@ -314,7 +314,7 @@ struct Knob
   int click;
   int temp;
   int debounce;
-  int click int heldTime;
+  int heldTime;
   bool heldDown;
 };
 Knob knob1;

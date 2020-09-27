@@ -58,6 +58,9 @@ void updateEncoders()
         //Since we have changed the mode we should save it in a bit
         saveTime = 100;
 
+        //And let the fade function know to start
+        interfade = 25;
+
         //Check to make sure we haven't gone over the maximum amount of modes
         if (mode > mode_max)
         {
@@ -121,6 +124,7 @@ void updateEncoders()
       knob1.temp += 4;
       pattern[mode] += 1;
       saveTime = 100;
+      interfade = 25;
     }
     while (tempValue <= -4)
     {
@@ -128,6 +132,7 @@ void updateEncoders()
       knob1.temp -= 4;
       pattern[mode] -= 1;
       saveTime = 100;
+      interfade = 25;
     }
 
     //Constrain Mode - add switch to allow 3 options - constrain; rollover back to beginning/end; rollover to next/previous mode
@@ -892,6 +897,55 @@ void resetFavorites()
   }
 
   EEPROM.commit();  //write it to memory
+}
+
+void smoothOperator()
+{
+  //Check for interfade
+  if (interfade == 0)
+  {
+    //take snapshot
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      ledsTemp[i] = leds[i];
+    }
+  } else
+  {
+    //Let's compare the snapshot to the new values
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      for (int ii = 0; ii < 3; ii++)
+      {
+        if (abs(leds[i][ii] - ledsTemp[i][ii]) >= 10)
+        {
+          if (leds[i][ii] < ledsTemp[i][ii])
+          {
+            if (ledsTemp[i][ii] > 10)
+            {
+              ledsTemp[i][ii] -= 10;
+            }
+          } else if (leds[i][ii] > ledsTemp[i][ii])
+          {
+            if (ledsTemp[i][ii] < 245)
+            {
+              ledsTemp[i][ii] += 10;
+            }
+          }
+        }
+      }      
+      leds[i] = ledsTemp[i];
+    }
+    //Only want to interfade for a bit 
+    interfade -= 1;
+    Serial.print(interfade);
+    Serial.print(" ");
+    Serial.println(ledsTemp[1][1]);
+
+    if (interfade < 1)
+    {
+      interfade = 0;
+    }
+  }
 }
 
 void drawProgressBar()

@@ -135,6 +135,8 @@ FASTLED_USING_NAMESPACE
 #define visualizer_x 48
 #define visualizer_y 128
 CRGB leds[NUM_LEDS];
+CRGB ledsTemp[NUM_LEDS];
+int interfade = 0;
 
 //GAMES
 int playerX = 64;
@@ -313,7 +315,7 @@ int star_yy[maxStars];
 int star_z[maxStars];
 struct Knob
 {
-  int click;
+  bool click;
   int temp;
   int debounce;
   int heldTime;
@@ -599,7 +601,11 @@ void loop()
     favorites_category(pattern[mode]);
     break;
   }
-  //WS LED
+
+  //Detect mode changes and apply interfading
+  smoothOperator();
+  
+  //Output data to strip
   showStrip();
 
   if (useFade == true)

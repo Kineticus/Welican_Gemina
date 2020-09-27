@@ -468,13 +468,15 @@ void drawMenu()
 {
   u8g2.setFont(u8g2_font_ncenB08_tr);
   u8g2.setCursor(0, 8);
-  u8g2.print("Menu");
+  //u8g2.print("Menu");
   u8g2_horizontal_line(9);
 
   switch (menu_cur)
   {
   case 0:
     // DRAW IMAGE
+    u8g2.setCursor(0, 8);
+    u8g2.print("Welican Gemina");
     u8g2.setCursor(5, 24);
     u8g2.print("Games");
     u8g2.setCursor(69, 24);
@@ -505,31 +507,60 @@ void drawMenu()
     break;
   case 1:
     // DRAW GAMES MENU
+    u8g2.setCursor(0, 8);
+    u8g2.print("Games");
+    u8g2.setCursor(5, 24);
+    u8g2.print("Fallios");
+    u8g2.setCursor(69, 24);
+    u8g2.print("Block Breaker");
+    u8g2.setCursor(5, 44);
+    u8g2.print("Tetris");
+    u8g2.setCursor(69, 44);
+    u8g2.print("Back");
     switch (menu[menu_cur])
     {
     case 0:
-      u8g2.print("Back");
+      // u8g2.print("Games");
+      u8g2.drawRFrame(0, 12, 64, 16, 7);
       break;
     case 1:
-      u8g2.print("Fallios");
+      // u8g2.print("Settings");
+      u8g2.drawRFrame(64, 12, 64, 16, 7);
       break;
     case 2:
-      u8g2.print("Block Breaker");
+      u8g2.drawRFrame(0, 32, 64, 16, 7);
+      // u8g2.print("Exit");
+      break;
+    case 3:
+      u8g2.drawRFrame(64, 32, 64, 16, 7);
       break;
     }
     break;
   case 2:
     // DRAW SETTINGS MENU
+    u8g2.setCursor(0, 8);
+    u8g2.print("Settings");
+    u8g2.setCursor(5, 24);
+    u8g2.print("LED Count");
+    u8g2.setCursor(69, 24);
+    u8g2.print("Favorites");
+    u8g2.setCursor(5, 44);
+    u8g2.print("IP Address");
+    u8g2.setCursor(69, 44);
+    u8g2.print("WiFi");
     switch (menu[menu_cur])
     {
     case 0:
-      u8g2.print("LED Count");
+      u8g2.drawRFrame(0, 12, 64, 16, 7);
       break;
     case 1:
-      u8g2.print("WIFI");
+      u8g2.drawRFrame(64, 12, 64, 16, 7);
       break;
     case 2:
-      u8g2.print("IP Address");
+      u8g2.drawRFrame(0, 32, 64, 16, 7);
+      break;
+    case 3:
+      u8g2.drawRFrame(64, 32, 64, 16, 7);
       break;
     }
     break;
@@ -542,22 +573,117 @@ void drawMenu()
     // IP ADDRESS MENU
     break;
 
-  case 10:
-    //ADD NEW FAVORITE
-    u8g2.setCursor(0, 24);
-    u8g2.print("Add New Favorite");
+  case 5:
+    // FAVORITES MENU
+    u8g2.setCursor(0, 8);
+    u8g2.print("Settings > Favorites");
+    u8g2.setCursor(5, 24);
+    u8g2.print("Add New");
+    u8g2.setCursor(69, 24);
+    u8g2.print("Set Max");
+    u8g2.setCursor(5, 44);
+    u8g2.print("Reset");
+    u8g2.setCursor(69, 44);
+    u8g2.print("Back");
+    switch (menu[menu_cur])
+    {
+    case 0:
+      // u8g2.print("Add New");
+      u8g2.drawRFrame(0, 12, 64, 16, 7);
+      break;
+    case 1:
+      //Set Max
+      u8g2.drawRFrame(64, 12, 64, 16, 7);
+      break;
+    case 2:
+      u8g2.drawRFrame(0, 32, 64, 16, 7);
+      // u8g2.print("Exit");
+      break;
+    case 3:
+      u8g2.drawRFrame(64, 32, 64, 16, 7);
+      break;
+      
+    }
+    break;
 
-    u8g2.setCursor(12, 42);
-    u8g2.print("Slot: ");
+  case 6:
+    u8g2.setCursor(0, 8);
+    u8g2.print("Set Max Favorites");
+
+    if (menu[menu_cur] < 10)
+    {
+      u8g2.setCursor(57, 36);
+    }else
+    {
+      u8g2.setCursor(54, 36);
+    }
+    
+    if (menu[menu_cur] < 1) //gotta have at least 1 favorite
+    {
+      menu[menu_cur] = 1;
+    }
     u8g2.print(menu[menu_cur]);
+
+    u8g2.drawRFrame(50,24,20,16,3);
+    break;
+
+
+
+  case 7:
+    // FAVORITES RESET MENU
+    u8g2.setCursor(0, 8);
+    u8g2.print("Reset All Favorites?");
+    u8g2.setCursor(5, 24);
+    u8g2.print("No");
+    u8g2.setCursor(69, 24);
+    u8g2.print("Yes");
+    switch (menu[menu_cur])
+    {
+    case 0:
+      //No
+      u8g2.drawRFrame(0, 12, 64, 16, 7);
+      break;
+    case 1:
+      //Yes
+      u8g2.drawRFrame(64, 12, 64, 16, 7);
+      break;
+    }
+    break;
+  case 10:
+    //ADD NEW 
+    newFavoritesMenu();
     break;
   }
 
+  //Back Button
   if (knob2.click == 1)
   {
-    runMode = 0;
-  }
+    switch (menu_cur)
+    {
+    case 0: //main menu
+      runMode = 0;
+      break;
+    case 1: //Games Menu
+      menu_cur = 0;
+      break;
+    case 2: //Settings Menu
+      menu_cur = 0;
+      break;
+    
 
+    case 5: //Favorites Main Menu
+      menu_cur = 2;
+      break;
+    case 6: //Favorites Set Max
+      menu_cur = 5;
+      break;
+
+    case 10: //Add New Favorite
+      runMode = 0;
+      break;
+    }
+  }
+  //Forward/Confirm Button
   if (knob1.click == 1)
   {
     switch (menu_cur)
@@ -572,6 +698,9 @@ void drawMenu()
         menu_cur = 2; //settings
         break;
       case 2:
+        //stuff
+        break;
+      case 3:
         runMode = 0; //exit
         break;
       }
@@ -580,31 +709,186 @@ void drawMenu()
       switch (menu[menu_cur])
       {
       case 0:
-        menu_cur = 0; //back to main menu
+        runMode = 2; //game mode
+        setGameMode();
         break;
       case 1:
         runMode = 2; //game mode
         setGameMode();
         break;
       case 2:
-        runMode = 2; //game mode
-        setGameMode();
+        break;
+      case 4:
+        menu_cur = 0; //back to main menu
         break;
       }
       break;
-    case 10:                                            //New Favorite click
-      EEPROM.write(100 + menu[menu_cur], pattern[mode]); //the pattern we're on
-      EEPROM.write(130 + menu[menu_cur], mode);         //the mode we're on
-      //Serial.println("WRITE THAT SHIT");
-      //Serial.println(99 + menu[menu_cur]);
-      //Serial.println(129 + menu[menu_cur]);
+    case 2: //Settings click
+      switch (menu[menu_cur])
+      {
+        case 0: //LED Count
+          break;
+        case 1: //Favorites Settings Menu
+          menu_cur = 5;
+          break;
+        case 2: //IP Address
+          break;
+        case 3: //Wifi
+          break;
+      }
+      break;
+    
+    case 5: //Favorites Setting Menu Click
+      switch (menu[menu_cur])
+      {
+        case 0: //Add New, can't favorite a favorite!
+          if (mode != 5)
+          {
+            menu_cur = 10;
+          }
+          break;
+        case 1: //Set Max
+          menu_cur = 6;
+          menu[6] = NUM_FAVORITES;
+          break;
+        case 2: //Reset
+          menu_cur = 7;
+          break;
+        case 3: //Back to settings
+          menu_cur = 2;
+          break;
+      }
+      break;
+    
+    case 6: //Set Max Favorites Click
+      NUM_FAVORITES = menu[menu_cur];
+      pattern_max[5] = NUM_FAVORITES;
+      menu_max[11] = NUM_FAVORITES;
+      EEPROM.write(99, NUM_FAVORITES);
       EEPROM.commit();
-      favorite_mode[menu[menu_cur]] = mode;
-      favorite_pattern[menu[menu_cur]] = pattern[mode];
+      menu_cur = 5;
+      break;
+
+    case 7: //Reset Favorites Click
+      switch (menu[menu_cur])
+      {
+        case 0: //No
+          menu_cur = 5;
+          break;
+        case 1: //Yes
+          resetFavorites();
+          //picture of trash can or something and small delay later
+          runMode = 0;
+          break;
+      }
+      break;
+    case 10:        
+      saveFavorites();                                    //New Favorite click
       runMode = 0;
       break;
     }
   }
+}
+
+void newFavoritesMenu()
+{
+  u8g2.setCursor(0, 8);
+  u8g2.print("Add New Favorite");
+ 
+  //This is a menu with NUM_FAVORITES 'selections', each indicating a favorite slot
+  if (menu[menu_cur] < 10)
+  {
+    u8g2.setCursor(58, 26);
+  }else
+  {
+    u8g2.setCursor(55, 26);
+  }
+  
+  u8g2.print(menu[menu_cur]);
+
+  u8g2.drawRFrame(50,14,20,16,3);
+
+  //Call the favorite for the slot we're looking at
+  //The real function call is below this, so LEDs will not show bad data
+  favorites_category(menu[menu_cur]);
+
+  //Convert the strings 
+  functionName.toCharArray(function_name_out_str, 20);
+  categoryName.toCharArray(category_name_out_str, 20);
+
+  u8g2.setCursor(16, 44);
+  u8g2.print("Current Setting");
+  //u8g2.print(category_name_out_str);
+
+  switch (favorite_mode[menu[menu_cur]])
+  {
+  case 0:
+    u8g2.drawXBMP(2, 53, star_width, star_height, star);
+    break;
+  case 1:
+    u8g2.drawXBMP(2, 53, wave_width, wave_height, wave);
+    // u8g2.drawXBMP(0,0,musicNote_width, musicNote_height, musicNote);
+    break;
+  case 2:
+    u8g2.drawXBMP(2, 53, hashtag_width, hashtag_height, hashtag);
+    break;
+  case 3:
+    u8g2.drawXBMP(2, 53, donut_width, donut_height, donut);
+    break;
+  case 4:
+    u8g2.drawXBMP(2, 53, heart_width, heart_height, heart);
+    break;
+  }
+  u8g2.setCursor(12, 60);
+  u8g2.print(function_name_out_str);
+}
+
+void saveFavorites()
+{
+  EEPROM.write(100 + menu[menu_cur] * 2, pattern[mode]); //the pattern we're on
+  EEPROM.write(101 + (menu[menu_cur] * 2), mode);         //the mode we're on
+
+  EEPROM.commit();  //write it to memory
+
+  favorite_mode[menu[menu_cur]] = mode; //update running variables
+  favorite_pattern[menu[menu_cur]] = pattern[mode]; //first updated in readFavorites
+}
+
+void readFavorites()
+{
+  //Read the favorites from EEPROM
+  for (int i = 0; i < 50; i++)
+  {
+    favorite_pattern[i] = EEPROM.read(100 + i * 2);
+    favorite_mode[i] = EEPROM.read(101 + i * 2);
+    //check for out of range data, 255 indicates default setting
+    if (favorite_pattern[i] == 255 || favorite_mode[i] == 255)
+    {
+      favorite_pattern[i] = 0;
+      favorite_mode[i] = 0;
+    }  
+  }
+
+  NUM_FAVORITES = EEPROM.read(99);
+  pattern_max[5] = NUM_FAVORITES;
+  menu_max[11] = NUM_FAVORITES;
+}
+
+
+void resetFavorites()
+{
+  for (int i = 0; i < 50; i++)
+  {
+    //Set everything to 0
+    favorite_pattern[i] = 0;
+    favorite_mode[i] = 0;
+
+    //including EEPROM area 
+    EEPROM.write(100 + menu[menu_cur] * 2, 0); 
+    EEPROM.write(101 + (menu[menu_cur] * 2), 0);
+  }
+
+  EEPROM.commit();  //write it to memory
 }
 
 void drawProgressBar()

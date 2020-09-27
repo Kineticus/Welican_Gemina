@@ -79,7 +79,7 @@ AsyncWebServer server(80);
 int NUM_FAVORITES = 25; //Max 50, loads all 50 at program load, dynamically assignable
 
 int menu[10];
-int menu_max[11] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, NUM_FAVORITES}; //Root Menu Items, Game Menu Items, Settings Menu Items
+int menu_max[11] = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, NUM_FAVORITES}; //Root Menu Items, Game Menu Items, Settings Menu Items
 int menu_cur = 0;
 
 int runMode = 0;
@@ -89,8 +89,8 @@ int mode = 0;
 int mode_max = maxModes;
 int pattern[6];
 int pattern_temp = 0;
-int favorite_mode[50];
-int favorite_pattern[50];
+int favorite_mode[50]; //declare memory for all 50 favorites
+int favorite_pattern[50];  //all are used under the hood
 int favorite_slot;
 // basic, music, chill, moving colors, legacy
 int pattern_max[6] = {12, 12, 22, 65, 80, NUM_FAVORITES};
@@ -494,29 +494,7 @@ void setup()
   //Set master brightness control
   FastLED.setBrightness(brightness);
 
-  //Read the favorites
-  for (int i = 0; i < 50; i++)
-  {
-    Serial.print(i);
-    Serial.print(" ");
-    favorite_pattern[i] = EEPROM.read(100 + i);
-    Serial.print(favorite_pattern[i]);
-    Serial.print(" ");
-    favorite_mode[i] = EEPROM.read(150 + i);
-    Serial.println(favorite_mode[i]);
-
-    if (favorite_pattern[i] == 255)
-    {
-      favorite_pattern[i] = 0;
-    }
-
-    if (favorite_mode[i] == 255)
-    {
-      favorite_mode[i] = 0;
-    }
-
-    //check for out of range data
-  }
+  readFavorites();
 
   //Begin a task named 'fftComputeTask' to handle FFT on the other core
   //This task also takes care of reading the button inputs and computing encoder positions
@@ -554,11 +532,14 @@ void loop()
   case 2: //Game mode
     switch (menu[1])
     {
-    case 1:
+    case 0:
       fallios();
       break;
-    case 2:
+    case 1:
       blockbreaker();
+      break;
+    case 2:
+      //tetris();
       break;
     }
     break;

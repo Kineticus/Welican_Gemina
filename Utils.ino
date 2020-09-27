@@ -315,11 +315,14 @@ void setGameMode()
 
   switch (menu[1]) //Call reset code for whatever game we're about to run
   {
-  case 1:
+  case 0:
     fallios_reset();
     break;
-  case 2:
+  case 1:
     blockbreaker_reset();
+    break;
+  case 2:
+    //tetris_reset();
     break;
   }
 }

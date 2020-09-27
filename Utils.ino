@@ -937,14 +937,24 @@ void smoothOperator()
     }
     //Only want to interfade for a bit 
     interfade -= 1;
-    Serial.print(interfade);
-    Serial.print(" ");
-    Serial.println(ledsTemp[1][1]);
 
     if (interfade < 1)
     {
       interfade = 0;
     }
+  }
+}
+
+int showLogo(int millisTime)
+{
+  if (millis() < millisTime)
+  {
+    //Clear da buffer
+    u8g2.clearBuffer();
+
+    //Show logo
+    u8g2.setBitmapMode(true /* transparent*/);
+    u8g2.drawXBMP(32, 0, myBitmap_width, myBitmap_height, myBitmap);
   }
 }
 

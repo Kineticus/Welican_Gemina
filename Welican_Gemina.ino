@@ -136,7 +136,7 @@ FASTLED_USING_NAMESPACE
 #define visualizer_y 128
 CRGB leds[NUM_LEDS];
 CRGB ledsTemp[NUM_LEDS];
-int interfade = 0;
+int interfade = 25; //set this to 0 to disable fade in on boot. Set to 25 for fade in. 
 
 //GAMES
 int playerX = 64;
@@ -342,7 +342,7 @@ int temp3 = 0;
 void setup()
 {
   //Board Status LED Setup
-
+  
   // setting PWM properties
   const int freq = 5000;
   const int resolution = 13;
@@ -360,6 +360,10 @@ void setup()
   //Set the status LED to the lowest brightness
   ledcWrite(statusLED, 100);
 
+  u8g2.setBitmapMode(true /* transparent*/);
+  u8g2.drawXBMP(32, 0, myBitmap_width, myBitmap_height, myBitmap);
+  u8g2.sendBuffer();
+  
   // Enabke internal pull up resistors for buttons
   pinMode(knob1C, INPUT_PULLUP); //Knob 1 Click, internal Pull Up (button connects to ground)
   pinMode(knob2C, INPUT_PULLUP); //Knob 2 Click, internal Pull Up (button connects to ground)
@@ -440,14 +444,6 @@ void setup()
 
   //Display library initialization
   u8g2.begin();
-
-  //Show logo
-  u8g2.setBitmapMode(true /* transparent*/);
-  u8g2.drawXBMP(32, 0, myBitmap_width, myBitmap_height, myBitmap);
-  u8g2.sendBuffer();
-
-  //wait 1 second
-  delay(1000);
 
   //FastLED Declation
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
@@ -547,6 +543,9 @@ void loop()
     break;
   }
 
+  //Show logo instead for first X millis
+  showLogo(2500);
+  
   //Clear active button clicks
   knob1.click = 0;
   knob2.click = 0;

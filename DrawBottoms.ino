@@ -169,15 +169,21 @@ void drawIPAddress()
 
     
 
-    //Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
-    u8g2.print(currentHour);
-    u8g2.print(":");
-    if (currentMinute < 10) 
+    if (currentHour != 100) //Default setting is 100, so we know time is set
     {
-      u8g2.print("0");
+      //Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
+      u8g2.print(currentHour);
+      u8g2.print(":");
+      if (currentMinute < 10) 
+      {
+        u8g2.print("0");
+      }
+      u8g2.print(currentMinute);
+    } else //If time is not set yet have some fun
+    {
+      u8g2.print("4:20");
     }
-    u8g2.print(currentMinute);
-
+    
     if (currentPM == 1)
     {
       u8g2.print(" p");
@@ -193,21 +199,6 @@ void drawIPAddress()
   }
 }
 
-void updateTime()
-{
-  getLocalTime(&timeinfo);
-  currentHour = timeinfo.tm_hour;
-  if (currentHour > 12)
-  {
-    currentHour -= 12;
-    currentPM = 1;
-  }else
-  {
-    currentPM = 0;
-  }
-  
-  currentMinute = timeinfo.tm_min;
-}
 void gravityWell()
 {
   for (int i = 0; i < maxStars; i++)

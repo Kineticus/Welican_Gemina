@@ -71,7 +71,7 @@ TaskHandle_t inputComputeTask = NULL;
 #include "time.h"
 struct tm timeinfo;
 int currentMinute = 0;
-int currentHour = 0;
+int currentHour = 100;
 bool currentPM = 0;
 
 // Replace with your network credentials
@@ -767,7 +767,7 @@ void inputCompute(void *parameter)
 
     if (WiFi.status() == WL_CONNECTED)
     {
-      if (currentHour == 0)
+      if (currentHour == 100)
       {
         configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
       }

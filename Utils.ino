@@ -888,8 +888,8 @@ void resetFavorites()
     favorite_mode[i] = 0;
 
     //including EEPROM area 
-    EEPROM.write(100 + menu[menu_cur] * 2, 0); 
-    EEPROM.write(101 + (menu[menu_cur] * 2), 0);
+    EEPROM.write((100 + (i * 2)), 0); 
+    EEPROM.write((101 + (i * 2)), 0);
   }
 
   EEPROM.commit();  //write it to memory
@@ -958,6 +958,22 @@ void smoothOperatorStart()
   {
     ledsTemp[i] = leds[i];
   }
+}
+
+void updateTime()
+{
+  getLocalTime(&timeinfo);
+  currentHour = timeinfo.tm_hour;
+  if (currentHour > 12)
+  {
+    currentHour -= 12;
+    currentPM = 1;
+  }else
+  {
+    currentPM = 0;
+  }
+
+  currentMinute = timeinfo.tm_min;
 }
 
 void saveTimeCheck()

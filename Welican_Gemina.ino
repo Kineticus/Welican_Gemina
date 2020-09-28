@@ -68,10 +68,27 @@ TaskHandle_t inputComputeTask = NULL;
 #include <WiFi.h>
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
+#include "time.h"
+struct tm timeinfo;
+int currentMinute = 0;
+int currentHour = 0;
+bool currentPM = 0;
 
 // Replace with your network credentials
 const char *ssid = "";
 const char *password = "";
+
+/*
+For EST - UTC -5.00 : -5 * 60 * 60 : -18000
+For EDT - UTC -4.00 : -4 * 60 * 60 : -14400
+For UTC +0.00 : 0 * 60 * 60 : 0
+*/
+const char* ntpServer = "pool.ntp.org";
+int timeZone = -5;
+long  gmtOffset_sec = (timeZone * 60 * 60);
+const int   daylightOffset_sec = 3600;
+
+
 String returnText;
 
 AsyncWebServer server(80);
@@ -602,24 +619,10 @@ void loop()
   //Detect mode changes and apply interfading
   smoothOperator();
 
-  if (saveTime > 0)
-  {
-    saveTime -= 1;
-  }
-
-  if (saveTime == 1)
-  {
-    EEPROM.write(0, mode);
-    EEPROM.write(1, brightness);
-
-    for (int i = 0; i <= mode_max; i++)
-    {
-      EEPROM.write(2 + i, pattern[i]);
-    }
-    EEPROM.commit();
-  }
+  //Check to see if there are recent knob changes to store in memory
+  saveTimeCheck();
   
-  //Output data to strip
+  //Output data to LED strip
   showStrip();
 
   if (useFade == true)
@@ -646,12 +649,15 @@ void loop()
     fftps = 0;
     Serial.print("State: ");
     Serial.println(eTaskGetState(inputComputeTask));
-    Serial.print("newTime: ");
-    Serial.println(micros() - newTime);
     Serial.print("Minutes: ");
     Serial.println(((millis() / 1000) / 60));
     Serial.print("Encoder: ");
     Serial.println(int((abs(encoder.getCount())) % 4));
+  }
+
+  EVERY_N_MILLISECONDS(60000)
+  {
+   
   }
 
   EVERY_N_MILLISECONDS(200) { gHue++; } // slowly cycle the "base color" through the rainbow
@@ -758,6 +764,17 @@ void inputCompute(void *parameter)
 
     //Update variables compared to current encoder location
     updateEncoders();
+
+    if (WiFi.status() == WL_CONNECTED)
+    {
+      if (currentHour == 0)
+      {
+        configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+      }
+      updateTime();
+    }
+    
+    
     fftps++;
 
     //Serial.println(xPortGetFreeHeapSize());

@@ -960,6 +960,26 @@ void smoothOperatorStart()
   }
 }
 
+void saveTimeCheck()
+{
+  if (saveTime > 0)
+  {
+    saveTime -= 1;
+  }
+
+  if (saveTime == 1)
+  {
+    EEPROM.write(0, mode);
+    EEPROM.write(1, brightness);
+
+    for (int i = 0; i <= mode_max; i++)
+    {
+      EEPROM.write(2 + i, pattern[i]);
+    }
+    EEPROM.commit();
+  }
+}
+
 int showLogo(int millisTime)
 {
   if (millis() < millisTime)

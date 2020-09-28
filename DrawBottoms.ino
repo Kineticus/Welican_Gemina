@@ -156,14 +156,36 @@ void drawCircleEQ()
 void drawIPAddress()
 {
   u8g2.setFont(u8g2_font_ncenB08_tr);
-  u8g2.setCursor(20, 40);
+  u8g2.setCursor(20, 30);
 
   if (WiFi.status() == WL_CONNECTED)
   {
     //Convert WiFi.localIP() from 4 bytes to 1 nice pretty string
     String LocalIP = String() + WiFi.localIP()[0] + "." + WiFi.localIP()[1] + "." + WiFi.localIP()[2] + "." + WiFi.localIP()[3];
     u8g2.print(LocalIP);
+    u8g2.setCursor(50, 50);
     //u8g2.print("Connected");
+    
+
+    
+
+    //Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
+    u8g2.print(currentHour);
+    u8g2.print(":");
+    if (currentMinute < 10) 
+    {
+      u8g2.print("0");
+    }
+    u8g2.print(currentMinute);
+
+    if (currentPM == 1)
+    {
+      u8g2.print(" p");
+    } else
+    {
+      u8g2.print(" a");
+    }
+
   }
   else
   {
@@ -171,6 +193,21 @@ void drawIPAddress()
   }
 }
 
+void updateTime()
+{
+  getLocalTime(&timeinfo);
+  currentHour = timeinfo.tm_hour;
+  if (currentHour > 12)
+  {
+    currentHour -= 12;
+    currentPM = 1;
+  }else
+  {
+    currentPM = 0;
+  }
+  
+  currentMinute = timeinfo.tm_min;
+}
 void gravityWell()
 {
   for (int i = 0; i < maxStars; i++)

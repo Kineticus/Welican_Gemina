@@ -59,12 +59,7 @@ void updateEncoders()
         saveTime = 100;
 
         //And let the fade function know to start
-        interfade = 25;
-
-        for (int i = 0; i < NUM_LEDS; i++)
-        {
-          ledsTemp[i] = leds[i];
-        }
+        smoothOperatorStart();
 
         //Check to make sure we haven't gone over the maximum amount of modes
         if (mode > mode_max)
@@ -129,11 +124,7 @@ void updateEncoders()
       knob1.temp += 4;
       pattern[mode] += 1;
       saveTime = 100;
-      interfade = 25;
-      for (int i = 0; i < NUM_LEDS; i++)
-      {
-        ledsTemp[i] = leds[i];
-      }
+      smoothOperatorStart();
     }
     while (tempValue <= -4)
     {
@@ -141,11 +132,7 @@ void updateEncoders()
       knob1.temp -= 4;
       pattern[mode] -= 1;
       saveTime = 100;
-      interfade = 25;
-      for (int i = 0; i < NUM_LEDS; i++)
-      {
-        ledsTemp[i] = leds[i];
-      }
+      smoothOperatorStart();
     }
 
     //Constrain Mode - add switch to allow 3 options - constrain; rollover back to beginning/end; rollover to next/previous mode
@@ -227,6 +214,7 @@ void updateEncoders()
     if (tempValue != 0)
     {
       brightness_debounce = millis() + 1420;
+      saveTime = 100;
     }
 
     //Determine "acceleration" based on change amount. Large change = fast turn of knob
@@ -281,23 +269,6 @@ void updateEncoders()
       tempValue += 1;
       playerY -= 1;
     }
-  }
-
-  if (saveTime > 0)
-  {
-    saveTime -= 1;
-  }
-
-  if (saveTime == 1)
-  {
-    EEPROM.write(0, mode);
-    EEPROM.write(1, brightness);
-
-    for (int i = 0; i <= mode_max; i++)
-    {
-      EEPROM.write(2 + i, pattern[i]);
-    }
-    EEPROM.commit();
   }
 }
 
@@ -966,7 +937,7 @@ void smoothOperator()
 
     for (int i = 0; i < NUM_LEDS; i++)
     {
-      leds[i] = blend(leds[i], ledsTemp[i], interfade * 10);
+      leds[i] = blend(leds[i], ledsTemp[i], interfade * interfade_speed);
     }
     
     //Only want to interfade for a bit 
@@ -976,6 +947,16 @@ void smoothOperator()
     {
       interfade = 0;
     }
+  }
+}
+
+//make this an int and calculate variables based on time
+void smoothOperatorStart()
+{
+  interfade = interfade_max;
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    ledsTemp[i] = leds[i];
   }
 }
 

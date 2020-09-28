@@ -136,7 +136,9 @@ FASTLED_USING_NAMESPACE
 #define visualizer_y 128
 CRGB leds[NUM_LEDS];
 CRGB ledsTemp[NUM_LEDS];
-int interfade = 25; //set this to 0 to disable fade in on boot. Set to 25 for fade in. 
+int interfade = 18; //set this to 0 to disable fade in on boot. Set to 25 for fade in. 
+int interfade_max = 18;
+int interfade_speed = 14;
 
 //GAMES
 int playerX = 64;
@@ -599,6 +601,23 @@ void loop()
 
   //Detect mode changes and apply interfading
   smoothOperator();
+
+  if (saveTime > 0)
+  {
+    saveTime -= 1;
+  }
+
+  if (saveTime == 1)
+  {
+    EEPROM.write(0, mode);
+    EEPROM.write(1, brightness);
+
+    for (int i = 0; i <= mode_max; i++)
+    {
+      EEPROM.write(2 + i, pattern[i]);
+    }
+    EEPROM.commit();
+  }
   
   //Output data to strip
   showStrip();

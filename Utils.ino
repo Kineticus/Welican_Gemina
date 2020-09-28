@@ -61,6 +61,11 @@ void updateEncoders()
         //And let the fade function know to start
         interfade = 25;
 
+        for (int i = 0; i < NUM_LEDS; i++)
+        {
+          ledsTemp[i] = leds[i];
+        }
+
         //Check to make sure we haven't gone over the maximum amount of modes
         if (mode > mode_max)
         {
@@ -125,6 +130,10 @@ void updateEncoders()
       pattern[mode] += 1;
       saveTime = 100;
       interfade = 25;
+      for (int i = 0; i < NUM_LEDS; i++)
+      {
+        ledsTemp[i] = leds[i];
+      }
     }
     while (tempValue <= -4)
     {
@@ -133,6 +142,10 @@ void updateEncoders()
       pattern[mode] -= 1;
       saveTime = 100;
       interfade = 25;
+      for (int i = 0; i < NUM_LEDS; i++)
+      {
+        ledsTemp[i] = leds[i];
+      }
     }
 
     //Constrain Mode - add switch to allow 3 options - constrain; rollover back to beginning/end; rollover to next/previous mode
@@ -471,6 +484,18 @@ void drawBottom()
     break;
   }
 }
+
+/*******************************************************************
+ *  Menu System - menu_cur sets menu page. menu[] contains selection
+ *                menu_max[] specifies max selection
+ *  0 - Main Page
+ *  1 - Games Page
+ *  2 - Settings Page 
+ *        3 - LED Count   4 - IP Address
+ * 
+ *  5 - Favorites Page
+ *        6 - Max Favs    7 - Reset Favs   8 - New Fav 
+ * *****************************************************************/
 
 void drawMenu()
 {
@@ -911,6 +936,8 @@ void smoothOperator()
     }
   } else
   {
+
+    /*
     //Let's compare the snapshot to the new values
     for (int i = 0; i < NUM_LEDS; i++)
     {
@@ -935,6 +962,13 @@ void smoothOperator()
       }      
       leds[i] = ledsTemp[i];
     }
+    */
+
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      leds[i] = blend(leds[i], ledsTemp[i], interfade * 10);
+    }
+    
     //Only want to interfade for a bit 
     interfade -= 1;
 

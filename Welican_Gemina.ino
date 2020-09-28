@@ -359,10 +359,6 @@ void setup()
 
   //Set the status LED to the lowest brightness
   ledcWrite(statusLED, 100);
-
-  u8g2.setBitmapMode(true /* transparent*/);
-  u8g2.drawXBMP(32, 0, myBitmap_width, myBitmap_height, myBitmap);
-  u8g2.sendBuffer();
   
   // Enabke internal pull up resistors for buttons
   pinMode(knob1C, INPUT_PULLUP); //Knob 1 Click, internal Pull Up (button connects to ground)

@@ -72,11 +72,14 @@ TaskHandle_t inputComputeTask = NULL;
 struct tm timeinfo;
 int currentMinute = 0;
 int currentHour = 100;
+int currentDay = 5;
+int currentDate = 1;
+int currentMonth = 0;
 bool currentPM = 0;
 
 // Replace with your network credentials
-const char *ssid = "";
-const char *password = "";
+const char *ssid = "not_sure";
+const char *password = "ledlights06";
 
 /*
 For EST - UTC -5.00 : -5 * 60 * 60 : -18000
@@ -769,7 +772,12 @@ void inputCompute(void *parameter)
     {
       if (currentHour == 100)
       {
-        configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+        //configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+        configTime(3600*timeZone,0,ntpServer,NULL,NULL);
+        //configTime(TZ_America_New_York, ntpServer);
+        //configTime(EST5EDT,M3.2.0,M11.1.0, ntpServer);
+
+        setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1);
       }
       updateTime();
     }

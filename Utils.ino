@@ -962,18 +962,24 @@ void smoothOperatorStart()
 
 void updateTime()
 {
-  getLocalTime(&timeinfo);
-  currentHour = timeinfo.tm_hour;
+  getLocalTime(&timeinfo); //Update time struct with new data
+
+  currentDay = timeinfo.tm_wday; //Update day
+
+  currentHour = timeinfo.tm_hour; //Update hour
+
+  //Are we in PM/ over 12 hours?
+
   if (currentHour > 12)
   {
     currentHour -= 12;
     currentPM = 1;
   }else
   {
-    currentPM = 0;
+    currentPM = 0;  //If not then it is morning time
   }
 
-  currentMinute = timeinfo.tm_min;
+  currentMinute = timeinfo.tm_min; //Update minutes
 }
 
 void saveTimeCheck()

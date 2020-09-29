@@ -163,7 +163,35 @@ void drawIPAddress()
     //Convert WiFi.localIP() from 4 bytes to 1 nice pretty string
     String LocalIP = String() + WiFi.localIP()[0] + "." + WiFi.localIP()[1] + "." + WiFi.localIP()[2] + "." + WiFi.localIP()[3];
     u8g2.print(LocalIP);
-    u8g2.setCursor(50, 50);
+
+    u8g2.setCursor(10, 50);
+
+    switch(currentDay)
+    {
+      case 0:
+        u8g2.print("Sunday");
+        break;
+      case 1:
+        u8g2.print("Monday");
+        break;
+      case 2:
+        u8g2.print("Tuesday");
+        break;
+      case 3:
+        u8g2.print("Wednesday");
+        break;
+      case 4:
+        u8g2.print("Thursday");
+        break;
+      case 5:
+        u8g2.print("Friday");
+        break;
+      case 6:
+        u8g2.print("Saturday");
+        break;
+    }
+    
+    u8g2.setCursor(64, 50);
     //u8g2.print("Connected");
     
 

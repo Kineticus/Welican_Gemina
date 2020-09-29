@@ -91,6 +91,17 @@ This project requires the [Arduino IDE](https://www.arduino.cc/en/Main/Software)
   - [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) *Must be installed manually
   - [ASyncTCP](https://github.com/me-no-dev/AsyncTCP) *Must be installed manually
 
+### Create Wifi Credentials file
+
+7. Create a file called `WifiCredentials.h` in the main folder.
+That file should include the following:
+```
+#define WIFI_SSID "your-wifi-ssid-goes-here"
+#define WIFI_PASSWORD "your-wifi-password-goes-here"
+```
+
+You will need to replace the strings with your WIFI SSID and PASSWORD
+
 ### VS Code & C++
   - [.vscode/c_app_properties.json](https://code.visualstudio.com/docs/cpp/customize-default-settings-cpp)
   - [Arduino Extension](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.vscode-arduino)

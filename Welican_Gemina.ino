@@ -90,8 +90,6 @@ For UTC +0.00 : 0 * 60 * 60 : 0
 */
 const char *ntpServer = "pool.ntp.org";
 int timeZone = -5;
-long gmtOffset_sec = (timeZone * 60 * 60);
-const int daylightOffset_sec = 3600;
 
 String returnText;
 
@@ -772,11 +770,8 @@ void inputCompute(void *parameter)
     {
       if (currentHour == 100)
       {
-        //configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
         configTime(3600*timeZone,0,ntpServer,NULL,NULL);
-        //configTime(TZ_America_New_York, ntpServer);
-        //configTime(EST5EDT,M3.2.0,M11.1.0, ntpServer);
-
+               
         setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1);
       }
       updateTime();

@@ -69,6 +69,7 @@ TaskHandle_t inputComputeTask = NULL;
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
 #include "time.h"
+#include "WifiCredentials.h"
 struct tm timeinfo;
 int currentMinute = 0;
 int currentHour = 100;
@@ -78,19 +79,19 @@ int currentMonth = 0;
 bool currentPM = 0;
 
 // Replace with your network credentials
-const char *ssid = "not_sure";
-const char *password = "ledlights06";
+
+const char *ssid = WIFI_SSID;
+const char *password = WIFI_PASSWORD;
 
 /*
 For EST - UTC -5.00 : -5 * 60 * 60 : -18000
 For EDT - UTC -4.00 : -4 * 60 * 60 : -14400
 For UTC +0.00 : 0 * 60 * 60 : 0
 */
-const char* ntpServer = "pool.ntp.org";
+const char *ntpServer = "pool.ntp.org";
 int timeZone = -5;
-long  gmtOffset_sec = (timeZone * 60 * 60);
-const int   daylightOffset_sec = 3600;
-
+long gmtOffset_sec = (timeZone * 60 * 60);
+const int daylightOffset_sec = 3600;
 
 String returnText;
 
@@ -109,8 +110,8 @@ int mode = 0;
 int mode_max = maxModes;
 int pattern[6];
 int pattern_temp = 0;
-int favorite_mode[50]; //declare memory for all 50 favorites
-int favorite_pattern[50];  //all are used under the hood
+int favorite_mode[50];    //declare memory for all 50 favorites
+int favorite_pattern[50]; //all are used under the hood
 int favorite_slot;
 // basic, music, chill, moving colors, legacy
 int pattern_max[6] = {12, 12, 22, 65, 80, NUM_FAVORITES};
@@ -151,12 +152,12 @@ FASTLED_USING_NAMESPACE
 //#define CLK_PIN   4
 #define LED_TYPE WS2811
 #define COLOR_ORDER RGB
-#define NUM_LEDS 100
+#define NUM_LEDS 200
 #define visualizer_x 48
 #define visualizer_y 128
 CRGB leds[NUM_LEDS];
 CRGB ledsTemp[NUM_LEDS];
-int interfade = 18; //set this to 0 to disable fade in on boot. Set to 25 for fade in. 
+int interfade = 18; //set this to 0 to disable fade in on boot. Set to 25 for fade in.
 int interfade_max = 18;
 int interfade_speed = 14;
 
@@ -364,7 +365,7 @@ int temp3 = 0;
 void setup()
 {
   //Board Status LED Setup
-  
+
   // setting PWM properties
   const int freq = 5000;
   const int resolution = 13;
@@ -381,7 +382,7 @@ void setup()
 
   //Set the status LED to the lowest brightness
   ledcWrite(statusLED, 100);
-  
+
   // Enabke internal pull up resistors for buttons
   pinMode(knob1C, INPUT_PULLUP); //Knob 1 Click, internal Pull Up (button connects to ground)
   pinMode(knob2C, INPUT_PULLUP); //Knob 2 Click, internal Pull Up (button connects to ground)
@@ -563,7 +564,7 @@ void loop()
 
   //Show logo instead for first X millis
   showLogo(2500);
-  
+
   //Clear active button clicks
   knob1.click = 0;
   knob2.click = 0;
@@ -624,7 +625,7 @@ void loop()
 
   //Check to see if there are recent knob changes to store in memory
   saveTimeCheck();
-  
+
   //Output data to LED strip
   showStrip();
 
@@ -660,7 +661,6 @@ void loop()
 
   EVERY_N_MILLISECONDS(60000)
   {
-   
   }
 
   EVERY_N_MILLISECONDS(200) { gHue++; } // slowly cycle the "base color" through the rainbow
@@ -781,8 +781,7 @@ void inputCompute(void *parameter)
       }
       updateTime();
     }
-    
-    
+
     fftps++;
 
     //Serial.println(xPortGetFreeHeapSize());

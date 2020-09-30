@@ -658,7 +658,7 @@ void loop()
   }
   //FastLED.delay(1000/FRAMES_PER_SECOND);
 
-  fps++;                               //For tracking frame rate/ debug logging
+  fps++; //For tracking frame rate/ debug logging
 
   //Debug Serial Logging
   EVERY_N_MILLISECONDS(1000)
@@ -804,9 +804,8 @@ void inputCompute(void *parameter)
     }
   }
 
-    fftps++; //Debug, tracking loops per second
+  fftps++; //Debug, tracking loops per second
 
-    //Serial.println(xPortGetFreeHeapSize()); //How much memory is left in the task heap? If out we get a panic with "Stack canary watchpoint triggered" 
-    //vTaskDelay(50); //Give some time back to the scheduler. Normally this task never lets up. Use this to share resousrces better on assigned core.
-  }
+  //Serial.println(xPortGetFreeHeapSize()); //How much memory is left in the task heap? If out we get a panic with "Stack canary watchpoint triggered"
+  //vTaskDelay(50); //Give some time back to the scheduler. Normally this task never lets up. Use this to share resousrces better on assigned core.
 }

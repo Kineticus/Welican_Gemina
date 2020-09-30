@@ -154,13 +154,6 @@ const unsigned long period = 1000;
 #define qsubd(x, b) ((x > b) ? b : 0)     // Digital unsigned subtraction macro. if result <0, then => 0. Otherwise, take on fixed value.
 #define qsuba(x, b) ((x > b) ? x - b : 0) // Analog Unsigned subtraction macro. if result <0, then => 0
 
-int knobBothClick = 0;
-
-int knob1Click_debounce = 0;
-int knobBothClick_debounce = 0;
-
-int encoderValue = 0;
-
 int saveTime = 0;
 
 //LEDs

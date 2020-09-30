@@ -26,7 +26,17 @@ U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
 //ENCODER
 #include <ESP32Encoder.h>
 
-#define CONFIG_FILENAME F("/wifi_cred.dat")
+String openWeatherMapApiKey = "8f40cb693f2032badf06d4e432e1dfa6";
+String defaultZipCode = "33701";
+String countryCode = "US";
+// THE DEFAULT TIMER IS SET TO 10 SECONDS FOR TESTING PURPOSES
+// For a final application, check the API call limits per hour/minute to avoid getting blocked/banned
+unsigned long lastTime = 0;
+// Timer set to 10 minutes (600000)
+//unsigned long timerDelay = 600000;
+// Set timer to 10 seconds (10000)
+unsigned long timerDelay = 10000;
+String jsonBuffer;
 
 ESP32Encoder encoder;
 ESP32Encoder encoder2;
@@ -66,10 +76,14 @@ TaskHandle_t inputComputeTask = NULL;
 
 //WiFi, Web Server, and storage for web assets
 #include <WiFi.h>
+#include <HTTPClient.h>
+// #include <ArduinoJson.h>
+#include <Arduino_JSON.h>
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
 #include "time.h"
 #include "WifiCredentials.h"
+
 struct tm timeinfo;
 int currentMinute = 0;
 int currentHour = 100;
@@ -334,6 +348,9 @@ int star_xx[maxStars];
 int star_y[maxStars];
 int star_yy[maxStars];
 int star_z[maxStars];
+
+// JSONVar weatherObject;
+
 struct Knob
 {
   bool click;
@@ -765,21 +782,89 @@ void inputCompute(void *parameter)
 
     //Update variables compared to current encoder location
     updateEncoders();
-
-    if (WiFi.status() == WL_CONNECTED)
+    if ((millis() - lastTime) > timerDelay)
     {
-      if (currentHour == 100)
+      if (WiFi.status() == WL_CONNECTED)
       {
-        configTime(3600*timeZone,0,ntpServer,NULL,NULL);
-               
-        setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1);
+        Serial.println("WIFI Connected!");
+
+        String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + defaultZipCode + "," + countryCode + "&APPID=" + openWeatherMapApiKey;
+        // jsonBuffer = httpGETRequest(serverPath.c_str());
+        // JSONVar myObject = JSON.parse(jsonBuffer);
+
+        // Serial.println("Object Parsed!");
+
+        // JSON.typeof(jsonVar) can be used to get the type of the var
+        // if (JSON.typeof(myObject) == "undefined")
+        // {
+        //   Serial.println("Parsing input failed!");
+        //   return;
+        // }
+
+        // Serial.print("JSON object = ");
+        // Serial.println(myObject);
+        // Serial.print("Temperature: ");
+        // Serial.println(myObject["main"]["temp"]);
+        // Serial.print("Pressure: ");
+        // Serial.println(myObject["main"]["pressure"]);
+        // Serial.print("Humidity: ");
+        // Serial.println(myObject["main"]["humidity"]);
+        // Serial.print("Wind Speed: ");
+        // Serial.println(myObject["wind"]["speed"]);
+
+        if (currentHour == 100)
+        {
+          configTime(3600 * timeZone, 0, ntpServer, NULL, NULL);
+
+          setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1);
+        }
+        updateTime();
       }
-      updateTime();
+      else
+      {
+        Serial.println("WiFi Disconnected");
+      }
+      lastTime = millis();
     }
+  }
 
-    fftps++;
+  fftps++;
 
-    //Serial.println(xPortGetFreeHeapSize());
-    //vTaskDelay(50);
+  //Serial.println(xPortGetFreeHeapSize());
+  //vTaskDelay(50);
+}
+
+String httpGETRequest(const char *url)
+{
+  HTTPClient http;
+
+  // Your IP address with path or Domain name with URL path
+  if (!http.begin(url))
+  {
+    // Serial.println("HTTP Client failed to connect...");
+  }
+  else
+  {
+    // Send HTTP GET request
+    int httpResponseCode = http.GET();
+
+    String payload = "{}";
+
+    if (httpResponseCode > 0)
+    {
+      // Serial.print("HTTP Response code: ");
+      // Serial.println(httpResponseCode);
+      payload = http.getString();
+      // Serial.println(payload);
+    }
+    else
+    {
+      // Serial.print("Error code: ");
+      // Serial.println(httpResponseCode);
+    }
+    // Free resources
+    http.end();
+
+    return payload;
   }
 }

@@ -46,12 +46,22 @@ String countryCode = "US";
 // For a final application, check the API call limits per hour/minute to avoid getting blocked/banned
 unsigned long lastTime = 0;
 // Timer set to 10 minutes (600000)
-//unsigned long timerDelay = 600000;
+unsigned long timerDelay = 600000;
 // Set timer to 10 seconds (10000)
-unsigned long timerDelay = 10000;
-String currentWeatherDescription;
-String jsonBuffer;
-JSONVar weatherObject;
+// unsigned long timerDelay = 10000;
+struct OpenWeatherObject
+{
+  JSONVar weatherJson;
+  String currentWeatherDescription;
+  String currentTemperature;
+  String currentTemperatureMax;
+  String currentTemperatureMin;
+  String currentPressure;
+  String currentHumidity;
+  String currentWindSpeed;
+  String jsonBuffer;
+};
+OpenWeatherObject weather;
 
 ESP32Encoder encoder;
 ESP32Encoder encoder2;
@@ -353,8 +363,6 @@ int star_xx[maxStars];
 int star_y[maxStars];
 int star_yy[maxStars];
 int star_z[maxStars];
-
-// JSONVar weatherObject;
 
 struct Knob
 {

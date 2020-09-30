@@ -994,37 +994,49 @@ void updateWeather()
   {
     if (WiFi.status() == WL_CONNECTED)
     {
-
-      //http://api.openweathermap.org/data/2.5/weather?zip=33713,US&units=imperial&appid=cb8d53c3ae3c26a996a75696ab1a8717
-
       String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + zipCode + "," + countryCode + "&units=imperial&APPID=" + openWeatherMapApiKey;
 
-      jsonBuffer = httpGETRequest(serverPath.c_str());
-      Serial.println(jsonBuffer);
-
-      weatherObject = JSON.parse(jsonBuffer);
+      weather.jsonBuffer = httpGETRequest(serverPath.c_str());
+      weather.weatherJson = JSON.parse(weather.jsonBuffer);
 
       // JSON.typeof(jsonVar) can be used to get the type of the var
-      if (JSON.typeof(weatherObject) == "undefined")
+      if (JSON.typeof(weather.weatherJson) == "undefined")
       {
         Serial.println("Parsing input failed!");
         return;
       }
 
-      Serial.print("JSON object = ");
-      Serial.println(weatherObject);
-      Serial.print("Temperature: ");
-      Serial.println(weatherObject["main"]["temp"]);
-      Serial.print("Pressure: ");
-      Serial.println(weatherObject["main"]["pressure"]);
-      Serial.print("Humidity: ");
-      Serial.println(weatherObject["main"]["humidity"]);
-      Serial.print("Wind Speed: ");
-      Serial.println(weatherObject["wind"]["speed"]);
+      Serial.println("JSON object = ");
+      Serial.println(weather.weatherJson);
 
-      currentWeatherDescription = weatherObject["weather"][0]["main"];
+      weather.currentTemperature = weather.weatherJson["main"]["temp"];
+      weather.currentTemperatureMax = weather.weatherJson["main"]["temp_max"];
+      weather.currentTemperatureMax = weather.weatherJson["main"]["temp_min"];
+      weather.currentPressure = weather.weatherJson["main"]["pressure"];
+      weather.currentHumidity = weather.weatherJson["main"]["humidity"];
+      weather.currentWindSpeed = weather.weatherJson["wind"]["speed"];
+      weather.currentWeatherDescription = weather.weatherJson["weather"][0]["main"];
+
+      Serial.print("Temperature: ");
+      Serial.println(weather.weatherJson["main"]["temp"]);
+
+      Serial.print("Temperature Max: ");
+      Serial.println(weather.weatherJson["main"]["temp_max"]);
+
+      Serial.print("Temperature Min: ");
+      Serial.println(weather.weatherJson["main"]["temp_min"]);
+
+      Serial.print("Pressure: ");
+      Serial.println(weather.weatherJson["main"]["pressure"]);
+
+      Serial.print("Humidity: ");
+      Serial.println(weather.weatherJson["main"]["humidity"]);
+
+      Serial.print("Wind Speed: ");
+      Serial.println(weather.weatherJson["wind"]["speed"]);
+
       Serial.println("currentWeatherDescription :");
-      Serial.println(weatherObject["weather"][0]["main"]);
+      Serial.println(weather.currentWeatherDescription);
     }
     else
     {

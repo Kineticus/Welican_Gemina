@@ -162,7 +162,7 @@ void drawIPAddress()
     u8g2.setCursor(10, 50);
     u8g2.print(weather.currentWeatherDescription);
 
-    // switch(currentDay)
+    // switch(globalTime.currentDay)
     // {
     //   case 0:
     //     u8g2.print("Sunday");
@@ -190,24 +190,24 @@ void drawIPAddress()
     u8g2.setCursor(64, 50);
     //u8g2.print("Connected");
 
-    if (currentHour != 100) //Default setting is 100, so we know time is set
+    if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
     {
       //Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
-      u8g2.print(currentHour);
+      u8g2.print(globalTime.currentHour);
       u8g2.print(":");
-      if (currentMinute < 10)
+      if (globalTime.currentMinute < 10)
       {
         u8g2.print("0");
       }
-      u8g2.print(currentMinute);
+      u8g2.print(globalTime.currentMinute);
     }
     else //If time is not set yet have some fun
     {
       u8g2.print("4:20");
-      currentPM = 1;
+      globalTime.currentPM = 1;
     }
 
-    if (currentPM == 1)
+    if (globalTime.currentPM == 1)
     {
       u8g2.print(" p");
     }

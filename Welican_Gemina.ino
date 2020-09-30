@@ -99,14 +99,24 @@ arduinoFFT FFT = arduinoFFT(vReal, vImag, SAMPLES, SAMPLING_FREQ);
 TaskHandle_t inputComputeTask = NULL;
 
 struct tm timeinfo;
-int currentMinute = 0;
-int currentHour = 100;
-int currentDay = 5;
-int currentDate = 1;
-int currentMonth = 0;
-bool currentPM = 0;
+struct Time
+{
+  int currentMinute;
+  int currentHour;
+  int currentDay;
+  int currentDate;
+  int currentMonth;
+  bool currentPM;
+};
+Time globalTime = {0, 100, 5, 1, 0, 0};
 
-// Replace with your network credentials
+// struct tm timeinfo;
+// int currentMinute = 0;
+// int currentHour = 100;
+// int currentDay = 5;
+// int currentDate = 1;
+// int currentMonth = 0;
+// bool currentPM = 0;
 
 const char *ssid = WIFI_SSID;
 const char *password = WIFI_PASSWORD;

@@ -962,29 +962,29 @@ void updateTime()
 {
   if (WiFi.status() == WL_CONNECTED)
   {
-    if (currentHour == 100)
+    if (globalTime.currentHour == 100)
     {
       configTime(3600 * timeZone, 0, ntpServer, NULL, NULL);
 
       setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1);
     }
 
-    getLocalTime(&timeinfo);        //Update time struct with new data
-    currentDay = timeinfo.tm_wday;  //Update day
-    currentHour = timeinfo.tm_hour; //Update hour
+    getLocalTime(&timeinfo);                   //Update time struct with new data
+    globalTime.currentDay = timeinfo.tm_wday;  //Update day
+    globalTime.currentHour = timeinfo.tm_hour; //Update hour
     //Are we in PM/ over 12 hours?
 
-    if (currentHour > 12)
+    if (globalTime.currentHour > 12)
     {
-      currentHour -= 12;
-      currentPM = 1;
+      globalTime.currentHour -= 12;
+      globalTime.currentPM = 1;
     }
     else
     {
-      currentPM = 0; //If not then it is morning time
+      globalTime.currentPM = 0; //If not then it is morning time
     }
 
-    currentMinute = timeinfo.tm_min; //Update minutes
+    globalTime.currentMinute = timeinfo.tm_min; //Update minutes
   }
 }
 

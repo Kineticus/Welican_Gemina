@@ -32,6 +32,7 @@ U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
 // #include <HTTPClient.h>
 // #include <ArduinoHttpClient.h>
 // #include <ArduinoJson.h>
+#include <HTTPClient.h>
 #include <Arduino_JSON.h>
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
@@ -39,7 +40,7 @@ U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
 #include "WifiCredentials.h"
 
 String openWeatherMapApiKey = "8f40cb693f2032badf06d4e432e1dfa6";
-String defaultZipCode = "33701";
+String zipCode = "33701";
 String countryCode = "US";
 // THE DEFAULT TIMER IS SET TO 10 SECONDS FOR TESTING PURPOSES
 // For a final application, check the API call limits per hour/minute to avoid getting blocked/banned
@@ -48,6 +49,7 @@ unsigned long lastTime = 0;
 //unsigned long timerDelay = 600000;
 // Set timer to 10 seconds (10000)
 unsigned long timerDelay = 10000;
+String jsonBuffer;
 
 ESP32Encoder encoder;
 ESP32Encoder encoder2;
@@ -535,7 +537,7 @@ void setup()
   xTaskCreatePinnedToCore(
       inputCompute,         /* Function to implement the task */
       "Input Compute Task", /* Name of the task */
-      2000,                 /* Stack size in words */
+      5000,                 /* Stack size in words */
       NULL,                 /* Task input parameter */
       0,                    /* Priority of the task, lower is lower */
       &inputComputeTask,    /* Task handle. */
@@ -661,21 +663,23 @@ void loop()
   fps++; //For tracking frame rate/ debug logging
 
   //Debug Serial Logging
-  EVERY_N_MILLISECONDS(1000)
-  {
-    Serial.print("FPS: ");
-    Serial.println(fps);
-    fps = 0;
-    Serial.print("IPS: ");
-    Serial.println(fftps);
-    fftps = 0;
-    Serial.print("State: ");
-    Serial.println(eTaskGetState(inputComputeTask));
-    Serial.print("Minutes: ");
-    Serial.println(((millis() / 1000) / 60));
-    Serial.print("Encoder: ");
-    Serial.println(int((abs(encoder.getCount())) % 4));
-  }
+  /*
+    EVERY_N_MILLISECONDS(1000)
+    {
+      Serial.print("FPS: ");
+      Serial.println(fps);
+      fps = 0;
+      Serial.print("IPS: ");
+      Serial.println(fftps);
+      fftps = 0;
+      Serial.print("State: ");
+      Serial.println(eTaskGetState(inputComputeTask));
+      Serial.print("Minutes: ");
+      Serial.println(((millis() / 1000) / 60));
+      Serial.print("Encoder: ");
+      Serial.println(int((abs(encoder.getCount())) % 4));
+    }
+  */
 
   EVERY_N_MILLISECONDS(60000)
   {
@@ -784,28 +788,40 @@ void inputCompute(void *parameter)
 
     //Update variables compared to current encoder location
     updateEncoders();
-    if ((millis() - lastTime) > timerDelay)
-    {
-      if (WiFi.status() == WL_CONNECTED)
-      {
-        if (currentHour == 100)
-        {
-          configTime(3600 * timeZone, 0, ntpServer, NULL, NULL);
+    
+    updateTime();
 
-          setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1);
-        }
-        updateTime();
-      }
-      else
-      {
-        Serial.println("WiFi Disconnected");
-      }
-      lastTime = millis();
-    }
+    updateWeather();
   }
 
   fftps++; //Debug, tracking loops per second
 
   //Serial.println(xPortGetFreeHeapSize()); //How much memory is left in the task heap? If out we get a panic with "Stack canary watchpoint triggered"
   //vTaskDelay(50); //Give some time back to the scheduler. Normally this task never lets up. Use this to share resousrces better on assigned core.
+}
+
+String httpGETRequest(const char* serverName) {
+  HTTPClient http;
+    
+  // Your IP address with path or Domain name with URL path 
+  http.begin(serverName);
+  
+  // Send HTTP POST request
+  int httpResponseCode = http.GET();
+  
+  String payload = "{}"; 
+  
+  if (httpResponseCode>0) {
+    Serial.print("HTTP Response code: ");
+    Serial.println(httpResponseCode);
+    payload = http.getString();
+  }
+  else {
+    Serial.print("Error code: ");
+    Serial.println(httpResponseCode);
+  }
+  // Free resources
+  http.end();
+
+  return payload;
 }

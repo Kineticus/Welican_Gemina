@@ -74,15 +74,15 @@ void updateEncoders()
       else
       {
         //brightness knob is clicked at the same time as the program knob?
-        //setGameMode();
+        //Change the runMode variable to Menu
         runMode = 1;
-        menu_cur = 0;
-        knob1.click = 0;
+        menu_cur = 0; //Select main menu page
+        knob1.click = 0; //Null out clicks so menu doesn't get confused on first run
         knob2.click = 0;
       }
     }
   }
-  if ((tempValue == true) && (knob1.debounce > 0))
+  if ((tempValue == true) && (knob1.debounce > 0)) //No button press and there is debounce to reduce?
   {
     knob1.debounce -= 1;
   }
@@ -962,24 +962,70 @@ void smoothOperatorStart()
 
 void updateTime()
 {
-  getLocalTime(&timeinfo); //Update time struct with new data
-
-  currentDay = timeinfo.tm_wday; //Update day
-
-  currentHour = timeinfo.tm_hour; //Update hour
-
-  //Are we in PM/ over 12 hours?
-
-  if (currentHour > 12)
+  if (WiFi.status() == WL_CONNECTED)
   {
-    currentHour -= 12;
-    currentPM = 1;
-  }else
+    if (currentHour == 100)
+    {
+      configTime(3600 * timeZone, 0, ntpServer, NULL, NULL);
+
+      setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1);
+    }
+    
+    getLocalTime(&timeinfo); //Update time struct with new data
+    currentDay = timeinfo.tm_wday; //Update day
+    currentHour = timeinfo.tm_hour; //Update hour
+    //Are we in PM/ over 12 hours?
+
+    if (currentHour > 12)
+    {
+      currentHour -= 12;
+      currentPM = 1;
+    }else
+    {
+      currentPM = 0;  //If not then it is morning time
+    }
+
+    currentMinute = timeinfo.tm_min; //Update minutes
+  }   
+}
+
+void updateWeather()
+{
+  EVERY_N_MILLISECONDS(timerDelay)
   {
-    currentPM = 0;  //If not then it is morning time
+    if (WiFi.status() == WL_CONNECTED)
+    {
+      
+      //http://api.openweathermap.org/data/2.5/weather?zip=33713,US&units=imperial&appid=cb8d53c3ae3c26a996a75696ab1a8717
+
+      String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + zipCode + "," + countryCode + "&units=imperial&APPID=" + openWeatherMapApiKey;
+
+      jsonBuffer = httpGETRequest(serverPath.c_str());
+      Serial.println(jsonBuffer);    
+          
+      JSONVar myObject = JSON.parse(jsonBuffer);
+
+      // JSON.typeof(jsonVar) can be used to get the type of the var
+      if (JSON.typeof(myObject) == "undefined") {
+        Serial.println("Parsing input failed!");
+        return;
+      }
+
+      Serial.print("JSON object = ");
+      Serial.println(myObject);
+      Serial.print("Temperature: ");
+      Serial.println(myObject["main"]["temp"]);
+      Serial.print("Pressure: ");
+      Serial.println(myObject["main"]["pressure"]);
+      Serial.print("Humidity: ");
+      Serial.println(myObject["main"]["humidity"]);
+      Serial.print("Wind Speed: ");
+      Serial.println(myObject["wind"]["speed"]);
+    }else
+    {
+      Serial.println("Weather - No Connection");
+    }
   }
-
-  currentMinute = timeinfo.tm_min; //Update minutes
 }
 
 void saveTimeCheck()

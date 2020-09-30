@@ -227,6 +227,7 @@ void drawIPAddress()
     else //If time is not set yet have some fun
     {
       u8g2.print("4:20");
+      currentPM = 1;
     }
 
     if (currentPM == 1)

@@ -1014,8 +1014,11 @@ void updateWeather()
       weather.currentTemperatureMax = weather.weatherJson["main"]["temp_min"];
       weather.currentHumidity = weather.weatherJson["main"]["humidity"];
       weather.currentWindSpeed = weather.weatherJson["wind"]["speed"];
+      weather.currentWeatherId = weather.weatherJson["weather"][0]["id"];
       weather.currentWeatherTitle = weather.weatherJson["weather"][0]["main"];
       weather.currentWeatherDescription = weather.weatherJson["weather"][0]["description"];
+      weather.sunrise = weather.weatherJson["sys"]["sunrise"];
+      weather.sunset = weather.weatherJson["sys"]["sunset"];
 
       Serial.print("Temperature: ");
       Serial.println(weather.weatherJson["main"]["temp"]);
@@ -1031,6 +1034,15 @@ void updateWeather()
 
       Serial.print("Wind Speed: ");
       Serial.println(weather.weatherJson["wind"]["speed"]);
+
+      Serial.print("Sunrise: ");
+      Serial.println(weather.weatherJson["sys"]["sunrise"]);
+
+      Serial.print("Sunset: ");
+      Serial.println(weather.weatherJson["sys"]["sunset"]);
+
+      Serial.print("currentWeatherId: ");
+      Serial.println(weather.weatherJson["weather"][0]["id"]);
 
       Serial.print("currentWeatherTitle: ");
       Serial.println(weather.currentWeatherTitle);

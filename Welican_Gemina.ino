@@ -51,6 +51,7 @@ OpenWeatherSettings weatherSettings = {"33701", "US", 10000};
 struct OpenWeatherObject
 {
   JSONVar weatherJson;
+  String currentWeatherId;
   String currentWeatherTitle;
   String currentWeatherDescription;
   String currentTemperature;
@@ -58,6 +59,8 @@ struct OpenWeatherObject
   String currentTemperatureMin;
   String currentHumidity;
   String currentWindSpeed;
+  String sunrise;
+  String sunset;
   String jsonBuffer;
 };
 OpenWeatherObject weather;

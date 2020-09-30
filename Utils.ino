@@ -76,7 +76,7 @@ void updateEncoders()
         //brightness knob is clicked at the same time as the program knob?
         //Change the runMode variable to Menu
         runMode = 1;
-        menu_cur = 0; //Select main menu page
+        menu_cur = 0;    //Select main menu page
         knob1.click = 0; //Null out clicks so menu doesn't get confused on first run
         knob2.click = 0;
       }
@@ -606,7 +606,6 @@ void drawMenu()
     case 3:
       u8g2.drawRFrame(64, 32, 64, 16, 7);
       break;
-      
     }
     break;
 
@@ -617,21 +616,20 @@ void drawMenu()
     if (menu[menu_cur] < 10)
     {
       u8g2.setCursor(57, 36);
-    }else
+    }
+    else
     {
       u8g2.setCursor(54, 36);
     }
-    
+
     if (menu[menu_cur] < 1) //gotta have at least 1 favorite
     {
       menu[menu_cur] = 1;
     }
     u8g2.print(menu[menu_cur]);
 
-    u8g2.drawRFrame(50,24,20,16,3);
+    u8g2.drawRFrame(50, 24, 20, 16, 3);
     break;
-
-
 
   case 7:
     // FAVORITES RESET MENU
@@ -654,7 +652,7 @@ void drawMenu()
     }
     break;
   case 10:
-    //ADD NEW 
+    //ADD NEW
     newFavoritesMenu();
     break;
   }
@@ -673,7 +671,6 @@ void drawMenu()
     case 2: //Settings Menu
       menu_cur = 0;
       break;
-    
 
     case 5: //Favorites Main Menu
       menu_cur = 2;
@@ -730,40 +727,40 @@ void drawMenu()
     case 2: //Settings click
       switch (menu[menu_cur])
       {
-        case 0: //LED Count
-          break;
-        case 1: //Favorites Settings Menu
-          menu_cur = 5;
-          break;
-        case 2: //IP Address
-          break;
-        case 3: //Wifi
-          break;
+      case 0: //LED Count
+        break;
+      case 1: //Favorites Settings Menu
+        menu_cur = 5;
+        break;
+      case 2: //IP Address
+        break;
+      case 3: //Wifi
+        break;
       }
       break;
-    
+
     case 5: //Favorites Setting Menu Click
       switch (menu[menu_cur])
       {
-        case 0: //Add New, can't favorite a favorite!
-          if (mode != 5)
-          {
-            menu_cur = 10;
-          }
-          break;
-        case 1: //Set Max
-          menu_cur = 6;
-          menu[6] = NUM_FAVORITES;
-          break;
-        case 2: //Reset
-          menu_cur = 7;
-          break;
-        case 3: //Back to settings
-          menu_cur = 2;
-          break;
+      case 0: //Add New, can't favorite a favorite!
+        if (mode != 5)
+        {
+          menu_cur = 10;
+        }
+        break;
+      case 1: //Set Max
+        menu_cur = 6;
+        menu[6] = NUM_FAVORITES;
+        break;
+      case 2: //Reset
+        menu_cur = 7;
+        break;
+      case 3: //Back to settings
+        menu_cur = 2;
+        break;
       }
       break;
-    
+
     case 6: //Set Max Favorites Click
       NUM_FAVORITES = menu[menu_cur];
       pattern_max[5] = NUM_FAVORITES;
@@ -776,18 +773,18 @@ void drawMenu()
     case 7: //Reset Favorites Click
       switch (menu[menu_cur])
       {
-        case 0: //No
-          menu_cur = 5;
-          break;
-        case 1: //Yes
-          resetFavorites();
-          //picture of trash can or something and small delay later
-          runMode = 0;
-          break;
+      case 0: //No
+        menu_cur = 5;
+        break;
+      case 1: //Yes
+        resetFavorites();
+        //picture of trash can or something and small delay later
+        runMode = 0;
+        break;
       }
       break;
-    case 10:        
-      saveFavorites();                                    //New Favorite click
+    case 10:
+      saveFavorites(); //New Favorite click
       runMode = 0;
       break;
     }
@@ -798,25 +795,26 @@ void newFavoritesMenu()
 {
   u8g2.setCursor(0, 8);
   u8g2.print("Add New Favorite");
- 
+
   //This is a menu with NUM_FAVORITES 'selections', each indicating a favorite slot
   if (menu[menu_cur] < 10)
   {
     u8g2.setCursor(58, 26);
-  }else
+  }
+  else
   {
     u8g2.setCursor(55, 26);
   }
-  
+
   u8g2.print(menu[menu_cur]);
 
-  u8g2.drawRFrame(50,14,20,16,3);
+  u8g2.drawRFrame(50, 14, 20, 16, 3);
 
   //Call the favorite for the slot we're looking at
   //The real function call is below this, so LEDs will not show bad data
   favorites_category(menu[menu_cur]);
 
-  //Convert the strings 
+  //Convert the strings
   functionName.toCharArray(function_name_out_str, 20);
   categoryName.toCharArray(category_name_out_str, 20);
 
@@ -850,11 +848,11 @@ void newFavoritesMenu()
 void saveFavorites()
 {
   EEPROM.write(100 + menu[menu_cur] * 2, pattern[mode]); //the pattern we're on
-  EEPROM.write(101 + (menu[menu_cur] * 2), mode);         //the mode we're on
+  EEPROM.write(101 + (menu[menu_cur] * 2), mode);        //the mode we're on
 
-  EEPROM.commit();  //write it to memory
+  EEPROM.commit(); //write it to memory
 
-  favorite_mode[menu[menu_cur]] = mode; //update running variables
+  favorite_mode[menu[menu_cur]] = mode;             //update running variables
   favorite_pattern[menu[menu_cur]] = pattern[mode]; //first updated in readFavorites
 }
 
@@ -870,14 +868,13 @@ void readFavorites()
     {
       favorite_pattern[i] = 0;
       favorite_mode[i] = 0;
-    }  
+    }
   }
 
   NUM_FAVORITES = EEPROM.read(99);
   pattern_max[5] = NUM_FAVORITES;
   menu_max[11] = NUM_FAVORITES;
 }
-
 
 void resetFavorites()
 {
@@ -887,12 +884,12 @@ void resetFavorites()
     favorite_pattern[i] = 0;
     favorite_mode[i] = 0;
 
-    //including EEPROM area 
-    EEPROM.write((100 + (i * 2)), 0); 
+    //including EEPROM area
+    EEPROM.write((100 + (i * 2)), 0);
     EEPROM.write((101 + (i * 2)), 0);
   }
 
-  EEPROM.commit();  //write it to memory
+  EEPROM.commit(); //write it to memory
 }
 
 void smoothOperator()
@@ -905,7 +902,8 @@ void smoothOperator()
     {
       ledsTemp[i] = leds[i];
     }
-  } else
+  }
+  else
   {
 
     /*
@@ -939,8 +937,8 @@ void smoothOperator()
     {
       leds[i] = blend(leds[i], ledsTemp[i], interfade * interfade_speed);
     }
-    
-    //Only want to interfade for a bit 
+
+    //Only want to interfade for a bit
     interfade -= 1;
 
     if (interfade < 1)
@@ -970,9 +968,9 @@ void updateTime()
 
       setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1);
     }
-    
-    getLocalTime(&timeinfo); //Update time struct with new data
-    currentDay = timeinfo.tm_wday; //Update day
+
+    getLocalTime(&timeinfo);        //Update time struct with new data
+    currentDay = timeinfo.tm_wday;  //Update day
     currentHour = timeinfo.tm_hour; //Update hour
     //Are we in PM/ over 12 hours?
 
@@ -980,13 +978,14 @@ void updateTime()
     {
       currentHour -= 12;
       currentPM = 1;
-    }else
+    }
+    else
     {
-      currentPM = 0;  //If not then it is morning time
+      currentPM = 0; //If not then it is morning time
     }
 
     currentMinute = timeinfo.tm_min; //Update minutes
-  }   
+  }
 }
 
 void updateWeather()
@@ -995,33 +994,39 @@ void updateWeather()
   {
     if (WiFi.status() == WL_CONNECTED)
     {
-      
+
       //http://api.openweathermap.org/data/2.5/weather?zip=33713,US&units=imperial&appid=cb8d53c3ae3c26a996a75696ab1a8717
 
       String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + zipCode + "," + countryCode + "&units=imperial&APPID=" + openWeatherMapApiKey;
 
       jsonBuffer = httpGETRequest(serverPath.c_str());
-      Serial.println(jsonBuffer);    
-          
-      JSONVar myObject = JSON.parse(jsonBuffer);
+      Serial.println(jsonBuffer);
+
+      weatherObject = JSON.parse(jsonBuffer);
 
       // JSON.typeof(jsonVar) can be used to get the type of the var
-      if (JSON.typeof(myObject) == "undefined") {
+      if (JSON.typeof(weatherObject) == "undefined")
+      {
         Serial.println("Parsing input failed!");
         return;
       }
 
       Serial.print("JSON object = ");
-      Serial.println(myObject);
+      Serial.println(weatherObject);
       Serial.print("Temperature: ");
-      Serial.println(myObject["main"]["temp"]);
+      Serial.println(weatherObject["main"]["temp"]);
       Serial.print("Pressure: ");
-      Serial.println(myObject["main"]["pressure"]);
+      Serial.println(weatherObject["main"]["pressure"]);
       Serial.print("Humidity: ");
-      Serial.println(myObject["main"]["humidity"]);
+      Serial.println(weatherObject["main"]["humidity"]);
       Serial.print("Wind Speed: ");
-      Serial.println(myObject["wind"]["speed"]);
-    }else
+      Serial.println(weatherObject["wind"]["speed"]);
+
+      currentWeatherDescription = weatherObject["weather"][0]["main"];
+      Serial.println("currentWeatherDescription :");
+      Serial.println(weatherObject["weather"][0]["main"]);
+    }
+    else
     {
       Serial.println("Weather - No Connection");
     }

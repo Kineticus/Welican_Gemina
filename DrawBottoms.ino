@@ -160,7 +160,7 @@ void drawIPAddress()
     u8g2.print(LocalIP);
 
     u8g2.setCursor(10, 50);
-    // u8g2.print(weatherObject["weather"]["main"]);
+    u8g2.print(currentWeatherDescription);
     // switch(currentDay)
     // {
     //   case 0:

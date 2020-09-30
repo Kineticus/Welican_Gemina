@@ -39,7 +39,7 @@ U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
 #include "time.h"
 #include "WifiCredentials.h"
 
-String openWeatherMapApiKey = "8f40cb693f2032badf06d4e432e1dfa6";
+String openWeatherMapApiKey = OPEN_WEATHER_API_KEY;
 String zipCode = "33701";
 String countryCode = "US";
 // THE DEFAULT TIMER IS SET TO 10 SECONDS FOR TESTING PURPOSES
@@ -49,7 +49,9 @@ unsigned long lastTime = 0;
 //unsigned long timerDelay = 600000;
 // Set timer to 10 seconds (10000)
 unsigned long timerDelay = 10000;
+String currentWeatherDescription;
 String jsonBuffer;
+JSONVar weatherObject;
 
 ESP32Encoder encoder;
 ESP32Encoder encoder2;
@@ -788,7 +790,7 @@ void inputCompute(void *parameter)
 
     //Update variables compared to current encoder location
     updateEncoders();
-    
+
     updateTime();
 
     updateWeather();
@@ -800,23 +802,26 @@ void inputCompute(void *parameter)
   //vTaskDelay(50); //Give some time back to the scheduler. Normally this task never lets up. Use this to share resousrces better on assigned core.
 }
 
-String httpGETRequest(const char* serverName) {
+String httpGETRequest(const char *serverName)
+{
   HTTPClient http;
-    
-  // Your IP address with path or Domain name with URL path 
+
+  // Your IP address with path or Domain name with URL path
   http.begin(serverName);
-  
+
   // Send HTTP POST request
   int httpResponseCode = http.GET();
-  
-  String payload = "{}"; 
-  
-  if (httpResponseCode>0) {
+
+  String payload = "{}";
+
+  if (httpResponseCode > 0)
+  {
     Serial.print("HTTP Response code: ");
     Serial.println(httpResponseCode);
     payload = http.getString();
   }
-  else {
+  else
+  {
     Serial.print("Error code: ");
     Serial.println(httpResponseCode);
   }

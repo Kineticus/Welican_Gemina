@@ -46,9 +46,9 @@ String countryCode = "US";
 // For a final application, check the API call limits per hour/minute to avoid getting blocked/banned
 unsigned long lastTime = 0;
 // Timer set to 10 minutes (600000)
-unsigned long timerDelay = 600000;
+// unsigned long timerDelay = 600000;
 // Set timer to 10 seconds (10000)
-// unsigned long timerDelay = 10000;
+unsigned long timerDelay = 10000;
 struct OpenWeatherObject
 {
   JSONVar weatherJson;

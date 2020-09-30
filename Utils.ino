@@ -1035,7 +1035,7 @@ void updateWeather()
       Serial.print("Wind Speed: ");
       Serial.println(weather.weatherJson["wind"]["speed"]);
 
-      Serial.println("currentWeatherDescription :");
+      Serial.print("currentWeatherDescription :");
       Serial.println(weather.currentWeatherDescription);
     }
     else

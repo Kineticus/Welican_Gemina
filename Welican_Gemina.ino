@@ -640,6 +640,8 @@ void loop()
   }
   //FastLED.delay(1000/FRAMES_PER_SECOND);
 
+  fps++;                               //For tracking frame rate/ debug logging
+
   //Debug Serial Logging
   EVERY_N_MILLISECONDS(1000)
   {
@@ -662,7 +664,6 @@ void loop()
   }
 
   EVERY_N_MILLISECONDS(200) { gHue++; } // slowly cycle the "base color" through the rainbow
-  fps++;                                //For debug logging
 }
 
 void inputCompute(void *parameter)
@@ -766,20 +767,21 @@ void inputCompute(void *parameter)
     //Update variables compared to current encoder location
     updateEncoders();
 
+    //Initialized Time (can bog down CPU so we have it on 2nd core)
     if (WiFi.status() == WL_CONNECTED)
     {
-      if (currentHour == 100)
+      if (currentHour == 100) //This is the default state
       {
-        configTime(3600*timeZone,0,ntpServer,NULL,NULL);
+        configTime(3600*timeZone,0,ntpServer,NULL,NULL); //request time
                
-        setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1);
+        setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1); //set time zone and DST
       }
-      updateTime();
+      updateTime(); //update our local variables
     }
 
-    fftps++;
+    fftps++; //Debug, tracking loops per second
 
-    //Serial.println(xPortGetFreeHeapSize());
-    //vTaskDelay(50);
+    //Serial.println(xPortGetFreeHeapSize()); //How much memory is left in the task heap? If out we get a panic with "Stack canary watchpoint triggered" 
+    //vTaskDelay(50); //Give some time back to the scheduler. Normally this task never lets up. Use this to share resousrces better on assigned core.
   }
 }

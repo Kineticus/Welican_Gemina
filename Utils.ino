@@ -990,11 +990,11 @@ void updateTime()
 
 void updateWeather()
 {
-  EVERY_N_MILLISECONDS(timerDelay)
+  EVERY_N_MILLISECONDS(weatherSettings.weatherTimerDelay)
   {
     if (WiFi.status() == WL_CONNECTED)
     {
-      String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + zipCode + "," + countryCode + "&units=imperial&APPID=" + openWeatherMapApiKey;
+      String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + weatherSettings.zipCode + "," + weatherSettings.countryCode + "&units=imperial&APPID=" + openWeatherMapApiKey;
 
       weather.jsonBuffer = httpGETRequest(serverPath.c_str());
       weather.weatherJson = JSON.parse(weather.jsonBuffer);
@@ -1035,7 +1035,7 @@ void updateWeather()
       Serial.print("Wind Speed: ");
       Serial.println(weather.weatherJson["wind"]["speed"]);
 
-      Serial.print("currentWeatherDescription :");
+      Serial.print("currentWeatherDescription: ");
       Serial.println(weather.currentWeatherDescription);
     }
     else

@@ -40,15 +40,14 @@ U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
 #include "WifiCredentials.h"
 
 String openWeatherMapApiKey = OPEN_WEATHER_API_KEY;
-String zipCode = "33701";
-String countryCode = "US";
-// THE DEFAULT TIMER IS SET TO 10 SECONDS FOR TESTING PURPOSES
-// For a final application, check the API call limits per hour/minute to avoid getting blocked/banned
-unsigned long lastTime = 0;
-// Timer set to 10 minutes (600000)
-// unsigned long timerDelay = 600000;
-// Set timer to 10 seconds (10000)
-unsigned long timerDelay = 10000;
+struct OpenWeatherSettings
+{
+  String zipCode;
+  String countryCode;
+  unsigned long weatherTimerDelay;
+};
+OpenWeatherSettings weatherSettings = {"33701", "US", 10000};
+
 struct OpenWeatherObject
 {
   JSONVar weatherJson;

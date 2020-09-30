@@ -61,7 +61,6 @@ void drawEQ()
   temp3 = peak[0] / AMPLITUDE;
   u8g2.drawBox(temp3, pos, 1, 7);
 
-
   temp2 = bandValues[1] / AMPLITUDE;
   temp2 -= 7;
   if (temp2 < min)
@@ -76,7 +75,6 @@ void drawEQ()
   temp3 = peak[1] / AMPLITUDE;
   u8g2.drawBox(temp3, pos + 8, 1, 7);
 
-
   temp3 = bandValues[3] / AMPLITUDE;
   temp3 -= 7;
   if (temp3 < min)
@@ -90,7 +88,6 @@ void drawEQ()
   u8g2.drawBox(0, pos + 16, temp3, 7);
   temp3 = peak[3] / AMPLITUDE;
   u8g2.drawBox(temp3, pos + 16, 1, 7);
-
 
   temp3 = bandValues[4] / AMPLITUDE;
   temp3 -= 7;
@@ -121,7 +118,6 @@ void drawEQ()
   temp3 = peak[5] / AMPLITUDE;
   u8g2.drawBox(temp3, pos + 32, 1, 7);
 
-
   temp3 = bandValues[6] / AMPLITUDE;
   temp3 -= 7;
   if (temp3 < min)
@@ -134,8 +130,7 @@ void drawEQ()
   }
   u8g2.drawBox(0, pos + 40, temp3, 7);
   temp3 = peak[6] / AMPLITUDE;
-  u8g2.drawBox(temp3, pos +40, 1, 7);
-
+  u8g2.drawBox(temp3, pos + 40, 1, 7);
 }
 
 void drawCircleEQ()
@@ -165,61 +160,83 @@ void drawIPAddress()
     u8g2.print(LocalIP);
 
     u8g2.setCursor(10, 50);
+    // u8g2.print(weatherObject["weather"]["main"]);
+    // switch(currentDay)
+    // {
+    //   case 0:
+    //     u8g2.print("Sunday");
+    //     break;
+    //   case 1:
+    //     u8g2.print("Monday");
+    //     break;
+    //   case 2:
+    //     u8g2.print("Tuesday");
+    //     break;
+    //   case 3:
+    //     u8g2.print("Wednesday");
+    //     break;
+    //   case 4:
+    //     u8g2.print("Thursday");
+    //     break;
+    //   case 5:
+    //     u8g2.print("Friday");
+    //     break;
+    //   case 6:
+    //     u8g2.print("Saturday");
+    //     break;
+    // }
+    // switch(currentDay)
+    // {
+    //   case 0:
+    //     u8g2.print("Sunday");
+    //     break;
+    //   case 1:
+    //     u8g2.print("Monday");
+    //     break;
+    //   case 2:
+    //     u8g2.print("Tuesday");
+    //     break;
+    //   case 3:
+    //     u8g2.print("Wednesday");
+    //     break;
+    //   case 4:
+    //     u8g2.print("Thursday");
+    //     break;
+    //   case 5:
+    //     u8g2.print("Friday");
+    //     break;
+    //   case 6:
+    //     u8g2.print("Saturday");
+    //     break;
+    // }
 
-    switch(currentDay)
-    {
-      case 0:
-        u8g2.print("Sunday");
-        break;
-      case 1:
-        u8g2.print("Monday");
-        break;
-      case 2:
-        u8g2.print("Tuesday");
-        break;
-      case 3:
-        u8g2.print("Wednesday");
-        break;
-      case 4:
-        u8g2.print("Thursday");
-        break;
-      case 5:
-        u8g2.print("Friday");
-        break;
-      case 6:
-        u8g2.print("Saturday");
-        break;
-    }
-    
     u8g2.setCursor(64, 50);
     //u8g2.print("Connected");
-    
-
-    
 
     if (currentHour != 100) //Default setting is 100, so we know time is set
     {
       //Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
       u8g2.print(currentHour);
       u8g2.print(":");
-      if (currentMinute < 10) 
+      if (currentMinute < 10)
       {
         u8g2.print("0");
       }
       u8g2.print(currentMinute);
-    } else //If time is not set yet have some fun
+    }
+    else //If time is not set yet have some fun
     {
       u8g2.print("4:20");
     }
-    
+
     if (currentPM == 1)
     {
       u8g2.print(" p");
-    } else
+    }
+    else
     {
       u8g2.print(" a");
     }
-
   }
   else
   {
@@ -295,14 +312,13 @@ void movingTriangles()
 
   //Circle
   u8g2.drawCircle(t1.x, t1.y, t1.radius, U8G2_DRAW_ALL);
-  
+
   //Lines
   u8g2.drawLine(t1.x1, t1.y1, t1.x2, t1.y2);
   u8g2.drawLine(t1.x2, t1.y2, t1.x3, t1.y3);
   u8g2.drawLine(t1.x3, t1.y3, t1.x1, t1.y1);
 
-
-  //Increase rad of each point a little 
+  //Increase rad of each point a little
   t1.point1 -= 0.02;
   t1.point2 -= 0.02;
   t1.point3 -= 0.02;

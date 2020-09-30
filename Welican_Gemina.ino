@@ -26,7 +26,28 @@ U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
 //ENCODER
 #include <ESP32Encoder.h>
 
-#define CONFIG_FILENAME F("/wifi_cred.dat")
+//WiFi, Web Server, and storage for web assets
+#include <WiFi.h>
+// #include <Bridge.h>
+// #include <HTTPClient.h>
+// #include <ArduinoHttpClient.h>
+// #include <ArduinoJson.h>
+#include <Arduino_JSON.h>
+#include "ESPAsyncWebServer.h"
+#include "SPIFFS.h"
+#include "time.h"
+#include "WifiCredentials.h"
+
+String openWeatherMapApiKey = "8f40cb693f2032badf06d4e432e1dfa6";
+String defaultZipCode = "33701";
+String countryCode = "US";
+// THE DEFAULT TIMER IS SET TO 10 SECONDS FOR TESTING PURPOSES
+// For a final application, check the API call limits per hour/minute to avoid getting blocked/banned
+unsigned long lastTime = 0;
+// Timer set to 10 minutes (600000)
+//unsigned long timerDelay = 600000;
+// Set timer to 10 seconds (10000)
+unsigned long timerDelay = 10000;
 
 ESP32Encoder encoder;
 ESP32Encoder encoder2;
@@ -64,12 +85,6 @@ arduinoFFT FFT = arduinoFFT(vReal, vImag, SAMPLES, SAMPLING_FREQ);
 
 TaskHandle_t inputComputeTask = NULL;
 
-//WiFi, Web Server, and storage for web assets
-#include <WiFi.h>
-#include "ESPAsyncWebServer.h"
-#include "SPIFFS.h"
-#include "time.h"
-#include "WifiCredentials.h"
 struct tm timeinfo;
 int currentMinute = 0;
 int currentHour = 100;
@@ -334,6 +349,9 @@ int star_xx[maxStars];
 int star_y[maxStars];
 int star_yy[maxStars];
 int star_z[maxStars];
+
+// JSONVar weatherObject;
+
 struct Knob
 {
   bool click;
@@ -428,9 +446,9 @@ void setup()
     request->send(SPIFFS, "/main.js", "text/javascript");
   });
 
-  server.on("/obama_not_bad.jpg", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(SPIFFS, "/obama_not_bad.jpg", "image/jpg");
-  });
+  // server.on("/obama_not_bad.jpg", HTTP_GET, [](AsyncWebServerRequest *request) {
+  //   request->send(SPIFFS, "/obama_not_bad.jpg", "image/jpg");
+  // });
   // Route to set GPIO to HIGH
   server.on("/on", HTTP_GET, [](AsyncWebServerRequest *request) {
     brightness = 255;
@@ -766,18 +784,25 @@ void inputCompute(void *parameter)
 
     //Update variables compared to current encoder location
     updateEncoders();
-
-    //Initialized Time (can bog down CPU so we have it on 2nd core)
-    if (WiFi.status() == WL_CONNECTED)
+    if ((millis() - lastTime) > timerDelay)
     {
-      if (currentHour == 100) //This is the default state
+      if (WiFi.status() == WL_CONNECTED)
       {
-        configTime(3600*timeZone,0,ntpServer,NULL,NULL); //request time
-               
-        setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1); //set time zone and DST
+        if (currentHour == 100)
+        {
+          configTime(3600 * timeZone, 0, ntpServer, NULL, NULL);
+
+          setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1);
+        }
+        updateTime();
       }
-      updateTime(); //update our local variables
+      else
+      {
+        Serial.println("WiFi Disconnected");
+      }
+      lastTime = millis();
     }
+  }
 
     fftps++; //Debug, tracking loops per second
 

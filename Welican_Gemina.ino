@@ -26,6 +26,18 @@ U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
 //ENCODER
 #include <ESP32Encoder.h>
 
+//WiFi, Web Server, and storage for web assets
+#include <WiFi.h>
+// #include <Bridge.h>
+// #include <HTTPClient.h>
+// #include <ArduinoHttpClient.h>
+// #include <ArduinoJson.h>
+#include <Arduino_JSON.h>
+#include "ESPAsyncWebServer.h"
+#include "SPIFFS.h"
+#include "time.h"
+#include "WifiCredentials.h"
+
 String openWeatherMapApiKey = "8f40cb693f2032badf06d4e432e1dfa6";
 String defaultZipCode = "33701";
 String countryCode = "US";
@@ -36,7 +48,6 @@ unsigned long lastTime = 0;
 //unsigned long timerDelay = 600000;
 // Set timer to 10 seconds (10000)
 unsigned long timerDelay = 10000;
-String jsonBuffer;
 
 ESP32Encoder encoder;
 ESP32Encoder encoder2;
@@ -73,16 +84,6 @@ unsigned long tempTime;
 arduinoFFT FFT = arduinoFFT(vReal, vImag, SAMPLES, SAMPLING_FREQ);
 
 TaskHandle_t inputComputeTask = NULL;
-
-//WiFi, Web Server, and storage for web assets
-#include <WiFi.h>
-#include <HTTPClient.h>
-// #include <ArduinoJson.h>
-#include <Arduino_JSON.h>
-#include "ESPAsyncWebServer.h"
-#include "SPIFFS.h"
-#include "time.h"
-#include "WifiCredentials.h"
 
 struct tm timeinfo;
 int currentMinute = 0;
@@ -445,9 +446,9 @@ void setup()
     request->send(SPIFFS, "/main.js", "text/javascript");
   });
 
-  server.on("/obama_not_bad.jpg", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(SPIFFS, "/obama_not_bad.jpg", "image/jpg");
-  });
+  // server.on("/obama_not_bad.jpg", HTTP_GET, [](AsyncWebServerRequest *request) {
+  //   request->send(SPIFFS, "/obama_not_bad.jpg", "image/jpg");
+  // });
   // Route to set GPIO to HIGH
   server.on("/on", HTTP_GET, [](AsyncWebServerRequest *request) {
     brightness = 255;
@@ -786,32 +787,6 @@ void inputCompute(void *parameter)
     {
       if (WiFi.status() == WL_CONNECTED)
       {
-        Serial.println("WIFI Connected!");
-
-        String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + defaultZipCode + "," + countryCode + "&APPID=" + openWeatherMapApiKey;
-        // jsonBuffer = httpGETRequest(serverPath.c_str());
-        // JSONVar myObject = JSON.parse(jsonBuffer);
-
-        // Serial.println("Object Parsed!");
-
-        // JSON.typeof(jsonVar) can be used to get the type of the var
-        // if (JSON.typeof(myObject) == "undefined")
-        // {
-        //   Serial.println("Parsing input failed!");
-        //   return;
-        // }
-
-        // Serial.print("JSON object = ");
-        // Serial.println(myObject);
-        // Serial.print("Temperature: ");
-        // Serial.println(myObject["main"]["temp"]);
-        // Serial.print("Pressure: ");
-        // Serial.println(myObject["main"]["pressure"]);
-        // Serial.print("Humidity: ");
-        // Serial.println(myObject["main"]["humidity"]);
-        // Serial.print("Wind Speed: ");
-        // Serial.println(myObject["wind"]["speed"]);
-
         if (currentHour == 100)
         {
           configTime(3600 * timeZone, 0, ntpServer, NULL, NULL);
@@ -832,39 +807,4 @@ void inputCompute(void *parameter)
 
   //Serial.println(xPortGetFreeHeapSize());
   //vTaskDelay(50);
-}
-
-String httpGETRequest(const char *url)
-{
-  HTTPClient http;
-
-  // Your IP address with path or Domain name with URL path
-  if (!http.begin(url))
-  {
-    // Serial.println("HTTP Client failed to connect...");
-  }
-  else
-  {
-    // Send HTTP GET request
-    int httpResponseCode = http.GET();
-
-    String payload = "{}";
-
-    if (httpResponseCode > 0)
-    {
-      // Serial.print("HTTP Response code: ");
-      // Serial.println(httpResponseCode);
-      payload = http.getString();
-      // Serial.println(payload);
-    }
-    else
-    {
-      // Serial.print("Error code: ");
-      // Serial.println(httpResponseCode);
-    }
-    // Free resources
-    http.end();
-
-    return payload;
-  }
 }

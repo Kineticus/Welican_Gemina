@@ -51,11 +51,11 @@ OpenWeatherSettings weatherSettings = {"33701", "US", 10000};
 struct OpenWeatherObject
 {
   JSONVar weatherJson;
+  String currentWeatherTitle;
   String currentWeatherDescription;
   String currentTemperature;
   String currentTemperatureMax;
   String currentTemperatureMin;
-  String currentPressure;
   String currentHumidity;
   String currentWindSpeed;
   String jsonBuffer;

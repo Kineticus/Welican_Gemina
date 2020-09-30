@@ -1012,10 +1012,10 @@ void updateWeather()
       weather.currentTemperature = weather.weatherJson["main"]["temp"];
       weather.currentTemperatureMax = weather.weatherJson["main"]["temp_max"];
       weather.currentTemperatureMax = weather.weatherJson["main"]["temp_min"];
-      weather.currentPressure = weather.weatherJson["main"]["pressure"];
       weather.currentHumidity = weather.weatherJson["main"]["humidity"];
       weather.currentWindSpeed = weather.weatherJson["wind"]["speed"];
-      weather.currentWeatherDescription = weather.weatherJson["weather"][0]["main"];
+      weather.currentWeatherTitle = weather.weatherJson["weather"][0]["main"];
+      weather.currentWeatherDescription = weather.weatherJson["weather"][0]["description"];
 
       Serial.print("Temperature: ");
       Serial.println(weather.weatherJson["main"]["temp"]);
@@ -1026,14 +1026,14 @@ void updateWeather()
       Serial.print("Temperature Min: ");
       Serial.println(weather.weatherJson["main"]["temp_min"]);
 
-      Serial.print("Pressure: ");
-      Serial.println(weather.weatherJson["main"]["pressure"]);
-
       Serial.print("Humidity: ");
       Serial.println(weather.weatherJson["main"]["humidity"]);
 
       Serial.print("Wind Speed: ");
       Serial.println(weather.weatherJson["wind"]["speed"]);
+
+      Serial.print("currentWeatherTitle: ");
+      Serial.println(weather.currentWeatherTitle);
 
       Serial.print("currentWeatherDescription: ");
       Serial.println(weather.currentWeatherDescription);

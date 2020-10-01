@@ -39,9 +39,9 @@
 #warning "Requires FastLED 3.1 or later; check github for latest code."
 #endif
 #define VERSION_INFO "Build 0.420 - 09/16/20"
-#define knob1C 25 //Program
-#define knob2C 4  //Brightness 14
-#define maxModes 5
+#define KNOB_1C 25 //Program
+#define KNOB_2C 4  //Brightness 14
+#define MAX_MODES 5
 #define SAMPLES 512         // Must be a power of 2. FAST 256 (40fps), NORMAL 512 (20fps), ACCURATE 1024 (10fps)
 #define SAMPLING_FREQ 40000 // Hz, must be 40000 or less due to ADC conversion time. Determines maximum frequency that can be analysed by the FFT Fmax=sampleF/2.
 #define AMPLITUDE 3000      // Depending on your audio source level, you may need to alter this value. Can be used as a 'sensitivity' control.
@@ -50,19 +50,19 @@
 #define NOISE 500           // Used as a crude noise filter, values below this are ignored
 #define TOP 32
 #define FRAMES_PER_SECOND 120
-#define screen_width 127
-#define screen_height 63
-#define maxStars 32
-#define qsubd(x, b) ((x > b) ? b : 0)     // Digital unsigned subtraction macro. if result <0, then => 0. Otherwise, take on fixed value.
-#define qsuba(x, b) ((x > b) ? x - b : 0) // Analog Unsigned subtraction macro. if result <0, then => 0
+#define SCREEN_WIDTH 127
+#define SCREEN_HEIGHT 63
+#define MAX_STARS 32
+#define QSUBD(x, b) ((x > b) ? b : 0)     // Digital unsigned subtraction macro. if result <0, then => 0. Otherwise, take on fixed value.
+#define QSUBA(x, b) ((x > b) ? x - b : 0) // Analog Unsigned subtraction macro. if result <0, then => 0
 #define DATA_PIN 18
 #define DATA_PIN_A 12
 #define LED_TYPE WS2811
 #define COLOR_ORDER RGB
 #define NUM_LEDS 200
-#define visualizer_x 48
-#define visualizer_y 128
-#define statusLED 0
+#define VISUALIZER_X 48
+#define VISUALIZER_Y 128
+#define STATUS_LED 0
 // COOLING: How much does the air cool as it rises?
 // Less cooling = taller flames.  More cooling = shorter flames.
 // Default 50, suggested range 20-100
@@ -76,9 +76,23 @@
 // GLOBALs
 // ----------------------------------------------------------------
 FASTLED_USING_NAMESPACE
+AsyncWebServer server(80);
+TaskHandle_t inputComputeTask = NULL;
+U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
+ESP32Encoder encoder;
+ESP32Encoder encoder2;
+struct tm timeinfo;
+CRGB temp[NUM_LEDS];
+CRGB leds_temp[NUM_LEDS / 2]; // half the total number of pixels
+CRGB leds[NUM_LEDS];
+CRGB ledsTemp[NUM_LEDS];
+CRGB clr1;
+CRGB clr2;
+
 String openWeatherMapApiKey = OPEN_WEATHER_API_KEY;
 const char *ssid = WIFI_SSID;
 const char *password = WIFI_PASSWORD;
+
 /*
 For EST - UTC -5.00 : -5 * 60 * 60 : -18000
 For EDT - UTC -4.00 : -4 * 60 * 60 : -14400
@@ -86,12 +100,6 @@ For UTC +0.00 : 0 * 60 * 60 : 0
 */
 const char *ntpServer = "pool.ntp.org";
 String returnText;
-AsyncWebServer server(80);
-TaskHandle_t inputComputeTask = NULL;
-U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
-ESP32Encoder encoder;
-ESP32Encoder encoder2;
-struct tm timeinfo;
 int NUM_FAVORITES = 25; //Max 50, loads all 50 at program load, dynamically assignable
 int tempValue = 0;
 int encoder_unstick = 0;
@@ -104,16 +112,16 @@ int oldBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 volatile int bandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 double vReal[SAMPLES];
 double vImag[SAMPLES];
+arduinoFFT FFT = arduinoFFT(vReal, vImag, SAMPLES, SAMPLING_FREQ);
 unsigned long newTime;
 byte knobReading = 0;
 unsigned long tempTime;
-arduinoFFT FFT = arduinoFFT(vReal, vImag, SAMPLES, SAMPLING_FREQ);
 int menu[10];
 int menu_max[11] = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, NUM_FAVORITES}; //Root Menu Items, Game Menu Items, Settings Menu Items
 int menu_cur = 0;
 int runMode = 0;
 int mode = 0;
-int mode_max = maxModes;
+int mode_max = MAX_MODES;
 int pattern[6];
 int pattern_temp = 0;
 int favorite_mode[50];    //declare memory for all 50 favorites
@@ -129,8 +137,6 @@ int saveTime = 0;
 //LEDs
 float breath = 0;
 int breathing = 1;
-CRGB leds[NUM_LEDS];
-CRGB ledsTemp[NUM_LEDS];
 int interfade = 18; //set this to 0 to disable fade in on boot. Set to 25 for fade in.
 int interfade_max = 18;
 int interfade_speed = 14;
@@ -141,8 +147,6 @@ int interfade_speed = 14;
 //Define simplex noise node for each LED
 const int LEDs_in_strip = NUM_LEDS;
 const int LEDs_for_simplex = 6;
-CRGB temp[NUM_LEDS];
-CRGB leds_temp[NUM_LEDS / 2]; // half the total number of pixels
 long tempTimer;
 int ledPosition;
 int fadeDirection = 0;      // 1 or 0, positive or negative
@@ -163,8 +167,6 @@ uint8_t hueB = 95;      // End hue at valueMax.
 uint8_t satB = 255;     // End saturation at valueMax.
 float valueMax = 255.0; // Pulse maximum value (Should be larger then valueMin).
 // used in Blendwave
-CRGB clr1;
-CRGB clr2;
 uint8_t speed;
 uint8_t loc1;
 uint8_t loc2;
@@ -240,11 +242,11 @@ int dvdBounce3_vy = 1;
 int brightness = 0;
 int brightness_temp = 0;
 unsigned long brightness_debounce = 0;
-int star_x[maxStars];
-int star_xx[maxStars];
-int star_y[maxStars];
-int star_yy[maxStars];
-int star_z[maxStars];
+int star_x[MAX_STARS];
+int star_xx[MAX_STARS];
+int star_y[MAX_STARS];
+int star_yy[MAX_STARS];
+int star_z[MAX_STARS];
 
 // ----------------------------------------------------------------
 // STRUCTs
@@ -279,9 +281,9 @@ Fallios fallios = {0, 0, 0, 0, 8, 0};
 
 byte fallios_wall[64];
 byte fallios_wallDistance[64];
-int fallios_tunnel_1[screen_height + 1];
-int fallios_tunnel_2[screen_height + 1];
-int fallios_tunnelWidth = screen_width / 2;
+int fallios_tunnel_1[SCREEN_HEIGHT + 1];
+int fallios_tunnel_2[SCREEN_HEIGHT + 1];
+int fallios_tunnelWidth = SCREEN_WIDTH / 2;
 
 //BLOCKBREAKER
 struct BlockBreaker
@@ -372,20 +374,20 @@ void setup()
 
   //pinMode(ledChannel, OUTPUT); //LED Status Light
   // configure LED PWM functionalitites
-  ledcSetup(statusLED, freq, resolution);
+  ledcSetup(STATUS_LED, freq, resolution);
 
   //Set Pin to Output mode to send power to LED
   pinMode(23, OUTPUT);
 
   //Attach the channel to the GPIO to be controlled
-  ledcAttachPin(23, statusLED);
+  ledcAttachPin(23, STATUS_LED);
 
   //Set the status LED to the lowest brightness
-  ledcWrite(statusLED, 100);
+  ledcWrite(STATUS_LED, 100);
 
   // Enabke internal pull up resistors for buttons
-  pinMode(knob1C, INPUT_PULLUP); //Knob 1 Click, internal Pull Up (button connects to ground)
-  pinMode(knob2C, INPUT_PULLUP); //Knob 2 Click, internal Pull Up (button connects to ground)
+  pinMode(KNOB_1C, INPUT_PULLUP); //Knob 1 Click, internal Pull Up (button connects to ground)
+  pinMode(KNOB_2C, INPUT_PULLUP); //Knob 2 Click, internal Pull Up (button connects to ground)
 
   // Enable the weak pull up resistors for encoders
   ESP32Encoder::useInternalWeakPullResistors = UP;
@@ -449,11 +451,11 @@ void setup()
   server.begin();
 
   //Seed variables
-  for (int i = 0; i < maxStars; i++)
+  for (int i = 0; i < MAX_STARS; i++)
   {
-    star_x[i] = random(0, visualizer_x);
+    star_x[i] = random(0, VISUALIZER_X);
     star_xx[i] = random(1, 4);
-    star_y[i] = random(0, visualizer_y);
+    star_y[i] = random(0, VISUALIZER_Y);
     star_yy[i] = random(1, 4);
     star_z[i] = random(1, 4);
   }
@@ -598,7 +600,7 @@ void loop()
     breath = 4;
   }
   //Write current breath value to status LED
-  ledcWrite(statusLED, breath);
+  ledcWrite(STATUS_LED, breath);
 
   switch (mode)
   {

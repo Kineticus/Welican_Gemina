@@ -224,7 +224,7 @@ void drawIPAddress()
 
 void gravityWell()
 {
-  for (int i = 0; i < maxStars; i++)
+  for (int i = 0; i < MAX_STARS; i++)
   {
     if (star_xx[i] > -7)
     {
@@ -252,18 +252,18 @@ void gravityWell()
       star_xx[i] = abs(star_xx[i]);
     }
 
-    if (((star_y[i] > visualizer_y) || (star_y[i] < 0)) || ((star_yy[i] == 0) && (star_x[i] <= 0))) // || (star_x[i] > visualizer_x) || (star_x[i] < 0)
+    if (((star_y[i] > VISUALIZER_Y) || (star_y[i] < 0)) || ((star_yy[i] == 0) && (star_x[i] <= 0))) // || (star_x[i] > VISUALIZER_X) || (star_x[i] < 0)
     {
-      //star_y[i] = random(0, visualizer_y);
-      //star_x[i] = random(0, visualizer_x);
-      star_y[i] = visualizer_y / 2;
+      //star_y[i] = random(0, VISUALIZER_Y);
+      //star_x[i] = random(0, VISUALIZER_X);
+      star_y[i] = VISUALIZER_Y / 2;
       star_x[i] = 0;
       star_yy[i] = random(-4, 4);
       star_xx[i] = random(4, 10);
       star_z[i] = random(1, 5);
     }
 
-    u8g2.drawDisc(star_y[i], (visualizer_x - star_x[i]) + (14 - star_z[i]), star_z[i], U8G2_DRAW_ALL);
+    u8g2.drawDisc(star_y[i], (VISUALIZER_X - star_x[i]) + (14 - star_z[i]), star_z[i], U8G2_DRAW_ALL);
   }
 }
 
@@ -333,10 +333,10 @@ void movingCircles()
   for (int i = 0; i < 8; i++)
   {
     star_y[i] += star_z[i];
-    if (star_y[i] > visualizer_y)
+    if (star_y[i] > VISUALIZER_Y)
     {
       star_y[i] = 0;
-      star_x[i] = random(0, visualizer_x);
+      star_x[i] = random(0, VISUALIZER_X);
       star_yy[i] = random(1, 4);
     }
     u8g2.drawDisc(star_y[i], star_x[i] + 18, 2, U8G2_DRAW_ALL);
@@ -352,7 +352,7 @@ void dvdBounce()
   {
     dvdBounce_vy = 1;
   }
-  if (dvdBounce_y >= (visualizer_y - DVD_width))
+  if (dvdBounce_y >= (VISUALIZER_Y - DVD_width))
   {
     dvdBounce_vy = -1;
   }
@@ -361,7 +361,7 @@ void dvdBounce()
   {
     dvdBounce_vx = 1;
   }
-  if (dvdBounce_x >= (visualizer_x - DVD_height))
+  if (dvdBounce_x >= (VISUALIZER_X - DVD_height))
   {
     dvdBounce_vx = -1;
   }
@@ -379,7 +379,7 @@ void starBounce()
   {
     dvdBounce_vy = 1;
   }
-  if (dvdBounce_y >= (visualizer_y - star_width))
+  if (dvdBounce_y >= (VISUALIZER_Y - star_width))
   {
     dvdBounce_vy = -1;
   }
@@ -388,7 +388,7 @@ void starBounce()
   {
     dvdBounce_vx = 1;
   }
-  if (dvdBounce_x >= (visualizer_x - star_height))
+  if (dvdBounce_x >= (VISUALIZER_X - star_height))
   {
     dvdBounce_vx = -1;
   }
@@ -400,7 +400,7 @@ void starBounce()
   {
     dvdBounce2_vy = 1;
   }
-  if (dvdBounce2_y >= (visualizer_y - star_width))
+  if (dvdBounce2_y >= (VISUALIZER_Y - star_width))
   {
     dvdBounce2_vy = -1;
   }
@@ -409,7 +409,7 @@ void starBounce()
   {
     dvdBounce2_vx = 1;
   }
-  if (dvdBounce2_x >= (visualizer_x - star_height))
+  if (dvdBounce2_x >= (VISUALIZER_X - star_height))
   {
     dvdBounce2_vx = -1;
   }
@@ -421,7 +421,7 @@ void starBounce()
   {
     dvdBounce3_vy = 1;
   }
-  if (dvdBounce3_y >= (visualizer_y - star_width))
+  if (dvdBounce3_y >= (VISUALIZER_Y - star_width))
   {
     dvdBounce3_vy = -1;
   }
@@ -430,7 +430,7 @@ void starBounce()
   {
     dvdBounce3_vx = 1;
   }
-  if (dvdBounce3_x >= (visualizer_x - star_height))
+  if (dvdBounce3_x >= (VISUALIZER_X - star_height))
   {
     dvdBounce3_vx = -1;
   }

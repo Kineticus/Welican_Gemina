@@ -147,7 +147,7 @@ void updateEncoders()
   //--CLICK--
 
   //Read knob 1 digital pin, button pulls pin low
-  tempValue = digitalRead(knob1C);
+  tempValue = digitalRead(KNOB_1C);
 
   //Is the button pulling the pin low and the debounce counter is at 0 (no recent button press) ?
   if ((tempValue == false) && (knob1.debounce == 0))
@@ -200,7 +200,7 @@ void updateEncoders()
   }
 
   //Read knob 2 digital pin, button pulls pin low
-  tempValue = digitalRead(knob2C);
+  tempValue = digitalRead(KNOB_2C);
   if ((tempValue == false) && (knob2.debounce == 0))
   {
     knob2.debounce = 3;
@@ -500,7 +500,7 @@ void drawTop()
 
   //Blackout box
   u8g2.setDrawColor(0);
-  u8g2.drawBox(0, 0, visualizer_y, 16);
+  u8g2.drawBox(0, 0, VISUALIZER_Y, 16);
   u8g2.setDrawColor(1);
 
   switch (mode)
@@ -1233,12 +1233,12 @@ String httpGETRequest(const char *serverName)
 
 void drawProgressBar()
 {
-  int boxWidth = (screen_width / pattern_max[mode]);
+  int boxWidth = (SCREEN_WIDTH / pattern_max[mode]);
   if (boxWidth < 4)
   {
     boxWidth = 4;
   }
-  u8g2.drawBox(((float(screen_width - boxWidth) / pattern_max[mode]) * pattern[mode]), 12, boxWidth, 4);
+  u8g2.drawBox(((float(SCREEN_WIDTH - boxWidth) / pattern_max[mode]) * pattern[mode]), 12, boxWidth, 4);
 }
 
 void addGlitter(fract8 chanceOfGlitter)
@@ -1264,7 +1264,7 @@ void plasma(CRGBPalette16 currentPalette, TBlendType currentBlending)
   { // For each of the LED's in the strand, set a brightness based on a wave as follows:
 
     int colorIndex = cubicwave8((k * 23) + thisPhase) / 2 + cos8((k * 15) + thatPhase) / 2; // Create a wave and add a phase change and add another wave with its own phase change.. Hey, you can even change the frequencies if you wish.
-    int thisBright = qsuba(colorIndex, beatsin8(7, 0, 96));                                 // qsub gives it a bit of 'black' dead space by setting sets a minimum value. If colorIndex < current value of beatsin8(), then bright = 0. Otherwise, bright = colorIndex..
+    int thisBright = QSUBA(colorIndex, beatsin8(7, 0, 96));                                 // qsub gives it a bit of 'black' dead space by setting sets a minimum value. If colorIndex < current value of beatsin8(), then bright = 0. Otherwise, bright = colorIndex..
 
     leds[k] = ColorFromPalette(currentPalette, colorIndex, thisBright, currentBlending); // Let's now add the foreground colour.
   }

@@ -88,6 +88,9 @@ CRGB leds[NUM_LEDS];
 CRGB ledsTemp[NUM_LEDS];
 CRGB clr1;
 CRGB clr2;
+double vReal[SAMPLES];
+double vImag[SAMPLES];
+arduinoFFT FFT = arduinoFFT(vReal, vImag, SAMPLES, SAMPLING_FREQ);
 
 String openWeatherMapApiKey = OPEN_WEATHER_API_KEY;
 const char *ssid = WIFI_SSID;
@@ -110,9 +113,6 @@ volatile int peak[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // The l
 int tempBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int oldBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 volatile int bandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-double vReal[SAMPLES];
-double vImag[SAMPLES];
-arduinoFFT FFT = arduinoFFT(vReal, vImag, SAMPLES, SAMPLING_FREQ);
 unsigned long newTime;
 byte knobReading = 0;
 unsigned long tempTime;

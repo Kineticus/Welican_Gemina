@@ -116,7 +116,7 @@ volatile int bandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 unsigned long newTime;
 byte knobReading = 0;
 unsigned long tempTime;
-int menu[10];
+int menu[11];
 int menu_max[11] = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, NUM_FAVORITES}; //Root Menu Items, Game Menu Items, Settings Menu Items
 int menu_cur = 0;
 int runMode = 0;
@@ -649,27 +649,20 @@ void loop()
   fps++; //For tracking frame rate/ debug logging
 
   //Debug Serial Logging
-  /*
-    EVERY_N_MILLISECONDS(1000)
+  
+    EVERY_N_MILLISECONDS(60000)
     {
       Serial.print("FPS: ");
-      Serial.println(fps);
+      Serial.println(fps/60);
       fps = 0;
       Serial.print("IPS: ");
-      Serial.println(fftps);
+      Serial.println(fftps/60);
       fftps = 0;
-      Serial.print("State: ");
+      Serial.print("ICT: ");
       Serial.println(eTaskGetState(inputComputeTask));
-      Serial.print("Minutes: ");
+      Serial.print("MIN: ");
       Serial.println(((millis() / 1000) / 60));
-      Serial.print("Encoder: ");
-      Serial.println(int((abs(encoder.getCount())) % 4));
     }
-  */
-
-  EVERY_N_MILLISECONDS(60000)
-  {
-  }
 
   EVERY_N_MILLISECONDS(200) { gHue++; } // slowly cycle the "base color" through the rainbow
 }

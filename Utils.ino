@@ -102,12 +102,12 @@ void inputCompute(void *parameter)
     updateTime();
 
     updateWeather();
+    
+    fftps++; //Debug, tracking loops per second
+
+    //Serial.println(xPortGetFreeHeapSize()); //How much memory is left in the task heap? If out we get a panic with "Stack canary watchpoint triggered"
+    //vTaskDelay(50); //Give some time back to the scheduler. Normally this task never lets up. Use this to share resousrces better on assigned core.
   }
-
-  fftps++; //Debug, tracking loops per second
-
-  //Serial.println(xPortGetFreeHeapSize()); //How much memory is left in the task heap? If out we get a panic with "Stack canary watchpoint triggered"
-  //vTaskDelay(50); //Give some time back to the scheduler. Normally this task never lets up. Use this to share resousrces better on assigned core.
 }
 
 void drawDebug()
@@ -911,11 +911,11 @@ void newFavoritesMenu()
   //This is a menu with NUM_FAVORITES 'selections', each indicating a favorite slot
   if (menu[menu_cur] < 10)
   {
-    u8g2.setCursor(58, 26);
+    u8g2.setCursor(57, 26);
   }
   else
   {
-    u8g2.setCursor(55, 26);
+    u8g2.setCursor(54, 26);
   }
 
   u8g2.print(menu[menu_cur]);
@@ -1017,34 +1017,6 @@ void smoothOperator()
   }
   else
   {
-
-    /*
-    //Let's compare the snapshot to the new values
-    for (int i = 0; i < NUM_LEDS; i++)
-    {
-      for (int ii = 0; ii < 3; ii++)
-      {
-        if (abs(leds[i][ii] - ledsTemp[i][ii]) >= 10)
-        {
-          if (leds[i][ii] < ledsTemp[i][ii])
-          {
-            if (ledsTemp[i][ii] > 10)
-            {
-              ledsTemp[i][ii] -= 10;
-            }
-          } else if (leds[i][ii] > ledsTemp[i][ii])
-          {
-            if (ledsTemp[i][ii] < 245)
-            {
-              ledsTemp[i][ii] += 10;
-            }
-          }
-        }
-      }      
-      leds[i] = ledsTemp[i];
-    }
-    */
-
     for (int i = 0; i < NUM_LEDS; i++)
     {
       leds[i] = blend(leds[i], ledsTemp[i], interfade * interfade_speed);

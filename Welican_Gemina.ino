@@ -209,7 +209,6 @@ int intensity_b = 734;
 float yoffset = 0.0;
 float yoffsetMAX = 15000;
 float xoffset = 0.0;
-int currSpeed = 10;
 //TO IMPLEMENT
 unsigned long frameRateCounter = 0;
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
@@ -222,6 +221,7 @@ struct Globals
   int temp[3];
   int timeZone;
   int tempValue;
+  int currentSpeed;
 
   ESP32Encoder encoder;
   ESP32Encoder encoder2;
@@ -230,7 +230,7 @@ struct Globals
   double vReal[SAMPLES];
   double vImag[SAMPLES];
 };
-Globals globals = {{}, -5, 0};
+Globals globals = {{}, -5, 0, 10};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
 struct DevEnvironment
 {

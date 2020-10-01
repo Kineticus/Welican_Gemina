@@ -567,7 +567,7 @@ void RainbowFlowSlow(float hSpeed, float colorSpacing)
 
 void RainbowYoffset(float speed, float spacing, bool useFadeDirection)
 {
-  timeinc = (speed * currSpeed);
+  timeinc = (speed * globals.currentSpeed);
   spaceinc = spacing;
 
   if (useFadeDirection)
@@ -628,7 +628,7 @@ void RainbowOneYoffset()
 {
   globalStrings.functionName = "RainbowOneYoffset";
   spaceinc = 0.03;
-  timeinc = (0.000025 * currSpeed);
+  timeinc = (0.000025 * globals.currentSpeed);
   yoffset += timeinc;
   //xoffset += timeinc;
   SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
@@ -637,7 +637,7 @@ void RainbowTwoYoffset()
 {
   globalStrings.functionName = "RainbowTwoYoffset";
   spaceinc = 0.07;
-  timeinc = (0.000025 * currSpeed);
+  timeinc = (0.000025 * globals.currentSpeed);
   yoffset += timeinc;
   //xoffset += timeinc;
   SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
@@ -646,7 +646,7 @@ void RainbowThreeXoffset()
 {
   globalStrings.functionName = "RainbowThreeXoffset";
   spaceinc = 0.07;
-  timeinc = (0.000025 * currSpeed);
+  timeinc = (0.000025 * globals.currentSpeed);
   //yoffset += timeinc;
   xoffset += timeinc;
   SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
@@ -655,7 +655,7 @@ void RainbowFourXoffset()
 {
   globalStrings.functionName = "RainbowFourXoffset";
   spaceinc = 0.03;
-  timeinc = (0.000025 * currSpeed);
+  timeinc = (0.000025 * globals.currentSpeed);
   //yoffset += timeinc;
   xoffset += timeinc;
   SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
@@ -664,7 +664,7 @@ void RainbowBigXoffset()
 {
   globalStrings.functionName = "RainbowBigXoffset";
   spaceinc = 0.12;
-  timeinc = (0.000025 * currSpeed);
+  timeinc = (0.000025 * globals.currentSpeed);
   //yoffset += timeinc;
   xoffset += timeinc;
   SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
@@ -673,7 +673,7 @@ void RainbowBigYoffset()
 {
   globalStrings.functionName = "RainbowBigYoffset";
   spaceinc = 0.12;
-  timeinc = (0.000025 * currSpeed);
+  timeinc = (0.000025 * globals.currentSpeed);
   yoffset += timeinc;
   //xoffset += timeinc;
   SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);

@@ -198,7 +198,7 @@ void sinelonFive()
 // {
 //     globalStrings.functionName = "RainbowOneYoffset";
 //     spaceinc = 0.03;
-//     timeinc = (0.000025 * currSpeed);
+//     timeinc = (0.000025 * globals.currentSpeed);
 //     yoffset += timeinc;
 //     //xoffset += timeinc;
 //     SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
@@ -207,7 +207,7 @@ void sinelonFive()
 // {
 //     globalStrings.functionName = "RainbowTwoYoffset";
 //     spaceinc = 0.07;
-//     timeinc = (0.000025 * currSpeed);
+//     timeinc = (0.000025 * globals.currentSpeed);
 //     yoffset += timeinc;
 //     //xoffset += timeinc;
 //     SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
@@ -216,7 +216,7 @@ void sinelonFive()
 // {
 //     globalStrings.functionName = "RainbowThreeXoffset";
 //     spaceinc = 0.07;
-//     timeinc = (0.000025 * currSpeed);
+//     timeinc = (0.000025 * globals.currentSpeed);
 //     //yoffset += timeinc;
 //     xoffset += timeinc;
 //     SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
@@ -225,7 +225,7 @@ void sinelonFive()
 // {
 //     globalStrings.functionName = "RainbowFourXoffset";
 //     spaceinc = 0.03;
-//     timeinc = (0.000025 * currSpeed);
+//     timeinc = (0.000025 * globals.currentSpeed);
 //     //yoffset += timeinc;
 //     xoffset += timeinc;
 //     SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
@@ -234,7 +234,7 @@ void sinelonFive()
 // {
 //     globalStrings.functionName = "RainbowBigXoffset";
 //     spaceinc = 0.12;
-//     timeinc = (0.000025 * currSpeed);
+//     timeinc = (0.000025 * globals.currentSpeed);
 //     //yoffset += timeinc;
 //     xoffset += timeinc;
 //     SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
@@ -243,7 +243,7 @@ void sinelonFive()
 // {
 //     globalStrings.functionName = "RainbowBigYoffset";
 //     spaceinc = 0.12;
-//     timeinc = (0.000025 * currSpeed);
+//     timeinc = (0.000025 * globals.currentSpeed);
 //     yoffset += timeinc;
 //     //xoffset += timeinc;
 //     SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);

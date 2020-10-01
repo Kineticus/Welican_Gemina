@@ -6,10 +6,10 @@ void inputCompute(void *parameter)
     // Sample the audio pin
     for (int i = 0; i < SAMPLES; i++)
     {
-      newTime = micros();
+      globals.newTime = micros();
       globals.vReal[i] = analogRead(AUDIO_IN_PIN); // A conversion takes about 9.7uS on an ESP32
       globals.vImag[i] = 0;
-      while ((micros() - newTime) < sampling_period_us)
+      while ((micros() - globals.newTime) < sampling_period_us)
       {
         /* chill */
       }
@@ -586,9 +586,9 @@ void convertUnixToTime(time_t t)
 time_t timeConvert(String timeToConvert)
 {
   struct tm tm;
-  char __newTime[sizeof(timeToConvert)];
-  timeToConvert.toCharArray(__newTime, sizeof(__newTime));
-  strptime(__newTime, "%H:%M:%S", &tm);
+  char __createdTime[sizeof(timeToConvert)];
+  timeToConvert.toCharArray(__createdTime, sizeof(__createdTime));
+  strptime(__createdTime, "%H:%M:%S", &tm);
   time_t t = mktime(&tm); // t is now your desired time_t
   return t;
 }

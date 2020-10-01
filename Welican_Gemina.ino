@@ -105,7 +105,6 @@ volatile int peak[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // The l
 int tempBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int oldBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 volatile int bandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-unsigned long newTime;
 byte knobReading = 0;
 unsigned long tempTime;
 int menu[11];
@@ -222,6 +221,7 @@ struct Globals
   int timeZone;
   int tempValue;
   int currentSpeed;
+  unsigned long newTime;
 
   ESP32Encoder encoder;
   ESP32Encoder encoder2;
@@ -230,7 +230,7 @@ struct Globals
   double vReal[SAMPLES];
   double vImag[SAMPLES];
 };
-Globals globals = {{}, -5, 0, 10};
+Globals globals = {{}, -5, 0, 10, 0};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
 struct DevEnvironment
 {
@@ -592,7 +592,7 @@ void loop()
 
   //int tempTime = micros();
   //Wait a moment for the task to finish up
-  //while (micros() < (newTime + 1000)) { /* chill */ }
+  //while (micros() < (globals.newTime + 1000)) { /* chill */ }
 
   //start fft processing again
   //vTaskResume(fftComputeTask);

@@ -103,7 +103,7 @@ void inputCompute(void *parameter)
 
     updateWeather();
 
-    fftps++; //Debug, tracking loops per second
+    devEnv.fftps++; //Debug, tracking loops per second
 
     //Serial.println(xPortGetFreeHeapSize()); //How much memory is left in the task heap? If out we get a panic with "Stack canary watchpoint triggered"
     //vTaskDelay(50); //Give some time back to the scheduler. Normally this task never lets up. Use this to share resousrces better on assigned core.

@@ -99,8 +99,7 @@ const char *ntpServer = "pool.ntp.org";
 String returnText;
 int NUM_FAVORITES = 25; //Max 50, loads all 50 at program load, dynamically assignable
 int encoder_unstick = 0;
-int fps = 0;   //dev, speed tracking for main loop
-int fftps = 0; //dev, speed tracking for fft task
+
 unsigned int sampling_period_us;
 volatile int peak[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // The length of these arrays must be >= NUM_BANDS
 int tempBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -233,6 +232,12 @@ struct Globals
 };
 Globals globals = {{}, -5, 0};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
+struct DevEnvironment
+{
+  int fps;   //dev, speed tracking for main loop
+  int fftps; //dev, speed tracking for fft task
+};
+DevEnvironment devEnv = {0, 0};
 struct GlobalStrings
 {
   String categoryName;
@@ -655,18 +660,18 @@ void loop()
   }
   //FastLED.delay(1000/FRAMES_PER_SECOND);
 
-  fps++; //For tracking frame rate/ debug logging
+  devEnv.fps++; //For tracking frame rate/ debug logging
 
   //Debug Serial Logging
 
   EVERY_N_MILLISECONDS(60000)
   {
     Serial.print("FPS: ");
-    Serial.println(fps / 60);
-    fps = 0;
+    Serial.println(devEnv.fps / 60);
+    devEnv.fps = 0;
     Serial.print("IPS: ");
-    Serial.println(fftps / 60);
-    fftps = 0;
+    Serial.println(devEnv.fftps / 60);
+    devEnv.fftps = 0;
     Serial.print("ICT: ");
     Serial.println(eTaskGetState(inputComputeTask));
     Serial.print("MIN: ");

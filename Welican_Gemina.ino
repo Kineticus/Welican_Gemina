@@ -110,7 +110,6 @@ int favorite_mode[50];    //declare memory for all 50 favorites
 int favorite_pattern[50]; //all are used under the hood
 // basic, music, chill, moving colors, legacy
 int pattern_max[6] = {12, 12, 22, 65, 80, NUM_FAVORITES};
-int pixelNumber = 0;
 unsigned long startMillis;
 unsigned long currentMillis;
 const unsigned long period = 1000;
@@ -217,6 +216,7 @@ struct Globals
   int currentMenu;
   int modeMax;
   int tempPattern;
+  int pixelNumber;
 
   ESP32Encoder encoder;
   ESP32Encoder encoder2;
@@ -225,7 +225,7 @@ struct Globals
   double vReal[SAMPLES];
   double vImag[SAMPLES];
 };
-Globals globals = {{}, -5, 0, 10, 0, 0, 0, 0, 0, MAX_MODES, 0};
+Globals globals = {{}, -5, 0, 10, 0, 0, 0, 0, 0, MAX_MODES, 0, 0};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
 
 struct DevEnvironment

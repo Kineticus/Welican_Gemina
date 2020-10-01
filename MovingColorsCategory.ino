@@ -914,14 +914,14 @@ void Mover(uint8_t thisfade, uint8_t hue)
   if (currentMillis - startMillis >= beatsin8(15, 25, 100))
   {
     startMillis = currentMillis;
-    leds[pixelNumber] += CHSV(hue, 255, 255);
-    leds[(pixelNumber + 5) % NUM_LEDS] += CHSV(hue + 85, 255, 255);   // We use modulus so that the location is between 0 and NUM_LEDS
-    leds[(pixelNumber + 10) % NUM_LEDS] += CHSV(hue + 170, 255, 255); // Same here.
-    fadeToBlackBy(leds, NUM_LEDS, thisfade);                          // Low values = slower fade.
+    leds[globals.pixelNumber] += CHSV(hue, 255, 255);
+    leds[(globals.pixelNumber + 5) % NUM_LEDS] += CHSV(hue + 85, 255, 255);   // We use modulus so that the location is between 0 and NUM_LEDS
+    leds[(globals.pixelNumber + 10) % NUM_LEDS] += CHSV(hue + 170, 255, 255); // Same here.
+    fadeToBlackBy(leds, NUM_LEDS, thisfade);                                  // Low values = slower fade.
 
-    if (++pixelNumber >= NUM_LEDS)
+    if (++globals.pixelNumber >= NUM_LEDS)
     {
-      pixelNumber = 0;
+      globals.pixelNumber = 0;
     }
   }
 }
@@ -990,9 +990,9 @@ void MeteorRain(byte red, byte green, byte blue, byte meteorSize, byte meteorTra
     // draw meteor
     for (int j = 0; j < meteorSize; j++)
     {
-      if ((pixelNumber - j < NUM_LEDS) && (pixelNumber - j >= 0))
+      if ((globals.pixelNumber - j < NUM_LEDS) && (globals.pixelNumber - j >= 0))
       {
-        setPixel(pixelNumber - j, red, green, blue);
+        setPixel(globals.pixelNumber - j, red, green, blue);
       }
     }
 
@@ -1009,14 +1009,14 @@ void Meteor(uint8_t red, uint8_t green, uint8_t blue)
   {
     startMillis = currentMillis;
 
-    leds[pixelNumber] = CRGB(red, green, blue);
+    leds[globals.pixelNumber] = CRGB(red, green, blue);
     blur1d(leds, NUM_LEDS, beatsin8(7, 20, 80));
 
     FastLED.show();
-    leds[pixelNumber] = CRGB::Black;
-    if (++pixelNumber >= NUM_LEDS)
+    leds[globals.pixelNumber] = CRGB::Black;
+    if (++globals.pixelNumber >= NUM_LEDS)
     {
-      pixelNumber = 0;
+      globals.pixelNumber = 0;
     }
   }
 }

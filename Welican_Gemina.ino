@@ -10,22 +10,19 @@
  * Matt Taylor (maylortaylor@gmail.com)
  * 
  **************************************************************************/
-#define VERSION_INFO "Build 0.420 - 09/16/20"
 
+// ----------------------------------------------------------------
+// INCLUDEs
+// ----------------------------------------------------------------
+#include <FastLED.h>
 #include "images.h"
-
 //SAVE SETTINGS
 #include "EEPROM.h"
-
 //SCREEN
 #include <Wire.h>
 #include <U8g2lib.h>
-
-U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
-
 //ENCODER
 #include <ESP32Encoder.h>
-
 //WiFi, Web Server, and storage for web assets
 #include <WiFi.h>
 // #include <Bridge.h>
@@ -38,7 +35,58 @@ U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
 #include "SPIFFS.h"
 #include "time.h"
 #include "WifiCredentials.h"
+//AUDIO INPUT
+#include <arduinoFFT.h>
+// ----------------------------------------------------------------
+// DEFINEs
+// ----------------------------------------------------------------
+#define VERSION_INFO "Build 0.420 - 09/16/20"
+#define knob1C 25 //Program
+#define knob2C 4  //Brightness 14
+#define maxModes 5
 
+#define SAMPLES 512         // Must be a power of 2. FAST 256 (40fps), NORMAL 512 (20fps), ACCURATE 1024 (10fps)
+#define SAMPLING_FREQ 40000 // Hz, must be 40000 or less due to ADC conversion time. Determines maximum frequency that can be analysed by the FFT Fmax=sampleF/2.
+#define AMPLITUDE 3000      // Depending on your audio source level, you may need to alter this value. Can be used as a 'sensitivity' control.
+#define AUDIO_IN_PIN 35     // Signal in on this pin
+#define NUM_BANDS 8         // To change this, you will need to change the bunch of if statements describing the mapping from bins to bands
+#define NOISE 500           // Used as a crude noise filter, values below this are ignored
+#define TOP 32
+#define FRAMES_PER_SECOND 120
+
+#define screen_width 127
+#define screen_height 63
+
+#define maxStars 32
+
+#define qsubd(x, b) ((x > b) ? b : 0)     // Digital unsigned subtraction macro. if result <0, then => 0. Otherwise, take on fixed value.
+#define qsuba(x, b) ((x > b) ? x - b : 0) // Analog Unsigned subtraction macro. if result <0, then => 0
+
+// COOLING: How much does the air cool as it rises?
+// Less cooling = taller flames.  More cooling = shorter flames.
+// Default 50, suggested range 20-100
+#define COOLING 90
+
+// SPARKING: What chance (out of 255) is there that a new spark will be lit?
+// Higher chance = more roaring fire.  Lower chance = more flickery fire.
+// Default 120, suggested range 50-200.
+#define SPARKING 50
+
+#if defined(FASTLED_VERSION) && (FASTLED_VERSION < 3001000)
+#warning "Requires FastLED 3.1 or later; check github for latest code."
+#endif
+
+#define DATA_PIN 18
+#define DATA_PIN_A 12
+//#define CLK_PIN   4
+#define LED_TYPE WS2811
+#define COLOR_ORDER RGB
+#define NUM_LEDS 200
+#define visualizer_x 48
+#define visualizer_y 128
+#define statusLED 0
+
+U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
 String openWeatherMapApiKey = OPEN_WEATHER_API_KEY;
 struct OpenWeatherSettings
 {
@@ -68,22 +116,8 @@ OpenWeatherObject weather;
 ESP32Encoder encoder;
 ESP32Encoder encoder2;
 
-#define knob1C 25 //Program
-#define knob2C 4  //Brightness 14
-
 int tempValue = 0;
 int encoder_unstick = 0;
-
-//AUDIO INPUT
-#include <arduinoFFT.h>
-
-#define SAMPLES 512         // Must be a power of 2. FAST 256 (40fps), NORMAL 512 (20fps), ACCURATE 1024 (10fps)
-#define SAMPLING_FREQ 40000 // Hz, must be 40000 or less due to ADC conversion time. Determines maximum frequency that can be analysed by the FFT Fmax=sampleF/2.
-#define AMPLITUDE 3000      // Depending on your audio source level, you may need to alter this value. Can be used as a 'sensitivity' control.
-#define AUDIO_IN_PIN 35     // Signal in on this pin
-#define NUM_BANDS 8         // To change this, you will need to change the bunch of if statements describing the mapping from bins to bands
-#define NOISE 500           // Used as a crude noise filter, values below this are ignored
-#define TOP 32
 
 int fps = 0;   //dev, speed tracking for main loop
 int fftps = 0; //dev, speed tracking for fft task
@@ -136,7 +170,6 @@ int menu_cur = 0;
 
 int runMode = 0;
 
-#define maxModes 5
 int mode = 0;
 int mode_max = maxModes;
 int pattern[6];
@@ -151,34 +184,14 @@ unsigned long startMillis;
 unsigned long currentMillis;
 const unsigned long period = 1000;
 
-#define screen_width 127
-#define screen_height 63
-
-#define qsubd(x, b) ((x > b) ? b : 0)     // Digital unsigned subtraction macro. if result <0, then => 0. Otherwise, take on fixed value.
-#define qsuba(x, b) ((x > b) ? x - b : 0) // Analog Unsigned subtraction macro. if result <0, then => 0
-
 int saveTime = 0;
 
 //LEDs
-#define statusLED 0
 float breath = 0;
 int breathing = 1;
-#include <FastLED.h>
 
 FASTLED_USING_NAMESPACE
 
-#if defined(FASTLED_VERSION) && (FASTLED_VERSION < 3001000)
-#warning "Requires FastLED 3.1 or later; check github for latest code."
-#endif
-
-#define DATA_PIN 18
-#define DATA_PIN_A 12
-//#define CLK_PIN   4
-#define LED_TYPE WS2811
-#define COLOR_ORDER RGB
-#define NUM_LEDS 200
-#define visualizer_x 48
-#define visualizer_y 128
 CRGB leds[NUM_LEDS];
 CRGB ledsTemp[NUM_LEDS];
 int interfade = 18; //set this to 0 to disable fade in on boot. Set to 25 for fade in.
@@ -277,16 +290,6 @@ bool gReverseDirection = false; //false = center outward, true = from ends inwar
 uint8_t count;
 bool sizeUpdate;
 
-// COOLING: How much does the air cool as it rises?
-// Less cooling = taller flames.  More cooling = shorter flames.
-// Default 50, suggested range 20-100
-#define COOLING 90
-
-// SPARKING: What chance (out of 255) is there that a new spark will be lit?
-// Higher chance = more roaring fire.  Lower chance = more flickery fire.
-// Default 120, suggested range 50-200.
-#define SPARKING 50
-
 int flowDirection = -1;      // Use either 1 or -1 to set flow direction
 uint16_t cycleLength = 1500; // Lover values = continuous flow, higher values = distinct pulses.
 uint16_t pulseLength = 150;  // How long the pulse takes to fade out.  Higher value is longer.
@@ -321,7 +324,6 @@ float xoffset = 0.0;
 int currSpeed = 10;
 
 //TO IMPLEMENT
-#define FRAMES_PER_SECOND 120
 unsigned long frameRateCounter = 0;
 
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
@@ -352,8 +354,6 @@ int dvdBounce3_vy = 1;
 int brightness = 0;
 int brightness_temp = 0;
 unsigned long brightness_debounce = 0;
-
-#define maxStars 32
 
 int star_x[maxStars];
 int star_xx[maxStars];

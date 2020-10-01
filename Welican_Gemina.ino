@@ -242,16 +242,24 @@ int dvdBounce3_vy = 1;
 int brightness = 0;
 int brightness_temp = 0;
 unsigned long brightness_debounce = 0;
-int star_x[MAX_STARS];
-int star_xx[MAX_STARS];
-int star_y[MAX_STARS];
-int star_yy[MAX_STARS];
-int star_z[MAX_STARS];
+// int star_x[MAX_STARS];
+// int star_xx[MAX_STARS];
+// int star_y[MAX_STARS];
+// int star_yy[MAX_STARS];
+// int star_z[MAX_STARS];
 
 // ----------------------------------------------------------------
 // STRUCTs
 // ----------------------------------------------------------------
-
+struct StarModel
+{
+  int x[MAX_STARS];
+  int xx[MAX_STARS];
+  int y[MAX_STARS];
+  int yy[MAX_STARS];
+  int z[MAX_STARS];
+};
+StarModel star;
 struct Globals
 {
   int temp[3];
@@ -453,11 +461,11 @@ void setup()
   //Seed variables
   for (int i = 0; i < MAX_STARS; i++)
   {
-    star_x[i] = random(0, VISUALIZER_X);
-    star_xx[i] = random(1, 4);
-    star_y[i] = random(0, VISUALIZER_Y);
-    star_yy[i] = random(1, 4);
-    star_z[i] = random(1, 4);
+    star.x[i] = random(0, VISUALIZER_X);
+    star.xx[i] = random(1, 4);
+    star.y[i] = random(0, VISUALIZER_Y);
+    star.yy[i] = random(1, 4);
+    star.z[i] = random(1, 4);
   }
 
   //For troubleshooting
@@ -649,20 +657,20 @@ void loop()
   fps++; //For tracking frame rate/ debug logging
 
   //Debug Serial Logging
-  
-    EVERY_N_MILLISECONDS(60000)
-    {
-      Serial.print("FPS: ");
-      Serial.println(fps/60);
-      fps = 0;
-      Serial.print("IPS: ");
-      Serial.println(fftps/60);
-      fftps = 0;
-      Serial.print("ICT: ");
-      Serial.println(eTaskGetState(inputComputeTask));
-      Serial.print("MIN: ");
-      Serial.println(((millis() / 1000) / 60));
-    }
+
+  EVERY_N_MILLISECONDS(60000)
+  {
+    Serial.print("FPS: ");
+    Serial.println(fps / 60);
+    fps = 0;
+    Serial.print("IPS: ");
+    Serial.println(fftps / 60);
+    fftps = 0;
+    Serial.print("ICT: ");
+    Serial.println(eTaskGetState(inputComputeTask));
+    Serial.print("MIN: ");
+    Serial.println(((millis() / 1000) / 60));
+  }
 
   EVERY_N_MILLISECONDS(200) { gHue++; } // slowly cycle the "base color" through the rainbow
 }

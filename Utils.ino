@@ -506,7 +506,7 @@ void drawTop()
   switch (mode)
   {
   case 0:
-    u8g2.drawXBMP(0, 0, star_width, star_height, star);
+    u8g2.drawXBMP(0, 0, STAR_WIDTH, STAR_HEIGHT, starshape);
     break;
   case 1:
     u8g2.drawXBMP(0, 0, wave_width, wave_height, wave);
@@ -961,7 +961,7 @@ void newFavoritesMenu()
   switch (favorite_mode[menu[menu_cur]])
   {
   case 0:
-    u8g2.drawXBMP(2, 53, star_width, star_height, star);
+    u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_HEIGHT, starshape);
     break;
   case 1:
     u8g2.drawXBMP(2, 53, wave_width, wave_height, wave);

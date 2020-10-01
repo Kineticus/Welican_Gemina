@@ -226,44 +226,44 @@ void gravityWell()
 {
   for (int i = 0; i < MAX_STARS; i++)
   {
-    if (star_xx[i] > -7)
+    if (star.xx[i] > -7)
     {
-      star_xx[i] -= 1;
+      star.xx[i] -= 1;
     }
 
-    star_y[i] += star_yy[i];
-    star_x[i] += star_xx[i];
+    star.y[i] += star.yy[i];
+    star.x[i] += star.xx[i];
 
-    if (star_x[i] < 0)
+    if (star.x[i] < 0)
     {
-      if (star_xx[i] == -1)
+      if (star.xx[i] == -1)
       {
-        star_xx[i] = 1;
+        star.xx[i] = 1;
       }
       else
       {
-        star_xx[i] = abs(star_xx[i]) - 1;
+        star.xx[i] = abs(star.xx[i]) - 1;
       }
-      star_x[i] = 0;
+      star.x[i] = 0;
     }
 
-    if (star_x[i] < 0)
+    if (star.x[i] < 0)
     {
-      star_xx[i] = abs(star_xx[i]);
+      star.xx[i] = abs(star.xx[i]);
     }
 
-    if (((star_y[i] > VISUALIZER_Y) || (star_y[i] < 0)) || ((star_yy[i] == 0) && (star_x[i] <= 0))) // || (star_x[i] > VISUALIZER_X) || (star_x[i] < 0)
+    if (((star.y[i] > VISUALIZER_Y) || (star.y[i] < 0)) || ((star.yy[i] == 0) && (star.x[i] <= 0))) // || (star.x[i] > VISUALIZER_X) || (star.x[i] < 0)
     {
-      //star_y[i] = random(0, VISUALIZER_Y);
-      //star_x[i] = random(0, VISUALIZER_X);
-      star_y[i] = VISUALIZER_Y / 2;
-      star_x[i] = 0;
-      star_yy[i] = random(-4, 4);
-      star_xx[i] = random(4, 10);
-      star_z[i] = random(1, 5);
+      //star.y[i] = random(0, VISUALIZER_Y);
+      //star.x[i] = random(0, VISUALIZER_X);
+      star.y[i] = VISUALIZER_Y / 2;
+      star.x[i] = 0;
+      star.yy[i] = random(-4, 4);
+      star.xx[i] = random(4, 10);
+      star.z[i] = random(1, 5);
     }
 
-    u8g2.drawDisc(star_y[i], (VISUALIZER_X - star_x[i]) + (14 - star_z[i]), star_z[i], U8G2_DRAW_ALL);
+    u8g2.drawDisc(star.y[i], (VISUALIZER_X - star.x[i]) + (14 - star.z[i]), star.z[i], U8G2_DRAW_ALL);
   }
 }
 
@@ -332,14 +332,14 @@ void movingCircles()
 {
   for (int i = 0; i < 8; i++)
   {
-    star_y[i] += star_z[i];
-    if (star_y[i] > VISUALIZER_Y)
+    star.y[i] += star.z[i];
+    if (star.y[i] > VISUALIZER_Y)
     {
-      star_y[i] = 0;
-      star_x[i] = random(0, VISUALIZER_X);
-      star_yy[i] = random(1, 4);
+      star.y[i] = 0;
+      star.x[i] = random(0, VISUALIZER_X);
+      star.yy[i] = random(1, 4);
     }
-    u8g2.drawDisc(star_y[i], star_x[i] + 18, 2, U8G2_DRAW_ALL);
+    u8g2.drawDisc(star.y[i], star.x[i] + 18, 2, U8G2_DRAW_ALL);
   }
 }
 
@@ -379,7 +379,7 @@ void starBounce()
   {
     dvdBounce_vy = 1;
   }
-  if (dvdBounce_y >= (VISUALIZER_Y - star_width))
+  if (dvdBounce_y >= (VISUALIZER_Y - STAR_WIDTH))
   {
     dvdBounce_vy = -1;
   }
@@ -388,7 +388,7 @@ void starBounce()
   {
     dvdBounce_vx = 1;
   }
-  if (dvdBounce_x >= (VISUALIZER_X - star_height))
+  if (dvdBounce_x >= (VISUALIZER_X - STAR_HEIGHT))
   {
     dvdBounce_vx = -1;
   }
@@ -400,7 +400,7 @@ void starBounce()
   {
     dvdBounce2_vy = 1;
   }
-  if (dvdBounce2_y >= (VISUALIZER_Y - star_width))
+  if (dvdBounce2_y >= (VISUALIZER_Y - STAR_WIDTH))
   {
     dvdBounce2_vy = -1;
   }
@@ -409,7 +409,7 @@ void starBounce()
   {
     dvdBounce2_vx = 1;
   }
-  if (dvdBounce2_x >= (VISUALIZER_X - star_height))
+  if (dvdBounce2_x >= (VISUALIZER_X - STAR_HEIGHT))
   {
     dvdBounce2_vx = -1;
   }
@@ -421,7 +421,7 @@ void starBounce()
   {
     dvdBounce3_vy = 1;
   }
-  if (dvdBounce3_y >= (VISUALIZER_Y - star_width))
+  if (dvdBounce3_y >= (VISUALIZER_Y - STAR_WIDTH))
   {
     dvdBounce3_vy = -1;
   }
@@ -430,12 +430,12 @@ void starBounce()
   {
     dvdBounce3_vx = 1;
   }
-  if (dvdBounce3_x >= (VISUALIZER_X - star_height))
+  if (dvdBounce3_x >= (VISUALIZER_X - STAR_HEIGHT))
   {
     dvdBounce3_vx = -1;
   }
 
-  u8g2.drawXBMP(dvdBounce_y, dvdBounce_x + 16, star_width, star_height, star);
-  u8g2.drawXBMP(dvdBounce2_y, dvdBounce2_x + 16, star_width, star_height, star);
-  u8g2.drawXBMP(dvdBounce3_y, dvdBounce3_x + 16, star_width, star_height, star);
+  u8g2.drawXBMP(dvdBounce_y, dvdBounce_x + 16, STAR_WIDTH, STAR_HEIGHT, starshape);
+  u8g2.drawXBMP(dvdBounce2_y, dvdBounce2_x + 16, STAR_WIDTH, STAR_HEIGHT, starshape);
+  u8g2.drawXBMP(dvdBounce3_y, dvdBounce3_x + 16, STAR_WIDTH, STAR_HEIGHT, starshape);
 }

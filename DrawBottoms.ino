@@ -345,97 +345,97 @@ void movingCircles()
 
 void dvdBounce()
 {
-  dvdBounce_y += dvdBounce_vy;
-  dvdBounce_x += dvdBounce_vx;
+  dvd1.y += dvd1.vy;
+  dvd1.x += dvd1.vx;
 
-  if (dvdBounce_y <= 0)
+  if (dvd1.y <= 0)
   {
-    dvdBounce_vy = 1;
+    dvd1.vy = 1;
   }
-  if (dvdBounce_y >= (VISUALIZER_Y - DVD_width))
+  if (dvd1.y >= (VISUALIZER_Y - DVD_width))
   {
-    dvdBounce_vy = -1;
-  }
-
-  if (dvdBounce_x <= 0)
-  {
-    dvdBounce_vx = 1;
-  }
-  if (dvdBounce_x >= (VISUALIZER_X - DVD_height))
-  {
-    dvdBounce_vx = -1;
+    dvd1.vy = -1;
   }
 
-  //u8g2.drawDisc(dvdBounce_y, dvdBounce_x + 18, 2, U8G2_DRAW_ALL);
-  u8g2.drawXBMP(dvdBounce_y, dvdBounce_x + 16, DVD_width, DVD_height, DVD);
+  if (dvd1.x <= 0)
+  {
+    dvd1.vx = 1;
+  }
+  if (dvd1.x >= (VISUALIZER_X - DVD_height))
+  {
+    dvd1.vx = -1;
+  }
+
+  //u8g2.drawDisc(dvd1.y, dvd1.x + 18, 2, U8G2_DRAW_ALL);
+  u8g2.drawXBMP(dvd1.y, dvd1.x + 16, DVD_width, DVD_height, DVD);
 }
 
 void starBounce()
 {
-  dvdBounce_y += dvdBounce_vy;
-  dvdBounce_x += dvdBounce_vx;
+  dvd1.y += dvd1.vy;
+  dvd1.x += dvd1.vx;
 
-  if (dvdBounce_y <= 0)
+  if (dvd1.y <= 0)
   {
-    dvdBounce_vy = 1;
+    dvd1.vy = 1;
   }
-  if (dvdBounce_y >= (VISUALIZER_Y - STAR_WIDTH))
+  if (dvd1.y >= (VISUALIZER_Y - STAR_WIDTH))
   {
-    dvdBounce_vy = -1;
-  }
-
-  if (dvdBounce_x <= 0)
-  {
-    dvdBounce_vx = 1;
-  }
-  if (dvdBounce_x >= (VISUALIZER_X - STAR_HEIGHT))
-  {
-    dvdBounce_vx = -1;
+    dvd1.vy = -1;
   }
 
-  dvdBounce2_y += dvdBounce2_vy;
-  dvdBounce2_x += dvdBounce2_vx;
-
-  if (dvdBounce2_y <= 0)
+  if (dvd1.x <= 0)
   {
-    dvdBounce2_vy = 1;
+    dvd1.vx = 1;
   }
-  if (dvdBounce2_y >= (VISUALIZER_Y - STAR_WIDTH))
+  if (dvd1.x >= (VISUALIZER_X - STAR_HEIGHT))
   {
-    dvdBounce2_vy = -1;
+    dvd1.vx = -1;
   }
 
-  if (dvdBounce2_x <= 0)
+  dvd2.y += dvd2.vy;
+  dvd2.x += dvd2.vx;
+
+  if (dvd2.y <= 0)
   {
-    dvdBounce2_vx = 1;
+    dvd2.vy = 1;
   }
-  if (dvdBounce2_x >= (VISUALIZER_X - STAR_HEIGHT))
+  if (dvd2.y >= (VISUALIZER_Y - STAR_WIDTH))
   {
-    dvdBounce2_vx = -1;
+    dvd2.vy = -1;
   }
 
-  dvdBounce3_y += dvdBounce3_vy;
-  dvdBounce3_x += dvdBounce3_vx;
-
-  if (dvdBounce3_y <= 0)
+  if (dvd2.x <= 0)
   {
-    dvdBounce3_vy = 1;
+    dvd2.vx = 1;
   }
-  if (dvdBounce3_y >= (VISUALIZER_Y - STAR_WIDTH))
+  if (dvd2.x >= (VISUALIZER_X - STAR_HEIGHT))
   {
-    dvdBounce3_vy = -1;
+    dvd2.vx = -1;
   }
 
-  if (dvdBounce3_x <= 0)
+  dvd3.y += dvd3.vy;
+  dvd3.x += dvd3.vx;
+
+  if (dvd3.y <= 0)
   {
-    dvdBounce3_vx = 1;
+    dvd3.vy = 1;
   }
-  if (dvdBounce3_x >= (VISUALIZER_X - STAR_HEIGHT))
+  if (dvd3.y >= (VISUALIZER_Y - STAR_WIDTH))
   {
-    dvdBounce3_vx = -1;
+    dvd3.vy = -1;
   }
 
-  u8g2.drawXBMP(dvdBounce_y, dvdBounce_x + 16, STAR_WIDTH, STAR_HEIGHT, starshape);
-  u8g2.drawXBMP(dvdBounce2_y, dvdBounce2_x + 16, STAR_WIDTH, STAR_HEIGHT, starshape);
-  u8g2.drawXBMP(dvdBounce3_y, dvdBounce3_x + 16, STAR_WIDTH, STAR_HEIGHT, starshape);
+  if (dvd3.x <= 0)
+  {
+    dvd3.vx = 1;
+  }
+  if (dvd3.x >= (VISUALIZER_X - STAR_HEIGHT))
+  {
+    dvd3.vx = -1;
+  }
+
+  u8g2.drawXBMP(dvd1.y, dvd1.x + 16, STAR_WIDTH, STAR_HEIGHT, starshape);
+  u8g2.drawXBMP(dvd2.y, dvd2.x + 16, STAR_WIDTH, STAR_HEIGHT, starshape);
+  u8g2.drawXBMP(dvd3.y, dvd3.x + 16, STAR_WIDTH, STAR_HEIGHT, starshape);
 }

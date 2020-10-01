@@ -219,25 +219,6 @@ String functionName = "";
 char category_name_out_str[20];
 char function_name_out_str[20];
 int testValue = 30;
-//VISUALIZERS
-int dvdBounce_x = random(0, 32);
-int dvdBounce_y = random(0, 32);
-int dvdBounce_vx = 1;
-int dvdBounce_vy = 1;
-int dvdBounce2_x = random(0, 32);
-int dvdBounce2_y = random(0, 32);
-int dvdBounce2_vx = 1;
-int dvdBounce2_vy = 1;
-int dvdBounce3_x = random(0, 32);
-int dvdBounce3_y = random(0, 32);
-int dvdBounce3_vx = 1;
-int dvdBounce3_vy = 1;
-
-// int star_x[MAX_STARS];
-// int star_xx[MAX_STARS];
-// int star_y[MAX_STARS];
-// int star_yy[MAX_STARS];
-// int star_z[MAX_STARS];
 
 // ----------------------------------------------------------------
 // STRUCTs
@@ -273,6 +254,16 @@ struct StarModel
   int z[MAX_STARS];
 };
 StarModel star;
+struct DvdModel
+{
+  int x;
+  int y;
+  int vx;
+  int vy;
+};
+DvdModel dvd1 = {random(0, 32), random(0, 32), 1, 1};
+DvdModel dvd2 = {random(0, 32), random(0, 32), 1, 1};
+DvdModel dvd3 = {random(0, 32), random(0, 32), 1, 1};
 
 //GAMES
 struct Player

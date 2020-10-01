@@ -115,7 +115,6 @@ int pattern_max[6] = {12, 12, 22, 65, 80, NUM_FAVORITES};
 
 //LEDs
 float breath = 0;
-int breathing = 1;
 
 /***********************************************************
   Simplex Noise Variable Declaration
@@ -150,14 +149,12 @@ float val = valueMin;                                    // Do Not Edit
 uint8_t hueDelta = hueA - hueB;                          // Do Not Edit
 static float delta = (valueMax - valueMin) / 2.35040238; // Do Not Edit
 boolean moving = 1;
-uint8_t pos;                    // stores a position for color being blended in
-int8_t advance;                 // Stores the advance amount
-uint8_t colorStorage;           // Stores a hue color.
-uint8_t posR, posG, posB;       // positions of moving R,G,B dots
-bool gReverseDirection = false; //false = center outward, true = from ends inward
+uint8_t pos;              // stores a position for color being blended in
+int8_t advance;           // Stores the advance amount
+uint8_t colorStorage;     // Stores a hue color.
+uint8_t posR, posG, posB; // positions of moving R,G,B dots
 uint8_t count;
 bool sizeUpdate;
-int flowDirection = -1;      // Use either 1 or -1 to set flow direction
 uint16_t cycleLength = 1500; // Lover values = continuous flow, higher values = distinct pulses.
 uint16_t pulseLength = 150;  // How long the pulse takes to fade out.  Higher value is longer.
 uint16_t pulseOffset = 200;  // Delay before second pulse.  Higher value is more delay.
@@ -184,9 +181,6 @@ int intensity_b = 734;
 float yoffset = 0.0;
 float yoffsetMAX = 15000;
 float xoffset = 0.0;
-//TO IMPLEMENT
-unsigned long frameRateCounter = 0;
-uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 
 // ----------------------------------------------------------------
 // STRUCTs
@@ -220,8 +214,9 @@ struct DevEnvironment
 {
   int fps;   //dev, speed tracking for main loop
   int fftps; //dev, speed tracking for fft task
+  int breathing;
 };
-DevEnvironment devEnv = {0, 0};
+DevEnvironment devEnv = {0, 0, 1};
 
 struct GlobalStrings
 {
@@ -262,6 +257,14 @@ struct GlobalLED
   int fadeDirectionHTemp; // 1 or 0, positive or negative
 };
 GlobalLED globalLED = {18, 18, 14, 0, 0, 0};
+
+struct PatternSettings
+{
+  uint8_t gHue;           // rotating "base color" used by many of the patterns
+  int flowDirection;      // Use either 1 or -1 to set flow direction
+  bool gReverseDirection; //false = center outward, true = from ends inward
+};
+PatternSettings patternSettings = {0, -1, false};
 
 struct Brightness
 {
@@ -609,7 +612,7 @@ void loop()
   u8g2.sendBuffer();
 
   //future toggle of breathing indicator vs static
-  if (breathing == 1)
+  if (devEnv.breathing == 1)
   {
     breath = (exp(sin(millis() / 4200.0 * PI)) - 0.36787944) * 108.0;
     breath = breath / 2;

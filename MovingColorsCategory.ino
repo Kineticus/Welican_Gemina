@@ -146,7 +146,7 @@ void moving_colors_category(int patternMode)
     break;
   case 30:
     globalStrings.functionName = "Fire 3";
-    gReverseDirection = true;
+    patternSettings.gReverseDirection = true;
     FireHalfStrip(); // draw fire data to leds_temp
 
     mirror2ndHalf(); // copy and mirror data from leds_temp to leds
@@ -556,7 +556,7 @@ void HeartBeat(uint8_t bloodHue, uint8_t bloodSat)
 {
   for (int i = 0; i < NUM_LEDS; i++)
   {
-    uint8_t bloodVal = sumPulse((5 / NUM_LEDS / 2) + (NUM_LEDS / 2) * i * flowDirection);
+    uint8_t bloodVal = sumPulse((5 / NUM_LEDS / 2) + (NUM_LEDS / 2) * i * patternSettings.flowDirection);
     leds[i] = CHSV(bloodHue, bloodSat, bloodVal);
   }
 }
@@ -662,7 +662,7 @@ void mirror2ndHalf()
 {
   //copy and mirror pixel data from leds_temp to leds array.
 
-  if (gReverseDirection == false)
+  if (patternSettings.gReverseDirection == false)
   { //false is center outward
     for (int i = 0; i < NUM_LEDS / 2; i++)
     {

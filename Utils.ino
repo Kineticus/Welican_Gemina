@@ -1501,7 +1501,7 @@ void confettiCustom(int saturation, int value, int random)
   // random colored speckles that blink in and fade smoothly
   fadeToBlackBy(leds, NUM_LEDS, 10);
   int pos = random16(NUM_LEDS);
-  leds[pos] += CHSV(gHue + random8(random), saturation, value);
+  leds[pos] += CHSV(patternSettings.gHue + random8(random), saturation, value);
 }
 
 void sinelonCustom(int saturation, int value, int speed, int fadeBy)

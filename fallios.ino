@@ -28,11 +28,11 @@ void fallios_game()
         u8g2.drawPixel(fallios_tunnel_2[i - 1], i - 1);
     }
 
-    playerX += playerY;
-    playerY = 0;
+    player.X += player.Y;
+    player.Y = 0;
 
-    //Draw the player
-    u8g2.drawDisc(playerX, fallios.Y, 2, U8G2_DRAW_ALL);
+    //Draw the player.
+    u8g2.drawDisc(player.X, fallios.Y, 2, U8G2_DRAW_ALL);
 
     //increment simplex noise for tunnel generation
     fallios.tunnelGenerator += .015;
@@ -68,8 +68,8 @@ void fallios_game()
     //Store the current simplex noise point to compare next loop
     fallios.motionHistory = fallios.motion;
 
-    //Collision detection, needs padding as player object is more than 1 pixel wide
-    if ((playerX > fallios_tunnel_2[fallios.Y] - 3) || (playerX < fallios_tunnel_1[fallios.Y] + 3))
+    //Collision detection, needs padding as player. object is more than 1 pixel wide
+    if ((player.X > fallios_tunnel_2[fallios.Y] - 3) || (player.X < fallios_tunnel_1[fallios.Y] + 3))
     {
         //Place the cursor and draw some game over message
         u8g2.setCursor(8, screen_height / 1.5);
@@ -116,9 +116,9 @@ void fallios_reset()
     //Current score is back to 0
     fallios.score = 0;
 
-    //Player to the middle of the screen
-    playerX = screen_width / 2;
-    playerY = 0;
+    //player. to the middle of the screen
+    player.X = screen_width / 2;
+    player.Y = 0;
 
     //And not far from the top
     fallios.Y = 8;

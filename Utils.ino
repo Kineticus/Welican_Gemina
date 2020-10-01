@@ -291,13 +291,13 @@ void updateEncoders()
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
       tempValue -= 4;
       knob1.temp += 4;
-      playerX += 4;
+      player.X += 4;
     }
     while (tempValue <= -4)
     {
       tempValue += 4;
       knob1.temp -= 4;
-      playerX -= 4;
+      player.X -= 4;
     }
   }
 
@@ -374,12 +374,12 @@ void updateEncoders()
     while (tempValue > 0)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
       tempValue -= 1;
-      playerY += 1;
+      player.Y += 1;
     }
     while (tempValue < 0)
     {
       tempValue += 1;
-      playerY -= 1;
+      player.Y -= 1;
     }
   }
 }

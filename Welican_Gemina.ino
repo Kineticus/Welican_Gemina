@@ -135,43 +135,6 @@ CRGB ledsTemp[NUM_LEDS];
 int interfade = 18; //set this to 0 to disable fade in on boot. Set to 25 for fade in.
 int interfade_max = 18;
 int interfade_speed = 14;
-//GAMES
-int playerX = 64;
-int playerY = 8;
-//FALLIOS
-struct Fallios
-{
-  unsigned int score;
-  unsigned int score_top;
-  int motion;
-  int motionHistory;
-  int Y;
-  float tunnelGenerator;
-};
-Fallios fallios = {0, 0, 0, 0, 8, 0};
-
-byte fallios_wall[64];
-byte fallios_wallDistance[64];
-int fallios_tunnel_1[screen_height + 1];
-int fallios_tunnel_2[screen_height + 1];
-int fallios_tunnelWidth = screen_width / 2;
-
-//BLOCKBREAKER
-struct BlockBreaker
-{
-  int score;
-  int ballX;
-  int ballY;
-  int ballXvel;
-  int ballYvel;
-  int ballWidth;
-  int paddleHeight;
-  int paddleWidth;
-  int message;
-  int messageTimer;
-  int running;
-};
-BlockBreaker blockBreaker = {0, 0, 0, 0, 0, 4, 2, 16, 0, 0, 0};
 
 /***********************************************************
   Simplex Noise Variable Declaration
@@ -290,6 +253,47 @@ int temp3 = 0;
 // ----------------------------------------------------------------
 // STRUCTs
 // ----------------------------------------------------------------
+//GAMES
+struct Player
+{
+  int X;
+  int Y;
+};
+Player player = {64, 8};
+//FALLIOS
+struct Fallios
+{
+  unsigned int score;
+  unsigned int score_top;
+  int motion;
+  int motionHistory;
+  int Y;
+  float tunnelGenerator;
+};
+Fallios fallios = {0, 0, 0, 0, 8, 0};
+
+byte fallios_wall[64];
+byte fallios_wallDistance[64];
+int fallios_tunnel_1[screen_height + 1];
+int fallios_tunnel_2[screen_height + 1];
+int fallios_tunnelWidth = screen_width / 2;
+
+//BLOCKBREAKER
+struct BlockBreaker
+{
+  int score;
+  int ballX;
+  int ballY;
+  int ballXvel;
+  int ballYvel;
+  int ballWidth;
+  int paddleHeight;
+  int paddleWidth;
+  int message;
+  int messageTimer;
+  int running;
+};
+BlockBreaker blockBreaker = {0, 0, 0, 0, 0, 4, 2, 16, 0, 0, 0};
 
 struct OpenWeatherSettings
 {

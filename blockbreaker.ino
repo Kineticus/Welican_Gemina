@@ -34,21 +34,21 @@ void blockbreaker_game()
     }
 
     //Add input from the other knob and clear it
-    playerX += playerY;
-    playerY = 0;
+    player.X += player.Y;
+    player.Y = 0;
 
     //Make sure we're in range
-    if (playerX < 0)
+    if (player.X < 0)
     {
-        playerX = 0;
+        player.X = 0;
     }
-    if (playerX > (screen_width - blockBreaker.paddleWidth))
+    if (player.X > (screen_width - blockBreaker.paddleWidth))
     {
-        playerX = screen_width - blockBreaker.paddleWidth;
+        player.X = screen_width - blockBreaker.paddleWidth;
     }
 
     //Draw the paddle
-    u8g2.drawBox(playerX, screen_height - blockBreaker.paddleHeight, blockBreaker.paddleWidth, 4);
+    u8g2.drawBox(player.X, screen_height - blockBreaker.paddleHeight, blockBreaker.paddleWidth, 4);
 
     //Draw the ball
     u8g2.drawDisc(blockBreaker.ballX, blockBreaker.ballY, 2, U8G2_DRAW_ALL);
@@ -93,7 +93,7 @@ void blockbreaker_game()
     //Did we hit the paddle height?
     if (blockBreaker.ballY == (screen_height - blockBreaker.paddleHeight - (blockBreaker.ballWidth / 2)))
     {
-        if (((blockBreaker.ballX + (blockBreaker.ballWidth / 2)) < playerX) || (blockBreaker.ballX > (playerX + blockBreaker.paddleWidth + (blockBreaker.ballWidth / 2))))
+        if (((blockBreaker.ballX + (blockBreaker.ballWidth / 2)) < player.X) || (blockBreaker.ballX > (player.X + blockBreaker.paddleWidth + (blockBreaker.ballWidth / 2))))
         {
         }
         else if (blockBreaker.ballYvel > 0)
@@ -106,7 +106,7 @@ void blockbreaker_game()
     //2nd Chance - Did we hit the paddle height?
     if (blockBreaker.ballY == (screen_height - blockBreaker.paddleHeight - (blockBreaker.ballWidth / 2) + 2))
     {
-        if (((blockBreaker.ballX + (blockBreaker.ballWidth / 2)) < playerX) || (blockBreaker.ballX > (playerX + blockBreaker.paddleWidth + (blockBreaker.ballWidth / 2))))
+        if (((blockBreaker.ballX + (blockBreaker.ballWidth / 2)) < player.X) || (blockBreaker.ballX > (player.X + blockBreaker.paddleWidth + (blockBreaker.ballWidth / 2))))
         {
             //This is game over condition area
             blockBreaker.message = 2;
@@ -153,9 +153,9 @@ void blockbreaker_reset()
     blockBreaker.ballXvel = -1;
     blockBreaker.ballYvel = 1;
 
-    //Player to the middle of the screen
-    playerX = screen_width / 2;
-    playerY = 0;
+    //player. to the middle of the screen
+    player.X = screen_width / 2;
+    player.Y = 0;
 
     //And at the bottom
     blockBreaker.paddleHeight = 2;

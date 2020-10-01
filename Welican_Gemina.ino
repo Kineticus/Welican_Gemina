@@ -60,6 +60,8 @@
 #define LED_TYPE WS2811
 #define COLOR_ORDER RGB
 #define NUM_LEDS 200
+#define LEDS_IN_STRIP 200
+#define LEDS_FOR_SIMPLEX 6
 #define VISUALIZER_X 48
 #define VISUALIZER_Y 128
 #define STATUS_LED 0
@@ -119,8 +121,7 @@ int breathing = 1;
   Simplex Noise Variable Declaration
 ***********************************************************/
 //Define simplex noise node for each LED
-const int LEDs_in_strip = NUM_LEDS;
-const int LEDs_for_simplex = 6;
+
 int ledPosition;
 int fadeDirection = 0;      // 1 or 0, positive or negative
 int fadeDirection2 = 0;     // 1 or 0, positive or negative
@@ -169,10 +170,10 @@ uint16_t pulseOffset = 200;  // Delay before second pulse.  Higher value is more
 uint8_t baseBrightness = 10; // Brightness of LEDs when not pulsing. Set to 0 for off.
 // Extra fake LED at the end, to avoid fencepost problem.
 // It is used by simplex node and interpolation code.
-float LED_array_red[LEDs_in_strip + 1];
-float LED_array_green[LEDs_in_strip + 1];
-float LED_array_blue[LEDs_in_strip + 1];
-int node_spacing = LEDs_in_strip / LEDs_for_simplex;
+float LED_array_red[LEDS_IN_STRIP + 1];
+float LED_array_green[LEDS_IN_STRIP + 1];
+float LED_array_blue[LEDS_IN_STRIP + 1];
+int node_spacing = LEDS_IN_STRIP / LEDS_FOR_SIMPLEX;
 // Math variables
 int i, j, k, A[] = {0, 0, 0};
 float u, v, w, s, h;

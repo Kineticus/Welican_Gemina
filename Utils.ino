@@ -1250,7 +1250,7 @@ void addGlitter(fract8 chanceOfGlitter)
 
 void customColor(int r, int g, int b)
 {
-  fill_solid(leds, LEDs_in_strip, CRGB(r, g, b));
+  fill_solid(leds, LEDS_IN_STRIP, CRGB(r, g, b));
 }
 
 void plasma(CRGBPalette16 currentPalette, TBlendType currentBlending)
@@ -1531,7 +1531,7 @@ void SimplexNoisePatternInterpolated(float spaceinc, float timeinc, float yoffse
   //float xoffset = 0.0;
   float xoffset_holder = xoffset;
 
-  for (int i = 0; i <= LEDs_in_strip; i = i + node_spacing)
+  for (int i = 0; i <= LEDS_IN_STRIP; i = i + node_spacing)
   {
     xoffset += spaceinc;
     LED_array_red[i] = SimplexNoise(xoffset, yoffset, 0);
@@ -1542,7 +1542,7 @@ void SimplexNoisePatternInterpolated(float spaceinc, float timeinc, float yoffse
   xoffset = xoffset_holder;
 
   // Interpolate values for LEDs between nodes
-  for (int i = 0; i < LEDs_in_strip; i++)
+  for (int i = 0; i < LEDS_IN_STRIP; i++)
   {
     int position_between_nodes = i % node_spacing;
     int last_node, next_node;
@@ -1568,7 +1568,7 @@ void SimplexNoisePatternInterpolated(float spaceinc, float timeinc, float yoffse
   }
 
   // Convert values from raw noise to scaled r,g,b and feed to strip
-  for (int i = 0; i < LEDs_in_strip; i++)
+  for (int i = 0; i < LEDS_IN_STRIP; i++)
   {
     int r = LED_array_red[i] * 734 + 16;
     int g = LED_array_green[i] * 734 + 16;

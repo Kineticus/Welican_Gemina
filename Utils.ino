@@ -1509,7 +1509,7 @@ void sinelonCustom(int saturation, int value, int speed, int fadeBy)
   // a colored dot sweeping back and forth, with fading trails
   fadeToBlackBy(leds, NUM_LEDS, fadeBy);
   int pos = beatsin16(speed, 0, NUM_LEDS - 1);
-  leds[pos] += CHSV(gHue, saturation, value);
+  leds[pos] += CHSV(patternSettings.gHue, saturation, value);
 }
 
 void u8g2_horizontal_line(uint8_t a)

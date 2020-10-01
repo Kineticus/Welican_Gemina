@@ -690,5 +690,5 @@ void loop()
     Serial.println(((millis() / 1000) / 60));
   }
 
-  EVERY_N_MILLISECONDS(200) { gHue++; } // slowly cycle the "base color" through the rainbow
+  EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; } // slowly cycle the "base color" through the rainbow
 }

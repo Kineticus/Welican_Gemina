@@ -7,8 +7,8 @@ void inputCompute(void *parameter)
     for (int i = 0; i < SAMPLES; i++)
     {
       newTime = micros();
-      vReal[i] = analogRead(AUDIO_IN_PIN); // A conversion takes about 9.7uS on an ESP32
-      vImag[i] = 0;
+      globals.vReal[i] = analogRead(AUDIO_IN_PIN); // A conversion takes about 9.7uS on an ESP32
+      globals.vImag[i] = 0;
       while ((micros() - newTime) < sampling_period_us)
       {
         /* chill */
@@ -34,44 +34,44 @@ void inputCompute(void *parameter)
     // Analyse FFT results
     for (int i = 2; i < (SAMPLES / 2); i++)
     { // Don't use sample 0 and only first SAMPLES/2 are usable. Each array element represents a frequency bin and its value the amplitude.
-      if (vReal[i] > NOISE)
+      if (globals.vReal[i] > NOISE)
       { // Add a crude noise filter
 
         //8 bands, 12kHz top band
         if (i <= 3)
-          tempBandValues[0] += (int)vReal[i];
+          tempBandValues[0] += (int)globals.vReal[i];
         if (i > 3 && i <= 6)
-          tempBandValues[1] += (int)vReal[i];
+          tempBandValues[1] += (int)globals.vReal[i];
         if (i > 6 && i <= 13)
-          tempBandValues[2] += (int)vReal[i];
+          tempBandValues[2] += (int)globals.vReal[i];
         if (i > 13 && i <= 27)
-          tempBandValues[3] += (int)vReal[i];
+          tempBandValues[3] += (int)globals.vReal[i];
         if (i > 27 && i <= 55)
-          tempBandValues[4] += (int)vReal[i];
+          tempBandValues[4] += (int)globals.vReal[i];
         if (i > 55 && i <= 112)
-          tempBandValues[5] += (int)vReal[i];
+          tempBandValues[5] += (int)globals.vReal[i];
         if (i > 112 && i <= 229)
-          tempBandValues[6] += (int)vReal[i];
+          tempBandValues[6] += (int)globals.vReal[i];
         if (i > 229)
-          tempBandValues[7] += (int)vReal[i];
+          tempBandValues[7] += (int)globals.vReal[i];
 
         /*16 bands, 12kHz top band 
-        if (i<=2 )           tempBandValues[0]  += (int)vReal[i];
-        if (i>2   && i<=3  ) tempBandValues[1]  += (int)vReal[i];
-        if (i>3   && i<=5  ) tempBandValues[2]  += (int)vReal[i];
-        if (i>5   && i<=7  ) tempBandValues[3]  += (int)vReal[i];
-        if (i>7   && i<=9  ) tempBandValues[4]  += (int)vReal[i];
-        if (i>9   && i<=13 ) tempBandValues[5]  += (int)vReal[i];
-        if (i>13  && i<=18 ) tempBandValues[6]  += (int)vReal[i];
-        if (i>18  && i<=25 ) tempBandValues[7]  += (int)vReal[i];
-        if (i>25  && i<=36 ) tempBandValues[8]  += (int)vReal[i];
-        if (i>36  && i<=50 ) tempBandValues[9]  += (int)vReal[i];
-        if (i>50  && i<=69 ) tempBandValues[10] += (int)vReal[i];
-        if (i>69  && i<=97 ) tempBandValues[11] += (int)vReal[i];
-        if (i>97  && i<=135) tempBandValues[12] += (int)vReal[i];
-        if (i>135 && i<=189) tempBandValues[13] += (int)vReal[i];
-        if (i>189 && i<=264) tempBandValues[14] += (int)vReal[i];
-        if (i>264          ) tempBandValues[15] += (int)vReal[i];*/
+        if (i<=2 )           tempBandValues[0]  += (int)globals.vReal[i];
+        if (i>2   && i<=3  ) tempBandValues[1]  += (int)globals.vReal[i];
+        if (i>3   && i<=5  ) tempBandValues[2]  += (int)globals.vReal[i];
+        if (i>5   && i<=7  ) tempBandValues[3]  += (int)globals.vReal[i];
+        if (i>7   && i<=9  ) tempBandValues[4]  += (int)globals.vReal[i];
+        if (i>9   && i<=13 ) tempBandValues[5]  += (int)globals.vReal[i];
+        if (i>13  && i<=18 ) tempBandValues[6]  += (int)globals.vReal[i];
+        if (i>18  && i<=25 ) tempBandValues[7]  += (int)globals.vReal[i];
+        if (i>25  && i<=36 ) tempBandValues[8]  += (int)globals.vReal[i];
+        if (i>36  && i<=50 ) tempBandValues[9]  += (int)globals.vReal[i];
+        if (i>50  && i<=69 ) tempBandValues[10] += (int)globals.vReal[i];
+        if (i>69  && i<=97 ) tempBandValues[11] += (int)globals.vReal[i];
+        if (i>97  && i<=135) tempBandValues[12] += (int)globals.vReal[i];
+        if (i>135 && i<=189) tempBandValues[13] += (int)globals.vReal[i];
+        if (i>189 && i<=264) tempBandValues[14] += (int)globals.vReal[i];
+        if (i>264          ) tempBandValues[15] += (int)globals.vReal[i];*/
       }
     }
 
@@ -117,7 +117,7 @@ void drawDebug()
   u8g2.print(VERSION_INFO);
   u8g2.setCursor(0, 24);
   u8g2.print("Knob 1: ");
-  //u8g2.print(encoder.getCount());
+  //u8g2.print(globals.encoder.getCount());
   u8g2.setCursor(80, 24);
   u8g2.print(pattern[mode]);
 
@@ -128,7 +128,7 @@ void drawDebug()
   }
   u8g2.setCursor(0, 48);
   u8g2.print("Knob 2: ");
-  //u8g2.print(encoder2.getCount());
+  //u8g2.print(globals.encoder2.getCount());
   if (knob2.click == true)
   {
     u8g2.setCursor(0, 60);
@@ -147,10 +147,10 @@ void updateEncoders()
   //--CLICK--
 
   //Read knob 1 digital pin, button pulls pin low
-  tempValue = digitalRead(KNOB_1C);
+  globals.tempValue = digitalRead(KNOB_1C);
 
   //Is the button pulling the pin low and the debounce counter is at 0 (no recent button press) ?
-  if ((tempValue == false) && (knob1.debounce == 0))
+  if ((globals.tempValue == false) && (knob1.debounce == 0))
   {
     //if yes we should set a debounce variable
     knob1.debounce = 3;
@@ -194,23 +194,23 @@ void updateEncoders()
       }
     }
   }
-  if ((tempValue == true) && (knob1.debounce > 0)) //No button press and there is debounce to reduce?
+  if ((globals.tempValue == true) && (knob1.debounce > 0)) //No button press and there is debounce to reduce?
   {
     knob1.debounce -= 1;
   }
 
   //Read knob 2 digital pin, button pulls pin low
-  tempValue = digitalRead(KNOB_2C);
-  if ((tempValue == false) && (knob2.debounce == 0))
+  globals.tempValue = digitalRead(KNOB_2C);
+  if ((globals.tempValue == false) && (knob2.debounce == 0))
   {
     knob2.debounce = 3;
     knob2.click = 1;
   }
-  else if ((tempValue == false) && (knob2.debounce > 0))
+  else if ((globals.tempValue == false) && (knob2.debounce > 0))
   {
     knob2.heldTime += 1;
   }
-  if ((tempValue == true) && (knob2.debounce > 0))
+  if ((globals.tempValue == true) && (knob2.debounce > 0))
   {
     knob2.debounce -= 1;
   }
@@ -226,21 +226,21 @@ void updateEncoders()
 
   //--PATTERN ENCODER--
 
-  tempValue = encoder.getCount() - knob1.temp; //Read current knob position vs. last time we checked
+  globals.tempValue = globals.encoder.getCount() - knob1.temp; //Read current knob position vs. last time we checked
 
   if (runMode == 0)
   {
-    while (tempValue >= 4)
+    while (globals.tempValue >= 4)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
-      tempValue -= 4;
+      globals.tempValue -= 4;
       knob1.temp += 4;
       pattern[mode] += 1;
       saveTime = 100;
       smoothOperatorStart();
     }
-    while (tempValue <= -4)
+    while (globals.tempValue <= -4)
     {
-      tempValue += 4;
+      globals.tempValue += 4;
       knob1.temp -= 4;
       pattern[mode] -= 1;
       saveTime = 100;
@@ -261,15 +261,15 @@ void updateEncoders()
   }
   else if (runMode == 1)
   {
-    while (tempValue >= 4)
+    while (globals.tempValue >= 4)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
-      tempValue -= 4;
+      globals.tempValue -= 4;
       knob1.temp += 4;
       menu[menu_cur] += 1;
     }
-    while (tempValue <= -4)
+    while (globals.tempValue <= -4)
     {
-      tempValue += 4;
+      globals.tempValue += 4;
       knob1.temp -= 4;
       menu[menu_cur] -= 1;
     }
@@ -287,22 +287,22 @@ void updateEncoders()
   }
   else if (runMode == 2)
   {
-    while (tempValue >= 4)
+    while (globals.tempValue >= 4)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
-      tempValue -= 4;
+      globals.tempValue -= 4;
       knob1.temp += 4;
       player.X += 4;
     }
-    while (tempValue <= -4)
+    while (globals.tempValue <= -4)
     {
-      tempValue += 4;
+      globals.tempValue += 4;
       knob1.temp -= 4;
       player.X -= 4;
     }
   }
 
   //check for out of sync condition (knob is reseting at value that is not divisible by 4)
-  if ((abs(encoder.getCount()) % 4) > 0)
+  if ((abs(globals.encoder.getCount()) % 4) > 0)
   {
     encoder_unstick++;
   }
@@ -312,18 +312,18 @@ void updateEncoders()
   }
   if (encoder_unstick > 200)
   {
-    encoder.clearCount();
+    globals.encoder.clearCount();
     knob1.temp = 0;
   }
 
   //--BRIGHTNESS ENCODER--
 
-  tempValue = encoder2.getCount() - knob2.temp; //Read current knob position vs. last time we checked
-  knob2.temp = encoder2.getCount();             //Store this position to compare next time around
+  globals.tempValue = globals.encoder2.getCount() - knob2.temp; //Read current knob position vs. last time we checked
+  knob2.temp = globals.encoder2.getCount();                     //Store this position to compare next time around
 
   if (runMode == 0)
   {
-    if (tempValue != 0)
+    if (globals.tempValue != 0)
     {
       brightness_debounce = millis() + 1420;
       saveTime = 100;
@@ -332,29 +332,29 @@ void updateEncoders()
     //Determine "acceleration" based on change amount. Large change = fast turn of knob
     //There are 96 pulses per revolution
 
-    if (abs(tempValue) > 10) // 100% acceleration
+    if (abs(globals.tempValue) > 10) // 100% acceleration
     {
-      tempValue = tempValue * 7;
+      globals.tempValue = globals.tempValue * 7;
     }
-    else if (abs(tempValue) > 7) // 75%
+    else if (abs(globals.tempValue) > 7) // 75%
     {
-      tempValue = tempValue * 5;
+      globals.tempValue = globals.tempValue * 5;
     }
-    else if (abs(tempValue) > 4) // 50%
+    else if (abs(globals.tempValue) > 4) // 50%
     {
-      tempValue = tempValue * 3;
+      globals.tempValue = globals.tempValue * 3;
     }
-    else if (abs(tempValue) > 2) // 25%  acceleration
+    else if (abs(globals.tempValue) > 2) // 25%  acceleration
     {
-      tempValue = tempValue * 2;
+      globals.tempValue = globals.tempValue * 2;
     }
     else //No acceleration applied
     {
-      tempValue = tempValue;
+      globals.tempValue = globals.tempValue;
     }
 
     //Add adjusted value to brightness
-    brightness += tempValue;
+    brightness += globals.tempValue;
 
     //Constrain (for some reason constrain function gave me fits)
     if (brightness > 255)
@@ -371,14 +371,14 @@ void updateEncoders()
   }
   else if (runMode == 2)
   {
-    while (tempValue > 0)
+    while (globals.tempValue > 0)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
-      tempValue -= 1;
+      globals.tempValue -= 1;
       player.Y += 1;
     }
-    while (tempValue < 0)
+    while (globals.tempValue < 0)
     {
-      tempValue += 1;
+      globals.tempValue += 1;
       player.Y -= 1;
     }
   }
@@ -1033,13 +1033,11 @@ void smoothOperator()
   //Check for interfade
   if (interfade == 0)
   {
-    /*
     //take snapshot
     for (int i = 0; i < NUM_LEDS; i++)
     {
       ledsTemp[i] = leds[i];
     }
-    */
   }
   else
   {

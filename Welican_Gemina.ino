@@ -79,18 +79,12 @@ FASTLED_USING_NAMESPACE
 AsyncWebServer server(80);
 TaskHandle_t inputComputeTask = NULL;
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
-ESP32Encoder encoder;
-ESP32Encoder encoder2;
+
 struct tm timeinfo;
 CRGB temp[NUM_LEDS];
 CRGB leds_temp[NUM_LEDS / 2]; // half the total number of pixels
 CRGB leds[NUM_LEDS];
 CRGB ledsTemp[NUM_LEDS];
-CRGB clr1;
-CRGB clr2;
-double vReal[SAMPLES];
-double vImag[SAMPLES];
-arduinoFFT FFT = arduinoFFT(vReal, vImag, SAMPLES, SAMPLING_FREQ);
 
 String openWeatherMapApiKey = OPEN_WEATHER_API_KEY;
 const char *ssid = WIFI_SSID;
@@ -104,7 +98,6 @@ For UTC +0.00 : 0 * 60 * 60 : 0
 const char *ntpServer = "pool.ntp.org";
 String returnText;
 int NUM_FAVORITES = 25; //Max 50, loads all 50 at program load, dynamically assignable
-int tempValue = 0;
 int encoder_unstick = 0;
 int fps = 0;   //dev, speed tracking for main loop
 int fftps = 0; //dev, speed tracking for fft task
@@ -251,6 +244,22 @@ unsigned long brightness_debounce = 0;
 // ----------------------------------------------------------------
 // STRUCTs
 // ----------------------------------------------------------------
+struct Globals
+{
+  int temp[3];
+  int timeZone;
+  int tempValue;
+
+  ESP32Encoder encoder;
+  ESP32Encoder encoder2;
+  CRGB clr1;
+  CRGB clr2;
+  double vReal[SAMPLES];
+  double vImag[SAMPLES];
+};
+Globals globals = {{}, -5, 0};
+arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
+
 struct StarModel
 {
   int x[MAX_STARS];
@@ -260,12 +269,6 @@ struct StarModel
   int z[MAX_STARS];
 };
 StarModel star;
-struct Globals
-{
-  int temp[3];
-  int timeZone;
-};
-Globals globals = {{}, -5};
 
 //GAMES
 struct Player
@@ -401,17 +404,17 @@ void setup()
   ESP32Encoder::useInternalWeakPullResistors = UP;
 
   //Program Selection, encoder WITH Detents
-  encoder.attachFullQuad(33, 32);
+  globals.encoder.attachFullQuad(33, 32);
 
   //Brightness Adjustment, encoder WITHOUT Detents
   //encoder2.attachFullQuad(27, 26);
-  encoder2.attachFullQuad(16, 17); //RX2 and TX2
+  globals.encoder2.attachFullQuad(16, 17); //RX2 and TX2
 
   // set starting count value after attaching
-  encoder.clearCount();
+  globals.encoder.clearCount();
 
   // clear the encoder's raw count and set the tracked count to zero
-  encoder2.clearCount();
+  globals.encoder2.clearCount();
 
   // Initialize SPIFFS
   if (!SPIFFS.begin(true))

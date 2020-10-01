@@ -9,42 +9,39 @@
  * Brian Schimke (brs0906@gmail.com)
  * Matt Taylor (maylortaylor@gmail.com)
  * 
- **************************************************************************/
+ *************************************************************************
+*/
 
 // ----------------------------------------------------------------
 // INCLUDEs
 // ----------------------------------------------------------------
+
 #include <FastLED.h>
 #include "images.h"
-//SAVE SETTINGS
 #include "EEPROM.h"
-//SCREEN
 #include <Wire.h>
 #include <U8g2lib.h>
-//ENCODER
 #include <ESP32Encoder.h>
-//WiFi, Web Server, and storage for web assets
 #include <WiFi.h>
-// #include <Bridge.h>
-// #include <HTTPClient.h>
-// #include <ArduinoHttpClient.h>
-// #include <ArduinoJson.h>
 #include <HTTPClient.h>
 #include <Arduino_JSON.h>
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
 #include "time.h"
 #include "WifiCredentials.h"
-//AUDIO INPUT
 #include <arduinoFFT.h>
+
 // ----------------------------------------------------------------
 // DEFINEs
 // ----------------------------------------------------------------
+
+#if defined(FASTLED_VERSION) && (FASTLED_VERSION < 3001000)
+#warning "Requires FastLED 3.1 or later; check github for latest code."
+#endif
 #define VERSION_INFO "Build 0.420 - 09/16/20"
 #define knob1C 25 //Program
 #define knob2C 4  //Brightness 14
 #define maxModes 5
-
 #define SAMPLES 512         // Must be a power of 2. FAST 256 (40fps), NORMAL 512 (20fps), ACCURATE 1024 (10fps)
 #define SAMPLING_FREQ 40000 // Hz, must be 40000 or less due to ADC conversion time. Determines maximum frequency that can be analysed by the FFT Fmax=sampleF/2.
 #define AMPLITUDE 3000      // Depending on your audio source level, you may need to alter this value. Can be used as a 'sensitivity' control.
@@ -53,41 +50,238 @@
 #define NOISE 500           // Used as a crude noise filter, values below this are ignored
 #define TOP 32
 #define FRAMES_PER_SECOND 120
-
 #define screen_width 127
 #define screen_height 63
-
 #define maxStars 32
-
 #define qsubd(x, b) ((x > b) ? b : 0)     // Digital unsigned subtraction macro. if result <0, then => 0. Otherwise, take on fixed value.
 #define qsuba(x, b) ((x > b) ? x - b : 0) // Analog Unsigned subtraction macro. if result <0, then => 0
-
-// COOLING: How much does the air cool as it rises?
-// Less cooling = taller flames.  More cooling = shorter flames.
-// Default 50, suggested range 20-100
-#define COOLING 90
-
-// SPARKING: What chance (out of 255) is there that a new spark will be lit?
-// Higher chance = more roaring fire.  Lower chance = more flickery fire.
-// Default 120, suggested range 50-200.
-#define SPARKING 50
-
-#if defined(FASTLED_VERSION) && (FASTLED_VERSION < 3001000)
-#warning "Requires FastLED 3.1 or later; check github for latest code."
-#endif
-
 #define DATA_PIN 18
 #define DATA_PIN_A 12
-//#define CLK_PIN   4
 #define LED_TYPE WS2811
 #define COLOR_ORDER RGB
 #define NUM_LEDS 200
 #define visualizer_x 48
 #define visualizer_y 128
 #define statusLED 0
+// COOLING: How much does the air cool as it rises?
+// Less cooling = taller flames.  More cooling = shorter flames.
+// Default 50, suggested range 20-100
+#define COOLING 90
+// SPARKING: What chance (out of 255) is there that a new spark will be lit?
+// Higher chance = more roaring fire.  Lower chance = more flickery fire.
+// Default 120, suggested range 50-200.
+#define SPARKING 50
 
-U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
+// ----------------------------------------------------------------
+// GLOBALs
+// ----------------------------------------------------------------
+FASTLED_USING_NAMESPACE
 String openWeatherMapApiKey = OPEN_WEATHER_API_KEY;
+const char *ssid = WIFI_SSID;
+const char *password = WIFI_PASSWORD;
+/*
+For EST - UTC -5.00 : -5 * 60 * 60 : -18000
+For EDT - UTC -4.00 : -4 * 60 * 60 : -14400
+For UTC +0.00 : 0 * 60 * 60 : 0
+*/
+const char *ntpServer = "pool.ntp.org";
+int timeZone = -5;
+String returnText;
+AsyncWebServer server(80);
+TaskHandle_t inputComputeTask = NULL;
+U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
+ESP32Encoder encoder;
+ESP32Encoder encoder2;
+struct tm timeinfo;
+int NUM_FAVORITES = 25; //Max 50, loads all 50 at program load, dynamically assignable
+int tempValue = 0;
+int encoder_unstick = 0;
+int fps = 0;   //dev, speed tracking for main loop
+int fftps = 0; //dev, speed tracking for fft task
+unsigned int sampling_period_us;
+volatile int peak[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // The length of these arrays must be >= NUM_BANDS
+int tempBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+int oldBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+volatile int bandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+double vReal[SAMPLES];
+double vImag[SAMPLES];
+unsigned long newTime;
+byte knobReading = 0;
+unsigned long tempTime;
+arduinoFFT FFT = arduinoFFT(vReal, vImag, SAMPLES, SAMPLING_FREQ);
+int menu[10];
+int menu_max[11] = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, NUM_FAVORITES}; //Root Menu Items, Game Menu Items, Settings Menu Items
+int menu_cur = 0;
+int runMode = 0;
+int mode = 0;
+int mode_max = maxModes;
+int pattern[6];
+int pattern_temp = 0;
+int favorite_mode[50];    //declare memory for all 50 favorites
+int favorite_pattern[50]; //all are used under the hood
+int favorite_slot;
+// basic, music, chill, moving colors, legacy
+int pattern_max[6] = {12, 12, 22, 65, 80, NUM_FAVORITES};
+int pixelNumber = 0;
+unsigned long startMillis;
+unsigned long currentMillis;
+const unsigned long period = 1000;
+int saveTime = 0;
+//LEDs
+float breath = 0;
+int breathing = 1;
+CRGB leds[NUM_LEDS];
+CRGB ledsTemp[NUM_LEDS];
+int interfade = 18; //set this to 0 to disable fade in on boot. Set to 25 for fade in.
+int interfade_max = 18;
+int interfade_speed = 14;
+//GAMES
+int playerX = 64;
+int playerY = 8;
+//FALLIOS
+unsigned int fallios_score = 0;
+unsigned int fallios_score_top = 0;
+int fallios_motion = 0;
+int fallios_motionHistory = 0;
+int fallios_Y = 8;
+byte fallios_wall[64];
+byte fallios_wallDistance[64];
+int fallios_tunnel_1[screen_height + 1];
+int fallios_tunnel_2[screen_height + 1];
+int fallios_tunnelWidth = screen_width / 2;
+float fallios_tunnelGenerator = 0;
+//BLOCKBREAKER
+int blockbreaker_score;
+int blockbreaker_ballX;
+int blockbreaker_ballY;
+int blockbreaker_ballXvel;
+int blockbreaker_ballYvel;
+int blockbreaker_ballWidth = 4;
+int blockbreaker_paddleHeight = 2;
+int blockbreaker_paddleWidth = 16;
+int blockbreaker_message = 0;
+int blockbreaker_messageTimer = 0;
+int blockbreaker_running = 0;
+
+/***********************************************************
+  Simplex Noise Variable Declaration
+***********************************************************/
+//Define simplex noise node for each LED
+const int LEDs_in_strip = NUM_LEDS;
+const int LEDs_for_simplex = 6;
+CRGB temp[NUM_LEDS];
+CRGB leds_temp[NUM_LEDS / 2]; // half the total number of pixels
+long tempTimer;
+int ledPosition;
+int fadeDirection = 0;      // 1 or 0, positive or negative
+int fadeDirection2 = 0;     // 1 or 0, positive or negative
+int fadeDirectionHTemp = 0; // 1 or 0, positive or negative
+int fadeAmount = 5;         // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
+bool useFade = false;
+boolean fadingTail = 0; // Add fading tail? [1=true, 0=falue]
+uint8_t fadeRate = 170; // How fast to fade out tail. [0-255]
+int8_t delta2 = 1;      // Sets forward or backwards direction amount. (Can be negative.)
+int palletPosition;
+int colorBarPosition = 1;
+bool clearLEDS = false;
+uint8_t hueA = 15;      // Start hue at valueMin.
+uint8_t satA = 230;     // Start saturation at valueMin.
+float valueMin = 120.0; // Pulse minimum value (Should be less then valueMax).
+uint8_t hueB = 95;      // End hue at valueMax.
+uint8_t satB = 255;     // End saturation at valueMax.
+float valueMax = 255.0; // Pulse maximum value (Should be larger then valueMin).
+
+// used in Blendwave
+CRGB clr1;
+CRGB clr2;
+uint8_t speed;
+uint8_t loc1;
+uint8_t loc2;
+uint8_t ran1;
+uint8_t ran2;
+int red, green, blue;                                    // used in hsv2rgb color functions
+int red2, green2, blue2;                                 // used in hsv2rgb color functions
+int red3, green3, blue3;                                 // used in hsv2rgb color functions
+uint8_t hue = hueA;                                      // Do Not Edit
+uint8_t hue2 = hueB;                                     // Do Not Edit
+uint8_t sat = satA;                                      // Do Not Edit
+float val = valueMin;                                    // Do Not Edit
+uint8_t hueDelta = hueA - hueB;                          // Do Not Edit
+static float delta = (valueMax - valueMin) / 2.35040238; // Do Not Edit
+boolean moving = 1;
+uint8_t pos;                    // stores a position for color being blended in
+int8_t advance;                 // Stores the advance amount
+uint8_t colorStorage;           // Stores a hue color.
+uint8_t posR, posG, posB;       // positions of moving R,G,B dots
+bool gReverseDirection = false; //false = center outward, true = from ends inward
+uint8_t count;
+bool sizeUpdate;
+int flowDirection = -1;      // Use either 1 or -1 to set flow direction
+uint16_t cycleLength = 1500; // Lover values = continuous flow, higher values = distinct pulses.
+uint16_t pulseLength = 150;  // How long the pulse takes to fade out.  Higher value is longer.
+uint16_t pulseOffset = 200;  // Delay before second pulse.  Higher value is more delay.
+uint8_t baseBrightness = 10; // Brightness of LEDs when not pulsing. Set to 0 for off.
+// Extra fake LED at the end, to avoid fencepost problem.
+// It is used by simplex node and interpolation code.
+float LED_array_red[LEDs_in_strip + 1];
+float LED_array_green[LEDs_in_strip + 1];
+float LED_array_blue[LEDs_in_strip + 1];
+int node_spacing = LEDs_in_strip / LEDs_for_simplex;
+// Math variables
+int i, j, k, A[] = {0, 0, 0};
+float u, v, w, s, h;
+float hTemp = .420;
+float hOld = .0;
+static float onethird = 0.333333333;
+static float onesixth = 0.166666667;
+int T[] = {0x15, 0x38, 0x32, 0x2c, 0x0d, 0x13, 0x07, 0x2a};
+// Simplex noise parameters:
+float timeinc = 0.0025;
+float spaceinc = 0.05;
+int intensity_r = 734;
+int intensity_g = 734;
+int intensity_b = 734;
+float yoffset = 0.0;
+float yoffsetMAX = 15000;
+float xoffset = 0.0;
+int currSpeed = 10;
+//TO IMPLEMENT
+unsigned long frameRateCounter = 0;
+uint8_t gHue = 0; // rotating "base color" used by many of the patterns
+String categoryName = "";
+String functionName = "";
+char category_name_out_str[20];
+char function_name_out_str[20];
+int testValue = 30;
+//VISUALIZERS
+int dvdBounce_x = random(0, 32);
+int dvdBounce_y = random(0, 32);
+int dvdBounce_vx = 1;
+int dvdBounce_vy = 1;
+int dvdBounce2_x = random(0, 32);
+int dvdBounce2_y = random(0, 32);
+int dvdBounce2_vx = 1;
+int dvdBounce2_vy = 1;
+int dvdBounce3_x = random(0, 32);
+int dvdBounce3_y = random(0, 32);
+int dvdBounce3_vx = 1;
+int dvdBounce3_vy = 1;
+int brightness = 0;
+int brightness_temp = 0;
+unsigned long brightness_debounce = 0;
+int star_x[maxStars];
+int star_xx[maxStars];
+int star_y[maxStars];
+int star_yy[maxStars];
+int star_z[maxStars];
+int temp1 = 0;
+int temp2 = 0;
+int temp3 = 0;
+
+// ----------------------------------------------------------------
+// STRUCTs
+// ----------------------------------------------------------------
+
 struct OpenWeatherSettings
 {
   String zipCode;
@@ -113,29 +307,6 @@ struct OpenWeatherObject
 };
 OpenWeatherObject weather;
 
-ESP32Encoder encoder;
-ESP32Encoder encoder2;
-
-int tempValue = 0;
-int encoder_unstick = 0;
-
-int fps = 0;   //dev, speed tracking for main loop
-int fftps = 0; //dev, speed tracking for fft task
-unsigned int sampling_period_us;
-volatile int peak[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // The length of these arrays must be >= NUM_BANDS
-int tempBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-int oldBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-volatile int bandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-double vReal[SAMPLES];
-double vImag[SAMPLES];
-unsigned long newTime;
-byte knobReading = 0;
-unsigned long tempTime;
-arduinoFFT FFT = arduinoFFT(vReal, vImag, SAMPLES, SAMPLING_FREQ);
-
-TaskHandle_t inputComputeTask = NULL;
-
-struct tm timeinfo;
 struct Time
 {
   int currentMinute;
@@ -146,220 +317,6 @@ struct Time
   bool currentPM;
 };
 Time globalTime = {0, 100, 5, 1, 0, 0};
-
-const char *ssid = WIFI_SSID;
-const char *password = WIFI_PASSWORD;
-
-/*
-For EST - UTC -5.00 : -5 * 60 * 60 : -18000
-For EDT - UTC -4.00 : -4 * 60 * 60 : -14400
-For UTC +0.00 : 0 * 60 * 60 : 0
-*/
-const char *ntpServer = "pool.ntp.org";
-int timeZone = -5;
-
-String returnText;
-
-AsyncWebServer server(80);
-
-int NUM_FAVORITES = 25; //Max 50, loads all 50 at program load, dynamically assignable
-
-int menu[10];
-int menu_max[11] = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, NUM_FAVORITES}; //Root Menu Items, Game Menu Items, Settings Menu Items
-int menu_cur = 0;
-
-int runMode = 0;
-
-int mode = 0;
-int mode_max = maxModes;
-int pattern[6];
-int pattern_temp = 0;
-int favorite_mode[50];    //declare memory for all 50 favorites
-int favorite_pattern[50]; //all are used under the hood
-int favorite_slot;
-// basic, music, chill, moving colors, legacy
-int pattern_max[6] = {12, 12, 22, 65, 80, NUM_FAVORITES};
-int pixelNumber = 0;
-unsigned long startMillis;
-unsigned long currentMillis;
-const unsigned long period = 1000;
-
-int saveTime = 0;
-
-//LEDs
-float breath = 0;
-int breathing = 1;
-
-FASTLED_USING_NAMESPACE
-
-CRGB leds[NUM_LEDS];
-CRGB ledsTemp[NUM_LEDS];
-int interfade = 18; //set this to 0 to disable fade in on boot. Set to 25 for fade in.
-int interfade_max = 18;
-int interfade_speed = 14;
-
-//GAMES
-int playerX = 64;
-int playerY = 8;
-
-//FALLIOS
-unsigned int fallios_score = 0;
-unsigned int fallios_score_top = 0;
-int fallios_motion = 0;
-int fallios_motionHistory = 0;
-int fallios_Y = 8;
-byte fallios_wall[64];
-byte fallios_wallDistance[64];
-
-int fallios_tunnel_1[screen_height + 1];
-int fallios_tunnel_2[screen_height + 1];
-int fallios_tunnelWidth = screen_width / 2;
-float fallios_tunnelGenerator = 0;
-
-//BLOCKBREAKER
-int blockbreaker_score;
-int blockbreaker_ballX;
-int blockbreaker_ballY;
-int blockbreaker_ballXvel;
-int blockbreaker_ballYvel;
-int blockbreaker_ballWidth = 4;
-int blockbreaker_paddleHeight = 2;
-int blockbreaker_paddleWidth = 16;
-int blockbreaker_message = 0;
-int blockbreaker_messageTimer = 0;
-int blockbreaker_running = 0;
-
-/***********************************************************
-  Simplex Noise Variable Declaration
-***********************************************************/
-//Define simplex noise node for each LED
-const int LEDs_in_strip = NUM_LEDS;
-const int LEDs_for_simplex = 6;
-CRGB temp[NUM_LEDS];
-CRGB leds_temp[NUM_LEDS / 2]; // half the total number of pixels
-
-long tempTimer;
-int ledPosition;
-int fadeDirection = 0;      // 1 or 0, positive or negative
-int fadeDirection2 = 0;     // 1 or 0, positive or negative
-int fadeDirectionHTemp = 0; // 1 or 0, positive or negative
-int fadeAmount = 5;         // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
-bool useFade = false;
-boolean fadingTail = 0; // Add fading tail? [1=true, 0=falue]
-uint8_t fadeRate = 170; // How fast to fade out tail. [0-255]
-
-int8_t delta2 = 1; // Sets forward or backwards direction amount. (Can be negative.)
-
-int palletPosition;
-int colorBarPosition = 1;
-bool clearLEDS = false;
-
-uint8_t hueA = 15;      // Start hue at valueMin.
-uint8_t satA = 230;     // Start saturation at valueMin.
-float valueMin = 120.0; // Pulse minimum value (Should be less then valueMax).
-
-uint8_t hueB = 95;      // End hue at valueMax.
-uint8_t satB = 255;     // End saturation at valueMax.
-float valueMax = 255.0; // Pulse maximum value (Should be larger then valueMin).
-
-// used in Blendwave
-CRGB clr1;
-CRGB clr2;
-uint8_t speed;
-uint8_t loc1;
-uint8_t loc2;
-uint8_t ran1;
-uint8_t ran2;
-// -------------------
-
-int red, green, blue;                                    // used in hsv2rgb color functions
-int red2, green2, blue2;                                 // used in hsv2rgb color functions
-int red3, green3, blue3;                                 // used in hsv2rgb color functions
-uint8_t hue = hueA;                                      // Do Not Edit
-uint8_t hue2 = hueB;                                     // Do Not Edit
-uint8_t sat = satA;                                      // Do Not Edit
-float val = valueMin;                                    // Do Not Edit
-uint8_t hueDelta = hueA - hueB;                          // Do Not Edit
-static float delta = (valueMax - valueMin) / 2.35040238; // Do Not Edit
-boolean moving = 1;
-uint8_t pos;                    // stores a position for color being blended in
-int8_t advance;                 // Stores the advance amount
-uint8_t colorStorage;           // Stores a hue color.
-uint8_t posR, posG, posB;       // positions of moving R,G,B dots
-bool gReverseDirection = false; //false = center outward, true = from ends inward
-uint8_t count;
-bool sizeUpdate;
-
-int flowDirection = -1;      // Use either 1 or -1 to set flow direction
-uint16_t cycleLength = 1500; // Lover values = continuous flow, higher values = distinct pulses.
-uint16_t pulseLength = 150;  // How long the pulse takes to fade out.  Higher value is longer.
-uint16_t pulseOffset = 200;  // Delay before second pulse.  Higher value is more delay.
-uint8_t baseBrightness = 10; // Brightness of LEDs when not pulsing. Set to 0 for off.
-
-// Extra fake LED at the end, to avoid fencepost problem.
-// It is used by simplex node and interpolation code.
-float LED_array_red[LEDs_in_strip + 1];
-float LED_array_green[LEDs_in_strip + 1];
-float LED_array_blue[LEDs_in_strip + 1];
-int node_spacing = LEDs_in_strip / LEDs_for_simplex;
-
-// Math variables
-int i, j, k, A[] = {0, 0, 0};
-float u, v, w, s, h;
-float hTemp = .420;
-float hOld = .0;
-static float onethird = 0.333333333;
-static float onesixth = 0.166666667;
-int T[] = {0x15, 0x38, 0x32, 0x2c, 0x0d, 0x13, 0x07, 0x2a};
-
-// Simplex noise parameters:
-float timeinc = 0.0025;
-float spaceinc = 0.05;
-int intensity_r = 734;
-int intensity_g = 734;
-int intensity_b = 734;
-float yoffset = 0.0;
-float yoffsetMAX = 15000;
-float xoffset = 0.0;
-int currSpeed = 10;
-
-//TO IMPLEMENT
-unsigned long frameRateCounter = 0;
-
-uint8_t gHue = 0; // rotating "base color" used by many of the patterns
-
-String categoryName = "";
-String functionName = "";
-char category_name_out_str[20];
-char function_name_out_str[20];
-
-int testValue = 30;
-
-//VISUALIZERS
-int dvdBounce_x = random(0, 32);
-int dvdBounce_y = random(0, 32);
-int dvdBounce_vx = 1;
-int dvdBounce_vy = 1;
-
-int dvdBounce2_x = random(0, 32);
-int dvdBounce2_y = random(0, 32);
-int dvdBounce2_vx = 1;
-int dvdBounce2_vy = 1;
-
-int dvdBounce3_x = random(0, 32);
-int dvdBounce3_y = random(0, 32);
-int dvdBounce3_vx = 1;
-int dvdBounce3_vy = 1;
-
-int brightness = 0;
-int brightness_temp = 0;
-unsigned long brightness_debounce = 0;
-
-int star_x[maxStars];
-int star_xx[maxStars];
-int star_y[maxStars];
-int star_yy[maxStars];
-int star_z[maxStars];
 
 struct Knob
 {
@@ -383,9 +340,9 @@ struct visualizer_triangle
 
 visualizer_triangle t1 = {64, 42, 18, 0.0, 2.1, 4.2, 0, 0, 0, 0, 0, 0};
 
-int temp1 = 0;
-int temp2 = 0;
-int temp3 = 0;
+// ----------------------------------------------------------------
+// SETUP
+// ----------------------------------------------------------------
 
 void setup()
 {
@@ -492,7 +449,6 @@ void setup()
   //FastLED Declation
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   FastLED.addLeds<LED_TYPE, DATA_PIN_A, COLOR_ORDER>(leds, NUM_LEDS);
-  //FastLED.addLeds<LED_TYPE,DATA_PIN,CLK_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 
   /* Load Save Settings
 
@@ -551,6 +507,9 @@ void setup()
       0);                   /* Pin to specific CPU Core, main Loop runs on 1*/
 }
 
+// ----------------------------------------------------------------
+// LOOP
+// ----------------------------------------------------------------
 void loop()
 {
   //fftCompute();   //Only needed if not using task
@@ -693,116 +652,4 @@ void loop()
   }
 
   EVERY_N_MILLISECONDS(200) { gHue++; } // slowly cycle the "base color" through the rainbow
-}
-
-void inputCompute(void *parameter)
-{
-  //Create an infinite for loop as this is a task and we want it to keep repeating
-  for (;;)
-  {
-    // Sample the audio pin
-    for (int i = 0; i < SAMPLES; i++)
-    {
-      newTime = micros();
-      vReal[i] = analogRead(AUDIO_IN_PIN); // A conversion takes about 9.7uS on an ESP32
-      vImag[i] = 0;
-      while ((micros() - newTime) < sampling_period_us)
-      {
-        /* chill */
-      }
-    }
-
-    //Serial.print("A ");
-    //Serial.println(millis());
-    //updateEncoders();
-
-    // Compute FFT
-    FFT.DCRemoval();
-    FFT.Windowing(FFT_WIN_TYP_HAMMING, FFT_FORWARD);
-    FFT.Compute(FFT_FORWARD);
-    FFT.ComplexToMagnitude();
-
-    // Reset temp variables
-    for (int i = 0; i < NUM_BANDS; i++)
-    {
-      tempBandValues[i] = 0;
-    }
-
-    // Analyse FFT results
-    for (int i = 2; i < (SAMPLES / 2); i++)
-    { // Don't use sample 0 and only first SAMPLES/2 are usable. Each array element represents a frequency bin and its value the amplitude.
-      if (vReal[i] > NOISE)
-      { // Add a crude noise filter
-
-        //8 bands, 12kHz top band
-        if (i <= 3)
-          tempBandValues[0] += (int)vReal[i];
-        if (i > 3 && i <= 6)
-          tempBandValues[1] += (int)vReal[i];
-        if (i > 6 && i <= 13)
-          tempBandValues[2] += (int)vReal[i];
-        if (i > 13 && i <= 27)
-          tempBandValues[3] += (int)vReal[i];
-        if (i > 27 && i <= 55)
-          tempBandValues[4] += (int)vReal[i];
-        if (i > 55 && i <= 112)
-          tempBandValues[5] += (int)vReal[i];
-        if (i > 112 && i <= 229)
-          tempBandValues[6] += (int)vReal[i];
-        if (i > 229)
-          tempBandValues[7] += (int)vReal[i];
-
-        /*16 bands, 12kHz top band 
-        if (i<=2 )           tempBandValues[0]  += (int)vReal[i];
-        if (i>2   && i<=3  ) tempBandValues[1]  += (int)vReal[i];
-        if (i>3   && i<=5  ) tempBandValues[2]  += (int)vReal[i];
-        if (i>5   && i<=7  ) tempBandValues[3]  += (int)vReal[i];
-        if (i>7   && i<=9  ) tempBandValues[4]  += (int)vReal[i];
-        if (i>9   && i<=13 ) tempBandValues[5]  += (int)vReal[i];
-        if (i>13  && i<=18 ) tempBandValues[6]  += (int)vReal[i];
-        if (i>18  && i<=25 ) tempBandValues[7]  += (int)vReal[i];
-        if (i>25  && i<=36 ) tempBandValues[8]  += (int)vReal[i];
-        if (i>36  && i<=50 ) tempBandValues[9]  += (int)vReal[i];
-        if (i>50  && i<=69 ) tempBandValues[10] += (int)vReal[i];
-        if (i>69  && i<=97 ) tempBandValues[11] += (int)vReal[i];
-        if (i>97  && i<=135) tempBandValues[12] += (int)vReal[i];
-        if (i>135 && i<=189) tempBandValues[13] += (int)vReal[i];
-        if (i>189 && i<=264) tempBandValues[14] += (int)vReal[i];
-        if (i>264          ) tempBandValues[15] += (int)vReal[i];*/
-      }
-    }
-
-    //Refresh main variables with temp data
-    for (int i = 0; i < NUM_BANDS; i++)
-    {
-      bandValues[i] = tempBandValues[i];
-    }
-
-    //Look for Peaks
-    for (byte band = 0; band < NUM_BANDS; band++)
-    {
-
-      if (bandValues[band] > peak[band])
-      {
-        peak[band] = bandValues[band];
-      }
-
-      // Decay peak
-      for (byte band = 0; band < NUM_BANDS; band++)
-        if (peak[band] > 500)
-          peak[band] -= 500;
-    }
-
-    //Update variables compared to current encoder location
-    updateEncoders();
-
-    updateTime();
-
-    updateWeather();
-  }
-
-  fftps++; //Debug, tracking loops per second
-
-  //Serial.println(xPortGetFreeHeapSize()); //How much memory is left in the task heap? If out we get a panic with "Stack canary watchpoint triggered"
-  //vTaskDelay(50); //Give some time back to the scheduler. Normally this task never lets up. Use this to share resousrces better on assigned core.
 }

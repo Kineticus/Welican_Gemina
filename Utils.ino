@@ -1,3 +1,115 @@
+void inputCompute(void *parameter)
+{
+  //Create an infinite for loop as this is a task and we want it to keep repeating
+  for (;;)
+  {
+    // Sample the audio pin
+    for (int i = 0; i < SAMPLES; i++)
+    {
+      newTime = micros();
+      vReal[i] = analogRead(AUDIO_IN_PIN); // A conversion takes about 9.7uS on an ESP32
+      vImag[i] = 0;
+      while ((micros() - newTime) < sampling_period_us)
+      {
+        /* chill */
+      }
+    }
+
+    //Serial.print("A ");
+    //Serial.println(millis());
+    //updateEncoders();
+
+    // Compute FFT
+    FFT.DCRemoval();
+    FFT.Windowing(FFT_WIN_TYP_HAMMING, FFT_FORWARD);
+    FFT.Compute(FFT_FORWARD);
+    FFT.ComplexToMagnitude();
+
+    // Reset temp variables
+    for (int i = 0; i < NUM_BANDS; i++)
+    {
+      tempBandValues[i] = 0;
+    }
+
+    // Analyse FFT results
+    for (int i = 2; i < (SAMPLES / 2); i++)
+    { // Don't use sample 0 and only first SAMPLES/2 are usable. Each array element represents a frequency bin and its value the amplitude.
+      if (vReal[i] > NOISE)
+      { // Add a crude noise filter
+
+        //8 bands, 12kHz top band
+        if (i <= 3)
+          tempBandValues[0] += (int)vReal[i];
+        if (i > 3 && i <= 6)
+          tempBandValues[1] += (int)vReal[i];
+        if (i > 6 && i <= 13)
+          tempBandValues[2] += (int)vReal[i];
+        if (i > 13 && i <= 27)
+          tempBandValues[3] += (int)vReal[i];
+        if (i > 27 && i <= 55)
+          tempBandValues[4] += (int)vReal[i];
+        if (i > 55 && i <= 112)
+          tempBandValues[5] += (int)vReal[i];
+        if (i > 112 && i <= 229)
+          tempBandValues[6] += (int)vReal[i];
+        if (i > 229)
+          tempBandValues[7] += (int)vReal[i];
+
+        /*16 bands, 12kHz top band 
+        if (i<=2 )           tempBandValues[0]  += (int)vReal[i];
+        if (i>2   && i<=3  ) tempBandValues[1]  += (int)vReal[i];
+        if (i>3   && i<=5  ) tempBandValues[2]  += (int)vReal[i];
+        if (i>5   && i<=7  ) tempBandValues[3]  += (int)vReal[i];
+        if (i>7   && i<=9  ) tempBandValues[4]  += (int)vReal[i];
+        if (i>9   && i<=13 ) tempBandValues[5]  += (int)vReal[i];
+        if (i>13  && i<=18 ) tempBandValues[6]  += (int)vReal[i];
+        if (i>18  && i<=25 ) tempBandValues[7]  += (int)vReal[i];
+        if (i>25  && i<=36 ) tempBandValues[8]  += (int)vReal[i];
+        if (i>36  && i<=50 ) tempBandValues[9]  += (int)vReal[i];
+        if (i>50  && i<=69 ) tempBandValues[10] += (int)vReal[i];
+        if (i>69  && i<=97 ) tempBandValues[11] += (int)vReal[i];
+        if (i>97  && i<=135) tempBandValues[12] += (int)vReal[i];
+        if (i>135 && i<=189) tempBandValues[13] += (int)vReal[i];
+        if (i>189 && i<=264) tempBandValues[14] += (int)vReal[i];
+        if (i>264          ) tempBandValues[15] += (int)vReal[i];*/
+      }
+    }
+
+    //Refresh main variables with temp data
+    for (int i = 0; i < NUM_BANDS; i++)
+    {
+      bandValues[i] = tempBandValues[i];
+    }
+
+    //Look for Peaks
+    for (byte band = 0; band < NUM_BANDS; band++)
+    {
+
+      if (bandValues[band] > peak[band])
+      {
+        peak[band] = bandValues[band];
+      }
+
+      // Decay peak
+      for (byte band = 0; band < NUM_BANDS; band++)
+        if (peak[band] > 500)
+          peak[band] -= 500;
+    }
+
+    //Update variables compared to current encoder location
+    updateEncoders();
+
+    updateTime();
+
+    updateWeather();
+  }
+
+  fftps++; //Debug, tracking loops per second
+
+  //Serial.println(xPortGetFreeHeapSize()); //How much memory is left in the task heap? If out we get a panic with "Stack canary watchpoint triggered"
+  //vTaskDelay(50); //Give some time back to the scheduler. Normally this task never lets up. Use this to share resousrces better on assigned core.
+}
+
 void drawDebug()
 {
   u8g2.setFont(u8g2_font_ncenB08_tr);

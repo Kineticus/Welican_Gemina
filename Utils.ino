@@ -1033,11 +1033,13 @@ void smoothOperator()
   //Check for interfade
   if (interfade == 0)
   {
+    /*
     //take snapshot
     for (int i = 0; i < NUM_LEDS; i++)
     {
       ledsTemp[i] = leds[i];
     }
+    */
   }
   else
   {

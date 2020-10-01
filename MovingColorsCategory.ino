@@ -417,7 +417,7 @@ void CandyCane(uint16_t ts, uint8_t numColors, uint8_t stripeLength, CRGB color1
   {
     if (numColors == 2)
     {
-      for (uint8_t i = 0; i < NUM_LEDS; i++)
+      for (int i = 0; i < NUM_LEDS; i++)
       {
         if ((i + offset) % ((numColors)*stripeLength) < stripeLength)
         {
@@ -432,7 +432,7 @@ void CandyCane(uint16_t ts, uint8_t numColors, uint8_t stripeLength, CRGB color1
 
     if (numColors == 3)
     {
-      for (uint8_t i = 0; i < NUM_LEDS; i++)
+      for (int i = 0; i < NUM_LEDS; i++)
       {
         if ((i + offset) % ((numColors + 1) * stripeLength) < stripeLength)
         {
@@ -531,7 +531,7 @@ void BlendIntoRainbow(CRGB color1, CRGB color2, CRGB color3)
     fadeToBlackBy(temp, NUM_LEDS, 1); // create fading tail effect
   }
 
-  for (uint8_t i = 0; i < NUM_LEDS; i++)
+  for (int i = 0; i < NUM_LEDS; i++)
   {
     nblend(leds[i], temp[i], 128);
   }
@@ -664,7 +664,7 @@ void mirror2ndHalf()
 
   if (gReverseDirection == false)
   { //false is center outward
-    for (uint8_t i = 0; i < NUM_LEDS / 2; i++)
+    for (int i = 0; i < NUM_LEDS / 2; i++)
     {
       leds[(NUM_LEDS / 2) - 1 - i] = leds_temp[i];
       leds[(NUM_LEDS / 2) + i] = leds_temp[i];
@@ -672,7 +672,7 @@ void mirror2ndHalf()
   }
   else
   { //true is from ends inward
-    for (uint8_t i = 0; i < NUM_LEDS / 2; i++)
+    for (int i = 0; i < NUM_LEDS / 2; i++)
     {
       leds[i] = leds_temp[i];
       leds[(NUM_LEDS - 1) - i] = leds_temp[i];
@@ -1052,7 +1052,7 @@ void Marqueev2(uint8_t spacing, uint16_t holdTime)
     // holdTime = Milliseconds to hold position before advancing
     // Advance pixels to next position.
 
-    for (uint8_t i = 0; i < (NUM_LEDS / spacing); i++)
+    for (int i = 0; i < (NUM_LEDS / spacing); i++)
     {
       pos = (spacing * (i - 1) + spacing + advance) % NUM_LEDS;
       leds[pos] = CHSV(hue, 255, 255);
@@ -1067,7 +1067,7 @@ void Marqueev2(uint8_t spacing, uint16_t holdTime)
     }
     else
     {
-      for (uint8_t i = 0; i < (NUM_LEDS / spacing); i++)
+      for (int i = 0; i < (NUM_LEDS / spacing); i++)
       {
         pos = (spacing * (i - 1) + spacing + advance) % NUM_LEDS;
         leds[pos] = CRGB::Black;
@@ -1111,7 +1111,7 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
     }
     else
     {
-      for (uint8_t i = 0; i < (NUM_LEDS / spacing); i++)
+      for (int i = 0; i < (NUM_LEDS / spacing); i++)
       {
         for (uint8_t w = 0; w < width; w++)
         {
@@ -1123,7 +1123,7 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
     }
 
     // Update pixels down the strip.
-    for (uint8_t i = 0; i < (NUM_LEDS / spacing); i++)
+    for (int i = 0; i < (NUM_LEDS / spacing); i++)
     {
       for (uint8_t w = 0; w < width; w++)
       {

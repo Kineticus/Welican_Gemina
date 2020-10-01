@@ -114,9 +114,6 @@ int pattern_max[6] = {12, 12, 22, 65, 80, NUM_FAVORITES};
 //LEDs
 float breath = 0;
 int breathing = 1;
-int interfade = 18; //set this to 0 to disable fade in on boot. Set to 25 for fade in.
-int interfade_max = 18;
-int interfade_speed = 14;
 
 /***********************************************************
   Simplex Noise Variable Declaration
@@ -261,6 +258,13 @@ struct GlobalUtils
   int encoderUnstick;
 };
 GlobalUtils utils = {0};
+struct GlobalLED
+{
+  int interfade; //set this to 0 to disable fade in on boot. Set to 25 for fade in.
+  int interfadeMax;
+  int interfadeSpeed;
+};
+GlobalLED globalLED = {18, 18, 14};
 
 struct Brightness
 {

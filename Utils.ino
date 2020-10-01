@@ -1031,7 +1031,7 @@ void resetFavorites()
 void smoothOperator()
 {
   //Check for interfade
-  if (interfade == 0)
+  if (globalLED.interfade == 0)
   {
     //take snapshot
     for (int i = 0; i < NUM_LEDS; i++)
@@ -1043,15 +1043,15 @@ void smoothOperator()
   {
     for (int i = 0; i < NUM_LEDS; i++)
     {
-      leds[i] = blend(leds[i], ledsTemp[i], interfade * interfade_speed);
+      leds[i] = blend(leds[i], ledsTemp[i], globalLED.interfade * globalLED.interfadeSpeed);
     }
 
     //Only want to interfade for a bit
-    interfade -= 1;
+    globalLED.interfade -= 1;
 
-    if (interfade < 1)
+    if (globalLED.interfade < 1)
     {
-      interfade = 0;
+      globalLED.interfade = 0;
     }
   }
 }
@@ -1059,7 +1059,7 @@ void smoothOperator()
 //make this an int and calculate variables based on time
 void smoothOperatorStart()
 {
-  interfade = interfade_max;
+  globalLED.interfade = globalLED.interfadeMax;
   for (int i = 0; i < NUM_LEDS; i++)
   {
     ledsTemp[i] = leds[i];

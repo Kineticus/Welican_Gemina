@@ -98,15 +98,12 @@ For UTC +0.00 : 0 * 60 * 60 : 0
 const char *ntpServer = "pool.ntp.org";
 String returnText;
 int NUM_FAVORITES = 25; //Max 50, loads all 50 at program load, dynamically assignable
-int encoder_unstick = 0;
 
 unsigned int sampling_period_us;
 volatile int peak[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // The length of these arrays must be >= NUM_BANDS
 int tempBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int oldBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 volatile int bandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-byte knobReading = 0;
-unsigned long tempTime;
 int menu[11];
 int menu_max[11] = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, NUM_FAVORITES}; //Root Menu Items, Game Menu Items, Settings Menu Items
 int menu_cur = 0;
@@ -138,7 +135,6 @@ int interfade_speed = 14;
 //Define simplex noise node for each LED
 const int LEDs_in_strip = NUM_LEDS;
 const int LEDs_for_simplex = 6;
-long tempTimer;
 int ledPosition;
 int fadeDirection = 0;      // 1 or 0, positive or negative
 int fadeDirection2 = 0;     // 1 or 0, positive or negative
@@ -232,12 +228,14 @@ struct Globals
 };
 Globals globals = {{}, -5, 0, 10, 0};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
+
 struct DevEnvironment
 {
   int fps;   //dev, speed tracking for main loop
   int fftps; //dev, speed tracking for fft task
 };
 DevEnvironment devEnv = {0, 0};
+
 struct GlobalStrings
 {
   String categoryName;
@@ -246,6 +244,13 @@ struct GlobalStrings
   char functionNameOutString[20];
 };
 GlobalStrings globalStrings = {"", "", {}, {}};
+
+struct GlobalUtils
+{
+  int encoderUnstick;
+};
+GlobalUtils utils = {0};
+
 struct Brightness
 {
   int current;

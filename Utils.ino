@@ -304,13 +304,13 @@ void updateEncoders()
   //check for out of sync condition (knob is reseting at value that is not divisible by 4)
   if ((abs(globals.encoder.getCount()) % 4) > 0)
   {
-    encoder_unstick++;
+    utils.encoderUnstick++;
   }
   else
   {
-    encoder_unstick = 0;
+    utils.encoderUnstick = 0;
   }
-  if (encoder_unstick > 200)
+  if (utils.encoderUnstick > 200)
   {
     globals.encoder.clearCount();
     knob1.temp = 0;

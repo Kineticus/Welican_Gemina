@@ -102,7 +102,7 @@ void inputCompute(void *parameter)
     updateTime();
 
     updateWeather();
-    
+
     fftps++; //Debug, tracking loops per second
 
     //Serial.println(xPortGetFreeHeapSize()); //How much memory is left in the task heap? If out we get a panic with "Stack canary watchpoint triggered"
@@ -568,6 +568,30 @@ void drawBottom()
   }
 }
 
+void convertUnixToTime(time_t t)
+{
+  struct tm ts;
+  char buf[80];
+
+  // Get current time
+  time(&t);
+
+  // Format time, "ddd yyyy-mm-dd hh:mm:ss zzz"
+  ts = *localtime(&t);
+  strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", &ts);
+  Serial.println("time stuff --------------");
+  Serial.println(buf);
+}
+
+time_t timeConvert(String timeToConvert)
+{
+  struct tm tm;
+  char __newTime[sizeof(timeToConvert)];
+  timeToConvert.toCharArray(__newTime, sizeof(__newTime));
+  strptime(__newTime, "%H:%M:%S", &tm);
+  time_t t = mktime(&tm); // t is now your desired time_t
+  return t;
+}
 /*******************************************************************
  *  Menu System - menu_cur sets menu page. menu[] contains selection
  *                menu_max[] specifies max selection
@@ -1103,6 +1127,9 @@ void updateWeather()
       weather.currentWeatherDescription = weather.weatherJson["weather"][0]["description"];
       weather.sunrise = weather.weatherJson["sys"]["sunrise"];
       weather.sunset = weather.weatherJson["sys"]["sunset"];
+
+      convertUnixToTime(timeConvert(weather.sunrise));
+      convertUnixToTime(timeConvert(weather.sunset));
 
       Serial.print("Temperature: ");
       Serial.println(weather.weatherJson["main"]["temp"]);

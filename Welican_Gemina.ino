@@ -99,7 +99,6 @@ const char *ntpServer = "pool.ntp.org";
 String returnText;
 int NUM_FAVORITES = 25; //Max 50, loads all 50 at program load, dynamically assignable
 
-unsigned int sampling_period_us;
 volatile int peak[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // The length of these arrays must be >= NUM_BANDS
 int tempBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int oldBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -107,9 +106,6 @@ volatile int bandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int menu[11];
 int menu_max[11] = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, NUM_FAVORITES}; //Root Menu Items, Game Menu Items, Settings Menu Items
 int menu_cur = 0;
-int runMode = 0;
-int mode = 0;
-int mode_max = MAX_MODES;
 int pattern[6];
 int pattern_temp = 0;
 int favorite_mode[50];    //declare memory for all 50 favorites
@@ -218,6 +214,10 @@ struct Globals
   int tempValue;
   int currentSpeed;
   unsigned long newTime;
+  unsigned int samplingPeriodUs;
+  int runMode;
+  int mode;
+  int modeMax;
 
   ESP32Encoder encoder;
   ESP32Encoder encoder2;
@@ -226,7 +226,7 @@ struct Globals
   double vReal[SAMPLES];
   double vImag[SAMPLES];
 };
-Globals globals = {{}, -5, 0, 10, 0};
+Globals globals = {{}, -5, 0, 10, 0, 0, 0, 0, MAX_MODES};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
 
 struct DevEnvironment
@@ -507,11 +507,11 @@ void setup()
 
   fallios.score_top = word;
 
-  mode = EEPROM.read(0);
+  globals.mode = EEPROM.read(0);
   brightness.current = EEPROM.read(1);
 
   //Read the pattern setting for each mode
-  for (int i = 0; i <= mode_max; i++)
+  for (int i = 0; i <= globals.modeMax; i++)
   {
     pattern[i] = EEPROM.read(2 + i);
 
@@ -523,9 +523,9 @@ void setup()
   }
 
   //Make sure values aren't out of range
-  if (mode > mode_max)
+  if (globals.mode > globals.modeMax)
   {
-    mode = 0;
+    globals.mode = 0;
   }
 
   //Set master brightness control
@@ -559,7 +559,7 @@ void loop()
   //Clear the display buffer so we can draw new stuff
   u8g2.clearBuffer();
 
-  switch (runMode)
+  switch (globals.runMode)
   {
   case 0: //Main run mode
     drawBottom();
@@ -621,25 +621,25 @@ void loop()
   //Write current breath value to status LED
   ledcWrite(STATUS_LED, breath);
 
-  switch (mode)
+  switch (globals.mode)
   {
   case 0:
-    basic_category(pattern[mode]);
+    basic_category(pattern[globals.mode]);
     break;
   case 1:
-    music_category(pattern[mode]);
+    music_category(pattern[globals.mode]);
     break;
   case 2:
-    chill_category(pattern[mode]);
+    chill_category(pattern[globals.mode]);
     break;
   case 3:
-    moving_colors_category(pattern[mode]);
+    moving_colors_category(pattern[globals.mode]);
     break;
   case 4:
-    legacy_category(pattern[mode]);
+    legacy_category(pattern[globals.mode]);
     break;
   case 5:
-    favorites_category(pattern[mode]);
+    favorites_category(pattern[globals.mode]);
     break;
   }
 

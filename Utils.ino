@@ -9,7 +9,7 @@ void inputCompute(void *parameter)
       globals.newTime = micros();
       globals.vReal[i] = analogRead(AUDIO_IN_PIN); // A conversion takes about 9.7uS on an ESP32
       globals.vImag[i] = 0;
-      while ((micros() - globals.newTime) < sampling_period_us)
+      while ((micros() - globals.newTime) < globals.samplingPeriodUs)
       {
         /* chill */
       }
@@ -119,7 +119,7 @@ void drawDebug()
   u8g2.print("Knob 1: ");
   //u8g2.print(globals.encoder.getCount());
   u8g2.setCursor(80, 24);
-  u8g2.print(pattern[mode]);
+  u8g2.print(pattern[globals.mode]);
 
   if (knob1.click == true)
   {
@@ -139,7 +139,7 @@ void drawDebug()
   u8g2.print(brightness.current);
 
   u8g2.setCursor(80, 64);
-  u8g2.print(mode);
+  u8g2.print(globals.mode);
 }
 
 void updateEncoders()
@@ -159,13 +159,13 @@ void updateEncoders()
     knob1.click = 1;
 
     //Are we running in normal mode? If not we can skip these checks
-    if (runMode == 0)
+    if (globals.runMode == 0)
     {
       //Check to see if the Brightness Knob (#2) is also held down
       if (knob2.debounce == 0)
       {
         //It's not? Just advance the mode by once
-        mode += 1;
+        globals.mode += 1;
 
         //Since we have changed the mode we should save it in a bit
         saveTime = 100;
@@ -174,10 +174,10 @@ void updateEncoders()
         smoothOperatorStart();
 
         //Check to make sure we haven't gone over the maximum amount of modes
-        if (mode > mode_max)
+        if (globals.mode > globals.modeMax)
         {
           //if we did go over let's roll mode back to 0
-          mode = 0;
+          globals.mode = 0;
         }
 
         //Clear up some other variables
@@ -186,8 +186,8 @@ void updateEncoders()
       else
       {
         //brightness knob is clicked at the same time as the program knob?
-        //Change the runMode variable to Menu
-        runMode = 1;
+        //Change the globals.runMode variable to Menu
+        globals.runMode = 1;
         menu_cur = 0;    //Select main menu page
         knob1.click = 0; //Null out clicks so menu doesn't get confused on first run
         knob2.click = 0;
@@ -215,12 +215,12 @@ void updateEncoders()
     knob2.debounce -= 1;
   }
 
-  if ((knob2.heldTime > 69) && (mode != 5)) //Can't set a favorite of a favorite
+  if ((knob2.heldTime > 69) && (globals.mode != 5)) //Can't set a favorite of a favorite
   {
     //Save Favorite
     knob2.heldTime = 0;
-    runMode = 1;   //enter Menu Mode
-    menu_cur = 10; //Select the 10th menu, New Favorite
+    globals.runMode = 1; //enter Menu Mode
+    menu_cur = 10;       //Select the 10th menu, New Favorite
     //menu[10] = 0;
   }
 
@@ -228,13 +228,13 @@ void updateEncoders()
 
   globals.tempValue = globals.encoder.getCount() - knob1.temp; //Read current knob position vs. last time we checked
 
-  if (runMode == 0)
+  if (globals.runMode == 0)
   {
     while (globals.tempValue >= 4)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
       globals.tempValue -= 4;
       knob1.temp += 4;
-      pattern[mode] += 1;
+      pattern[globals.mode] += 1;
       saveTime = 100;
       smoothOperatorStart();
     }
@@ -242,24 +242,24 @@ void updateEncoders()
     {
       globals.tempValue += 4;
       knob1.temp -= 4;
-      pattern[mode] -= 1;
+      pattern[globals.mode] -= 1;
       saveTime = 100;
       smoothOperatorStart();
     }
 
     //Constrain Mode - add switch to allow 3 options - constrain; rollover back to beginning/end; rollover to next/previous mode
-    if (pattern[mode] > pattern_max[mode])
+    if (pattern[globals.mode] > pattern_max[globals.mode])
     {
       //Mode 1 - constrain
-      pattern[mode] = pattern_max[mode];
+      pattern[globals.mode] = pattern_max[globals.mode];
     }
-    if (pattern[mode] <= 0)
+    if (pattern[globals.mode] <= 0)
     {
       //Mode 1 - constrain
-      pattern[mode] = 0;
+      pattern[globals.mode] = 0;
     }
   }
-  else if (runMode == 1)
+  else if (globals.runMode == 1)
   {
     while (globals.tempValue >= 4)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
@@ -285,7 +285,7 @@ void updateEncoders()
       menu[menu_cur] = 0;
     }
   }
-  else if (runMode == 2)
+  else if (globals.runMode == 2)
   {
     while (globals.tempValue >= 4)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
@@ -321,7 +321,7 @@ void updateEncoders()
   globals.tempValue = globals.encoder2.getCount() - knob2.temp; //Read current knob position vs. last time we checked
   knob2.temp = globals.encoder2.getCount();                     //Store this position to compare next time around
 
-  if (runMode == 0)
+  if (globals.runMode == 0)
   {
     if (globals.tempValue != 0)
     {
@@ -369,7 +369,7 @@ void updateEncoders()
     // set master brightness control
     FastLED.setBrightness(brightness.current);
   }
-  else if (runMode == 2)
+  else if (globals.runMode == 2)
   {
     while (globals.tempValue > 0)
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
@@ -410,9 +410,9 @@ void favorites_category(int patternMode)
 
 void setGameMode()
 {
-  runMode = 2;                          //game mode
+  globals.runMode = 2;                  //game mode
   brightness.temp = brightness.current; //save brightness
-  pattern_temp = pattern[mode];         //and program in case they get messed up
+  pattern_temp = pattern[globals.mode]; //and program in case they get messed up
 
   switch (menu[1]) //Call reset code for whatever game we're about to run
   {
@@ -435,13 +435,13 @@ void endGameMode()
 
   //Set values to right when game mode started in case they got dorked with
   brightness.current = brightness.temp;
-  pattern[mode] = pattern_temp;
+  pattern[globals.mode] = pattern_temp;
 
   //Don't want to see brightness indicator when we leave
   brightness.debounce = 0;
 
-  //Set runMode (like Run mode) back to default, 0
-  runMode = 0;
+  //Set globals.runMode (like Run mode) back to default, 0
+  globals.runMode = 0;
 }
 
 void showBrightnessDisplay()
@@ -503,7 +503,7 @@ void drawTop()
   u8g2.drawBox(0, 0, VISUALIZER_Y, 16);
   u8g2.setDrawColor(1);
 
-  switch (mode)
+  switch (globals.mode)
   {
   case 0:
     u8g2.drawXBMP(0, 0, STAR_WIDTH, STAR_HEIGHT, starshape);
@@ -523,9 +523,9 @@ void drawTop()
     break;
   }
 
-  //u8g2.print(mode);
+  //u8g2.print(globals.mode);
   u8g2.setCursor(12, 8);
-  u8g2.print(pattern[mode]);
+  u8g2.print(pattern[globals.mode]);
   u8g2.setCursor(32, 8);
   u8g2.print(globalStrings.functionNameOutString);
   //u8g2.drawXBMP(42,0,donut_width, donut_height, donut);
@@ -537,11 +537,11 @@ void drawTop()
 
 void drawBottom()
 {
-  int tempMode = mode;
+  int tempMode = globals.mode;
 
-  if (mode == 5) //favorites
+  if (globals.mode == 5) //favorites
   {
-    tempMode = favorite_mode[pattern[mode]];
+    tempMode = favorite_mode[pattern[globals.mode]];
   }
 
   switch (tempMode)
@@ -799,7 +799,7 @@ void drawMenu()
     switch (menu_cur)
     {
     case 0: //main menu
-      runMode = 0;
+      globals.runMode = 0;
       break;
     case 1: //Games Menu
       menu_cur = 0;
@@ -816,7 +816,7 @@ void drawMenu()
       break;
 
     case 10: //Add New Favorite
-      runMode = 0;
+      globals.runMode = 0;
       break;
     }
   }
@@ -838,7 +838,7 @@ void drawMenu()
         //stuff
         break;
       case 3:
-        runMode = 0; //exit
+        globals.runMode = 0; //exit
         break;
       }
       break;
@@ -846,11 +846,11 @@ void drawMenu()
       switch (menu[menu_cur])
       {
       case 0:
-        runMode = 2; //game mode
+        globals.runMode = 2; //game mode
         setGameMode();
         break;
       case 1:
-        runMode = 2; //game mode
+        globals.runMode = 2; //game mode
         setGameMode();
         break;
       case 2:
@@ -879,7 +879,7 @@ void drawMenu()
       switch (menu[menu_cur])
       {
       case 0: //Add New, can't favorite a favorite!
-        if (mode != 5)
+        if (globals.mode != 5)
         {
           menu_cur = 10;
         }
@@ -915,13 +915,13 @@ void drawMenu()
       case 1: //Yes
         resetFavorites();
         //picture of trash can or something and small delay later
-        runMode = 0;
+        globals.runMode = 0;
         break;
       }
       break;
     case 10:
       saveFavorites(); //New Favorite click
-      runMode = 0;
+      globals.runMode = 0;
       break;
     }
   }
@@ -983,13 +983,13 @@ void newFavoritesMenu()
 
 void saveFavorites()
 {
-  EEPROM.write(100 + menu[menu_cur] * 2, pattern[mode]); //the pattern we're on
-  EEPROM.write(101 + (menu[menu_cur] * 2), mode);        //the mode we're on
+  EEPROM.write(100 + menu[menu_cur] * 2, pattern[globals.mode]); //the pattern we're on
+  EEPROM.write(101 + (menu[menu_cur] * 2), globals.mode);        //the mode we're on
 
   EEPROM.commit(); //write it to memory
 
-  favorite_mode[menu[menu_cur]] = mode;             //update running variables
-  favorite_pattern[menu[menu_cur]] = pattern[mode]; //first updated in readFavorites
+  favorite_mode[menu[menu_cur]] = globals.mode;             //update running variables
+  favorite_pattern[menu[menu_cur]] = pattern[globals.mode]; //first updated in readFavorites
 }
 
 void readFavorites()
@@ -1177,10 +1177,10 @@ void saveTimeCheck()
 
   if (saveTime == 1)
   {
-    EEPROM.write(0, mode);
+    EEPROM.write(0, globals.mode);
     EEPROM.write(1, brightness.current);
 
-    for (int i = 0; i <= mode_max; i++)
+    for (int i = 0; i <= globals.modeMax; i++)
     {
       EEPROM.write(2 + i, pattern[i]);
     }
@@ -1232,12 +1232,12 @@ String httpGETRequest(const char *serverName)
 
 void drawProgressBar()
 {
-  int boxWidth = (SCREEN_WIDTH / pattern_max[mode]);
+  int boxWidth = (SCREEN_WIDTH / pattern_max[globals.mode]);
   if (boxWidth < 4)
   {
     boxWidth = 4;
   }
-  u8g2.drawBox(((float(SCREEN_WIDTH - boxWidth) / pattern_max[mode]) * pattern[mode]), 12, boxWidth, 4);
+  u8g2.drawBox(((float(SCREEN_WIDTH - boxWidth) / pattern_max[globals.mode]) * pattern[globals.mode]), 12, boxWidth, 4);
 }
 
 void addGlitter(fract8 chanceOfGlitter)

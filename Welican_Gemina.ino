@@ -232,9 +232,7 @@ int dvdBounce3_x = random(0, 32);
 int dvdBounce3_y = random(0, 32);
 int dvdBounce3_vx = 1;
 int dvdBounce3_vy = 1;
-int brightness = 0;
-int brightness_temp = 0;
-unsigned long brightness_debounce = 0;
+
 // int star_x[MAX_STARS];
 // int star_xx[MAX_STARS];
 // int star_y[MAX_STARS];
@@ -259,7 +257,13 @@ struct Globals
 };
 Globals globals = {{}, -5, 0};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
-
+struct Brightness
+{
+  int current;
+  int temp;
+  unsigned long debounce;
+};
+Brightness brightness = {0, 0, 0};
 struct StarModel
 {
   int x[MAX_STARS];
@@ -448,13 +452,13 @@ void setup()
   // });
   // Route to set GPIO to HIGH
   server.on("/on", HTTP_GET, [](AsyncWebServerRequest *request) {
-    brightness = 255;
+    brightness.current = 255;
     request->send(SPIFFS, "/index.html", String(), false, processor);
   });
 
   // Route to set GPIO to LOW
   server.on("/off", HTTP_GET, [](AsyncWebServerRequest *request) {
-    brightness = 0;
+    brightness.current = 0;
     request->send(SPIFFS, "/index.html", String(), false, processor);
   });
 
@@ -500,7 +504,7 @@ void setup()
   fallios.score_top = word;
 
   mode = EEPROM.read(0);
-  brightness = EEPROM.read(1);
+  brightness.current = EEPROM.read(1);
 
   //Read the pattern setting for each mode
   for (int i = 0; i <= mode_max; i++)
@@ -521,7 +525,7 @@ void setup()
   }
 
   //Set master brightness control
-  FastLED.setBrightness(brightness);
+  FastLED.setBrightness(brightness.current);
 
   readFavorites();
 
@@ -646,9 +650,9 @@ void loop()
 
   if (useFade == true)
   {
-    brightness = brightness + fadeAmount;
+    brightness.current = brightness.current + fadeAmount;
     // reverse the direction of the fading at the ends of the fade:
-    if (brightness == 0 || brightness == 255)
+    if (brightness.current == 0 || brightness.current == 255)
     {
       fadeAmount = -fadeAmount;
     }

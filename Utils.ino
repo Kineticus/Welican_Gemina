@@ -136,7 +136,7 @@ void drawDebug()
   }
 
   u8g2.setCursor(80, 48);
-  u8g2.print(brightness);
+  u8g2.print(brightness.current);
 
   u8g2.setCursor(80, 64);
   u8g2.print(mode);
@@ -325,7 +325,7 @@ void updateEncoders()
   {
     if (globals.tempValue != 0)
     {
-      brightness_debounce = millis() + 1420;
+      brightness.debounce = millis() + 1420;
       saveTime = 100;
     }
 
@@ -354,20 +354,20 @@ void updateEncoders()
     }
 
     //Add adjusted value to brightness
-    brightness += globals.tempValue;
+    brightness.current += globals.tempValue;
 
     //Constrain (for some reason constrain function gave me fits)
-    if (brightness > 255)
+    if (brightness.current > 255)
     {
-      brightness = 255;
+      brightness.current = 255;
     }
-    if (brightness < 0)
+    if (brightness.current < 0)
     {
-      brightness = 0;
+      brightness.current = 0;
     }
 
     // set master brightness control
-    FastLED.setBrightness(brightness);
+    FastLED.setBrightness(brightness.current);
   }
   else if (runMode == 2)
   {
@@ -410,9 +410,9 @@ void favorites_category(int patternMode)
 
 void setGameMode()
 {
-  runMode = 2;                  //game mode
-  brightness_temp = brightness; //save brightness
-  pattern_temp = pattern[mode]; //and program in case they get messed up
+  runMode = 2;                          //game mode
+  brightness.temp = brightness.current; //save brightness
+  pattern_temp = pattern[mode];         //and program in case they get messed up
 
   switch (menu[1]) //Call reset code for whatever game we're about to run
   {
@@ -434,11 +434,11 @@ void endGameMode()
   updateEncoders();
 
   //Set values to right when game mode started in case they got dorked with
-  brightness = brightness_temp;
+  brightness.current = brightness.temp;
   pattern[mode] = pattern_temp;
 
   //Don't want to see brightness indicator when we leave
-  brightness_debounce = 0;
+  brightness.debounce = 0;
 
   //Set runMode (like Run mode) back to default, 0
   runMode = 0;
@@ -451,42 +451,42 @@ void showBrightnessDisplay()
   int frameW = 38;
   int frameH = 39;
 
-  if (brightness_debounce > millis())
+  if (brightness.debounce > millis())
   {
     u8g2.setDrawColor(0);
     u8g2.drawBox(frameX, frameY - 1, frameW, frameH);
     u8g2.setDrawColor(1);
     u8g2.drawRFrame(frameX, frameY - 1, frameW, frameH, 7);
 
-    if (brightness == 0)
+    if (brightness.current == 0)
     {
       u8g2.drawXBMP(frameX, frameY, brightness1_width, brightness1_height, brightness1);
     }
-    else if (brightness == 255)
+    else if (brightness.current == 255)
     {
       u8g2.drawXBMP(frameX, frameY, brightness8_width, brightness8_height, brightness8);
     }
-    else if (brightness > 200)
+    else if (brightness.current > 200)
     {
       u8g2.drawXBMP(frameX, frameY, brightness7_width, brightness7_height, brightness7);
     }
-    else if (brightness > 160)
+    else if (brightness.current > 160)
     {
       u8g2.drawXBMP(frameX, frameY, brightness6_width, brightness6_height, brightness6);
     }
-    else if (brightness > 120)
+    else if (brightness.current > 120)
     {
       u8g2.drawXBMP(frameX, frameY, brightness5_width, brightness5_height, brightness5);
     }
-    else if (brightness > 80)
+    else if (brightness.current > 80)
     {
       u8g2.drawXBMP(frameX, frameY, brightness4_width, brightness4_height, brightness4);
     }
-    else if (brightness > 40)
+    else if (brightness.current > 40)
     {
       u8g2.drawXBMP(frameX, frameY, brightness3_width, brightness3_height, brightness3);
     }
-    else if (brightness > 0)
+    else if (brightness.current > 0)
     {
       u8g2.drawXBMP(frameX, frameY, brightness2_width, brightness2_height, brightness2);
     }
@@ -1178,7 +1178,7 @@ void saveTimeCheck()
   if (saveTime == 1)
   {
     EEPROM.write(0, mode);
-    EEPROM.write(1, brightness);
+    EEPROM.write(1, brightness.current);
 
     for (int i = 0; i <= mode_max; i++)
     {
@@ -1351,14 +1351,14 @@ void setAll(byte red, byte green, byte blue)
   showStrip();
 }
 
-void fadeLightBy(int pixel, int brightness)
+void fadeLightBy(int pixel, int brightnes)
 {
 
 #ifndef ADAFRUIT_NEOPIXEL_H
 
   // FastLED
 
-  leds[pixel].fadeLightBy(brightness);
+  leds[pixel].fadeLightBy(brightnes);
 #endif
 }
 
@@ -1452,35 +1452,35 @@ String processor(const String &var)
 {
   if (var == "BRIGHTNESS")
   {
-    if (brightness == 0)
+    if (brightness.current == 0)
     {
       returnText = "Off";
     }
-    else if (brightness == 255)
+    else if (brightness.current == 255)
     {
       returnText = "Max";
     }
-    else if (brightness > 200)
+    else if (brightness.current > 200)
     {
       returnText = "Bright";
     }
-    else if (brightness > 160)
+    else if (brightness.current > 160)
     {
       returnText = "Half";
     }
-    else if (brightness > 120)
+    else if (brightness.current > 120)
     {
       returnText = "Third";
     }
-    else if (brightness > 80)
+    else if (brightness.current > 80)
     {
       returnText = "Quarter";
     }
-    else if (brightness > 40)
+    else if (brightness.current > 40)
     {
       returnText = "Dim";
     }
-    else if (brightness > 0)
+    else if (brightness.current > 0)
     {
       returnText = "Moody";
     }

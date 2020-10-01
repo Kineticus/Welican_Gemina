@@ -177,19 +177,19 @@ void moving_colors_category(int patternMode)
     break;
   case 37:
     functionName = "Twinkle 1";
-    Twinkle(8, 100, 50, 100, brightness, false);
+    Twinkle(8, 100, 50, 100, brightness.current, false);
     break;
   case 38:
     functionName = "Twinkle 2";
-    Twinkle(8, 20, 125, 100, brightness, true);
+    Twinkle(8, 20, 125, 100, brightness.current, true);
     break;
   case 39:
     functionName = "Twinkle 3";
-    Twinkle(16, 200, 200, 100, brightness, false);
+    Twinkle(16, 200, 200, 100, brightness.current, false);
     break;
   case 40:
     functionName = "Twinkle 4";
-    Twinkle(32, 500, 70, 100, brightness, true);
+    Twinkle(32, 500, 70, 100, brightness.current, true);
     break;
   case 41:
     functionName = "Mover 1";
@@ -978,7 +978,7 @@ void MeteorRain(byte red, byte green, byte blue, byte meteorSize, byte meteorTra
   for (int i = 0; i < NUM_LEDS + NUM_LEDS; i++)
   {
 
-    // fade brightness all LEDs one step
+    // fade brightness.current all LEDs one step
     for (int j = 0; j < NUM_LEDS; j++)
     {
       if ((!meteorRandomDecay) || (random(10) > 5))

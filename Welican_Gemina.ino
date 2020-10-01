@@ -110,10 +110,7 @@ int favorite_mode[50];    //declare memory for all 50 favorites
 int favorite_pattern[50]; //all are used under the hood
 // basic, music, chill, moving colors, legacy
 int pattern_max[6] = {12, 12, 22, 65, 80, NUM_FAVORITES};
-unsigned long startMillis;
-unsigned long currentMillis;
-const unsigned long period = 1000;
-int saveTime = 0;
+
 //LEDs
 float breath = 0;
 int breathing = 1;
@@ -244,6 +241,21 @@ struct GlobalStrings
 };
 GlobalStrings globalStrings = {"", "", {}, {}};
 
+struct GlobalTime
+{
+  int currentMinute;
+  int currentHour;
+  int currentDay;
+  int currentDate;
+  int currentMonth;
+  bool currentPM;
+  unsigned long startMillis;
+  unsigned long currentMillis;
+  const unsigned long period;
+  int save;
+};
+GlobalTime globalTime = {0, 100, 5, 1, 0, 0, 0, 0, 1000, 0};
+
 struct GlobalUtils
 {
   int encoderUnstick;
@@ -344,17 +356,6 @@ struct OpenWeatherObject
   String jsonBuffer;
 };
 OpenWeatherObject weather;
-
-struct Time
-{
-  int currentMinute;
-  int currentHour;
-  int currentDay;
-  int currentDate;
-  int currentMonth;
-  bool currentPM;
-};
-Time globalTime = {0, 100, 5, 1, 0, 0};
 
 struct Knob
 {

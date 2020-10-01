@@ -909,11 +909,11 @@ void Mover(uint8_t thisfade, uint8_t hue)
 {
   // https://forum.makerforums.info/t/still-a-newbie-with-newbie-questions/64143/2
 
-  currentMillis = millis();
-  // if (currentMillis - startMillis >= period)
-  if (currentMillis - startMillis >= beatsin8(15, 25, 100))
+  globalTime.currentMillis = millis();
+  // if (globalTime.currentMillis - globalTime.startMillis >= globalTime.period)
+  if (globalTime.currentMillis - globalTime.startMillis >= beatsin8(15, 25, 100))
   {
-    startMillis = currentMillis;
+    globalTime.startMillis = globalTime.currentMillis;
     leds[globals.pixelNumber] += CHSV(hue, 255, 255);
     leds[(globals.pixelNumber + 5) % NUM_LEDS] += CHSV(hue + 85, 255, 255);   // We use modulus so that the location is between 0 and NUM_LEDS
     leds[(globals.pixelNumber + 10) % NUM_LEDS] += CHSV(hue + 170, 255, 255); // Same here.
@@ -1004,10 +1004,10 @@ void MeteorRain(byte red, byte green, byte blue, byte meteorSize, byte meteorTra
 void Meteor(uint8_t red, uint8_t green, uint8_t blue)
 {
   // https://www.reddit.com/r/FastLED/comments/gbhpcq/meteor_sketches_with_millis/
-  currentMillis = millis();
-  if (currentMillis - startMillis >= beatsin8(15, 25, 100))
+  globalTime.currentMillis = millis();
+  if (globalTime.currentMillis - globalTime.startMillis >= beatsin8(15, 25, 100))
   {
-    startMillis = currentMillis;
+    globalTime.startMillis = globalTime.currentMillis;
 
     leds[globals.pixelNumber] = CRGB(red, green, blue);
     blur1d(leds, NUM_LEDS, beatsin8(7, 20, 80));

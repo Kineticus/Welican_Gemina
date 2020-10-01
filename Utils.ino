@@ -168,7 +168,7 @@ void updateEncoders()
         globals.mode += 1;
 
         //Since we have changed the mode we should save it in a bit
-        saveTime = 100;
+        globalTime.save = 100;
 
         //And let the fade function know to start
         smoothOperatorStart();
@@ -235,7 +235,7 @@ void updateEncoders()
       globals.tempValue -= 4;
       knob1.temp += 4;
       pattern[globals.mode] += 1;
-      saveTime = 100;
+      globalTime.save = 100;
       smoothOperatorStart();
     }
     while (globals.tempValue <= -4)
@@ -243,7 +243,7 @@ void updateEncoders()
       globals.tempValue += 4;
       knob1.temp -= 4;
       pattern[globals.mode] -= 1;
-      saveTime = 100;
+      globalTime.save = 100;
       smoothOperatorStart();
     }
 
@@ -326,7 +326,7 @@ void updateEncoders()
     if (globals.tempValue != 0)
     {
       brightness.debounce = millis() + 1420;
-      saveTime = 100;
+      globalTime.save = 100;
     }
 
     //Determine "acceleration" based on change amount. Large change = fast turn of knob
@@ -1170,12 +1170,12 @@ void updateWeather()
 
 void saveTimeCheck()
 {
-  if (saveTime > 0)
+  if (globalTime.save > 0)
   {
-    saveTime -= 1;
+    globalTime.save -= 1;
   }
 
-  if (saveTime == 1)
+  if (globalTime.save == 1)
   {
     EEPROM.write(0, globals.mode);
     EEPROM.write(1, brightness.current);

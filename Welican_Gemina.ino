@@ -308,7 +308,7 @@ struct OpenWeatherSettings
   String countryCode;
   unsigned long weatherTimerDelay;
 };
-OpenWeatherSettings weatherSettings = {"33701", "US", 10000};
+OpenWeatherSettings weatherSettings = {"33701", "US", 70000};
 
 struct OpenWeatherObject
 {
@@ -383,7 +383,7 @@ void setup()
   ledcAttachPin(23, STATUS_LED);
 
   //Set the status LED to the lowest brightness
-  ledcWrite(STATUS_LED, 100);
+  ledcWrite(STATUS_LED, 0);
 
   // Enabke internal pull up resistors for buttons
   pinMode(KNOB_1C, INPUT_PULLUP); //Knob 1 Click, internal Pull Up (button connects to ground)
@@ -468,7 +468,7 @@ void setup()
 
   //FastLED Declation
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
-  FastLED.addLeds<LED_TYPE, DATA_PIN_A, COLOR_ORDER>(leds, NUM_LEDS);
+  //FastLED.addLeds<LED_TYPE, DATA_PIN_A, COLOR_ORDER>(leds, NUM_LEDS);
 
   /* Load Save Settings
 

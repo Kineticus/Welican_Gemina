@@ -1076,7 +1076,7 @@ void updateTime()
   {
     if (globalTime.currentHour == 100)
     {
-      configTime(3600 * timeZone, 0, ntpServer, NULL, NULL);
+      configTime(3600 * globals.timeZone, 0, ntpServer, NULL, NULL);
 
       setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1);
     }

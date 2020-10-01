@@ -85,7 +85,6 @@ For EDT - UTC -4.00 : -4 * 60 * 60 : -14400
 For UTC +0.00 : 0 * 60 * 60 : 0
 */
 const char *ntpServer = "pool.ntp.org";
-int timeZone = -5;
 String returnText;
 AsyncWebServer server(80);
 TaskHandle_t inputComputeTask = NULL;
@@ -254,8 +253,9 @@ int star_z[maxStars];
 struct Globals
 {
   int temp[3];
+  int timeZone;
 };
-Globals globals;
+Globals globals = {{}, -5};
 
 //GAMES
 struct Player

@@ -792,7 +792,7 @@ void SteadyRGB(int ledSpacing)
   // setPixel(i + 10, 255, 255, 255);
   // setPixel(i + 11, 255, 255, 255);
 
-  if (useFade == true)
+  if (brightness.useFade == true)
   {
     fadeLightBy(i, brightness.current);
     fadeLightBy(i + 1, brightness.current);

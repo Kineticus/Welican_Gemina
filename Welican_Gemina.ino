@@ -122,7 +122,6 @@ int breathing = 1;
 ***********************************************************/
 //Define simplex noise node for each LED
 
-bool useFade = false;
 boolean fadingTail = 0; // Add fading tail? [1=true, 0=falue]
 uint8_t fadeRate = 170; // How fast to fade out tail. [0-255]
 int8_t delta2 = 1;      // Sets forward or backwards direction amount. (Can be negative.)
@@ -162,7 +161,6 @@ int flowDirection = -1;      // Use either 1 or -1 to set flow direction
 uint16_t cycleLength = 1500; // Lover values = continuous flow, higher values = distinct pulses.
 uint16_t pulseLength = 150;  // How long the pulse takes to fade out.  Higher value is longer.
 uint16_t pulseOffset = 200;  // Delay before second pulse.  Higher value is more delay.
-uint8_t baseBrightness = 10; // Brightness of LEDs when not pulsing. Set to 0 for off.
 // Extra fake LED at the end, to avoid fencepost problem.
 // It is used by simplex node and interpolation code.
 float LED_array_red[LEDS_IN_STRIP + 1];
@@ -270,9 +268,11 @@ struct Brightness
   int current;
   int temp;
   unsigned long debounce;
-  int fadeAmount; // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
+  bool useFade;
+  int fadeAmount;              // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
+  uint8_t baseBrightness = 10; // Brightness of LEDs when not pulsing. Set to 0 for off.
 };
-Brightness brightness = {0, 0, 0, 5};
+Brightness brightness = {0, 0, 0, false, 5};
 struct StarModel
 {
   int x[MAX_STARS];
@@ -656,7 +656,7 @@ void loop()
   //Output data to LED strip
   showStrip();
 
-  if (useFade == true)
+  if (brightness.useFade == true)
   {
     brightness.current = brightness.current + brightness.fadeAmount;
     // reverse the direction of the fading at the ends of the fade:

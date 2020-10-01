@@ -573,7 +573,7 @@ uint8_t pulseWave8(uint32_t ms, uint16_t cycleLength, uint16_t pulseLength)
 {
   uint16_t T = ms % cycleLength;
   if (T > pulseLength)
-    return baseBrightness;
+    return brightness.baseBrightness;
   uint16_t halfPulse = pulseLength / 2;
   if (T <= halfPulse)
   {

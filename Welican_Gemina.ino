@@ -269,10 +269,10 @@ struct Brightness
   int temp;
   unsigned long debounce;
   bool useFade;
-  int fadeAmount;              // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
-  uint8_t baseBrightness = 10; // Brightness of LEDs when not pulsing. Set to 0 for off.
+  int fadeAmount;         // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
+  uint8_t baseBrightness; // Brightness of LEDs when not pulsing. Set to 0 for off.
 };
-Brightness brightness = {0, 0, 0, false, 5};
+Brightness brightness = {0, 0, 0, false, 5, 10};
 struct StarModel
 {
   int x[MAX_STARS];

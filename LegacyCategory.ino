@@ -373,19 +373,19 @@ void DualColorFlow(float hHigh, float hLow, float hHigh2, float hLow2, float hSp
   if (h > hHigh)
   {
     h = hHigh;
-    fadeDirection = 0;
+    globalLED.fadeDirection = 0;
   }
   if (h < hLow)
   {
     h = hLow;
-    fadeDirection = 1;
+    globalLED.fadeDirection = 1;
   }
 
-  if (fadeDirection == 1)
+  if (globalLED.fadeDirection == 1)
   {
     h += hSpeed; // increment to make faster
   }
-  if (fadeDirection == 0)
+  if (globalLED.fadeDirection == 0)
   {
     h -= hSpeed; // decrement to make faster
   }
@@ -572,11 +572,11 @@ void RainbowYoffset(float speed, float spacing, bool useFadeDirection)
 
   if (useFadeDirection)
   {
-    if (fadeDirection2 == 1)
+    if (globalLED.fadeDirection2 == 1)
     {
       yoffset += timeinc;
     }
-    if (fadeDirection2 == 0)
+    if (globalLED.fadeDirection2 == 0)
     {
       yoffset -= timeinc;
     }
@@ -595,11 +595,11 @@ void RainbowXoffset(float speed, float spacing, bool useFadeDirection)
 
   if (useFadeDirection)
   {
-    if (fadeDirection2 == 1)
+    if (globalLED.fadeDirection2 == 1)
     {
       xoffset += timeinc;
     }
-    if (fadeDirection2 == 0)
+    if (globalLED.fadeDirection2 == 0)
     {
       xoffset -= timeinc;
     }

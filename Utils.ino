@@ -1392,19 +1392,19 @@ float GetH_BouncingWithLimits(float _speed, float _hHigh, float _hLow)
   if (h > _hHigh)
   {
     h = _hHigh;
-    fadeDirection = 0;
+    globalLED.fadeDirection = 0;
   }
   if (h < _hLow)
   {
     h = _hLow;
-    fadeDirection = 1;
+    globalLED.fadeDirection = 1;
   }
 
-  if (fadeDirection == 1)
+  if (globalLED.fadeDirection == 1)
   {
     h += _speed; // increment to make faster
   }
-  if (fadeDirection == 0)
+  if (globalLED.fadeDirection == 0)
   {
     h -= _speed; // decrement to make faster
   }
@@ -1416,19 +1416,19 @@ float GetHTemp_BouncingWithLimits(float _speed, float _hHigh, float _hLow)
   if (hTemp > _hHigh)
   {
     hTemp = _hHigh;
-    fadeDirectionHTemp = 0;
+    globalLED.fadeDirectionHTemp = 0;
   }
   if (hTemp < _hLow)
   {
     hTemp = _hLow;
-    fadeDirectionHTemp = 1;
+    globalLED.fadeDirectionHTemp = 1;
   }
 
-  if (fadeDirectionHTemp == 1)
+  if (globalLED.fadeDirectionHTemp == 1)
   {
     hTemp += _speed; // increment to make faster
   }
-  if (fadeDirectionHTemp == 0)
+  if (globalLED.fadeDirectionHTemp == 0)
   {
     hTemp -= _speed; // decrement to make faster
   }
@@ -1440,11 +1440,11 @@ void DetermineFadeDirection()
 {
   if (yoffset > yoffsetMAX)
   {
-    fadeDirection2 = 0;
+    globalLED.fadeDirection2 = 0;
   }
   if (yoffset < 0)
   {
-    fadeDirection2 = 1;
+    globalLED.fadeDirection2 = 1;
   }
 }
 

@@ -122,11 +122,7 @@ int breathing = 1;
 ***********************************************************/
 //Define simplex noise node for each LED
 
-int ledPosition;
-int fadeDirection = 0;      // 1 or 0, positive or negative
-int fadeDirection2 = 0;     // 1 or 0, positive or negative
-int fadeDirectionHTemp = 0; // 1 or 0, positive or negative
-int fadeAmount = 5;         // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
+int fadeAmount = 5; // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
 bool useFade = false;
 boolean fadingTail = 0; // Add fading tail? [1=true, 0=falue]
 uint8_t fadeRate = 170; // How fast to fade out tail. [0-255]
@@ -264,8 +260,11 @@ struct GlobalLED
   int interfade; //set this to 0 to disable fade in on boot. Set to 25 for fade in.
   int interfadeMax;
   int interfadeSpeed;
+  int fadeDirection;      // 1 or 0, positive or negative
+  int fadeDirection2;     // 1 or 0, positive or negative
+  int fadeDirectionHTemp; // 1 or 0, positive or negative
 };
-GlobalLED globalLED = {18, 18, 14};
+GlobalLED globalLED = {18, 18, 14, 0, 0, 0};
 
 struct Brightness
 {

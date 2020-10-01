@@ -139,29 +139,39 @@ int interfade_speed = 14;
 int playerX = 64;
 int playerY = 8;
 //FALLIOS
-unsigned int fallios_score = 0;
-unsigned int fallios_score_top = 0;
-int fallios_motion = 0;
-int fallios_motionHistory = 0;
-int fallios_Y = 8;
+struct Fallios
+{
+  unsigned int score;
+  unsigned int score_top;
+  int motion;
+  int motionHistory;
+  int Y;
+  float tunnelGenerator;
+};
+Fallios fallios = {0, 0, 0, 0, 8, 0};
+
 byte fallios_wall[64];
 byte fallios_wallDistance[64];
 int fallios_tunnel_1[screen_height + 1];
 int fallios_tunnel_2[screen_height + 1];
 int fallios_tunnelWidth = screen_width / 2;
-float fallios_tunnelGenerator = 0;
+
 //BLOCKBREAKER
-int blockbreaker_score;
-int blockbreaker_ballX;
-int blockbreaker_ballY;
-int blockbreaker_ballXvel;
-int blockbreaker_ballYvel;
-int blockbreaker_ballWidth = 4;
-int blockbreaker_paddleHeight = 2;
-int blockbreaker_paddleWidth = 16;
-int blockbreaker_message = 0;
-int blockbreaker_messageTimer = 0;
-int blockbreaker_running = 0;
+struct BlockBreaker
+{
+  int score;
+  int ballX;
+  int ballY;
+  int ballXvel;
+  int ballYvel;
+  int ballWidth;
+  int paddleHeight;
+  int paddleWidth;
+  int message;
+  int messageTimer;
+  int running;
+};
+BlockBreaker blockBreaker = {0, 0, 0, 0, 0, 4, 2, 16, 0, 0, 0};
 
 /***********************************************************
   Simplex Noise Variable Declaration
@@ -190,7 +200,6 @@ float valueMin = 120.0; // Pulse minimum value (Should be less then valueMax).
 uint8_t hueB = 95;      // End hue at valueMax.
 uint8_t satB = 255;     // End saturation at valueMax.
 float valueMax = 255.0; // Pulse maximum value (Should be larger then valueMin).
-
 // used in Blendwave
 CRGB clr1;
 CRGB clr2;
@@ -466,7 +475,7 @@ void setup()
 
   unsigned int word = EEPROM.read(20) + EEPROM.read(21) * 256;
 
-  fallios_score_top = word;
+  fallios.score_top = word;
 
   mode = EEPROM.read(0);
   brightness = EEPROM.read(1);
@@ -534,10 +543,10 @@ void loop()
     switch (menu[1])
     {
     case 0:
-      fallios();
+      fallios_game();
       break;
     case 1:
-      blockbreaker();
+      blockbreaker_game();
       break;
     case 2:
       //tetris();

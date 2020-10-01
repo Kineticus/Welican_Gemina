@@ -246,13 +246,17 @@ int star_xx[maxStars];
 int star_y[maxStars];
 int star_yy[maxStars];
 int star_z[maxStars];
-int temp1 = 0;
-int temp2 = 0;
-int temp3 = 0;
 
 // ----------------------------------------------------------------
 // STRUCTs
 // ----------------------------------------------------------------
+
+struct Globals
+{
+  int temp[3];
+};
+Globals globals;
+
 //GAMES
 struct Player
 {
@@ -260,6 +264,7 @@ struct Player
   int Y;
 };
 Player player = {64, 8};
+
 //FALLIOS
 struct Fallios
 {

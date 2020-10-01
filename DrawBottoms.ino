@@ -1,43 +1,43 @@
 void drawDiscEQ()
 {
-  temp1 = bandValues[1] / AMPLITUDE;
-  temp1 -= 7;
-  if (temp1 < 2)
+  globals.temp[0] = bandValues[1] / AMPLITUDE;
+  globals.temp[0] -= 7;
+  if (globals.temp[0] < 2)
   {
-    temp1 = 2;
+    globals.temp[0] = 2;
   }
-  if (temp1 > 20)
+  if (globals.temp[0] > 20)
   {
-    temp1 = 20;
+    globals.temp[0] = 20;
   }
-  u8g2.drawDisc(106, 22, temp1, U8G2_DRAW_ALL);
+  u8g2.drawDisc(106, 22, globals.temp[0], U8G2_DRAW_ALL);
 }
 
 void drawDiscSectionsEQ()
 {
-  temp1 = bandValues[0] / AMPLITUDE;
-  temp1 -= 7;
-  if (temp1 < 0)
+  globals.temp[0] = bandValues[0] / AMPLITUDE;
+  globals.temp[0] -= 7;
+  if (globals.temp[0] < 0)
   {
-    temp1 = 0;
+    globals.temp[0] = 0;
   }
-  if (temp1 > 12)
+  if (globals.temp[0] > 12)
   {
-    temp1 = 12;
+    globals.temp[0] = 12;
   }
-  u8g2.drawDisc(106, 42, temp1, U8G2_DRAW_LOWER_LEFT);
+  u8g2.drawDisc(106, 42, globals.temp[0], U8G2_DRAW_LOWER_LEFT);
 
-  temp2 = bandValues[1] / AMPLITUDE;
-  temp2 -= 7;
-  if (temp2 < 0)
+  globals.temp[1] = bandValues[1] / AMPLITUDE;
+  globals.temp[1] -= 7;
+  if (globals.temp[1] < 0)
   {
-    temp2 = 0;
+    globals.temp[1] = 0;
   }
-  if (temp2 > 12)
+  if (globals.temp[1] > 12)
   {
-    temp2 = 12;
+    globals.temp[1] = 12;
   }
-  u8g2.drawDisc(106, 42, temp2, U8G2_DRAW_UPPER_RIGHT);
+  u8g2.drawDisc(106, 42, globals.temp[1], U8G2_DRAW_UPPER_RIGHT);
 }
 
 void drawEQ()
@@ -46,106 +46,106 @@ void drawEQ()
   int min = 0;
   int max = 80;
 
-  temp1 = bandValues[0] / AMPLITUDE;
-  temp1 -= 7;
-  if (temp1 < min)
+  globals.temp[0] = bandValues[0] / AMPLITUDE;
+  globals.temp[0] -= 7;
+  if (globals.temp[0] < min)
   {
-    temp1 = min;
+    globals.temp[0] = min;
   }
-  if (temp1 > max)
+  if (globals.temp[0] > max)
   {
-    temp1 = max;
+    globals.temp[0] = max;
   }
   u8g2.setDrawColor(1);
-  u8g2.drawBox(0, pos, temp1, 7);
-  temp3 = peak[0] / AMPLITUDE;
-  u8g2.drawBox(temp3, pos, 1, 7);
+  u8g2.drawBox(0, pos, globals.temp[0], 7);
+  globals.temp[2] = peak[0] / AMPLITUDE;
+  u8g2.drawBox(globals.temp[2], pos, 1, 7);
 
-  temp2 = bandValues[1] / AMPLITUDE;
-  temp2 -= 7;
-  if (temp2 < min)
+  globals.temp[1] = bandValues[1] / AMPLITUDE;
+  globals.temp[1] -= 7;
+  if (globals.temp[1] < min)
   {
-    temp2 = min;
+    globals.temp[1] = min;
   }
-  if (temp2 > max)
+  if (globals.temp[1] > max)
   {
-    temp2 = max;
+    globals.temp[1] = max;
   }
-  u8g2.drawBox(0, pos + 8, temp2, 7);
-  temp3 = peak[1] / AMPLITUDE;
-  u8g2.drawBox(temp3, pos + 8, 1, 7);
+  u8g2.drawBox(0, pos + 8, globals.temp[1], 7);
+  globals.temp[2] = peak[1] / AMPLITUDE;
+  u8g2.drawBox(globals.temp[2], pos + 8, 1, 7);
 
-  temp3 = bandValues[3] / AMPLITUDE;
-  temp3 -= 7;
-  if (temp3 < min)
+  globals.temp[2] = bandValues[3] / AMPLITUDE;
+  globals.temp[2] -= 7;
+  if (globals.temp[2] < min)
   {
-    temp3 = min;
+    globals.temp[2] = min;
   }
-  if (temp3 > max)
+  if (globals.temp[2] > max)
   {
-    temp3 = max;
+    globals.temp[2] = max;
   }
-  u8g2.drawBox(0, pos + 16, temp3, 7);
-  temp3 = peak[3] / AMPLITUDE;
-  u8g2.drawBox(temp3, pos + 16, 1, 7);
+  u8g2.drawBox(0, pos + 16, globals.temp[2], 7);
+  globals.temp[2] = peak[3] / AMPLITUDE;
+  u8g2.drawBox(globals.temp[2], pos + 16, 1, 7);
 
-  temp3 = bandValues[4] / AMPLITUDE;
-  temp3 -= 7;
-  if (temp3 < min)
+  globals.temp[2] = bandValues[4] / AMPLITUDE;
+  globals.temp[2] -= 7;
+  if (globals.temp[2] < min)
   {
-    temp3 = min;
+    globals.temp[2] = min;
   }
-  if (temp3 > max)
+  if (globals.temp[2] > max)
   {
-    temp3 = max;
+    globals.temp[2] = max;
   }
-  u8g2.drawBox(0, pos + 24, temp3, 7);
+  u8g2.drawBox(0, pos + 24, globals.temp[2], 7);
 
-  temp3 = peak[4] / AMPLITUDE;
-  u8g2.drawBox(temp3, pos + 24, 1, 7);
+  globals.temp[2] = peak[4] / AMPLITUDE;
+  u8g2.drawBox(globals.temp[2], pos + 24, 1, 7);
 
-  temp3 = bandValues[5] / AMPLITUDE;
-  temp3 -= 7;
-  if (temp3 < min)
+  globals.temp[2] = bandValues[5] / AMPLITUDE;
+  globals.temp[2] -= 7;
+  if (globals.temp[2] < min)
   {
-    temp3 = min;
+    globals.temp[2] = min;
   }
-  if (temp3 > max)
+  if (globals.temp[2] > max)
   {
-    temp3 = max;
+    globals.temp[2] = max;
   }
-  u8g2.drawBox(0, pos + 32, temp3, 7);
-  temp3 = peak[5] / AMPLITUDE;
-  u8g2.drawBox(temp3, pos + 32, 1, 7);
+  u8g2.drawBox(0, pos + 32, globals.temp[2], 7);
+  globals.temp[2] = peak[5] / AMPLITUDE;
+  u8g2.drawBox(globals.temp[2], pos + 32, 1, 7);
 
-  temp3 = bandValues[6] / AMPLITUDE;
-  temp3 -= 7;
-  if (temp3 < min)
+  globals.temp[2] = bandValues[6] / AMPLITUDE;
+  globals.temp[2] -= 7;
+  if (globals.temp[2] < min)
   {
-    temp3 = min;
+    globals.temp[2] = min;
   }
-  if (temp3 > max)
+  if (globals.temp[2] > max)
   {
-    temp3 = max;
+    globals.temp[2] = max;
   }
-  u8g2.drawBox(0, pos + 40, temp3, 7);
-  temp3 = peak[6] / AMPLITUDE;
-  u8g2.drawBox(temp3, pos + 40, 1, 7);
+  u8g2.drawBox(0, pos + 40, globals.temp[2], 7);
+  globals.temp[2] = peak[6] / AMPLITUDE;
+  u8g2.drawBox(globals.temp[2], pos + 40, 1, 7);
 }
 
 void drawCircleEQ()
 {
-  temp1 = bandValues[2] / AMPLITUDE;
-  temp1 -= 7;
-  if (temp1 < 5)
+  globals.temp[0] = bandValues[2] / AMPLITUDE;
+  globals.temp[0] -= 7;
+  if (globals.temp[0] < 5)
   {
-    temp1 = 5;
+    globals.temp[0] = 5;
   }
-  if (temp1 > 20)
+  if (globals.temp[0] > 20)
   {
-    temp1 = 20;
+    globals.temp[0] = 20;
   }
-  u8g2.drawCircle(106, 42, temp1, U8G2_DRAW_ALL);
+  u8g2.drawCircle(106, 42, globals.temp[0], U8G2_DRAW_ALL);
 }
 
 void drawIPAddress()

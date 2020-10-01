@@ -106,10 +106,8 @@ volatile int bandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int menu[11];
 int menu_max[11] = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, NUM_FAVORITES}; //Root Menu Items, Game Menu Items, Settings Menu Items
 int pattern[6];
-int pattern_temp = 0;
 int favorite_mode[50];    //declare memory for all 50 favorites
 int favorite_pattern[50]; //all are used under the hood
-int favorite_slot;
 // basic, music, chill, moving colors, legacy
 int pattern_max[6] = {12, 12, 22, 65, 80, NUM_FAVORITES};
 int pixelNumber = 0;
@@ -218,6 +216,7 @@ struct Globals
   int mode;
   int currentMenu;
   int modeMax;
+  int tempPattern;
 
   ESP32Encoder encoder;
   ESP32Encoder encoder2;
@@ -226,7 +225,7 @@ struct Globals
   double vReal[SAMPLES];
   double vImag[SAMPLES];
 };
-Globals globals = {{}, -5, 0, 10, 0, 0, 0, 0, 0, MAX_MODES};
+Globals globals = {{}, -5, 0, 10, 0, 0, 0, 0, 0, MAX_MODES, 0};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
 
 struct DevEnvironment

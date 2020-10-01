@@ -410,9 +410,9 @@ void favorites_category(int patternMode)
 
 void setGameMode()
 {
-  globals.runMode = 2;                  //game mode
-  brightness.temp = brightness.current; //save brightness
-  pattern_temp = pattern[globals.mode]; //and program in case they get messed up
+  globals.runMode = 2;                         //game mode
+  brightness.temp = brightness.current;        //save brightness
+  globals.tempPattern = pattern[globals.mode]; //and program in case they get messed up
 
   switch (menu[1]) //Call reset code for whatever game we're about to run
   {
@@ -435,7 +435,7 @@ void endGameMode()
 
   //Set values to right when game mode started in case they got dorked with
   brightness.current = brightness.temp;
-  pattern[globals.mode] = pattern_temp;
+  pattern[globals.mode] = globals.tempPattern;
 
   //Don't want to see brightness indicator when we leave
   brightness.debounce = 0;

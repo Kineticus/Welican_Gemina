@@ -272,7 +272,7 @@ struct Brightness
   unsigned long debounce;
   int fadeAmount; // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
 };
-Brightness brightness = {0, 0, 0}, 5;
+Brightness brightness = {0, 0, 0, 5};
 struct StarModel
 {
   int x[MAX_STARS];

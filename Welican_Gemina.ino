@@ -122,7 +122,6 @@ int breathing = 1;
 ***********************************************************/
 //Define simplex noise node for each LED
 
-int fadeAmount = 5; // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
 bool useFade = false;
 boolean fadingTail = 0; // Add fading tail? [1=true, 0=falue]
 uint8_t fadeRate = 170; // How fast to fade out tail. [0-255]
@@ -271,8 +270,9 @@ struct Brightness
   int current;
   int temp;
   unsigned long debounce;
+  int fadeAmount; // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
 };
-Brightness brightness = {0, 0, 0};
+Brightness brightness = {0, 0, 0}, 5;
 struct StarModel
 {
   int x[MAX_STARS];
@@ -658,11 +658,11 @@ void loop()
 
   if (useFade == true)
   {
-    brightness.current = brightness.current + fadeAmount;
+    brightness.current = brightness.current + brightness.fadeAmount;
     // reverse the direction of the fading at the ends of the fade:
     if (brightness.current == 0 || brightness.current == 255)
     {
-      fadeAmount = -fadeAmount;
+      brightness.fadeAmount = -brightness.fadeAmount;
     }
 
     //delay(9); // This delay sets speed of the fade. I usually do from 5-75 but you can always go higher.

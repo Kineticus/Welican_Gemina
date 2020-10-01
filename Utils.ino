@@ -386,7 +386,7 @@ void updateEncoders()
 
 void favorites_category(int patternMode)
 {
-  categoryName = "FAVORITES";
+  globalStrings.categoryName = "FAVORITES";
 
   switch (favorite_mode[patternMode])
   {
@@ -527,7 +527,7 @@ void drawTop()
   u8g2.setCursor(12, 8);
   u8g2.print(pattern[mode]);
   u8g2.setCursor(32, 8);
-  u8g2.print(function_name_out_str);
+  u8g2.print(globalStrings.functionNameOutString);
   //u8g2.drawXBMP(42,0,donut_width, donut_height, donut);
   //u8g2.drawXBMP(54,0,musicNote_width, musicNote_height, musicNote);
   //u8g2.drawXBMP(68,0,heart_width, heart_height, heart);
@@ -951,12 +951,12 @@ void newFavoritesMenu()
   favorites_category(menu[menu_cur]);
 
   //Convert the strings
-  functionName.toCharArray(function_name_out_str, 20);
-  categoryName.toCharArray(category_name_out_str, 20);
+  globalStrings.functionName.toCharArray(globalStrings.functionNameOutString, 20);
+  globalStrings.categoryName.toCharArray(globalStrings.categoryNameOutString, 20);
 
   u8g2.setCursor(16, 44);
   u8g2.print("Current Setting");
-  //u8g2.print(category_name_out_str);
+  //u8g2.print(globalStrings.categoryNameOutString);
 
   switch (favorite_mode[menu[menu_cur]])
   {
@@ -978,7 +978,7 @@ void newFavoritesMenu()
     break;
   }
   u8g2.setCursor(12, 60);
-  u8g2.print(function_name_out_str);
+  u8g2.print(globalStrings.functionNameOutString);
 }
 
 void saveFavorites()

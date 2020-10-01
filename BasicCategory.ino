@@ -1,59 +1,59 @@
 void basic_category(int patternMode)
 {
-    categoryName = "BASIC";
+    globalStrings.categoryName = "BASIC";
 
     switch (patternMode)
     {
     case 0:
-        functionName = "red";
+        globalStrings.functionName = "red";
         customColor(255, 0, 0);
         break;
     case 1:
-        functionName = "green";
+        globalStrings.functionName = "green";
         customColor(0, 255, 0);
         break;
     case 2:
-        functionName = "blue";
+        globalStrings.functionName = "blue";
         customColor(0, 0, 255);
         break;
     case 3:
-        functionName = "purple";
+        globalStrings.functionName = "purple";
         customColor(98, 0, 255);
         break;
     case 4:
-        functionName = "teal";
+        globalStrings.functionName = "teal";
         customColor(0, 128, 255);
         break;
     case 5:
-        functionName = "pink";
+        globalStrings.functionName = "pink";
         customColor(255, 0, 98);
         break;
     case 6:
-        functionName = "amber";
+        globalStrings.functionName = "amber";
         customColor(255, 12, 0);
         break;
     case 7:
-        functionName = "amberTwo";
+        globalStrings.functionName = "amberTwo";
         customColor(255, 32, 0);
         break;
     case 8:
-        functionName = "amberThree";
+        globalStrings.functionName = "amberThree";
         customColor(255, 64, 0);
         break;
     case 9:
-        functionName = "amberFour";
+        globalStrings.functionName = "amberFour";
         customColor(255, 92, 0);
         break;
     case 10:
-        functionName = "warmWhite";
+        globalStrings.functionName = "warmWhite";
         customColor(255, 192, 42);
         break;
     case 11:
-        functionName = "white";
+        globalStrings.functionName = "white";
         customColor(255, 224, 80);
         break;
     case 12:
-        functionName = "daylight";
+        globalStrings.functionName = "daylight";
         customColor(255, 255, 255);
         break;
     }

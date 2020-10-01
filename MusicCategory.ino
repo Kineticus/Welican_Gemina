@@ -1,6 +1,6 @@
 void music_category(int patternMode)
 {
-    categoryName = "MUSIC";
+    globalStrings.categoryName = "MUSIC";
 
     switch (patternMode)
     {
@@ -85,66 +85,66 @@ void juggle(int saturation, int value)
 
 void musicZero()
 {
-    functionName = "musicZero";
+    globalStrings.functionName = "musicZero";
     bpm();
 }
 void musicOne()
 {
-    functionName = "musicOne";
+    globalStrings.functionName = "musicOne";
     juggle(255, 255);
 }
 void musicTwo()
 {
-    functionName = "musicTwo";
+    globalStrings.functionName = "musicTwo";
     juggle(128, 255);
 }
 void musicThree()
 {
-    functionName = "musicThree";
+    globalStrings.functionName = "musicThree";
     juggle(64, 255);
 }
 void musicFour()
 {
-    functionName = "musicFour";
+    globalStrings.functionName = "musicFour";
     juggle(32, 255);
 }
 void musicFive()
 {
-    functionName = "musicFive";
+    globalStrings.functionName = "musicFive";
     bpmCustom(PartyColors_p);
 }
 void musicSix()
 {
-    functionName = "musicSix";
+    globalStrings.functionName = "musicSix";
     bpmCustom(RainbowStripeColors_p);
 }
 void musicSeven()
 {
-    functionName = "musicSeven";
+    globalStrings.functionName = "musicSeven";
     bpmCustom(HeatColors_p);
 }
 void musicEight()
 {
-    functionName = "musicEight";
+    globalStrings.functionName = "musicEight";
     bpmCustom(RainbowColors_p);
 }
 void musicNine()
 {
-    functionName = "musicNine";
+    globalStrings.functionName = "musicNine";
     bpmCustom(ForestColors_p);
 }
 void musicTen()
 {
-    functionName = "musicTen";
+    globalStrings.functionName = "musicTen";
     bpmCustom(OceanColors_p);
 }
 void musicEleven()
 {
-    functionName = "musicEleven";
+    globalStrings.functionName = "musicEleven";
     bpmCustom(LavaColors_p);
 }
 void musicTwelve()
 {
-    functionName = "musicTwelve";
+    globalStrings.functionName = "musicTwelve";
     bpmCustom(CloudColors_p);
 }

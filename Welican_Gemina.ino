@@ -214,11 +214,6 @@ int currSpeed = 10;
 //TO IMPLEMENT
 unsigned long frameRateCounter = 0;
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
-String categoryName = "";
-String functionName = "";
-char category_name_out_str[20];
-char function_name_out_str[20];
-int testValue = 30;
 
 // ----------------------------------------------------------------
 // STRUCTs
@@ -238,6 +233,14 @@ struct Globals
 };
 Globals globals = {{}, -5, 0};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
+struct GlobalStrings
+{
+  String categoryName;
+  String functionName;
+  char categoryNameOutString[20];
+  char functionNameOutString[20];
+};
+GlobalStrings globalStrings = {"", "", {}, {}};
 struct Brightness
 {
   int current;
@@ -540,8 +543,8 @@ void loop()
 {
   //fftCompute();   //Only needed if not using task
 
-  functionName.toCharArray(function_name_out_str, 20);
-  categoryName.toCharArray(category_name_out_str, 20);
+  globalStrings.functionName.toCharArray(globalStrings.functionNameOutString, 20);
+  globalStrings.categoryName.toCharArray(globalStrings.categoryNameOutString, 20);
 
   //Clear the display buffer so we can draw new stuff
   u8g2.clearBuffer();

@@ -1,12 +1,12 @@
 void moving_colors_category(int patternMode)
 {
-  categoryName = "MOVING COLORS";
+  globalStrings.categoryName = "MOVING COLORS";
 
   switch (patternMode)
   {
   case 0:
   {
-    functionName = "MC 0";
+    globalStrings.functionName = "MC 0";
     long pattern[] = {CRGB::Green, CRGB::Grey, CRGB::Red, CRGB::Grey, CRGB::Red, CRGB::Grey, CRGB::Red, CRGB::Green, CRGB::Green, CRGB::Green};
     const int numberOfColors = sizeof(pattern) / sizeof(int); //Auto calculate your specified number of color bars
     MovingColoredBars(NUM_LEDS - 1, pattern, numberOfColors);
@@ -14,7 +14,7 @@ void moving_colors_category(int patternMode)
   break;
   case 1:
   {
-    functionName = "MC 1";
+    globalStrings.functionName = "MC 1";
     long pattern[] = {CRGB::Red, CRGB::Green, CRGB::Red};
     const int numberOfColors = sizeof(pattern) / sizeof(int);
     MovingColoredBars(NUM_LEDS / 2, pattern, numberOfColors);
@@ -22,7 +22,7 @@ void moving_colors_category(int patternMode)
   break;
   case 2:
   {
-    functionName = "MC 2";
+    globalStrings.functionName = "MC 2";
     long pattern[] = {CRGB::Blue, CRGB::Blue, CRGB::Yellow, CRGB::Purple};
     const int numberOfColors = sizeof(pattern) / sizeof(int);
     MovingColoredBars(NUM_LEDS / numberOfColors, pattern, numberOfColors);
@@ -30,265 +30,265 @@ void moving_colors_category(int patternMode)
   break;
   case 3:
   {
-    functionName = "MC 2";
+    globalStrings.functionName = "MC 2";
     long pattern[] = {CRGB::Purple, CRGB::Blue, CRGB::Teal, CRGB::Purple};
     const int numberOfColors = sizeof(pattern) / sizeof(int);
     MovingColoredBars(NUM_LEDS / numberOfColors, pattern, numberOfColors);
   }
   break;
   case 4:
-    functionName = "Breathing 1";
+    globalStrings.functionName = "Breathing 1";
     BreathingEffect(0.5, true, true, true);
     break;
   case 5:
-    functionName = "Breathing 2";
+    globalStrings.functionName = "Breathing 2";
     BreathingEffect(0.5, true, false, true);
     break;
   case 6:
-    functionName = "Breathing 3";
+    globalStrings.functionName = "Breathing 3";
     BreathingEffect(0.5, true, true, false);
     break;
   case 7:
-    functionName = "Breathing 4";
+    globalStrings.functionName = "Breathing 4";
     BreathingEffect(0.5, false, false, true);
     break;
   case 8:
-    functionName = "Breathing 5";
+    globalStrings.functionName = "Breathing 5";
     BreathingEffect(0.5, true, false, false);
     break;
   case 9:
-    functionName = "Breathing 6";
+    globalStrings.functionName = "Breathing 6";
     BreathingEffect(0.5, false, false, false);
     break;
   case 10:
-    functionName = "Breathing 7";
+    globalStrings.functionName = "Breathing 7";
     BreathingEffect(0.1, true, true, true);
     break;
   case 11:
-    functionName = "Breathing 8";
+    globalStrings.functionName = "Breathing 8";
     BreathingEffect(0.7, true, true, true);
     break;
   case 12:
-    functionName = "Breathing 9";
+    globalStrings.functionName = "Breathing 9";
     BreathingEffect(1, true, true, true);
     break;
   case 13:
-    functionName = "Candy Cane 1";
+    globalStrings.functionName = "Candy Cane 1";
     CandyCane(20, 3, 5, CRGB::White, CRGB::Red, CRGB::Blue);
     break;
   case 14:
-    functionName = "Candy Cane 2";
+    globalStrings.functionName = "Candy Cane 2";
     CandyCane(250, 3, 5, CRGB::Black, CRGB::Orange, CRGB::Green);
     break;
   case 15:
-    functionName = "Candy Cane 3";
+    globalStrings.functionName = "Candy Cane 3";
     CandyCane(200, 3, 5, CRGB::Yellow, CRGB::Green, CRGB::Purple);
     break;
   case 16:
-    functionName = "Candy Cane 4";
+    globalStrings.functionName = "Candy Cane 4";
     CandyCane(250, 3, 5, CRGB::Green, CRGB::Blue, CRGB::Teal);
     break;
   case 17:
-    functionName = "Candy Cane 5";
+    globalStrings.functionName = "Candy Cane 5";
     CandyCane(400, 3, 5, CRGB::Purple, CRGB::Blue, CRGB::White);
     break;
   case 18:
-    functionName = "Blend Rainbow 1";
+    globalStrings.functionName = "Blend Rainbow 1";
     BlendIntoRainbow(CRGB::Purple, CRGB::Blue, CRGB::Green);
     break;
   case 19:
-    functionName = "Blend Rainbow 2";
+    globalStrings.functionName = "Blend Rainbow 2";
     BlendIntoRainbow(CRGB::Red, CRGB::Blue, CRGB::White);
     break;
   case 20:
-    functionName = "Blend Rainbow 3";
+    globalStrings.functionName = "Blend Rainbow 3";
     BlendIntoRainbow(CRGB::Purple, CRGB::Orange, CRGB::White);
     break;
   case 21:
-    functionName = "Blend Rainbow 4";
+    globalStrings.functionName = "Blend Rainbow 4";
     BlendIntoRainbow(CRGB::Green, CRGB::Blue, CRGB::Yellow);
     break;
   case 22:
-    functionName = "Blend Rainbow 5";
+    globalStrings.functionName = "Blend Rainbow 5";
     BlendIntoRainbow(CRGB::Orange, CRGB::Purple, CRGB::Green);
     break;
   case 23:
-    functionName = "HeartBeat 1";
+    globalStrings.functionName = "HeartBeat 1";
     HeartBeat(100, 255);
     break;
   case 24:
-    functionName = "HeartBeat 2";
+    globalStrings.functionName = "HeartBeat 2";
     HeartBeat(20, 255);
     break;
   case 25:
-    functionName = "HeartBeat 3";
+    globalStrings.functionName = "HeartBeat 3";
     HeartBeat(155, 255);
     break;
   case 26:
-    functionName = "HeartBeat 4";
+    globalStrings.functionName = "HeartBeat 4";
     HeartBeat(75, 255);
     break;
   case 27:
-    functionName = "HeartBeat 5";
+    globalStrings.functionName = "HeartBeat 5";
     HeartBeat(225, 255);
     break;
   case 28:
-    functionName = "Fire 1";
+    globalStrings.functionName = "Fire 1";
     FireHalfStrip(); // draw fire data to leds_temp
 
     mirror2ndHalf(); // copy and mirror data from leds_temp to leds
     break;
   case 29:
-    functionName = "Fire 2";
+    globalStrings.functionName = "Fire 2";
     FireFullStrip(); // draw fire data to leds_temp
 
     mirror2ndHalf(); // copy and mirror data from leds_temp to leds
     break;
   case 30:
-    functionName = "Fire 3";
+    globalStrings.functionName = "Fire 3";
     gReverseDirection = true;
     FireHalfStrip(); // draw fire data to leds_temp
 
     mirror2ndHalf(); // copy and mirror data from leds_temp to leds
     break;
   case 31:
-    functionName = "RepeatingPattern 1";
+    globalStrings.functionName = "RepeatingPattern 1";
     RepeatingPattern(100, 80, 5, 1000);
     break;
   case 32:
-    functionName = "RepeatingPattern 2";
+    globalStrings.functionName = "RepeatingPattern 2";
     RepeatingPattern(10, 120, 10, FRAMES_PER_SECOND);
     break;
   case 33:
-    functionName = "RepeatingPattern 3";
+    globalStrings.functionName = "RepeatingPattern 3";
     RepeatingPattern(200, 155, 20, 500);
     break;
   case 34:
-    functionName = "RepeatingBlockPattern 1";
+    globalStrings.functionName = "RepeatingBlockPattern 1";
     RepeatingBlockPattern(100, 80, 5, 0, 5);
     break;
   case 35:
-    functionName = "RepeatingBlockPattern 2";
+    globalStrings.functionName = "RepeatingBlockPattern 2";
     RepeatingBlockPattern(10, 120, 10, 20, 10);
     break;
   case 36:
-    functionName = "RepeatingBlockPattern 3";
+    globalStrings.functionName = "RepeatingBlockPattern 3";
     RepeatingBlockPattern(200, 155, 20, 40, 20);
     break;
   case 37:
-    functionName = "Twinkle 1";
+    globalStrings.functionName = "Twinkle 1";
     Twinkle(8, 100, 50, 100, brightness.current, false);
     break;
   case 38:
-    functionName = "Twinkle 2";
+    globalStrings.functionName = "Twinkle 2";
     Twinkle(8, 20, 125, 100, brightness.current, true);
     break;
   case 39:
-    functionName = "Twinkle 3";
+    globalStrings.functionName = "Twinkle 3";
     Twinkle(16, 200, 200, 100, brightness.current, false);
     break;
   case 40:
-    functionName = "Twinkle 4";
+    globalStrings.functionName = "Twinkle 4";
     Twinkle(32, 500, 70, 100, brightness.current, true);
     break;
   case 41:
-    functionName = "Mover 1";
+    globalStrings.functionName = "Mover 1";
     Mover(10, 200);
     break;
   case 42:
-    functionName = "Meteor 1";
+    globalStrings.functionName = "Meteor 1";
     Meteor(255, 0, 255);
     break;
   case 43:
-    functionName = "Marqueev2 2";
+    globalStrings.functionName = "Marqueev2 2";
     Marqueev2(2, 250);
     break;
   case 44:
-    functionName = "Marqueev2 4";
+    globalStrings.functionName = "Marqueev2 4";
     Marqueev2(4, 250);
     break;
   case 45:
-    functionName = "Marqueev2 7";
+    globalStrings.functionName = "Marqueev2 7";
     Marqueev2(7, 250);
     break;
   case 46:
-    functionName = "Marqueev2 10";
+    globalStrings.functionName = "Marqueev2 10";
     Marqueev2(10, 250);
     break;
   case 47:
-    functionName = "Marqueev3 2";
+    globalStrings.functionName = "Marqueev3 2";
     Marqueev3(2, 250, 2, 20);
     break;
   case 48:
-    functionName = "Marqueev3 4";
+    globalStrings.functionName = "Marqueev3 4";
     Marqueev3(4, 250, 3, 40);
     break;
   case 49:
-    functionName = "Marqueev3 7";
+    globalStrings.functionName = "Marqueev3 7";
     Marqueev3(7, 250, 5, 80);
     break;
   case 50:
-    functionName = "Marqueev3 10";
+    globalStrings.functionName = "Marqueev3 10";
     Marqueev3(10, 250, 7, 100);
     break;
   case 51:
-    functionName = "Sawtooth 60";
+    globalStrings.functionName = "Sawtooth 60";
     Sawtooth(60, OceanColors_p, LINEARBLEND);
     break;
   case 52:
-    functionName = "Sawtooth 92";
+    globalStrings.functionName = "Sawtooth 92";
     Sawtooth(92, LavaColors_p, LINEARBLEND);
     break;
   case 53:
-    functionName = "Sawtooth 110";
+    globalStrings.functionName = "Sawtooth 110";
     Sawtooth(128, ForestColors_p, LINEARBLEND);
     break;
   case 54:
-    functionName = "Plasma 1";
+    globalStrings.functionName = "Plasma 1";
     Plasma(OceanColors_p, LavaColors_p, LINEARBLEND);
     break;
   case 55:
-    functionName = "Plasma 2";
+    globalStrings.functionName = "Plasma 2";
     Plasma(ForestColors_p, CloudColors_p, LINEARBLEND);
     break;
   case 56:
-    functionName = "Plasma 3";
+    globalStrings.functionName = "Plasma 3";
     Plasma(RainbowColors_p, PartyColors_p, LINEARBLEND);
     break;
   case 57:
-    functionName = "RainbowMarch 1";
+    globalStrings.functionName = "RainbowMarch 1";
     RainbowMarch(200, 10);
     break;
   case 58:
-    functionName = "RainbowMarch 2";
+    globalStrings.functionName = "RainbowMarch 2";
     RainbowMarch(100, 10);
     break;
   case 59:
-    functionName = "RainbowMarch 3";
+    globalStrings.functionName = "RainbowMarch 3";
     RainbowMarch(50, 100);
     break;
   case 60:
-    functionName = "BlendWave 1";
+    globalStrings.functionName = "BlendWave 1";
     BlendWave(60, 10);
     break;
   case 61:
-    functionName = "BlendWave 2";
+    globalStrings.functionName = "BlendWave 2";
     BlendWave(40, 20);
     break;
   case 62:
-    functionName = "BlendWave 3";
+    globalStrings.functionName = "BlendWave 3";
     BlendWave(20, 20);
     break;
   case 63:
-    functionName = "BeatWave 1";
+    globalStrings.functionName = "BeatWave 1";
     BeatWave(RainbowColors_p, PartyColors_p, LINEARBLEND);
     break;
   case 64:
-    functionName = "BeatWave 2";
+    globalStrings.functionName = "BeatWave 2";
     BeatWave(OceanColors_p, LavaColors_p, LINEARBLEND);
     break;
   case 65:
-    functionName = "BeatWave 3";
+    globalStrings.functionName = "BeatWave 3";
     BeatWave(ForestColors_p, CloudColors_p, LINEARBLEND);
     break;
   }

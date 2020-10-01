@@ -1,331 +1,331 @@
 void legacy_category(int patternMode)
 {
-  categoryName = "LEGACY";
+  globalStrings.categoryName = "LEGACY";
 
   switch (patternMode)
   {
   case 0:
-    functionName = "RainbowOneYoffset";
+    globalStrings.functionName = "RainbowOneYoffset";
     RainbowOneYoffset();
     break;
   case 1:
-    functionName = "RainbowTwoYoffset";
+    globalStrings.functionName = "RainbowTwoYoffset";
     RainbowTwoYoffset();
     break;
   case 2:
-    functionName = "RainbowThreeXoffset";
+    globalStrings.functionName = "RainbowThreeXoffset";
     RainbowThreeXoffset();
     break;
   case 3:
-    functionName = "RainbowFourXoffset";
+    globalStrings.functionName = "RainbowFourXoffset";
     RainbowFourXoffset();
     break;
   case 4:
-    functionName = "RainbowBigXoffset";
+    globalStrings.functionName = "RainbowBigXoffset";
     RainbowBigXoffset();
     break;
   case 5:
-    functionName = "RainbowBigYoffset";
+    globalStrings.functionName = "RainbowBigYoffset";
     RainbowBigYoffset();
     break;
   case 6:
-    functionName = "RbowY 0.000025, 0.3";
+    globalStrings.functionName = "RbowY 0.000025, 0.3";
     RainbowYoffset(0.000025, 0.3, true);
     break;
   case 7:
-    functionName = "RbowY 0.00025, 0.5";
+    globalStrings.functionName = "RbowY 0.00025, 0.5";
     RainbowYoffset(0.00025, 0.5, true);
     break;
   case 8:
-    functionName = "RbowY 0.0025, 0.7";
+    globalStrings.functionName = "RbowY 0.0025, 0.7";
     RainbowYoffset(0.0025, 0.7, true);
     break;
   case 9:
-    functionName = "RbowX 0.000025, 0.1";
+    globalStrings.functionName = "RbowX 0.000025, 0.1";
     RainbowXoffset(0.000025, 0.1, true);
     break;
   case 10:
-    functionName = "RbowX 0.00025, 0.1";
+    globalStrings.functionName = "RbowX 0.00025, 0.1";
     RainbowXoffset(0.00025, 0.1, true);
     break;
   case 11:
-    functionName = "RbowX 0.0025, 0.1";
+    globalStrings.functionName = "RbowX 0.0025, 0.1";
     RainbowXoffset(0.0025, 0.1, true);
     break;
   case 12:
-    functionName = "SteadyRGB 2";
+    globalStrings.functionName = "SteadyRGB 2";
     SteadyRGB(2);
     break;
   case 13:
-    functionName = "SteadyRGB 3";
+    globalStrings.functionName = "SteadyRGB 3";
     SteadyRGB(3);
     break;
   case 14:
-    functionName = "SteadyAltClrs RG";
+    globalStrings.functionName = "SteadyAltClrs RG";
     SteadyAlternatingColors(CRGB::Red, CRGB::Green);
     break;
   case 15:
-    functionName = "SteadyAltClrs BW";
+    globalStrings.functionName = "SteadyAltClrs BW";
     SteadyAlternatingColors(CRGB::Blue, CRGB::White);
     break;
   case 16:
-    functionName = "SteadyAltClrs PB";
+    globalStrings.functionName = "SteadyAltClrs PB";
     SteadyAlternatingColors(CRGB::Purple, CRGB::Blue);
     break;
   case 17:
-    functionName = "SteadyAltClrs YP";
+    globalStrings.functionName = "SteadyAltClrs YP";
     SteadyAlternatingColors(CRGB::Yellow, CRGB::Purple);
     break;
   case 18:
-    functionName = "SteadyAltClrs RW";
+    globalStrings.functionName = "SteadyAltClrs RW";
     SteadyAlternatingColors(CRGB::Red, CRGB::White);
     break;
   case 19:
-    functionName = "SteadyAltClrs OB";
+    globalStrings.functionName = "SteadyAltClrs OB";
     SteadyAlternatingColors(CRGB::Orange, CRGB::Blue);
     break;
   case 20:
-    functionName = "SteadyAltClrs OP";
+    globalStrings.functionName = "SteadyAltClrs OP";
     SteadyAlternatingColors(CRGB::Orange, CRGB::Purple);
     break;
   case 21:
-    functionName = "MovingHue 85.002";
+    globalStrings.functionName = "MovingHue 85.002";
     MovingHue(85, .002);
     break;
   case 22:
-    functionName = "MovingHue 42.008";
+    globalStrings.functionName = "MovingHue 42.008";
     MovingHue(42, .008);
     break;
   case 23:
-    functionName = "MovingHue 128.016";
+    globalStrings.functionName = "MovingHue 128.016";
     MovingHue(128, .025);
     break;
   case 24:
-    functionName = "MovingHue 85.3";
+    globalStrings.functionName = "MovingHue 85.3";
     MovingHue(85, .3);
     break;
   case 25:
-    functionName = "MovingHue 42.5";
+    globalStrings.functionName = "MovingHue 42.5";
     MovingHue(42, .5);
     break;
   case 26:
-    functionName = "MovingHue 128.7";
+    globalStrings.functionName = "MovingHue 128.7";
     MovingHue(128, .7);
     break;
   case 27:
-    functionName = "MovingHue 85.3.9";
+    globalStrings.functionName = "MovingHue 85.3.9";
     MovingHue(85, .3, .9);
     break;
   case 28:
-    functionName = "MovingHue 42.5.4";
+    globalStrings.functionName = "MovingHue 42.5.4";
     MovingHue(42, .5, .4);
     break;
   case 29:
-    functionName = "MovingHue 128.7.1";
+    globalStrings.functionName = "MovingHue 128.7.1";
     MovingHue(128, .7, .1);
     break;
   case 30:
-    functionName = "MovingHue 128.7 3";
+    globalStrings.functionName = "MovingHue 128.7 3";
     MovingHue(128, .7, 3);
     break;
   case 31:
-    functionName = "DLCLRflo2 .00009.9";
+    globalStrings.functionName = "DLCLRflo2 .00009.9";
     DualColorFlowTwo(.00009, .9);
     break;
   case 32:
-    functionName = "DLCLRflo2 .0009.9";
+    globalStrings.functionName = "DLCLRflo2 .0009.9";
     DualColorFlowTwo(.0009, .9);
     break;
   case 33:
-    functionName = "DLCLRflo2 .0009.4";
+    globalStrings.functionName = "DLCLRflo2 .0009.4";
     DualColorFlowTwo(.0009, .4);
     break;
   case 34:
-    functionName = "DLCLRflo2 .00009.1";
+    globalStrings.functionName = "DLCLRflo2 .00009.1";
     DualColorFlowTwo(.00009, .1);
     break;
   case 35:
-    functionName = "DLCLRflo2 .0007.5";
+    globalStrings.functionName = "DLCLRflo2 .0007.5";
     DualColorFlowTwo(.0007, .5);
     break;
   case 36:
-    functionName = "DLCLRflo2 .0075.7";
+    globalStrings.functionName = "DLCLRflo2 .0075.7";
     DualColorFlowTwo(.00075, .7);
     break;
   case 37:
-    functionName = "DLCLRflo2 .0001.3";
+    globalStrings.functionName = "DLCLRflo2 .0001.3";
     DualColorFlowTwo(.0001, .3);
     break;
   case 38:
-    functionName = "DLCLRflo2 .0009.6";
+    globalStrings.functionName = "DLCLRflo2 .0009.6";
     DualColorFlowTwo(.0009, .6);
     break;
   case 39:
-    functionName = "DLCLRflo2 .0007.1";
+    globalStrings.functionName = "DLCLRflo2 .0007.1";
     DualColorFlowTwo(.0007, .1);
     break;
   case 40:
-    functionName = "DLCLRflo2 .0005.9";
+    globalStrings.functionName = "DLCLRflo2 .0005.9";
     DualColorFlowTwo(.0005, .9);
     break;
   case 41:
-    functionName = "DLCLRflo 1";
+    globalStrings.functionName = "DLCLRflo 1";
     DualColorFlow(.85, .58, .46, .09, .00009, .9);
     break;
   case 42:
-    functionName = "DLCLRflo 2";
+    globalStrings.functionName = "DLCLRflo 2";
     DualColorFlow(.45, .20, .24, .03, .0009, .5);
     break;
   case 43:
-    functionName = "DLCLRflo 3";
+    globalStrings.functionName = "DLCLRflo 3";
     DualColorFlow(.7, .3, .85, .6, .0005, .1);
     break;
   case 44:
-    functionName = "DLCLRflo 4";
+    globalStrings.functionName = "DLCLRflo 4";
     DualColorFlow(.9, .5, .85, .6, .0007, .1);
     break;
   case 45:
-    functionName = "DLCLRflo 5";
+    globalStrings.functionName = "DLCLRflo 5";
     DualColorFlow(.15, .05, .4, .059, .0029, .1);
     break;
   case 46:
-    functionName = "DLCLRflo 6";
+    globalStrings.functionName = "DLCLRflo 6";
     DualColorFlow(.9, .5, .85, .6, .0007, .7);
     break;
   case 47:
-    functionName = "DLCLRflo 7";
+    globalStrings.functionName = "DLCLRflo 7";
     DualColorFlow(.9, .5, .4, .1, .00069, .1);
     break;
   case 48:
-    functionName = "DLCLRflo 8";
+    globalStrings.functionName = "DLCLRflo 8";
     DualColorFlow(.9, .6, .85, .6, .000420, .1);
     break;
   case 49:
-    functionName = "DLCLRflo 9";
+    globalStrings.functionName = "DLCLRflo 9";
     DualColorFlow(.8, .5, .5, .2, .00042, .5);
     break;
   case 50:
-    functionName = "DLCLRflo 10";
+    globalStrings.functionName = "DLCLRflo 10";
     DualColorFlow(.8, .5, .5, .2, .00042, .1);
     break;
   case 51:
-    functionName = "DLCLRfloB 1";
+    globalStrings.functionName = "DLCLRfloB 1";
     DualColorFlowBounce(.85, .58, .00009, .1, 2);
     break;
   case 52:
-    functionName = "DLCLRfloB 2";
+    globalStrings.functionName = "DLCLRfloB 2";
     DualColorFlowBounce(.17, .02, .00009, .1, 2);
     break;
   case 53:
-    functionName = "DLCLRfloB 3";
+    globalStrings.functionName = "DLCLRfloB 3";
     DualColorFlowBounce(.9, .7, .00042, .1, 2);
     break;
   case 54:
-    functionName = "DLCLRfloB 4";
+    globalStrings.functionName = "DLCLRfloB 4";
     DualColorFlowBounce(.3, .1, .00042, .1, 2);
     break;
   case 55:
-    functionName = "DLCLRfloB 5";
+    globalStrings.functionName = "DLCLRfloB 5";
     DualColorFlowBounce(.7, .4, .00069, .5, 2);
     break;
   case 56:
-    functionName = "DLCLRfloB 6";
+    globalStrings.functionName = "DLCLRfloB 6";
     DualColorFlowBounce(.5, .2, .00009, .7, 2);
     break;
   case 57:
-    functionName = "DLCLRfloB 7";
+    globalStrings.functionName = "DLCLRfloB 7";
     DualColorFlowBounce(.42, .1, .0009, .1, 4);
     break;
   case 58:
-    functionName = "DLCLRfloB 8";
+    globalStrings.functionName = "DLCLRfloB 8";
     DualColorFlowBounce(.85, .24, .00009, .5, 4);
     break;
   case 59:
-    functionName = "DLCLRfloB 9";
+    globalStrings.functionName = "DLCLRfloB 9";
     DualColorFlowBounce(.55, .21, .0001, .1, 6);
     break;
   case 60:
-    functionName = "DLCLRfloB 10";
+    globalStrings.functionName = "DLCLRfloB 10";
     DualColorFlowBounce(.84, .42, .0007, .5, 6);
     break;
   case 61:
-    functionName = "LGFloB 1";
+    globalStrings.functionName = "LGFloB 1";
     LargeGroupColorFlowBounce(.85, .58, .00009, .1, 2);
     break;
   case 62:
-    functionName = "LGFloB 2";
+    globalStrings.functionName = "LGFloB 2";
     LargeGroupColorFlowBounce(.17, .02, .00009, .1, 2);
     break;
   case 63:
-    functionName = "LGFloB 3";
+    globalStrings.functionName = "LGFloB 3";
     LargeGroupColorFlowBounce(.9, .7, .00042, .1, 2);
     break;
   case 64:
-    functionName = "LGFloB 4";
+    globalStrings.functionName = "LGFloB 4";
     LargeGroupColorFlowBounce(.3, .1, .00042, .1, 4);
     break;
   case 65:
-    functionName = "LGFloB 5";
+    globalStrings.functionName = "LGFloB 5";
     LargeGroupColorFlowBounce(.7, .4, .00069, .5, 6);
     break;
   case 66:
-    functionName = "RainbowFlow 1";
+    globalStrings.functionName = "RainbowFlow 1";
     RainbowFlow(.98, .01, .00025, .01);
     break;
   case 67:
-    functionName = "RainbowFlow 2";
+    globalStrings.functionName = "RainbowFlow 2";
     RainbowFlow(.98, .01, .00007, .002);
     break;
   case 68:
-    functionName = "RainbowFlow 3";
+    globalStrings.functionName = "RainbowFlow 3";
     RainbowFlow(.98, .01, .00025, .1);
     break;
   case 69:
-    functionName = "RainbowFlow 4";
+    globalStrings.functionName = "RainbowFlow 4";
     RainbowFlow(.98, .01, .00042, .25);
     break;
   case 70:
-    functionName = "RainbowNoFlow 1";
+    globalStrings.functionName = "RainbowNoFlow 1";
     RainbowNoFlow(.042);
     break;
   case 71:
-    functionName = "RainbowFlowSlow 1";
+    globalStrings.functionName = "RainbowFlowSlow 1";
     RainbowFlowSlow(.0005, .0045);
     break;
   case 72:
-    functionName = "RainbowFlowSlow 2";
+    globalStrings.functionName = "RainbowFlowSlow 2";
     RainbowFlowSlow(.0005, .007);
     break;
   case 73:
-    functionName = "RainbowFlowSlow 3";
+    globalStrings.functionName = "RainbowFlowSlow 3";
     RainbowFlowSlow(.0001, .0045);
     break;
   case 74:
-    functionName = "RainbowHsv 1";
+    globalStrings.functionName = "RainbowHsv 1";
     RainbowHsv(.00009, .98, .75);
     break;
   case 75:
-    functionName = "RainbowHsv 2";
+    globalStrings.functionName = "RainbowHsv 2";
     RainbowHsv(.00009, .98, .55);
     break;
   case 76:
-    functionName = "RainbowHsv 3";
+    globalStrings.functionName = "RainbowHsv 3";
     RainbowHsv(.000009, .75, .55);
     break;
   case 77:
-    functionName = "RainbowHsv 3";
+    globalStrings.functionName = "RainbowHsv 3";
     RainbowHsv(.000009, .98, .01);
     break;
   case 78:
-    functionName = "RainbowHsv 4";
+    globalStrings.functionName = "RainbowHsv 4";
     RainbowHsv(.0001, .98, .01);
     break;
   case 79:
-    functionName = "RainbowHsv 5";
+    globalStrings.functionName = "RainbowHsv 5";
     RainbowHsv(.00042, .98, .01);
     break;
   case 80:
-    functionName = "RainbowHsv 6";
+    globalStrings.functionName = "RainbowHsv 6";
     RainbowHsv(.00001, .55, .25);
     break;
   }
@@ -626,7 +626,7 @@ void RainbowHsv(float hHigh, float hLow, float speed)
 
 void RainbowOneYoffset()
 {
-  functionName = "RainbowOneYoffset";
+  globalStrings.functionName = "RainbowOneYoffset";
   spaceinc = 0.03;
   timeinc = (0.000025 * currSpeed);
   yoffset += timeinc;
@@ -635,7 +635,7 @@ void RainbowOneYoffset()
 }
 void RainbowTwoYoffset()
 {
-  functionName = "RainbowTwoYoffset";
+  globalStrings.functionName = "RainbowTwoYoffset";
   spaceinc = 0.07;
   timeinc = (0.000025 * currSpeed);
   yoffset += timeinc;
@@ -644,7 +644,7 @@ void RainbowTwoYoffset()
 }
 void RainbowThreeXoffset()
 {
-  functionName = "RainbowThreeXoffset";
+  globalStrings.functionName = "RainbowThreeXoffset";
   spaceinc = 0.07;
   timeinc = (0.000025 * currSpeed);
   //yoffset += timeinc;
@@ -653,7 +653,7 @@ void RainbowThreeXoffset()
 }
 void RainbowFourXoffset()
 {
-  functionName = "RainbowFourXoffset";
+  globalStrings.functionName = "RainbowFourXoffset";
   spaceinc = 0.03;
   timeinc = (0.000025 * currSpeed);
   //yoffset += timeinc;
@@ -662,7 +662,7 @@ void RainbowFourXoffset()
 }
 void RainbowBigXoffset()
 {
-  functionName = "RainbowBigXoffset";
+  globalStrings.functionName = "RainbowBigXoffset";
   spaceinc = 0.12;
   timeinc = (0.000025 * currSpeed);
   //yoffset += timeinc;
@@ -671,7 +671,7 @@ void RainbowBigXoffset()
 }
 void RainbowBigYoffset()
 {
-  functionName = "RainbowBigYoffset";
+  globalStrings.functionName = "RainbowBigYoffset";
   spaceinc = 0.12;
   timeinc = (0.000025 * currSpeed);
   yoffset += timeinc;

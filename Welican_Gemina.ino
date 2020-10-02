@@ -102,9 +102,6 @@ String returnText;
 int NUM_FAVORITES = 25; //Max 50, loads all 50 at program load, dynamically assignable
 
 volatile int peak[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // The length of these arrays must be >= NUM_BANDS
-int tempBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-int oldBandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-volatile int bandValues[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int menu[11];
 int menu_max[11] = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, NUM_FAVORITES}; //Root Menu Items, Game Menu Items, Settings Menu Items
 int pattern[6];
@@ -511,6 +508,15 @@ VisualizerTriangle t1 = {
     .y1 = 0,
     .y2 = 0,
     .y3 = 0};
+
+struct EQModel
+{
+  volatile int bandValues[15];
+  int tempBandValues[15];
+};
+EQModel eqBands = {
+    .bandValues = {},
+    .tempBandValues = {}};
 
 // ----------------------------------------------------------------
 // SETUP

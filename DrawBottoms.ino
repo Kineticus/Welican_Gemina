@@ -1,6 +1,6 @@
 void drawDiscEQ()
 {
-  globals.temp[0] = bandValues[1] / AMPLITUDE;
+  globals.temp[0] = eqBands.bandValues[1] / AMPLITUDE;
   globals.temp[0] -= 7;
   if (globals.temp[0] < 2)
   {
@@ -15,7 +15,7 @@ void drawDiscEQ()
 
 void drawDiscSectionsEQ()
 {
-  globals.temp[0] = bandValues[0] / AMPLITUDE;
+  globals.temp[0] = eqBands.bandValues[0] / AMPLITUDE;
   globals.temp[0] -= 7;
   if (globals.temp[0] < 0)
   {
@@ -27,7 +27,7 @@ void drawDiscSectionsEQ()
   }
   u8g2.drawDisc(106, 42, globals.temp[0], U8G2_DRAW_LOWER_LEFT);
 
-  globals.temp[1] = bandValues[1] / AMPLITUDE;
+  globals.temp[1] = eqBands.bandValues[1] / AMPLITUDE;
   globals.temp[1] -= 7;
   if (globals.temp[1] < 0)
   {
@@ -46,7 +46,7 @@ void drawEQ()
   int min = 0;
   int max = 80;
 
-  globals.temp[0] = bandValues[0] / AMPLITUDE;
+  globals.temp[0] = eqBands.bandValues[0] / AMPLITUDE;
   globals.temp[0] -= 7;
   if (globals.temp[0] < min)
   {
@@ -61,7 +61,7 @@ void drawEQ()
   globals.temp[2] = peak[0] / AMPLITUDE;
   u8g2.drawBox(globals.temp[2], pos, 1, 7);
 
-  globals.temp[1] = bandValues[1] / AMPLITUDE;
+  globals.temp[1] = eqBands.bandValues[1] / AMPLITUDE;
   globals.temp[1] -= 7;
   if (globals.temp[1] < min)
   {
@@ -75,7 +75,7 @@ void drawEQ()
   globals.temp[2] = peak[1] / AMPLITUDE;
   u8g2.drawBox(globals.temp[2], patternSettings.pos + 8, 1, 7);
 
-  globals.temp[2] = bandValues[3] / AMPLITUDE;
+  globals.temp[2] = eqBands.bandValues[3] / AMPLITUDE;
   globals.temp[2] -= 7;
   if (globals.temp[2] < min)
   {
@@ -89,7 +89,7 @@ void drawEQ()
   globals.temp[2] = peak[3] / AMPLITUDE;
   u8g2.drawBox(globals.temp[2], patternSettings.pos + 16, 1, 7);
 
-  globals.temp[2] = bandValues[4] / AMPLITUDE;
+  globals.temp[2] = eqBands.bandValues[4] / AMPLITUDE;
   globals.temp[2] -= 7;
   if (globals.temp[2] < min)
   {
@@ -104,7 +104,7 @@ void drawEQ()
   globals.temp[2] = peak[4] / AMPLITUDE;
   u8g2.drawBox(globals.temp[2], patternSettings.pos + 24, 1, 7);
 
-  globals.temp[2] = bandValues[5] / AMPLITUDE;
+  globals.temp[2] = eqBands.bandValues[5] / AMPLITUDE;
   globals.temp[2] -= 7;
   if (globals.temp[2] < min)
   {
@@ -118,7 +118,7 @@ void drawEQ()
   globals.temp[2] = peak[5] / AMPLITUDE;
   u8g2.drawBox(globals.temp[2], patternSettings.pos + 32, 1, 7);
 
-  globals.temp[2] = bandValues[6] / AMPLITUDE;
+  globals.temp[2] = eqBands.bandValues[6] / AMPLITUDE;
   globals.temp[2] -= 7;
   if (globals.temp[2] < min)
   {
@@ -135,7 +135,7 @@ void drawEQ()
 
 void drawCircleEQ()
 {
-  globals.temp[0] = bandValues[2] / AMPLITUDE;
+  globals.temp[0] = eqBands.bandValues[2] / AMPLITUDE;
   globals.temp[0] -= 7;
   if (globals.temp[0] < 5)
   {

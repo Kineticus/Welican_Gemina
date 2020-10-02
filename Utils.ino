@@ -28,7 +28,7 @@ void inputCompute(void *parameter)
     // Reset temp variables
     for (int i = 0; i < NUM_BANDS; i++)
     {
-      tempBandValues[i] = 0;
+      eqBands.tempBandValues[i] = 0;
     }
 
     // Analyse FFT results
@@ -39,55 +39,55 @@ void inputCompute(void *parameter)
 
         //8 bands, 12kHz top band
         if (i <= 3)
-          tempBandValues[0] += (int)globals.vReal[i];
+          eqBands.tempBandValues[0] += (int)globals.vReal[i];
         if (i > 3 && i <= 6)
-          tempBandValues[1] += (int)globals.vReal[i];
+          eqBands.tempBandValues[1] += (int)globals.vReal[i];
         if (i > 6 && i <= 13)
-          tempBandValues[2] += (int)globals.vReal[i];
+          eqBands.tempBandValues[2] += (int)globals.vReal[i];
         if (i > 13 && i <= 27)
-          tempBandValues[3] += (int)globals.vReal[i];
+          eqBands.tempBandValues[3] += (int)globals.vReal[i];
         if (i > 27 && i <= 55)
-          tempBandValues[4] += (int)globals.vReal[i];
+          eqBands.tempBandValues[4] += (int)globals.vReal[i];
         if (i > 55 && i <= 112)
-          tempBandValues[5] += (int)globals.vReal[i];
+          eqBands.tempBandValues[5] += (int)globals.vReal[i];
         if (i > 112 && i <= 229)
-          tempBandValues[6] += (int)globals.vReal[i];
+          eqBands.tempBandValues[6] += (int)globals.vReal[i];
         if (i > 229)
-          tempBandValues[7] += (int)globals.vReal[i];
+          eqBands.tempBandValues[7] += (int)globals.vReal[i];
 
         /*16 bands, 12kHz top band 
-        if (i<=2 )           tempBandValues[0]  += (int)globals.vReal[i];
-        if (i>2   && i<=3  ) tempBandValues[1]  += (int)globals.vReal[i];
-        if (i>3   && i<=5  ) tempBandValues[2]  += (int)globals.vReal[i];
-        if (i>5   && i<=7  ) tempBandValues[3]  += (int)globals.vReal[i];
-        if (i>7   && i<=9  ) tempBandValues[4]  += (int)globals.vReal[i];
-        if (i>9   && i<=13 ) tempBandValues[5]  += (int)globals.vReal[i];
-        if (i>13  && i<=18 ) tempBandValues[6]  += (int)globals.vReal[i];
-        if (i>18  && i<=25 ) tempBandValues[7]  += (int)globals.vReal[i];
-        if (i>25  && i<=36 ) tempBandValues[8]  += (int)globals.vReal[i];
-        if (i>36  && i<=50 ) tempBandValues[9]  += (int)globals.vReal[i];
-        if (i>50  && i<=69 ) tempBandValues[10] += (int)globals.vReal[i];
-        if (i>69  && i<=97 ) tempBandValues[11] += (int)globals.vReal[i];
-        if (i>97  && i<=135) tempBandValues[12] += (int)globals.vReal[i];
-        if (i>135 && i<=189) tempBandValues[13] += (int)globals.vReal[i];
-        if (i>189 && i<=264) tempBandValues[14] += (int)globals.vReal[i];
-        if (i>264          ) tempBandValues[15] += (int)globals.vReal[i];*/
+        if (i<=2 )           eqBands.tempBandValues[0]  += (int)globals.vReal[i];
+        if (i>2   && i<=3  ) eqBands.tempBandValues[1]  += (int)globals.vReal[i];
+        if (i>3   && i<=5  ) eqBands.tempBandValues[2]  += (int)globals.vReal[i];
+        if (i>5   && i<=7  ) eqBands.tempBandValues[3]  += (int)globals.vReal[i];
+        if (i>7   && i<=9  ) eqBands.tempBandValues[4]  += (int)globals.vReal[i];
+        if (i>9   && i<=13 ) eqBands.tempBandValues[5]  += (int)globals.vReal[i];
+        if (i>13  && i<=18 ) eqBands.tempBandValues[6]  += (int)globals.vReal[i];
+        if (i>18  && i<=25 ) eqBands.tempBandValues[7]  += (int)globals.vReal[i];
+        if (i>25  && i<=36 ) eqBands.tempBandValues[8]  += (int)globals.vReal[i];
+        if (i>36  && i<=50 ) eqBands.tempBandValues[9]  += (int)globals.vReal[i];
+        if (i>50  && i<=69 ) eqBands.tempBandValues[10] += (int)globals.vReal[i];
+        if (i>69  && i<=97 ) eqBands.tempBandValues[11] += (int)globals.vReal[i];
+        if (i>97  && i<=135) eqBands.tempBandValues[12] += (int)globals.vReal[i];
+        if (i>135 && i<=189) eqBands.tempBandValues[13] += (int)globals.vReal[i];
+        if (i>189 && i<=264) eqBands.tempBandValues[14] += (int)globals.vReal[i];
+        if (i>264          ) eqBands.tempBandValues[15] += (int)globals.vReal[i];*/
       }
     }
 
     //Refresh main variables with temp data
     for (int i = 0; i < NUM_BANDS; i++)
     {
-      bandValues[i] = tempBandValues[i];
+      eqBands.bandValues[i] = eqBands.tempBandValues[i];
     }
 
     //Look for Peaks
     for (byte band = 0; band < NUM_BANDS; band++)
     {
 
-      if (bandValues[band] > peak[band])
+      if (eqBands.bandValues[band] > peak[band])
       {
-        peak[band] = bandValues[band];
+        peak[band] = eqBands.bandValues[band];
       }
 
       // Decay peak

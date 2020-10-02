@@ -1231,23 +1231,53 @@ void saveTimeCheck()
 
 void drawClock()
 {
-  u8g2.setFont(u8g2_font_7Segments_26x42_mn);
   u8g2.setDrawColor(1);
-  
-  
 
+  //7 Segment Style
+  /*  
+  u8g2.setFont(u8g2_font_7Segments_26x42_mn);
   if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
   {
     u8g2.setCursor(20, 64);
 
     if (globalTime.currentHour > 9)
     {
-      u8g2.setCursor(-12, 64);
+      u8g2.setCursor(-14, 64);
     }
 
     u8g2.print(globalTime.currentHour);
     
-    u8g2.setCursor(52, 64);
+    u8g2.setCursor(50, 64);
+    u8g2.print(":");
+    
+    u8g2.setCursor(68, 64);
+    if (globalTime.currentMinute < 10)
+    {
+      u8g2.print("0");
+    }
+    u8g2.print(globalTime.currentMinute);
+  } else
+  {
+    //u8g2.print("0:00");
+    //Decided to just show nothing if we don't have a time sync
+  }
+  */
+
+  
+  //Flip Card style
+  u8g2.setFont(u8g2_font_fub30_tn);
+  if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
+  {
+    u8g2.setCursor(30, 64);
+
+    if (globalTime.currentHour > 9)
+    {
+      u8g2.setCursor(0, 64);
+    }
+
+    u8g2.print(globalTime.currentHour);
+    
+    u8g2.setCursor(50, 60);
     u8g2.print(":");
     
     u8g2.setCursor(68, 64);
@@ -1264,8 +1294,10 @@ void drawClock()
   
 
   //Show logo
-  //u8g2.setBitmapMode(true /* transparent*/);
-  //u8g2.drawXBMP(32, 0, myBitmap_width, myBitmap_height, myBitmap);
+  /*
+  u8g2.setBitmapMode(true);
+  u8g2.drawXBMP(32, 0, myBitmap_width, myBitmap_height, myBitmap);
+  */
 }
 
 void showLogo(int millisTime)

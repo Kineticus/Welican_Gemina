@@ -366,9 +366,9 @@ void BreathingEffect(float pulseSpeed, bool red, bool green, bool blue)
 {
   //https://github.com/marmilicious/FastLED_examples/blob/master/breath_effect_v2.ino
   float dV = ((exp(sin(pulseSpeed * millis() / 2000.0 * PI)) - 0.36787944) * patternSettings.delta);
-  val = valueMin + dV;
-  hue = map(val, valueMin, valueMax, hueA, hueB); // Map hue based on current val
-  sat = map(val, valueMin, valueMax, satA, satB); // Map sat based on current val
+  val = patternSettings.valueMin + dV;
+  hue = map(val, patternSettings.valueMin, patternSettings.valueMax, hueA, hueB); // Map hue based on current val
+  sat = map(val, patternSettings.valueMin, patternSettings.valueMax, satA, satB); // Map sat based on current val
 
   for (int i = 0; i < NUM_LEDS; i++)
   {
@@ -481,10 +481,10 @@ void BlendIntoRainbow(CRGB color1, CRGB color2, CRGB color3)
   {
     if (patternSettings.moving)
     {
-      pos++;
-      if (pos == NUM_LEDS)
+      patternSettings.pos++;
+      if (patternSettings.pos == NUM_LEDS)
       {
-        pos = 0;
+        patternSettings.pos = 0;
       } // reset to begining
     }
   }
@@ -507,24 +507,24 @@ void BlendIntoRainbow(CRGB color1, CRGB color2, CRGB color3)
 
   // https://www.reddit.com/r/FastLED/comments/dhoce6/nblend_function_explanation/
   // nblend (CRGB &existing, const CRGB &overlay, fract8 amountOfOverlay)
-  nblend(leds[pos], blendThisIn4, blendAmount / 3);
-  nblend(leds[mod8(pos + 1, NUM_LEDS)], blendThisIn3, blendAmount / 2);
-  nblend(leds[mod8(pos + 2, NUM_LEDS)], blendThisIn2, blendAmount);
-  nblend(leds[mod8(pos + 3, NUM_LEDS)], blendThisIn, blendAmount);
-  nblend(leds[mod8(pos + 4, NUM_LEDS)], blendThisIn2, blendAmount);
-  nblend(leds[mod8(pos + 5, NUM_LEDS)], blendThisIn3, blendAmount / 2);
-  nblend(leds[mod8(pos + 6, NUM_LEDS)], blendThisIn4, blendAmount / 3);
+  nblend(leds[patternSettings.pos], blendThisIn4, blendAmount / 3);
+  nblend(leds[mod8(patternSettings.pos + 1, NUM_LEDS)], blendThisIn3, blendAmount / 2);
+  nblend(leds[mod8(patternSettings.pos + 2, NUM_LEDS)], blendThisIn2, blendAmount);
+  nblend(leds[mod8(patternSettings.pos + 3, NUM_LEDS)], blendThisIn, blendAmount);
+  nblend(leds[mod8(patternSettings.pos + 4, NUM_LEDS)], blendThisIn2, blendAmount);
+  nblend(leds[mod8(patternSettings.pos + 5, NUM_LEDS)], blendThisIn3, blendAmount / 2);
+  nblend(leds[mod8(patternSettings.pos + 6, NUM_LEDS)], blendThisIn4, blendAmount / 3);
 
-  posR = beatsin8(5, 0, (NUM_LEDS - 1));
-  posG = beatsin8(7, 0, (NUM_LEDS - 1));
-  posB = beatsin8(9, 0, (NUM_LEDS - 1));
+  patternSettings.posR = beatsin8(5, 0, (NUM_LEDS - 1));
+  patternSettings.posG = beatsin8(7, 0, (NUM_LEDS - 1));
+  patternSettings.posB = beatsin8(9, 0, (NUM_LEDS - 1));
 
   CRGB tempColor = color1;
-  temp[posR] = tempColor;
+  temp[patternSettings.posR] = tempColor;
   tempColor = color2;
-  nblend(temp[posG], tempColor, 128);
+  nblend(temp[patternSettings.posG], tempColor, 128);
   tempColor = color3;
-  nblend(temp[posB], tempColor, 128);
+  nblend(temp[patternSettings.posB], tempColor, 128);
 
   EVERY_N_MILLISECONDS(2)
   {
@@ -536,17 +536,17 @@ void BlendIntoRainbow(CRGB color1, CRGB color2, CRGB color3)
     nblend(leds[i], temp[i], 128);
   }
 
-  nblend(leds[mod8(posR, NUM_LEDS)], color1, 90);
-  nblend(leds[mod8(posR + 1, NUM_LEDS)], color1, 128);
-  nblend(leds[mod8(posR + 2, NUM_LEDS)], color1, 90);
+  nblend(leds[mod8(patternSettings.posR, NUM_LEDS)], color1, 90);
+  nblend(leds[mod8(patternSettings.posR + 1, NUM_LEDS)], color1, 128);
+  nblend(leds[mod8(patternSettings.posR + 2, NUM_LEDS)], color1, 90);
 
-  nblend(leds[mod8(posG, NUM_LEDS)], color2, 90);
-  nblend(leds[mod8(posG + 1, NUM_LEDS)], color2, 128);
-  nblend(leds[mod8(posG + 2, NUM_LEDS)], color2, 90);
+  nblend(leds[mod8(patternSettings.posG, NUM_LEDS)], color2, 90);
+  nblend(leds[mod8(patternSettings.posG + 1, NUM_LEDS)], color2, 128);
+  nblend(leds[mod8(patternSettings.posG + 2, NUM_LEDS)], color2, 90);
 
-  nblend(leds[mod8(posB, NUM_LEDS)], color3, 90);
-  nblend(leds[mod8(posB + 1, NUM_LEDS)], color3, 128);
-  nblend(leds[mod8(posB + 2, NUM_LEDS)], color3, 90);
+  nblend(leds[mod8(patternSettings.posB, NUM_LEDS)], color3, 90);
+  nblend(leds[mod8(patternSettings.posB + 1, NUM_LEDS)], color3, 128);
+  nblend(leds[mod8(patternSettings.posB + 2, NUM_LEDS)], color3, 90);
 }
 
 //===============================================================
@@ -1054,8 +1054,8 @@ void Marqueev2(uint8_t spacing, uint16_t holdTime)
 
     for (int i = 0; i < (NUM_LEDS / spacing); i++)
     {
-      pos = (spacing * (i - 1) + spacing + patternSettings.advance) % NUM_LEDS;
-      leds[pos] = CHSV(hue, 255, 255);
+      patternSettings.pos = (spacing * (i - 1) + spacing + patternSettings.advance) % NUM_LEDS;
+      leds[patternSettings.pos] = CHSV(hue, 255, 255);
     }
 
     FastLED.show();
@@ -1069,8 +1069,8 @@ void Marqueev2(uint8_t spacing, uint16_t holdTime)
     {
       for (int i = 0; i < (NUM_LEDS / spacing); i++)
       {
-        pos = (spacing * (i - 1) + spacing + patternSettings.advance) % NUM_LEDS;
-        leds[pos] = CRGB::Black;
+        patternSettings.pos = (spacing * (i - 1) + spacing + patternSettings.advance) % NUM_LEDS;
+        leds[patternSettings.pos] = CRGB::Black;
       }
     }
 
@@ -1115,9 +1115,9 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
       {
         for (uint8_t w = 0; w < width; w++)
         {
-          //pos = (spacing * (i-1) + spacing + patternSettings.advance + w) % NUM_LEDS;
-          pos = (spacing * (i - 1) + spacing + patternSettings.advance + w - 1) % NUM_LEDS;
-          leds[pos] = CRGB::Black;
+          //patternSettings.pos = (spacing * (i-1) + spacing + patternSettings.advance + w) % NUM_LEDS;
+          patternSettings.pos = (spacing * (i - 1) + spacing + patternSettings.advance + w - 1) % NUM_LEDS;
+          leds[patternSettings.pos] = CRGB::Black;
         }
       }
     }
@@ -1127,7 +1127,7 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
     {
       for (uint8_t w = 0; w < width; w++)
       {
-        pos = (spacing * (i - 1) + spacing + patternSettings.advance + w) % NUM_LEDS;
+        patternSettings.pos = (spacing * (i - 1) + spacing + patternSettings.advance + w) % NUM_LEDS;
         if (w % 2 == 0)
         { // Is w even or odd?
           patternSettings.colorStorage = hue;
@@ -1137,7 +1137,7 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
           patternSettings.colorStorage = hue + hue2Shift;
         }
 
-        leds[pos] = CHSV(patternSettings.colorStorage, 255, 255);
+        leds[patternSettings.pos] = CHSV(patternSettings.colorStorage, 255, 255);
       }
     }
 

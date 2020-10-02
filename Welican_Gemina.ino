@@ -118,23 +118,17 @@ int pattern_max[6] = {12, 12, 22, 65, 80, NUM_FAVORITES};
 ***********************************************************/
 //Define simplex noise node for each LED
 
-uint8_t hueA = 15;      // Start hue at valueMin.
-uint8_t satA = 230;     // Start saturation at valueMin.
-float valueMin = 120.0; // Pulse minimum value (Should be less then valueMax).
-uint8_t hueB = 95;      // End hue at valueMax.
-uint8_t satB = 255;     // End saturation at valueMax.
-float valueMax = 255.0; // Pulse maximum value (Should be larger then valueMin).
+uint8_t hueA = 15;  // Start hue at valueMin.
+uint8_t satA = 230; // Start saturation at valueMin.
+uint8_t hueB = 95;  // End hue at valueMax.
+uint8_t satB = 255; // End saturation at valueMax.
 // used in Blendwave
-int red, green, blue;           // used in hsv2rgb color functions
-int red2, green2, blue2;        // used in hsv2rgb color functions
-int red3, green3, blue3;        // used in hsv2rgb color functions
-uint8_t hue = hueA;             // Do Not Edit
-uint8_t hue2 = hueB;            // Do Not Edit
-uint8_t sat = satA;             // Do Not Edit
-float val = valueMin;           // Do Not Edit
-uint8_t hueDelta = hueA - hueB; // Do Not Edit
-uint8_t pos;                    // stores a position for color being blended in
-uint8_t posR, posG, posB;       // positions of moving R,G,B dots
+int red, green, blue;    // used in hsv2rgb color functions
+int red2, green2, blue2; // used in hsv2rgb color functions
+int red3, green3, blue3; // used in hsv2rgb color functions
+uint8_t hue = hueA;      // Do Not Edit
+uint8_t hue2 = hueB;     // Do Not Edit
+uint8_t sat = satA;      // Do Not Edit
 // Extra fake LED at the end, to avoid fencepost problem.
 // It is used by simplex node and interpolation code.
 float LED_array_red[LEDS_IN_STRIP + 1];
@@ -264,6 +258,8 @@ struct PatternSettings
   uint8_t speed;
   bool fadingTail;  // Add fading tail?
   uint8_t fadeRate; // How fast to fade out tail. [0-255]
+  float valueMax;   // Pulse maximum value (Should be larger then valueMin).
+  float valueMin;   // Pulse minimum value (Should be less then valueMax).
   float delta;      // Do Not Edit
   int8_t delta2;    // Sets forward or backwards direction amount. (Can be negative.)
   int palletPosition;
@@ -276,6 +272,10 @@ struct PatternSettings
   uint16_t pulseLength; // How long the pulse takes to fade out.  Higher value is longer.
   uint16_t pulseOffset; // Delay before second pulse.  Higher value is more delay.
   float breath;
+  uint8_t posR;
+  uint8_t posG;
+  uint8_t posB; // positions of moving R,G,B dots
+  uint8_t pos;  // stores a position for color being blended in
 };
 PatternSettings patternSettings = {
     .gHue = 0,
@@ -286,7 +286,9 @@ PatternSettings patternSettings = {
     .speed = 0,
     .fadingTail = false,
     .fadeRate = 120,
-    .delta = ((valueMax - valueMin) / 2.35040238),
+    .valueMax = 255.0,
+    .valueMin = 120.0,
+    .delta = ((patternSettings.valueMax - patternSettings.valueMin) / 2.35040238),
     .delta2 = 170,
     .palletPosition = 1,
     .colorBarPosition = 0,
@@ -297,7 +299,12 @@ PatternSettings patternSettings = {
     .cycleLength = 0,
     .pulseLength = 1500,
     .pulseOffset = 150,
-    .breath = 0};
+    .breath = 0,
+    .posR = 0,
+    .posG = 0,
+    .posB = 0,
+    .pos = 0};
+float val = patternSettings.valueMin; // Do Not Edit
 
 struct Brightness
 {

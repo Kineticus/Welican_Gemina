@@ -71,9 +71,9 @@ void drawEQ()
   {
     globals.temp[1] = max;
   }
-  u8g2.drawBox(0, pos + 8, globals.temp[1], 7);
+  u8g2.drawBox(0, patternSettings.pos + 8, globals.temp[1], 7);
   globals.temp[2] = peak[1] / AMPLITUDE;
-  u8g2.drawBox(globals.temp[2], pos + 8, 1, 7);
+  u8g2.drawBox(globals.temp[2], patternSettings.pos + 8, 1, 7);
 
   globals.temp[2] = bandValues[3] / AMPLITUDE;
   globals.temp[2] -= 7;
@@ -85,9 +85,9 @@ void drawEQ()
   {
     globals.temp[2] = max;
   }
-  u8g2.drawBox(0, pos + 16, globals.temp[2], 7);
+  u8g2.drawBox(0, patternSettings.pos + 16, globals.temp[2], 7);
   globals.temp[2] = peak[3] / AMPLITUDE;
-  u8g2.drawBox(globals.temp[2], pos + 16, 1, 7);
+  u8g2.drawBox(globals.temp[2], patternSettings.pos + 16, 1, 7);
 
   globals.temp[2] = bandValues[4] / AMPLITUDE;
   globals.temp[2] -= 7;
@@ -99,10 +99,10 @@ void drawEQ()
   {
     globals.temp[2] = max;
   }
-  u8g2.drawBox(0, pos + 24, globals.temp[2], 7);
+  u8g2.drawBox(0, patternSettings.pos + 24, globals.temp[2], 7);
 
   globals.temp[2] = peak[4] / AMPLITUDE;
-  u8g2.drawBox(globals.temp[2], pos + 24, 1, 7);
+  u8g2.drawBox(globals.temp[2], patternSettings.pos + 24, 1, 7);
 
   globals.temp[2] = bandValues[5] / AMPLITUDE;
   globals.temp[2] -= 7;
@@ -114,9 +114,9 @@ void drawEQ()
   {
     globals.temp[2] = max;
   }
-  u8g2.drawBox(0, pos + 32, globals.temp[2], 7);
+  u8g2.drawBox(0, patternSettings.pos + 32, globals.temp[2], 7);
   globals.temp[2] = peak[5] / AMPLITUDE;
-  u8g2.drawBox(globals.temp[2], pos + 32, 1, 7);
+  u8g2.drawBox(globals.temp[2], patternSettings.pos + 32, 1, 7);
 
   globals.temp[2] = bandValues[6] / AMPLITUDE;
   globals.temp[2] -= 7;
@@ -128,9 +128,9 @@ void drawEQ()
   {
     globals.temp[2] = max;
   }
-  u8g2.drawBox(0, pos + 40, globals.temp[2], 7);
+  u8g2.drawBox(0, patternSettings.pos + 40, globals.temp[2], 7);
   globals.temp[2] = peak[6] / AMPLITUDE;
-  u8g2.drawBox(globals.temp[2], pos + 40, 1, 7);
+  u8g2.drawBox(globals.temp[2], patternSettings.pos + 40, 1, 7);
 }
 
 void drawCircleEQ()

@@ -36,7 +36,7 @@ void fallios_game()
 
     //increment simplex noise for tunnel generation
     fallios.tunnelGenerator += .015;
-    fallios.motion = SimplexNoise(fallios.tunnelGenerator, yoffset, 0) * 420;
+    fallios.motion = SimplexNoise(fallios.tunnelGenerator, simplexNoise.yoffset, 0) * 420;
 
     //Has simplex noise has gone up since last time? move tunnel right
     if (fallios.motion > fallios.motionHistory)

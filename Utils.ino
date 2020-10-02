@@ -1499,60 +1499,60 @@ void fadeToBlack(int ledNo, byte fadeValue)
 
 float GetH_BouncingWithLimits(float _speed, float _hHigh, float _hLow)
 {
-  if (simpleNoise.h > _hHigh)
+  if (simplexNoise.h > _hHigh)
   {
-    simpleNoise.h = _hHigh;
+    simplexNoise.h = _hHigh;
     globalLED.fadeDirection = 0;
   }
-  if (simpleNoise.h < _hLow)
+  if (simplexNoise.h < _hLow)
   {
-    simpleNoise.h = _hLow;
+    simplexNoise.h = _hLow;
     globalLED.fadeDirection = 1;
   }
 
   if (globalLED.fadeDirection == 1)
   {
-    simpleNoise.h += _speed; // increment to make faster
+    simplexNoise.h += _speed; // increment to make faster
   }
   if (globalLED.fadeDirection == 0)
   {
-    simpleNoise.h -= _speed; // decrement to make faster
+    simplexNoise.h -= _speed; // decrement to make faster
   }
 
-  return simpleNoise.h;
+  return simplexNoise.h;
 }
 float GetHTemp_BouncingWithLimits(float _speed, float _hHigh, float _hLow)
 {
-  if (simpleNoise.hTemp > _hHigh)
+  if (simplexNoise.hTemp > _hHigh)
   {
-    simpleNoise.hTemp = _hHigh;
+    simplexNoise.hTemp = _hHigh;
     globalLED.fadeDirectionHTemp = 0;
   }
-  if (simpleNoise.hTemp < _hLow)
+  if (simplexNoise.hTemp < _hLow)
   {
-    simpleNoise.hTemp = _hLow;
+    simplexNoise.hTemp = _hLow;
     globalLED.fadeDirectionHTemp = 1;
   }
 
   if (globalLED.fadeDirectionHTemp == 1)
   {
-    simpleNoise.hTemp += _speed; // increment to make faster
+    simplexNoise.hTemp += _speed; // increment to make faster
   }
   if (globalLED.fadeDirectionHTemp == 0)
   {
-    simpleNoise.hTemp -= _speed; // decrement to make faster
+    simplexNoise.hTemp -= _speed; // decrement to make faster
   }
 
-  return simpleNoise.hTemp;
+  return simplexNoise.hTemp;
 }
 
 void DetermineFadeDirection()
 {
-  if (yoffset > yoffsetMAX)
+  if (simplexNoise.yoffset > simplexNoise.yoffsetMax)
   {
     globalLED.fadeDirection2 = 0;
   }
-  if (yoffset < 0)
+  if (simplexNoise.yoffset < 0)
   {
     globalLED.fadeDirection2 = 1;
   }
@@ -1630,7 +1630,7 @@ void u8g2_horizontal_line(uint8_t a)
 /***********************************************************
   Simplex Noise Pattern (Rainbow Cloud Generator)
 ***********************************************************/
-void SimplexNoisePatternInterpolated(float spaceinc, float timeinc, float yoffset, float xoffset)
+void SimplexNoisePatternInterpolated(float spaceInc, float timeInc, float yoffset, float xoffset)
 {
 
   // Simplex noise for whole strip of LEDs.
@@ -1638,23 +1638,23 @@ void SimplexNoisePatternInterpolated(float spaceinc, float timeinc, float yoffse
 
   // Calculate simplex noise for LEDs that are nodes:
   // Store raw values from simplex function (-0.347 to 0.347)
-  //float xoffset = 0.0;
-  float xoffset_holder = xoffset;
+  //float simplexNoise.xoffset = 0.0;
+  float xoffset_holder = simplexNoise.xoffset;
 
-  for (int i = 0; i <= LEDS_IN_STRIP; i = i + simpleNoise.nodeSpacing)
+  for (int i = 0; i <= LEDS_IN_STRIP; i = i + simplexNoise.nodeSpacing)
   {
-    xoffset += spaceinc;
-    LED_array_red[i] = SimplexNoise(xoffset, yoffset, 0);
-    LED_array_green[i] = SimplexNoise(xoffset, yoffset, 1);
-    LED_array_blue[i] = SimplexNoise(xoffset, yoffset, 2);
+    simplexNoise.xoffset += simplexNoise.spaceInc;
+    LED_array_red[i] = SimplexNoise(simplexNoise.xoffset, simplexNoise.yoffset, 0);
+    LED_array_green[i] = SimplexNoise(simplexNoise.xoffset, simplexNoise.yoffset, 1);
+    LED_array_blue[i] = SimplexNoise(simplexNoise.xoffset, simplexNoise.yoffset, 2);
   }
 
-  xoffset = xoffset_holder;
+  simplexNoise.xoffset = xoffset_holder;
 
   // Interpolate values for LEDs between nodes
   for (int i = 0; i < LEDS_IN_STRIP; i++)
   {
-    int position_between_nodes = i % simpleNoise.nodeSpacing;
+    int position_between_nodes = i % simplexNoise.nodeSpacing;
     int last_node, next_node;
 
     // If at node, skip
@@ -1662,13 +1662,13 @@ void SimplexNoisePatternInterpolated(float spaceinc, float timeinc, float yoffse
     {
       // At node for simplex noise, do nothing but update which nodes we are between
       last_node = i;
-      next_node = last_node + simpleNoise.nodeSpacing;
+      next_node = last_node + simplexNoise.nodeSpacing;
     }
     // Else between two nodes, so identify those nodes
     else
     {
       // And interpolate between the values at those nodes for red, green, and blue
-      float t = float(position_between_nodes) / float(simpleNoise.nodeSpacing);
+      float t = float(position_between_nodes) / float(simplexNoise.nodeSpacing);
       float t_squaredx3 = 3 * t * t;
       float t_cubedx2 = 2 * t * t * t;
       LED_array_red[i] = LED_array_red[last_node] * (t_cubedx2 - t_squaredx3 + 1.0) + LED_array_red[next_node] * (-t_cubedx2 + t_squaredx3);
@@ -1715,24 +1715,24 @@ void SimplexNoisePatternInterpolated(float spaceinc, float timeinc, float yoffse
     leds[i] = CRGB(r, g, b);
   }
 
-  if (yoffset >= 16000)
+  if (simplexNoise.yoffset >= 16000)
   {
-    yoffset = -26000;
+    simplexNoise.yoffset = -26000;
   }
 
-  if (yoffset <= -26000)
+  if (simplexNoise.yoffset <= -26000)
   {
-    yoffset = 16000;
+    simplexNoise.yoffset = 16000;
   }
 
-  if (xoffset >= 16000)
+  if (simplexNoise.xoffset >= 16000)
   {
-    xoffset = -16000;
+    simplexNoise.xoffset = -16000;
   }
 
-  if (xoffset <= -16000)
+  if (simplexNoise.xoffset <= -16000)
   {
-    xoffset = 16000;
+    simplexNoise.xoffset = 16000;
   }
 }
 
@@ -1743,36 +1743,36 @@ void SimplexNoisePatternInterpolated(float spaceinc, float timeinc, float yoffse
 float SimplexNoise(float x, float y, float z)
 {
   // Skew input space to relative coordinate in simplex cell
-  simpleNoise.s = (x + y + z) * onethird;
-  simpleNoise.g = fastfloor(x + simpleNoise.s);
-  simpleNoise.j = fastfloor(y + simpleNoise.s);
-  simpleNoise.k = fastfloor(z + simpleNoise.s);
+  simplexNoise.s = (x + y + z) * onethird;
+  simplexNoise.g = fastfloor(x + simplexNoise.s);
+  simplexNoise.j = fastfloor(y + simplexNoise.s);
+  simplexNoise.k = fastfloor(z + simplexNoise.s);
 
   // Unskew cell origin back to (x, y , z) space
-  simpleNoise.s = (simpleNoise.g + simpleNoise.j + simpleNoise.k) * onesixth;
-  simpleNoise.u = x - simpleNoise.g + simpleNoise.s;
-  simpleNoise.v = y - simpleNoise.j + simpleNoise.s;
-  simpleNoise.w = z - simpleNoise.k + simpleNoise.s;
+  simplexNoise.s = (simplexNoise.g + simplexNoise.j + simplexNoise.k) * onesixth;
+  simplexNoise.u = x - simplexNoise.g + simplexNoise.s;
+  simplexNoise.v = y - simplexNoise.j + simplexNoise.s;
+  simplexNoise.w = z - simplexNoise.k + simplexNoise.s;
 
-  simpleNoise.A[0] = simpleNoise.A[1] = simpleNoise.A[2] = 0;
+  simplexNoise.A[0] = simplexNoise.A[1] = simplexNoise.A[2] = 0;
 
   // For 3D case, the simplex shape is a slightly irregular tetrahedron.
   // Determine which simplex we're in
-  int hi = simpleNoise.u >= simpleNoise.w ? simpleNoise.u >= simpleNoise.v ? 0 : 1 : simpleNoise.v >= simpleNoise.w ? 1 : 2;
-  int lo = simpleNoise.u < simpleNoise.w ? simpleNoise.u < simpleNoise.v ? 0 : 1 : simpleNoise.v < simpleNoise.w ? 1 : 2;
+  int hi = simplexNoise.u >= simplexNoise.w ? simplexNoise.u >= simplexNoise.v ? 0 : 1 : simplexNoise.v >= simplexNoise.w ? 1 : 2;
+  int lo = simplexNoise.u < simplexNoise.w ? simplexNoise.u < simplexNoise.v ? 0 : 1 : simplexNoise.v < simplexNoise.w ? 1 : 2;
 
   return k_fn(hi) + k_fn(3 - hi - lo) + k_fn(lo) + k_fn(0);
 }
 
 float k_fn(int a)
 {
-  simpleNoise.s = (simpleNoise.A[0] + simpleNoise.A[1] + simpleNoise.A[2]) * onesixth;
-  float x = simpleNoise.u - simpleNoise.A[0] + simpleNoise.s;
-  float y = simpleNoise.v - simpleNoise.A[1] + simpleNoise.s;
-  float z = simpleNoise.w - simpleNoise.A[2] + simpleNoise.s;
+  simplexNoise.s = (simplexNoise.A[0] + simplexNoise.A[1] + simplexNoise.A[2]) * onesixth;
+  float x = simplexNoise.u - simplexNoise.A[0] + simplexNoise.s;
+  float y = simplexNoise.v - simplexNoise.A[1] + simplexNoise.s;
+  float z = simplexNoise.w - simplexNoise.A[2] + simplexNoise.s;
   float t = 0.6f - x * x - y * y - z * z;
-  int h = shuffle(simpleNoise.g + simpleNoise.A[0], simpleNoise.j + simpleNoise.A[1], simpleNoise.k + simpleNoise.A[2]);
-  simpleNoise.A[a]++;
+  int h = shuffle(simplexNoise.g + simplexNoise.A[0], simplexNoise.j + simplexNoise.A[1], simplexNoise.k + simplexNoise.A[2]);
+  simplexNoise.A[a]++;
   if (t < 0)
     return 0;
   int b5 = h >> 5 & 1;

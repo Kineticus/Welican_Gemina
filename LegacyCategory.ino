@@ -333,10 +333,10 @@ void legacy_category(int patternMode)
 
 void LargeGroupColorFlowBounce(float hHigh, float hLow, float speed, float colorSpacing, int ledSpacing)
 {
-  simpleNoise.h = GetH_BouncingWithLimits(speed, hHigh, hLow);
+  simplexNoise.h = GetH_BouncingWithLimits(speed, hHigh, hLow);
 
-  float hTemp = simpleNoise.h;
-  hTemp = simpleNoise.h + colorSpacing; // space between colors
+  float hTemp = simplexNoise.h;
+  hTemp = simplexNoise.h + colorSpacing; // space between colors
   if (hTemp > .93)
   {
     hTemp -= 1;
@@ -346,7 +346,7 @@ void LargeGroupColorFlowBounce(float hHigh, float hLow, float speed, float color
     hTemp += 1;
   }
 
-  hsv2rgb(float(simpleNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
+  hsv2rgb(float(simplexNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
   hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red2, green2, blue2);
 
   for (uint16_t i = 0; i < NUM_LEDS; i = i + ledSpacing)
@@ -370,31 +370,31 @@ void LargeGroupColorFlowBounce(float hHigh, float hLow, float speed, float color
 }
 void DualColorFlow(float hHigh, float hLow, float hHigh2, float hLow2, float hSpeed, float spacing)
 {
-  if (simpleNoise.h > hHigh)
+  if (simplexNoise.h > hHigh)
   {
-    simpleNoise.h = hHigh;
+    simplexNoise.h = hHigh;
     globalLED.fadeDirection = 0;
   }
-  if (simpleNoise.h < hLow)
+  if (simplexNoise.h < hLow)
   {
-    simpleNoise.h = hLow;
+    simplexNoise.h = hLow;
     globalLED.fadeDirection = 1;
   }
 
   if (globalLED.fadeDirection == 1)
   {
-    simpleNoise.h += hSpeed; // increment to make faster
+    simplexNoise.h += hSpeed; // increment to make faster
   }
   if (globalLED.fadeDirection == 0)
   {
-    simpleNoise.h -= hSpeed; // decrement to make faster
+    simplexNoise.h -= hSpeed; // decrement to make faster
   }
 
-  float hTemp = simpleNoise.h;
+  float hTemp = simplexNoise.h;
 
-  hTemp = simpleNoise.h - spacing; // space between colors
+  hTemp = simplexNoise.h - spacing; // space between colors
 
-  hsv2rgb(float(simpleNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
+  hsv2rgb(float(simplexNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
 
   hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red2, green2, blue2);
 
@@ -406,19 +406,19 @@ void DualColorFlow(float hHigh, float hLow, float hHigh2, float hLow2, float hSp
 }
 void DualColorFlowTwo(float hStart, float spacing)
 {
-  simpleNoise.h += hStart; // increment to make faster
-  if (simpleNoise.h > 1)
+  simplexNoise.h += hStart; // increment to make faster
+  if (simplexNoise.h > 1)
   {
-    simpleNoise.h -= 1;
+    simplexNoise.h -= 1;
   }
-  if (simpleNoise.h < 0)
+  if (simplexNoise.h < 0)
   {
-    simpleNoise.h += 1;
+    simplexNoise.h += 1;
   }
 
-  float hTemp = simpleNoise.h;
+  float hTemp = simplexNoise.h;
 
-  hTemp = simpleNoise.h + spacing; // space between colors
+  hTemp = simplexNoise.h + spacing; // space between colors
 
   if (hTemp > 1)
   {
@@ -429,7 +429,7 @@ void DualColorFlowTwo(float hStart, float spacing)
     hTemp += 1;
   }
 
-  hsv2rgb(float(simpleNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
+  hsv2rgb(float(simplexNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
 
   hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red2, green2, blue2);
 
@@ -441,10 +441,10 @@ void DualColorFlowTwo(float hStart, float spacing)
 }
 void DualColorFlowBounce(float hHigh, float hLow, float speed, float colorSpacing, int ledSpacing)
 {
-  simpleNoise.h = GetH_BouncingWithLimits(speed, hHigh, hLow);
+  simplexNoise.h = GetH_BouncingWithLimits(speed, hHigh, hLow);
 
-  float hTemp = simpleNoise.h;
-  hTemp = simpleNoise.h - colorSpacing; // space between colors
+  float hTemp = simplexNoise.h;
+  hTemp = simplexNoise.h - colorSpacing; // space between colors
   if (hTemp > 1)
   {
     hTemp -= 1;
@@ -454,7 +454,7 @@ void DualColorFlowBounce(float hHigh, float hLow, float speed, float colorSpacin
     hTemp += 1;
   }
 
-  hsv2rgb(float(simpleNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
+  hsv2rgb(float(simplexNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
   hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red2, green2, blue2);
 
   for (uint16_t i = 0; i < NUM_LEDS; i = i + ledSpacing)
@@ -485,9 +485,9 @@ void DualColorFlowBounce(float hHigh, float hLow, float speed, float colorSpacin
 
 void RainbowNoFlow(float colorSpacing)
 {
-  simpleNoise.h = 0;
+  simplexNoise.h = 0;
 
-  float hTemp = simpleNoise.h;
+  float hTemp = simplexNoise.h;
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
@@ -510,9 +510,9 @@ void RainbowNoFlow(float colorSpacing)
 void RainbowFlow(float hHigh, float hLow, float speed, float colorSpacing)
 {
   // increment 'h' to make transitions faster
-  simpleNoise.h = GetH_BouncingWithLimits(speed, hHigh, hLow);
+  simplexNoise.h = GetH_BouncingWithLimits(speed, hHigh, hLow);
 
-  float hTemp = simpleNoise.h;
+  float hTemp = simplexNoise.h;
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
@@ -534,17 +534,17 @@ void RainbowFlow(float hHigh, float hLow, float speed, float colorSpacing)
 }
 void RainbowFlowSlow(float hSpeed, float colorSpacing)
 {
-  simpleNoise.h += hSpeed; // increment to make faster
-  if (simpleNoise.h > 1)
+  simplexNoise.h += hSpeed; // increment to make faster
+  if (simplexNoise.h > 1)
   {
-    simpleNoise.h -= 1;
+    simplexNoise.h -= 1;
   }
-  if (simpleNoise.h < 0)
+  if (simplexNoise.h < 0)
   {
-    simpleNoise.h += 1;
+    simplexNoise.h += 1;
   }
 
-  float hTemp = simpleNoise.h;
+  float hTemp = simplexNoise.h;
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
@@ -567,56 +567,56 @@ void RainbowFlowSlow(float hSpeed, float colorSpacing)
 
 void RainbowYoffset(float speed, float spacing, bool useFadeDirection)
 {
-  timeinc = (speed * globals.currentSpeed);
-  spaceinc = spacing;
+  simplexNoise.timeInc = (speed * globals.currentSpeed);
+  simplexNoise.spaceInc = spacing;
 
   if (useFadeDirection)
   {
     if (globalLED.fadeDirection2 == 1)
     {
-      yoffset += timeinc;
+      simplexNoise.yoffset += simplexNoise.timeInc;
     }
     if (globalLED.fadeDirection2 == 0)
     {
-      yoffset -= timeinc;
+      simplexNoise.yoffset -= simplexNoise.timeInc;
     }
   }
   else
   {
-    yoffset += timeinc;
+    simplexNoise.yoffset += simplexNoise.timeInc;
   }
 
-  SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
+  SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
 }
 void RainbowXoffset(float speed, float spacing, bool useFadeDirection)
 {
-  timeinc = speed;
-  spaceinc = spacing;
+  simplexNoise.timeInc = speed;
+  simplexNoise.spaceInc = spacing;
 
   if (useFadeDirection)
   {
     if (globalLED.fadeDirection2 == 1)
     {
-      xoffset += timeinc;
+      simplexNoise.xoffset += simplexNoise.timeInc;
     }
     if (globalLED.fadeDirection2 == 0)
     {
-      xoffset -= timeinc;
+      simplexNoise.xoffset -= simplexNoise.timeInc;
     }
   }
   else
   {
-    xoffset += timeinc;
+    simplexNoise.xoffset += simplexNoise.timeInc;
   }
 
-  SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
+  SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
 }
 
 void RainbowHsv(float hHigh, float hLow, float speed)
 {
-  simpleNoise.h = GetH_BouncingWithLimits(speed, hHigh, hLow);
+  simplexNoise.h = GetH_BouncingWithLimits(speed, hHigh, hLow);
 
-  hsv2rgb(float(simpleNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
+  hsv2rgb(float(simplexNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
@@ -627,56 +627,56 @@ void RainbowHsv(float hHigh, float hLow, float speed)
 void RainbowOneYoffset()
 {
   globalStrings.functionName = "RainbowOneYoffset";
-  spaceinc = 0.03;
-  timeinc = (0.000025 * globals.currentSpeed);
-  yoffset += timeinc;
-  //xoffset += timeinc;
-  SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
+  simplexNoise.spaceInc = 0.03;
+  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  simplexNoise.yoffset += simplexNoise.timeInc;
+  //simplexNoise.xoffset += simplexNoise.timeInc;
+  SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
 }
 void RainbowTwoYoffset()
 {
   globalStrings.functionName = "RainbowTwoYoffset";
-  spaceinc = 0.07;
-  timeinc = (0.000025 * globals.currentSpeed);
-  yoffset += timeinc;
-  //xoffset += timeinc;
-  SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
+  simplexNoise.spaceInc = 0.07;
+  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  simplexNoise.yoffset += simplexNoise.timeInc;
+  //simplexNoise.xoffset += simplexNoise.timeInc;
+  SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
 }
 void RainbowThreeXoffset()
 {
   globalStrings.functionName = "RainbowThreeXoffset";
-  spaceinc = 0.07;
-  timeinc = (0.000025 * globals.currentSpeed);
-  //yoffset += timeinc;
-  xoffset += timeinc;
-  SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
+  simplexNoise.spaceInc = 0.07;
+  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  //simplexNoise.yoffset += simplexNoise.timeInc;
+  simplexNoise.xoffset += simplexNoise.timeInc;
+  SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
 }
 void RainbowFourXoffset()
 {
   globalStrings.functionName = "RainbowFourXoffset";
-  spaceinc = 0.03;
-  timeinc = (0.000025 * globals.currentSpeed);
-  //yoffset += timeinc;
-  xoffset += timeinc;
-  SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
+  simplexNoise.spaceInc = 0.03;
+  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  //simplexNoise.yoffset += simplexNoise.timeInc;
+  simplexNoise.xoffset += simplexNoise.timeInc;
+  SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
 }
 void RainbowBigXoffset()
 {
   globalStrings.functionName = "RainbowBigXoffset";
-  spaceinc = 0.12;
-  timeinc = (0.000025 * globals.currentSpeed);
-  //yoffset += timeinc;
-  xoffset += timeinc;
-  SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
+  simplexNoise.spaceInc = 0.12;
+  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  //simplexNoise.yoffset += simplexNoise.timeInc;
+  simplexNoise.xoffset += simplexNoise.timeInc;
+  SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
 }
 void RainbowBigYoffset()
 {
   globalStrings.functionName = "RainbowBigYoffset";
-  spaceinc = 0.12;
-  timeinc = (0.000025 * globals.currentSpeed);
-  yoffset += timeinc;
-  //xoffset += timeinc;
-  SimplexNoisePatternInterpolated(spaceinc, timeinc, yoffset, xoffset);
+  simplexNoise.spaceInc = 0.12;
+  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  simplexNoise.yoffset += simplexNoise.timeInc;
+  //simplexNoise.xoffset += simplexNoise.timeInc;
+  SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
 }
 
 void Glowing(CRGB color1, CRGB color2)
@@ -696,9 +696,9 @@ void Glowing(CRGB color1, CRGB color2)
 
 void MovingHue(uint8_t hStart, float hMod)
 {
-  simpleNoise.h = hStart;
+  simplexNoise.h = hStart;
 
-  float hTemp = simpleNoise.h;
+  float hTemp = simplexNoise.h;
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
@@ -721,9 +721,9 @@ void MovingHue(uint8_t hStart, float hMod)
 }
 void MovingHue(uint8_t hStart, float hMod, float spacing)
 {
-  simpleNoise.h = hStart;
+  simplexNoise.h = hStart;
 
-  float hTemp = simpleNoise.h + spacing;
+  float hTemp = simplexNoise.h + spacing;
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {

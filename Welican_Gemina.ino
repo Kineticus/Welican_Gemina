@@ -143,15 +143,7 @@ float LED_array_green[LEDS_IN_STRIP + 1];
 float LED_array_blue[LEDS_IN_STRIP + 1];
 
 int T[] = {0x15, 0x38, 0x32, 0x2c, 0x0d, 0x13, 0x07, 0x2a};
-// Simplex noise parameters:
-float timeinc = 0.0025;
-float spaceinc = 0.05;
-int intensity_r = 734;
-int intensity_g = 734;
-int intensity_b = 734;
-float yoffset = 0.0;
-float yoffsetMAX = 15000;
-float xoffset = 0.0;
+
 static float onethird = 0.333333333;
 static float onesixth = 0.166666667;
 // ----------------------------------------------------------------
@@ -239,6 +231,11 @@ struct SimplexNoiseModel
   int nodeSpacing;
   int A[3];
   float hTemp;
+  float timeInc;
+  float spaceInc;
+  float yoffset;
+  float yoffsetMax;
+  float xoffset;
   float u;
   float v;
   float w;
@@ -248,10 +245,15 @@ struct SimplexNoiseModel
   int j;
   int k;
 };
-SimplexNoiseModel simpleNoise = {
+SimplexNoiseModel simplexNoise = {
     .nodeSpacing = (LEDS_IN_STRIP / LEDS_FOR_SIMPLEX),
     .A = {0, 0, 0},
-    .hTemp = .420};
+    .hTemp = .420,
+    .timeInc = 0.0025,
+    .spaceInc = 0.05,
+    .yoffset = 0.0,
+    .yoffsetMax = 15000,
+    .xoffset = 0.0};
 
 struct PatternSettings
 {

@@ -156,8 +156,8 @@ void drawIPAddress()
   if (WiFi.status() == WL_CONNECTED)
   {
     //Convert WiFi.localIP() from 4 bytes to 1 nice pretty string
-    String LocalIP = String() + WiFi.localIP()[0] + "." + WiFi.localIP()[1] + "." + WiFi.localIP()[2] + "." + WiFi.localIP()[3];
-    u8g2.print(LocalIP);
+    globals.ipAddress = String() + WiFi.localIP()[0] + "." + WiFi.localIP()[1] + "." + WiFi.localIP()[2] + "." + WiFi.localIP()[3];
+    u8g2.print(globals.ipAddress);
 
     u8g2.setCursor(10, 50);
     u8g2.print(weather.currentWeatherDescription);

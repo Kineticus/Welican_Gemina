@@ -98,7 +98,6 @@ For EDT - UTC -4.00 : -4 * 60 * 60 : -14400
 For UTC +0.00 : 0 * 60 * 60 : 0
 */
 const char *ntpServer = "pool.ntp.org";
-String returnText;
 int NUM_FAVORITES = 25; //Max 50, loads all 50 at program load, dynamically assignable
 
 volatile int peak[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // The length of these arrays must be >= NUM_BANDS
@@ -150,6 +149,7 @@ struct Globals
   int modeMax;
   int tempPattern;
   int pixelNumber;
+  String ipAddress;
 
   ESP32Encoder encoder;
   ESP32Encoder encoder2;
@@ -170,7 +170,8 @@ Globals globals = {
     .currentMenu = 0,
     .modeMax = MAX_MODES,
     .tempPattern = 0,
-    .pixelNumber = 0};
+    .pixelNumber = 0,
+    .ipAddress = ""};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
 
 struct DevEnvironment
@@ -518,6 +519,12 @@ EQModel eqBands = {
     .bandValues = {},
     .tempBandValues = {}};
 
+struct WebsiteModel
+{
+  String returnText;
+};
+WebsiteModel website = {
+    .returnText = ""};
 // ----------------------------------------------------------------
 // SETUP
 // ----------------------------------------------------------------
@@ -578,7 +585,7 @@ void setup()
 
   // Route for root / web page
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(SPIFFS, "/index.html", String(), false, processor);
+    request->send(SPIFFS, "/index.html", String(), false, websiteProcessor);
   });
 
   // Route to load style.css file
@@ -596,13 +603,13 @@ void setup()
   // Route to set GPIO to HIGH
   server.on("/on", HTTP_GET, [](AsyncWebServerRequest *request) {
     brightness.current = 255;
-    request->send(SPIFFS, "/index.html", String(), false, processor);
+    request->send(SPIFFS, "/index.html", String(), false, websiteProcessor);
   });
 
   // Route to set GPIO to LOW
   server.on("/off", HTTP_GET, [](AsyncWebServerRequest *request) {
     brightness.current = 0;
-    request->send(SPIFFS, "/index.html", String(), false, processor);
+    request->send(SPIFFS, "/index.html", String(), false, websiteProcessor);
   });
 
   // Start server

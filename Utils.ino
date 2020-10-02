@@ -1558,51 +1558,64 @@ void DetermineFadeDirection()
   }
 }
 
-String processor(const String &var)
+String websiteProcessor(const String &var)
 {
   if (var == "BRIGHTNESS")
   {
     if (brightness.current == 0)
     {
-      returnText = "Off";
+      return "Off";
     }
     else if (brightness.current == 255)
     {
-      returnText = "Max";
+      return "Max";
     }
     else if (brightness.current > 200)
     {
-      returnText = "Bright";
+      return "Bright";
     }
     else if (brightness.current > 160)
     {
-      returnText = "Half";
+      return "Half";
     }
     else if (brightness.current > 120)
     {
-      returnText = "Third";
+      return "Third";
     }
     else if (brightness.current > 80)
     {
-      returnText = "Quarter";
+      return "Quarter";
     }
     else if (brightness.current > 40)
     {
-      returnText = "Dim";
+      return "Dim";
     }
     else if (brightness.current > 0)
     {
-      returnText = "Moody";
+      return "Moody";
     }
+  }
 
-    return returnText;
+  if (var == "IP_ADDRESS")
+  {
+    return globals.ipAddress;
+  }
+
+  if (var == "CATEGORY_NAME")
+  {
+    return globalStrings.categoryNameOutString;
+  }
+
+  if (var == "FUNCTION_NAME")
+  {
+    return globalStrings.functionNameOutString;
   }
 
   if (var == "MODE")
   {
-
-    return returnText;
+    return website.returnText;
   }
+
   return String();
 }
 

@@ -1259,6 +1259,7 @@ void drawClock()
   } else
   {
     //u8g2.print("0:00");
+    //Decided to just show nothing if we don't have a time sync
   }
   
 

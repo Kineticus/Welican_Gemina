@@ -1644,9 +1644,9 @@ void SimplexNoisePatternInterpolated(float spaceInc, float timeInc, float yoffse
   for (int i = 0; i <= LEDS_IN_STRIP; i = i + simplexNoise.nodeSpacing)
   {
     simplexNoise.xoffset += simplexNoise.spaceInc;
-    LED_array_red[i] = SimplexNoise(simplexNoise.xoffset, simplexNoise.yoffset, 0);
-    LED_array_green[i] = SimplexNoise(simplexNoise.xoffset, simplexNoise.yoffset, 1);
-    LED_array_blue[i] = SimplexNoise(simplexNoise.xoffset, simplexNoise.yoffset, 2);
+    simplexNoise.ledArrayRed[i] = SimplexNoise(simplexNoise.xoffset, simplexNoise.yoffset, 0);
+    simplexNoise.ledArrayGreen[i] = SimplexNoise(simplexNoise.xoffset, simplexNoise.yoffset, 1);
+    simplexNoise.ledArrayBlue[i] = SimplexNoise(simplexNoise.xoffset, simplexNoise.yoffset, 2);
   }
 
   simplexNoise.xoffset = xoffset_holder;
@@ -1671,18 +1671,18 @@ void SimplexNoisePatternInterpolated(float spaceInc, float timeInc, float yoffse
       float t = float(position_between_nodes) / float(simplexNoise.nodeSpacing);
       float t_squaredx3 = 3 * t * t;
       float t_cubedx2 = 2 * t * t * t;
-      LED_array_red[i] = LED_array_red[last_node] * (t_cubedx2 - t_squaredx3 + 1.0) + LED_array_red[next_node] * (-t_cubedx2 + t_squaredx3);
-      LED_array_green[i] = LED_array_green[last_node] * (t_cubedx2 - t_squaredx3 + 1.0) + LED_array_green[next_node] * (-t_cubedx2 + t_squaredx3);
-      LED_array_blue[i] = LED_array_blue[last_node] * (t_cubedx2 - t_squaredx3 + 1.0) + LED_array_blue[next_node] * (-t_cubedx2 + t_squaredx3);
+      simplexNoise.ledArrayRed[i] = simplexNoise.ledArrayRed[last_node] * (t_cubedx2 - t_squaredx3 + 1.0) + simplexNoise.ledArrayRed[next_node] * (-t_cubedx2 + t_squaredx3);
+      simplexNoise.ledArrayGreen[i] = simplexNoise.ledArrayGreen[last_node] * (t_cubedx2 - t_squaredx3 + 1.0) + simplexNoise.ledArrayGreen[next_node] * (-t_cubedx2 + t_squaredx3);
+      simplexNoise.ledArrayBlue[i] = simplexNoise.ledArrayBlue[last_node] * (t_cubedx2 - t_squaredx3 + 1.0) + simplexNoise.ledArrayBlue[next_node] * (-t_cubedx2 + t_squaredx3);
     }
   }
 
   // Convert values from raw noise to scaled r,g,b and feed to strip
   for (int i = 0; i < LEDS_IN_STRIP; i++)
   {
-    int r = LED_array_red[i] * 734 + 16;
-    int g = LED_array_green[i] * 734 + 16;
-    int b = LED_array_blue[i] * 734 + 16;
+    int r = simplexNoise.ledArrayRed[i] * 734 + 16;
+    int g = simplexNoise.ledArrayGreen[i] * 734 + 16;
+    int b = simplexNoise.ledArrayBlue[i] * 734 + 16;
 
     if (r > 255)
     {

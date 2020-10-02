@@ -131,9 +131,6 @@ uint8_t hue2 = hueB;     // Do Not Edit
 uint8_t sat = satA;      // Do Not Edit
 // Extra fake LED at the end, to avoid fencepost problem.
 // It is used by simplex node and interpolation code.
-float LED_array_red[LEDS_IN_STRIP + 1];
-float LED_array_green[LEDS_IN_STRIP + 1];
-float LED_array_blue[LEDS_IN_STRIP + 1];
 
 int T[] = {0x15, 0x38, 0x32, 0x2c, 0x0d, 0x13, 0x07, 0x2a};
 
@@ -229,6 +226,9 @@ struct SimplexNoiseModel
   float yoffset;
   float yoffsetMax;
   float xoffset;
+  float ledArrayRed[LEDS_IN_STRIP + 1];
+  float ledArrayGreen[LEDS_IN_STRIP + 1];
+  float ledArrayBlue[LEDS_IN_STRIP + 1];
   float u;
   float v;
   float w;
@@ -338,7 +338,7 @@ DvdModel dvd1 = {random(0, 32), random(0, 32), 1, 1};
 DvdModel dvd2 = {random(0, 32), random(0, 32), 1, 1};
 DvdModel dvd3 = {random(0, 32), random(0, 32), 1, 1};
 
-//GAMES
+// GAMES
 struct Player
 {
   int X;
@@ -346,7 +346,6 @@ struct Player
 };
 Player player = {64, 8};
 
-//FALLIOS
 struct Fallios
 {
   unsigned int score;
@@ -364,7 +363,6 @@ int fallios_tunnel_1[SCREEN_HEIGHT + 1];
 int fallios_tunnel_2[SCREEN_HEIGHT + 1];
 int fallios_tunnelWidth = SCREEN_WIDTH / 2;
 
-//BLOCKBREAKER
 struct BlockBreaker
 {
   int score;
@@ -381,6 +379,7 @@ struct BlockBreaker
 };
 BlockBreaker blockBreaker = {0, 0, 0, 0, 0, 4, 2, 16, 0, 0, 0};
 
+// WEATHER
 struct OpenWeatherSettings
 {
   String zipCode;

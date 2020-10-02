@@ -100,14 +100,10 @@ For UTC +0.00 : 0 * 60 * 60 : 0
 const char *ntpServer = "pool.ntp.org";
 int NUM_FAVORITES = 25; //Max 50, loads all 50 at program load, dynamically assignable
 
-volatile int peak[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // The length of these arrays must be >= NUM_BANDS
-int menu[11];
-int menu_max[11] = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, NUM_FAVORITES}; //Root Menu Items, Game Menu Items, Settings Menu Items
 int pattern[6];
 int favorite_mode[50];    //declare memory for all 50 favorites
 int favorite_pattern[50]; //all are used under the hood
 // basic, music, chill, moving colors, legacy
-int pattern_max[6] = {12, 12, 22, 65, 80, NUM_FAVORITES};
 
 /***********************************************************
   Simplex Noise Variable Declaration
@@ -252,6 +248,18 @@ GlobalLED globalLED = {
     .fadeDirection2 = 0,
     .fadeDirectionHTemp = 0,
     .clearLEDS = false};
+
+struct MenuModel
+{
+  int menu[11];
+  int menuMax[11];
+  int patternMax[6];
+};
+MenuModel globalMenu = {
+    .menu = {},
+    //Root Menu Items, Game Menu Items, Settings Menu Items
+    .menuMax = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, NUM_FAVORITES},
+    .patternMax = {12, 12, 22, 65, 80, NUM_FAVORITES}};
 
 struct SimplexNoiseModel
 {
@@ -514,10 +522,12 @@ struct EQModel
 {
   volatile int bandValues[15];
   int tempBandValues[15];
+  volatile int peak[15]; // The length of these arrays must be >= NUM_BANDS
 };
 EQModel eqBands = {
     .bandValues = {},
-    .tempBandValues = {}};
+    .tempBandValues = {},
+    .peak = {}};
 
 struct WebsiteModel
 {
@@ -662,7 +672,7 @@ void setup()
     pattern[i] = EEPROM.read(2 + i);
 
     //check for out of range data
-    if (pattern[i] > pattern_max[i])
+    if (pattern[i] > globalMenu.patternMax[i])
     {
       pattern[i] = 0;
     }
@@ -716,7 +726,7 @@ void loop()
     drawMenu();
     break;
   case 2: //Game mode
-    switch (menu[1])
+    switch (globalMenu.menu[1])
     {
     case 0:
       fallios_game();

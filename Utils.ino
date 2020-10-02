@@ -85,15 +85,15 @@ void inputCompute(void *parameter)
     for (byte band = 0; band < NUM_BANDS; band++)
     {
 
-      if (eqBands.bandValues[band] > peak[band])
+      if (eqBands.bandValues[band] > eqBands.peak[band])
       {
-        peak[band] = eqBands.bandValues[band];
+        eqBands.peak[band] = eqBands.bandValues[band];
       }
 
       // Decay peak
       for (byte band = 0; band < NUM_BANDS; band++)
-        if (peak[band] > 500)
-          peak[band] -= 500;
+        if (eqBands.peak[band] > 500)
+          eqBands.peak[band] -= 500;
     }
 
     //Update variables compared to current encoder location
@@ -234,7 +234,7 @@ void updateEncoders()
     knob2.heldTime = 0;
     globals.runMode = 1;      //enter Menu Mode
     globals.currentMenu = 10; //Select the 10th menu, New Favorite
-    //menu[10] = 0;
+    //globalMenu.menu[10] = 0;
   }
 
   //--PATTERN ENCODER--
@@ -259,10 +259,10 @@ void updateEncoders()
     }
 
     //Constrain Mode - add switch to allow 3 options - constrain; rollover back to beginning/end; rollover to next/previous mode
-    if (pattern[globals.mode] > pattern_max[globals.mode])
+    if (pattern[globals.mode] > globalMenu.patternMax[globals.mode])
     {
       //Mode 1 - constrain
-      pattern[globals.mode] = pattern_max[globals.mode];
+      pattern[globals.mode] = globalMenu.patternMax[globals.mode];
     }
     if (pattern[globals.mode] <= 0)
     {
@@ -276,24 +276,24 @@ void updateEncoders()
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
       globals.tempValue -= 4;
       knob1.temp += 4;
-      menu[globals.currentMenu] += 1;
+      globalMenu.menu[globals.currentMenu] += 1;
     }
     while (globals.tempValue <= -4)
     {
       globals.tempValue += 4;
       knob1.temp -= 4;
-      menu[globals.currentMenu] -= 1;
+      globalMenu.menu[globals.currentMenu] -= 1;
     }
 
-    if (menu[globals.currentMenu] > menu_max[globals.currentMenu])
+    if (globalMenu.menu[globals.currentMenu] > globalMenu.menuMax[globals.currentMenu])
     {
       //Mode 1 - constrain
-      menu[globals.currentMenu] = menu_max[globals.currentMenu];
+      globalMenu.menu[globals.currentMenu] = globalMenu.menuMax[globals.currentMenu];
     }
-    else if (menu[globals.currentMenu] < 0)
+    else if (globalMenu.menu[globals.currentMenu] < 0)
     {
       //Mode 1 - constrain
-      menu[globals.currentMenu] = 0;
+      globalMenu.menu[globals.currentMenu] = 0;
     }
   }
   else if (globals.runMode == 2)
@@ -439,7 +439,7 @@ void setGameMode()
   brightness.temp = brightness.current;        //save brightness
   globals.tempPattern = pattern[globals.mode]; //and program in case they get messed up
 
-  switch (menu[1]) //Call reset code for whatever game we're about to run
+  switch (globalMenu.menu[1]) //Call reset code for whatever game we're about to run
   {
   case 0:
     fallios_reset();
@@ -618,8 +618,8 @@ time_t timeConvert(String timeToConvert)
   return t;
 }
 /*******************************************************************
- *  Menu System - globals.currentMenu sets menu page. menu[] contains selection
- *                menu_max[] specifies max selection
+ *  Menu System - globals.currentMenu sets menu page. globalMenu.menu[] contains selection
+ *                globalMenu.menuMax[] specifies max selection
  *  0 - Main Page
  *  1 - Games Page
  *  2 - Settings Page 
@@ -651,7 +651,7 @@ void drawMenu()
     u8g2.setCursor(69, 44);
     u8g2.print("Exit");
 
-    switch (menu[globals.currentMenu])
+    switch (globalMenu.menu[globals.currentMenu])
     {
     case 0:
       // u8g2.print("Games");
@@ -682,7 +682,7 @@ void drawMenu()
     u8g2.print("Tetris");
     u8g2.setCursor(69, 44);
     u8g2.print("Back");
-    switch (menu[globals.currentMenu])
+    switch (globalMenu.menu[globals.currentMenu])
     {
     case 0:
       // u8g2.print("Games");
@@ -713,7 +713,7 @@ void drawMenu()
     u8g2.print("IP Address");
     u8g2.setCursor(69, 44);
     u8g2.print("WiFi");
-    switch (menu[globals.currentMenu])
+    switch (globalMenu.menu[globals.currentMenu])
     {
     case 0:
       u8g2.drawRFrame(0, 12, 64, 16, 7);
@@ -750,7 +750,7 @@ void drawMenu()
     u8g2.print("Reset");
     u8g2.setCursor(69, 44);
     u8g2.print("Back");
-    switch (menu[globals.currentMenu])
+    switch (globalMenu.menu[globals.currentMenu])
     {
     case 0:
       // u8g2.print("Add New");
@@ -774,7 +774,7 @@ void drawMenu()
     u8g2.setCursor(0, 8);
     u8g2.print("Set Max Favorites");
 
-    if (menu[globals.currentMenu] < 10)
+    if (globalMenu.menu[globals.currentMenu] < 10)
     {
       u8g2.setCursor(57, 36);
     }
@@ -783,11 +783,11 @@ void drawMenu()
       u8g2.setCursor(54, 36);
     }
 
-    if (menu[globals.currentMenu] < 1) //gotta have at least 1 favorite
+    if (globalMenu.menu[globals.currentMenu] < 1) //gotta have at least 1 favorite
     {
-      menu[globals.currentMenu] = 1;
+      globalMenu.menu[globals.currentMenu] = 1;
     }
-    u8g2.print(menu[globals.currentMenu]);
+    u8g2.print(globalMenu.menu[globals.currentMenu]);
 
     u8g2.drawRFrame(50, 24, 20, 16, 3);
     break;
@@ -800,7 +800,7 @@ void drawMenu()
     u8g2.print("No");
     u8g2.setCursor(69, 24);
     u8g2.print("Yes");
-    switch (menu[globals.currentMenu])
+    switch (globalMenu.menu[globals.currentMenu])
     {
     case 0:
       //No
@@ -851,7 +851,7 @@ void drawMenu()
     switch (globals.currentMenu)
     {
     case 0: //main menu
-      switch (menu[globals.currentMenu])
+      switch (globalMenu.menu[globals.currentMenu])
       {
       case 0:
         globals.currentMenu = 1; //games
@@ -868,7 +868,7 @@ void drawMenu()
       }
       break;
     case 1: // games menu click
-      switch (menu[globals.currentMenu])
+      switch (globalMenu.menu[globals.currentMenu])
       {
       case 0:
         globals.runMode = 2; //game mode
@@ -886,7 +886,7 @@ void drawMenu()
       }
       break;
     case 2: //Settings click
-      switch (menu[globals.currentMenu])
+      switch (globalMenu.menu[globals.currentMenu])
       {
       case 0: //LED Count
         break;
@@ -901,7 +901,7 @@ void drawMenu()
       break;
 
     case 5: //Favorites Setting Menu Click
-      switch (menu[globals.currentMenu])
+      switch (globalMenu.menu[globals.currentMenu])
       {
       case 0: //Add New, can't favorite a favorite!
         if (globals.mode != 5)
@@ -911,7 +911,7 @@ void drawMenu()
         break;
       case 1: //Set Max
         globals.currentMenu = 6;
-        menu[6] = NUM_FAVORITES;
+        globalMenu.menu[6] = NUM_FAVORITES;
         break;
       case 2: //Reset
         globals.currentMenu = 7;
@@ -923,16 +923,16 @@ void drawMenu()
       break;
 
     case 6: //Set Max Favorites Click
-      NUM_FAVORITES = menu[globals.currentMenu];
-      pattern_max[5] = NUM_FAVORITES;
-      menu_max[11] = NUM_FAVORITES;
+      NUM_FAVORITES = globalMenu.menu[globals.currentMenu];
+      globalMenu.patternMax[5] = NUM_FAVORITES;
+      globalMenu.menuMax[11] = NUM_FAVORITES;
       EEPROM.write(99, NUM_FAVORITES);
       EEPROM.commit();
       globals.currentMenu = 5;
       break;
 
     case 7: //Reset Favorites Click
-      switch (menu[globals.currentMenu])
+      switch (globalMenu.menu[globals.currentMenu])
       {
       case 0: //No
         globals.currentMenu = 5;
@@ -958,7 +958,7 @@ void newFavoritesMenu()
   u8g2.print("Add New Favorite");
 
   //This is a menu with NUM_FAVORITES 'selections', each indicating a favorite slot
-  if (menu[globals.currentMenu] < 10)
+  if (globalMenu.menu[globals.currentMenu] < 10)
   {
     u8g2.setCursor(57, 26);
   }
@@ -967,13 +967,13 @@ void newFavoritesMenu()
     u8g2.setCursor(54, 26);
   }
 
-  u8g2.print(menu[globals.currentMenu]);
+  u8g2.print(globalMenu.menu[globals.currentMenu]);
 
   u8g2.drawRFrame(50, 14, 20, 16, 3);
 
   //Call the favorite for the slot we're looking at
   //The real function call is below this, so LEDs will not show bad data
-  favorites_category(menu[globals.currentMenu]);
+  favorites_category(globalMenu.menu[globals.currentMenu]);
 
   //Convert the strings
   globalStrings.functionName.toCharArray(globalStrings.functionNameOutString, 20);
@@ -983,7 +983,7 @@ void newFavoritesMenu()
   u8g2.print("Current Setting");
   //u8g2.print(globalStrings.categoryNameOutString);
 
-  switch (favorite_mode[menu[globals.currentMenu]])
+  switch (favorite_mode[globalMenu.menu[globals.currentMenu]])
   {
   case 0:
     u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_HEIGHT, starshape);
@@ -1008,13 +1008,13 @@ void newFavoritesMenu()
 
 void saveFavorites()
 {
-  EEPROM.write(100 + menu[globals.currentMenu] * 2, pattern[globals.mode]); //the pattern we're on
-  EEPROM.write(101 + (menu[globals.currentMenu] * 2), globals.mode);        //the mode we're on
+  EEPROM.write(100 + globalMenu.menu[globals.currentMenu] * 2, pattern[globals.mode]); //the pattern we're on
+  EEPROM.write(101 + (globalMenu.menu[globals.currentMenu] * 2), globals.mode);        //the mode we're on
 
   EEPROM.commit(); //write it to memory
 
-  favorite_mode[menu[globals.currentMenu]] = globals.mode;             //update running variables
-  favorite_pattern[menu[globals.currentMenu]] = pattern[globals.mode]; //first updated in readFavorites
+  favorite_mode[globalMenu.menu[globals.currentMenu]] = globals.mode;             //update running variables
+  favorite_pattern[globalMenu.menu[globals.currentMenu]] = pattern[globals.mode]; //first updated in readFavorites
 }
 
 void readFavorites()
@@ -1033,8 +1033,8 @@ void readFavorites()
   }
 
   NUM_FAVORITES = EEPROM.read(99);
-  pattern_max[5] = NUM_FAVORITES;
-  menu_max[11] = NUM_FAVORITES;
+  globalMenu.patternMax[5] = NUM_FAVORITES;
+  globalMenu.menuMax[11] = NUM_FAVORITES;
 }
 
 void resetFavorites()
@@ -1342,12 +1342,12 @@ String httpGETRequest(const char *serverName)
 
 void drawProgressBar()
 {
-  int boxWidth = (SCREEN_WIDTH / pattern_max[globals.mode]);
+  int boxWidth = (SCREEN_WIDTH / globalMenu.patternMax[globals.mode]);
   if (boxWidth < 4)
   {
     boxWidth = 4;
   }
-  u8g2.drawBox(((float(SCREEN_WIDTH - boxWidth) / pattern_max[globals.mode]) * pattern[globals.mode]), 12, boxWidth, 4);
+  u8g2.drawBox(((float(SCREEN_WIDTH - boxWidth) / globalMenu.patternMax[globals.mode]) * pattern[globals.mode]), 12, boxWidth, 4);
 }
 
 void addGlitter(fract8 chanceOfGlitter)

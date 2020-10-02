@@ -58,7 +58,7 @@ void drawEQ()
   }
   u8g2.setDrawColor(1);
   u8g2.drawBox(0, pos, globals.temp[0], 7);
-  globals.temp[2] = peak[0] / AMPLITUDE;
+  globals.temp[2] = eqBands.peak[0] / AMPLITUDE;
   u8g2.drawBox(globals.temp[2], pos, 1, 7);
 
   globals.temp[1] = eqBands.bandValues[1] / AMPLITUDE;
@@ -72,7 +72,7 @@ void drawEQ()
     globals.temp[1] = max;
   }
   u8g2.drawBox(0, patternSettings.pos + 8, globals.temp[1], 7);
-  globals.temp[2] = peak[1] / AMPLITUDE;
+  globals.temp[2] = eqBands.peak[1] / AMPLITUDE;
   u8g2.drawBox(globals.temp[2], patternSettings.pos + 8, 1, 7);
 
   globals.temp[2] = eqBands.bandValues[3] / AMPLITUDE;
@@ -86,7 +86,7 @@ void drawEQ()
     globals.temp[2] = max;
   }
   u8g2.drawBox(0, patternSettings.pos + 16, globals.temp[2], 7);
-  globals.temp[2] = peak[3] / AMPLITUDE;
+  globals.temp[2] = eqBands.peak[3] / AMPLITUDE;
   u8g2.drawBox(globals.temp[2], patternSettings.pos + 16, 1, 7);
 
   globals.temp[2] = eqBands.bandValues[4] / AMPLITUDE;
@@ -101,7 +101,7 @@ void drawEQ()
   }
   u8g2.drawBox(0, patternSettings.pos + 24, globals.temp[2], 7);
 
-  globals.temp[2] = peak[4] / AMPLITUDE;
+  globals.temp[2] = eqBands.peak[4] / AMPLITUDE;
   u8g2.drawBox(globals.temp[2], patternSettings.pos + 24, 1, 7);
 
   globals.temp[2] = eqBands.bandValues[5] / AMPLITUDE;
@@ -115,7 +115,7 @@ void drawEQ()
     globals.temp[2] = max;
   }
   u8g2.drawBox(0, patternSettings.pos + 32, globals.temp[2], 7);
-  globals.temp[2] = peak[5] / AMPLITUDE;
+  globals.temp[2] = eqBands.peak[5] / AMPLITUDE;
   u8g2.drawBox(globals.temp[2], patternSettings.pos + 32, 1, 7);
 
   globals.temp[2] = eqBands.bandValues[6] / AMPLITUDE;
@@ -129,7 +129,7 @@ void drawEQ()
     globals.temp[2] = max;
   }
   u8g2.drawBox(0, patternSettings.pos + 40, globals.temp[2], 7);
-  globals.temp[2] = peak[6] / AMPLITUDE;
+  globals.temp[2] = eqBands.peak[6] / AMPLITUDE;
   u8g2.drawBox(globals.temp[2], patternSettings.pos + 40, 1, 7);
 }
 

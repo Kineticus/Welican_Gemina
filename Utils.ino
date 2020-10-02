@@ -1325,22 +1325,23 @@ void drawClock()
   */
 
   //Modern Font
-  u8g2.setFont(u8g2_font_logisoso38_tn);
+  //u8g2.setFont(u8g2_font_logisoso38_tn);
+  u8g2.setFont(u8g2_font_logisoso42_tn);
   if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
   {
-    u8g2.setCursor(30, 64);
+    u8g2.setCursor(30, 60);
 
     if (globalTime.currentHour > 9)
     {
-      u8g2.setCursor(8, 64);
+      u8g2.setCursor(8, 60);
     }
 
     u8g2.print(globalTime.currentHour);
 
-    u8g2.setCursor(56, 60);
+    u8g2.setCursor(56, 56);
     u8g2.print(":");
 
-    u8g2.setCursor(72, 64);
+    u8g2.setCursor(72, 60);
     if (globalTime.currentMinute < 10)
     {
       u8g2.print("0");

@@ -218,7 +218,7 @@ struct GlobalTime
 GlobalTime globalTime = {
     .currentMinute = 0,
     .currentHour = 100,
-    .curerntDay = 5,
+    .currentDay = 5,
     .currentDate = 1,
     .currentMonth = 0,
     .currentPM = 0,
@@ -226,7 +226,7 @@ GlobalTime globalTime = {
     .currentMillis = 0,
     .period = 1000,
     .save = 0,
-    .timeout = 30000,
+    .timeOut = 30000,
     .touchTime = 0};
 
 struct GlobalUtils

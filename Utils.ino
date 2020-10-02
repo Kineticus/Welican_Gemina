@@ -192,14 +192,14 @@ void updateEncoders()
         knob1.click = 0;         //Null out clicks so menu doesn't get confused on first run
         knob2.click = 0;
       }
-
-      //Are we in clock/weather/visualizer/sleep mode?
-      if (globals.runMode == 3)
-      {
-        globals.runMode = -1;
-        knob1.click = 0;
-      } 
     }
+    
+    //Are we in clock/weather/visualizer/sleep mode?
+    if (globals.runMode == 3)
+    {
+      globals.runMode = -1;
+      knob1.click = 0;
+    } 
   }
   if ((globals.tempValue == true) && (knob1.debounce > 0)) //No button press and there is debounce to reduce?
   {

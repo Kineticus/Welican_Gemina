@@ -11,6 +11,7 @@
   
   1. Run `npm run build`
     - This will use the `webpack.config.js` file to grab all files in `/images`, all `./styles/**.scss` files, and all the `./src/**.js` files and put the minified files into `./data/` folder.
+  2. Go To ARUDINO SOFTWARE, then TOOLS > `ESP32 Data Sketch Upload`. Click this and do the "upload" to add the files to the ESP32 device.
 
 ## Developing
 

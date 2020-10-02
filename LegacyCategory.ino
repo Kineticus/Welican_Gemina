@@ -333,10 +333,10 @@ void legacy_category(int patternMode)
 
 void LargeGroupColorFlowBounce(float hHigh, float hLow, float speed, float colorSpacing, int ledSpacing)
 {
-  h = GetH_BouncingWithLimits(speed, hHigh, hLow);
+  simpleNoise.h = GetH_BouncingWithLimits(speed, hHigh, hLow);
 
-  float hTemp = h;
-  hTemp = h + colorSpacing; // space between colors
+  float hTemp = simpleNoise.h;
+  hTemp = simpleNoise.h + colorSpacing; // space between colors
   if (hTemp > .93)
   {
     hTemp -= 1;
@@ -346,7 +346,7 @@ void LargeGroupColorFlowBounce(float hHigh, float hLow, float speed, float color
     hTemp += 1;
   }
 
-  hsv2rgb(float(h), 1, (float(brightness.current) / 255.0), red, green, blue);
+  hsv2rgb(float(simpleNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
   hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red2, green2, blue2);
 
   for (uint16_t i = 0; i < NUM_LEDS; i = i + ledSpacing)
@@ -370,31 +370,31 @@ void LargeGroupColorFlowBounce(float hHigh, float hLow, float speed, float color
 }
 void DualColorFlow(float hHigh, float hLow, float hHigh2, float hLow2, float hSpeed, float spacing)
 {
-  if (h > hHigh)
+  if (simpleNoise.h > hHigh)
   {
-    h = hHigh;
+    simpleNoise.h = hHigh;
     globalLED.fadeDirection = 0;
   }
-  if (h < hLow)
+  if (simpleNoise.h < hLow)
   {
-    h = hLow;
+    simpleNoise.h = hLow;
     globalLED.fadeDirection = 1;
   }
 
   if (globalLED.fadeDirection == 1)
   {
-    h += hSpeed; // increment to make faster
+    simpleNoise.h += hSpeed; // increment to make faster
   }
   if (globalLED.fadeDirection == 0)
   {
-    h -= hSpeed; // decrement to make faster
+    simpleNoise.h -= hSpeed; // decrement to make faster
   }
 
-  float hTemp = h;
+  float hTemp = simpleNoise.h;
 
-  hTemp = h - spacing; // space between colors
+  hTemp = simpleNoise.h - spacing; // space between colors
 
-  hsv2rgb(float(h), 1, (float(brightness.current) / 255.0), red, green, blue);
+  hsv2rgb(float(simpleNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
 
   hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red2, green2, blue2);
 
@@ -406,19 +406,19 @@ void DualColorFlow(float hHigh, float hLow, float hHigh2, float hLow2, float hSp
 }
 void DualColorFlowTwo(float hStart, float spacing)
 {
-  h += hStart; // increment to make faster
-  if (h > 1)
+  simpleNoise.h += hStart; // increment to make faster
+  if (simpleNoise.h > 1)
   {
-    h -= 1;
+    simpleNoise.h -= 1;
   }
-  if (h < 0)
+  if (simpleNoise.h < 0)
   {
-    h += 1;
+    simpleNoise.h += 1;
   }
 
-  float hTemp = h;
+  float hTemp = simpleNoise.h;
 
-  hTemp = h + spacing; // space between colors
+  hTemp = simpleNoise.h + spacing; // space between colors
 
   if (hTemp > 1)
   {
@@ -429,7 +429,7 @@ void DualColorFlowTwo(float hStart, float spacing)
     hTemp += 1;
   }
 
-  hsv2rgb(float(h), 1, (float(brightness.current) / 255.0), red, green, blue);
+  hsv2rgb(float(simpleNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
 
   hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red2, green2, blue2);
 
@@ -441,10 +441,10 @@ void DualColorFlowTwo(float hStart, float spacing)
 }
 void DualColorFlowBounce(float hHigh, float hLow, float speed, float colorSpacing, int ledSpacing)
 {
-  h = GetH_BouncingWithLimits(speed, hHigh, hLow);
+  simpleNoise.h = GetH_BouncingWithLimits(speed, hHigh, hLow);
 
-  float hTemp = h;
-  hTemp = h - colorSpacing; // space between colors
+  float hTemp = simpleNoise.h;
+  hTemp = simpleNoise.h - colorSpacing; // space between colors
   if (hTemp > 1)
   {
     hTemp -= 1;
@@ -454,7 +454,7 @@ void DualColorFlowBounce(float hHigh, float hLow, float speed, float colorSpacin
     hTemp += 1;
   }
 
-  hsv2rgb(float(h), 1, (float(brightness.current) / 255.0), red, green, blue);
+  hsv2rgb(float(simpleNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
   hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red2, green2, blue2);
 
   for (uint16_t i = 0; i < NUM_LEDS; i = i + ledSpacing)
@@ -485,9 +485,9 @@ void DualColorFlowBounce(float hHigh, float hLow, float speed, float colorSpacin
 
 void RainbowNoFlow(float colorSpacing)
 {
-  h = 0;
+  simpleNoise.h = 0;
 
-  float hTemp = h;
+  float hTemp = simpleNoise.h;
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
@@ -510,9 +510,9 @@ void RainbowNoFlow(float colorSpacing)
 void RainbowFlow(float hHigh, float hLow, float speed, float colorSpacing)
 {
   // increment 'h' to make transitions faster
-  h = GetH_BouncingWithLimits(speed, hHigh, hLow);
+  simpleNoise.h = GetH_BouncingWithLimits(speed, hHigh, hLow);
 
-  float hTemp = h;
+  float hTemp = simpleNoise.h;
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
@@ -534,17 +534,17 @@ void RainbowFlow(float hHigh, float hLow, float speed, float colorSpacing)
 }
 void RainbowFlowSlow(float hSpeed, float colorSpacing)
 {
-  h += hSpeed; // increment to make faster
-  if (h > 1)
+  simpleNoise.h += hSpeed; // increment to make faster
+  if (simpleNoise.h > 1)
   {
-    h -= 1;
+    simpleNoise.h -= 1;
   }
-  if (h < 0)
+  if (simpleNoise.h < 0)
   {
-    h += 1;
+    simpleNoise.h += 1;
   }
 
-  float hTemp = h;
+  float hTemp = simpleNoise.h;
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
@@ -614,9 +614,9 @@ void RainbowXoffset(float speed, float spacing, bool useFadeDirection)
 
 void RainbowHsv(float hHigh, float hLow, float speed)
 {
-  h = GetH_BouncingWithLimits(speed, hHigh, hLow);
+  simpleNoise.h = GetH_BouncingWithLimits(speed, hHigh, hLow);
 
-  hsv2rgb(float(h), 1, (float(brightness.current) / 255.0), red, green, blue);
+  hsv2rgb(float(simpleNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
@@ -696,9 +696,9 @@ void Glowing(CRGB color1, CRGB color2)
 
 void MovingHue(uint8_t hStart, float hMod)
 {
-  h = hStart;
+  simpleNoise.h = hStart;
 
-  float hTemp = h;
+  float hTemp = simpleNoise.h;
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
@@ -721,9 +721,9 @@ void MovingHue(uint8_t hStart, float hMod)
 }
 void MovingHue(uint8_t hStart, float hMod, float spacing)
 {
-  h = hStart;
+  simpleNoise.h = hStart;
 
-  float hTemp = h + spacing;
+  float hTemp = simpleNoise.h + spacing;
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
@@ -747,26 +747,10 @@ void MovingHue(uint8_t hStart, float hMod, float spacing)
 
 void SteadyRGB(int ledSpacing)
 {
-  for (uint16_t i = 0; i < NUM_LEDS; i = i + ledSpacing)
+  for (int i = 0; i < NUM_LEDS; i = i + ledSpacing)
   {
     switch (ledSpacing)
     {
-    // case 6:
-    //   setPixel(i, red, green, blue);
-    //   setPixel(i + 1, red, green, blue);
-    //   setPixel(i + 2, red, green, blue);
-
-    //   setPixel(i + 3, red2, green2, blue2);
-    //   setPixel(i + 4, red2, green2, blue2);
-    //   setPixel(i + 5, red2, green2, blue2);
-    //   break;
-    // case 4:
-    //   setPixel(i, red, green, blue);
-    //   setPixel(i + 1, red, green, blue);
-
-    //   setPixel(i + 2, red2, green2, blue2);
-    //   setPixel(i + 3, red2, green2, blue2);
-    //   break;
     case 3:
       setPixel(i, 255, 0, 0);
       setPixel(i + 1, 0, 255, 0);
@@ -777,36 +761,12 @@ void SteadyRGB(int ledSpacing)
       setPixel(i + 1, red2, green2, blue2);
       break;
     }
-  }
-
-  // setPixel(i + 1, 0, 255, 0);
-  // setPixel(i + 2, 0, 0, 255);
-  // setPixel(i + 3, 0, 0, 255);
-  // setPixel(i + 4, 0, 0, 255);
-  // setPixel(i + 5, 0, 0, 255);
-
-  // setPixel(i + 6, 255, 255, 255);
-  // setPixel(i + 7, 255, 255, 255);
-  // setPixel(i + 8, 255, 255, 255);
-  // setPixel(i + 9, 255, 255, 255);
-  // setPixel(i + 10, 255, 255, 255);
-  // setPixel(i + 11, 255, 255, 255);
-
-  if (brightness.useFade == true)
-  {
-    fadeLightBy(i, brightness.current);
-    fadeLightBy(i + 1, brightness.current);
-    fadeLightBy(i + 2, brightness.current);
-    // fadeLightBy(i + 3, brightness.current);
-    // fadeLightBy(i + 4, brightness.current);
-    // fadeLightBy(i + 5, brightness.current);
-
-    // fadeLightBy(i + 6, brightness.current);
-    // fadeLightBy(i + 7, brightness.current);
-    // fadeLightBy(i + 8, brightness.current);
-    // fadeLightBy(i + 9, brightness.current);
-    // fadeLightBy(i + 10, brightness.current);
-    // fadeLightBy(i + 11, brightness.current);
+    if (brightness.useFade == true)
+    {
+      fadeLightBy(i, brightness.current);
+      fadeLightBy(i + 1, brightness.current);
+      fadeLightBy(i + 2, brightness.current);
+    }
   }
 }
 void SteadyAlternatingColors(CRGB color1, CRGB color2)

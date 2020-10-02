@@ -113,20 +113,11 @@ int favorite_pattern[50]; //all are used under the hood
 // basic, music, chill, moving colors, legacy
 int pattern_max[6] = {12, 12, 22, 65, 80, NUM_FAVORITES};
 
-//LEDs
-float breath = 0;
-
 /***********************************************************
   Simplex Noise Variable Declaration
 ***********************************************************/
 //Define simplex noise node for each LED
 
-boolean fadingTail = 0; // Add fading tail? [1=true, 0=falue]
-uint8_t fadeRate = 170; // How fast to fade out tail. [0-255]
-int8_t delta2 = 1;      // Sets forward or backwards direction amount. (Can be negative.)
-int palletPosition;
-int colorBarPosition = 1;
-bool clearLEDS = false;
 uint8_t hueA = 15;      // Start hue at valueMin.
 uint8_t satA = 230;     // Start saturation at valueMin.
 float valueMin = 120.0; // Pulse minimum value (Should be less then valueMax).
@@ -134,11 +125,6 @@ uint8_t hueB = 95;      // End hue at valueMax.
 uint8_t satB = 255;     // End saturation at valueMax.
 float valueMax = 255.0; // Pulse maximum value (Should be larger then valueMin).
 // used in Blendwave
-uint8_t speed;
-uint8_t loc1;
-uint8_t loc2;
-uint8_t ran1;
-uint8_t ran2;
 int red, green, blue;                                    // used in hsv2rgb color functions
 int red2, green2, blue2;                                 // used in hsv2rgb color functions
 int red3, green3, blue3;                                 // used in hsv2rgb color functions
@@ -148,29 +134,14 @@ uint8_t sat = satA;                                      // Do Not Edit
 float val = valueMin;                                    // Do Not Edit
 uint8_t hueDelta = hueA - hueB;                          // Do Not Edit
 static float delta = (valueMax - valueMin) / 2.35040238; // Do Not Edit
-boolean moving = 1;
-uint8_t pos;              // stores a position for color being blended in
-int8_t advance;           // Stores the advance amount
-uint8_t colorStorage;     // Stores a hue color.
-uint8_t posR, posG, posB; // positions of moving R,G,B dots
-uint8_t count;
-bool sizeUpdate;
-uint16_t cycleLength = 1500; // Lover values = continuous flow, higher values = distinct pulses.
-uint16_t pulseLength = 150;  // How long the pulse takes to fade out.  Higher value is longer.
-uint16_t pulseOffset = 200;  // Delay before second pulse.  Higher value is more delay.
+uint8_t pos;                                             // stores a position for color being blended in
+uint8_t posR, posG, posB;                                // positions of moving R,G,B dots
 // Extra fake LED at the end, to avoid fencepost problem.
 // It is used by simplex node and interpolation code.
 float LED_array_red[LEDS_IN_STRIP + 1];
 float LED_array_green[LEDS_IN_STRIP + 1];
 float LED_array_blue[LEDS_IN_STRIP + 1];
-int node_spacing = LEDS_IN_STRIP / LEDS_FOR_SIMPLEX;
-// Math variables
-int i, j, k, A[] = {0, 0, 0};
-float u, v, w, s, h;
-float hTemp = .420;
-float hOld = .0;
-static float onethird = 0.333333333;
-static float onesixth = 0.166666667;
+
 int T[] = {0x15, 0x38, 0x32, 0x2c, 0x0d, 0x13, 0x07, 0x2a};
 // Simplex noise parameters:
 float timeinc = 0.0025;
@@ -181,7 +152,8 @@ int intensity_b = 734;
 float yoffset = 0.0;
 float yoffsetMAX = 15000;
 float xoffset = 0.0;
-
+static float onethird = 0.333333333;
+static float onesixth = 0.166666667;
 // ----------------------------------------------------------------
 // STRUCTs
 // ----------------------------------------------------------------
@@ -249,6 +221,7 @@ struct GlobalUtils
   int encoderUnstick;
 };
 GlobalUtils utils = {0};
+
 struct GlobalLED
 {
   int interfade; //set this to 0 to disable fade in on boot. Set to 25 for fade in.
@@ -257,16 +230,52 @@ struct GlobalLED
   int fadeDirection;      // 1 or 0, positive or negative
   int fadeDirection2;     // 1 or 0, positive or negative
   int fadeDirectionHTemp; // 1 or 0, positive or negative
+  bool clearLEDS;
 };
-GlobalLED globalLED = {18, 18, 14, 0, 0, 0};
+GlobalLED globalLED = {18, 18, 14, 0, 0, 0, false};
+
+struct SimplexNoiseModel
+{
+  int nodeSpacing;
+  int A[3];
+  float hTemp;
+  float u;
+  float v;
+  float w;
+  float s;
+  float h;
+  int g;
+  int j;
+  int k;
+};
+SimplexNoiseModel simpleNoise = {
+    .nodeSpacing = (LEDS_IN_STRIP / LEDS_FOR_SIMPLEX),
+    .A = {0, 0, 0},
+    .hTemp = .420};
 
 struct PatternSettings
 {
   uint8_t gHue;           // rotating "base color" used by many of the patterns
   int flowDirection;      // Use either 1 or -1 to set flow direction
   bool gReverseDirection; //false = center outward, true = from ends inward
+  bool sizeUpdate;
+  bool moving;
+  uint8_t speed;
+  bool fadingTail;  // Add fading tail?
+  uint8_t fadeRate; // How fast to fade out tail. [0-255]
+  int8_t delta2;    // Sets forward or backwards direction amount. (Can be negative.)
+  int palletPosition;
+  int colorBarPosition;
+  uint8_t loc1;
+  int8_t advance;       // Stores the advance amount
+  uint8_t colorStorage; // Stores a hue color.
+  uint8_t count;
+  uint16_t cycleLength; // Lover values = continuous flow, higher values = distinct pulses.
+  uint16_t pulseLength; // How long the pulse takes to fade out.  Higher value is longer.
+  uint16_t pulseOffset; // Delay before second pulse.  Higher value is more delay.
+  float breath;
 };
-PatternSettings patternSettings = {0, -1, false};
+PatternSettings patternSettings = {0, -1, false, 0, true, 0, false, 170, 1, 0, 1, 0, 0, 0, 0, 1500, 150, 200, 0};
 
 struct Brightness
 {
@@ -278,6 +287,7 @@ struct Brightness
   uint8_t baseBrightness; // Brightness of LEDs when not pulsing. Set to 0 for off.
 };
 Brightness brightness = {0, 0, 0, false, 5, 10};
+
 struct StarModel
 {
   int x[MAX_STARS];
@@ -287,6 +297,7 @@ struct StarModel
   int z[MAX_STARS];
 };
 StarModel star;
+
 struct DvdModel
 {
   int x;
@@ -377,7 +388,7 @@ struct Knob
 Knob knob1;
 Knob knob2;
 
-struct visualizer_triangle
+struct VisualizerTriangle
 {
   int x, y;
   int radius;
@@ -385,8 +396,7 @@ struct visualizer_triangle
   int x1, x2, x3;
   int y1, y2, y3;
 };
-
-visualizer_triangle t1 = {64, 42, 18, 0.0, 2.1, 4.2, 0, 0, 0, 0, 0, 0};
+VisualizerTriangle t1 = {64, 42, 18, 0.0, 2.1, 4.2, 0, 0, 0, 0, 0, 0};
 
 // ----------------------------------------------------------------
 // SETUP
@@ -596,9 +606,9 @@ void loop()
     drawClock();
     showBrightnessDisplay();
     break;
-  case -1: //Reset
+  case -1:                           //Reset
     globalTime.touchTime = millis(); //Last touch time back to default
-    globals.runMode = 0; //Back to normal
+    globals.runMode = 0;             //Back to normal
     break;
   }
 
@@ -624,19 +634,19 @@ void loop()
   //future toggle of breathing indicator vs static
   if (devEnv.breathing == 1)
   {
-    breath = (exp(sin(millis() / 4200.0 * PI)) - 0.36787944) * 108.0;
-    breath = breath / 2;
-    if (breath <= 4)
+    patternSettings.breath = (exp(sin(millis() / 4200.0 * PI)) - 0.36787944) * 108.0;
+    patternSettings.breath = patternSettings.breath / 2;
+    if (patternSettings.breath <= 4)
     {
-      breath = 4;
+      patternSettings.breath = 4;
     }
   }
   else
   {
-    breath = 4;
+    patternSettings.breath = 4;
   }
   //Write current breath value to status LED
-  ledcWrite(STATUS_LED, breath);
+  ledcWrite(STATUS_LED, patternSettings.breath);
 
   switch (globals.mode)
   {

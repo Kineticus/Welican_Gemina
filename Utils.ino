@@ -154,7 +154,7 @@ void updateEncoders()
   {
     //if yes we should set a debounce variable
     knob1.debounce = 3;
-    
+
     //And set click for Knob 1 to True!
     knob1.click = 1;
 
@@ -193,13 +193,13 @@ void updateEncoders()
         knob2.click = 0;
       }
     }
-    
+
     //Are we in clock/weather/visualizer/sleep mode?
     if (globals.runMode == 3)
     {
       globals.runMode = -1;
       knob1.click = 0;
-    } 
+    }
   }
   if ((globals.tempValue == true) && (knob1.debounce > 0)) //No button press and there is debounce to reduce?
   {
@@ -217,7 +217,7 @@ void updateEncoders()
     {
       globals.runMode = -1;
       knob2.click = 0;
-    } 
+    }
   }
   else if ((globals.tempValue == false) && (knob2.debounce > 0))
   {
@@ -325,7 +325,6 @@ void updateEncoders()
       knob1.temp -= 4;
       globals.runMode = -1;
     }
-
   }
   //check for out of sync condition (knob is reseting at value that is not divisible by 4)
   if ((abs(globals.encoder.getCount()) % 4) > 0)
@@ -1091,9 +1090,9 @@ void smoothOperatorStart()
   {
     ledsTemp[i] = leds[i];
   }
-  
+
   globalTime.save = 100;
-  
+
   globalTime.touchTime = millis();
 }
 
@@ -1263,7 +1262,6 @@ void drawClock()
   }
   */
 
-  
   //Flip Card style
   u8g2.setFont(u8g2_font_fub30_tn);
   if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
@@ -1276,22 +1274,22 @@ void drawClock()
     }
 
     u8g2.print(globalTime.currentHour);
-    
+
     u8g2.setCursor(50, 60);
     u8g2.print(":");
-    
+
     u8g2.setCursor(68, 64);
     if (globalTime.currentMinute < 10)
     {
       u8g2.print("0");
     }
     u8g2.print(globalTime.currentMinute);
-  } else
+  }
+  else
   {
     //u8g2.print("0:00");
     //Decided to just show nothing if we don't have a time sync
   }
-  
 
   //Show logo
   /*
@@ -1501,51 +1499,51 @@ void fadeToBlack(int ledNo, byte fadeValue)
 
 float GetH_BouncingWithLimits(float _speed, float _hHigh, float _hLow)
 {
-  if (h > _hHigh)
+  if (simpleNoise.h > _hHigh)
   {
-    h = _hHigh;
+    simpleNoise.h = _hHigh;
     globalLED.fadeDirection = 0;
   }
-  if (h < _hLow)
+  if (simpleNoise.h < _hLow)
   {
-    h = _hLow;
+    simpleNoise.h = _hLow;
     globalLED.fadeDirection = 1;
   }
 
   if (globalLED.fadeDirection == 1)
   {
-    h += _speed; // increment to make faster
+    simpleNoise.h += _speed; // increment to make faster
   }
   if (globalLED.fadeDirection == 0)
   {
-    h -= _speed; // decrement to make faster
+    simpleNoise.h -= _speed; // decrement to make faster
   }
 
-  return h;
+  return simpleNoise.h;
 }
 float GetHTemp_BouncingWithLimits(float _speed, float _hHigh, float _hLow)
 {
-  if (hTemp > _hHigh)
+  if (simpleNoise.hTemp > _hHigh)
   {
-    hTemp = _hHigh;
+    simpleNoise.hTemp = _hHigh;
     globalLED.fadeDirectionHTemp = 0;
   }
-  if (hTemp < _hLow)
+  if (simpleNoise.hTemp < _hLow)
   {
-    hTemp = _hLow;
+    simpleNoise.hTemp = _hLow;
     globalLED.fadeDirectionHTemp = 1;
   }
 
   if (globalLED.fadeDirectionHTemp == 1)
   {
-    hTemp += _speed; // increment to make faster
+    simpleNoise.hTemp += _speed; // increment to make faster
   }
   if (globalLED.fadeDirectionHTemp == 0)
   {
-    hTemp -= _speed; // decrement to make faster
+    simpleNoise.hTemp -= _speed; // decrement to make faster
   }
 
-  return hTemp;
+  return simpleNoise.hTemp;
 }
 
 void DetermineFadeDirection()
@@ -1643,7 +1641,7 @@ void SimplexNoisePatternInterpolated(float spaceinc, float timeinc, float yoffse
   //float xoffset = 0.0;
   float xoffset_holder = xoffset;
 
-  for (int i = 0; i <= LEDS_IN_STRIP; i = i + node_spacing)
+  for (int i = 0; i <= LEDS_IN_STRIP; i = i + simpleNoise.nodeSpacing)
   {
     xoffset += spaceinc;
     LED_array_red[i] = SimplexNoise(xoffset, yoffset, 0);
@@ -1656,7 +1654,7 @@ void SimplexNoisePatternInterpolated(float spaceinc, float timeinc, float yoffse
   // Interpolate values for LEDs between nodes
   for (int i = 0; i < LEDS_IN_STRIP; i++)
   {
-    int position_between_nodes = i % node_spacing;
+    int position_between_nodes = i % simpleNoise.nodeSpacing;
     int last_node, next_node;
 
     // If at node, skip
@@ -1664,13 +1662,13 @@ void SimplexNoisePatternInterpolated(float spaceinc, float timeinc, float yoffse
     {
       // At node for simplex noise, do nothing but update which nodes we are between
       last_node = i;
-      next_node = last_node + node_spacing;
+      next_node = last_node + simpleNoise.nodeSpacing;
     }
     // Else between two nodes, so identify those nodes
     else
     {
       // And interpolate between the values at those nodes for red, green, and blue
-      float t = float(position_between_nodes) / float(node_spacing);
+      float t = float(position_between_nodes) / float(simpleNoise.nodeSpacing);
       float t_squaredx3 = 3 * t * t;
       float t_cubedx2 = 2 * t * t * t;
       LED_array_red[i] = LED_array_red[last_node] * (t_cubedx2 - t_squaredx3 + 1.0) + LED_array_red[next_node] * (-t_cubedx2 + t_squaredx3);
@@ -1745,37 +1743,36 @@ void SimplexNoisePatternInterpolated(float spaceinc, float timeinc, float yoffse
 float SimplexNoise(float x, float y, float z)
 {
   // Skew input space to relative coordinate in simplex cell
-  s = (x + y + z) * onethird;
-  i = fastfloor(x + s);
-  j = fastfloor(y + s);
-  k = fastfloor(z + s);
+  simpleNoise.s = (x + y + z) * onethird;
+  simpleNoise.g = fastfloor(x + simpleNoise.s);
+  simpleNoise.j = fastfloor(y + simpleNoise.s);
+  simpleNoise.k = fastfloor(z + simpleNoise.s);
 
   // Unskew cell origin back to (x, y , z) space
-  s = (i + j + k) * onesixth;
-  u = x - i + s;
-  v = y - j + s;
-  w = z - k + s;
-  ;
+  simpleNoise.s = (simpleNoise.g + simpleNoise.j + simpleNoise.k) * onesixth;
+  simpleNoise.u = x - simpleNoise.g + simpleNoise.s;
+  simpleNoise.v = y - simpleNoise.j + simpleNoise.s;
+  simpleNoise.w = z - simpleNoise.k + simpleNoise.s;
 
-  A[0] = A[1] = A[2] = 0;
+  simpleNoise.A[0] = simpleNoise.A[1] = simpleNoise.A[2] = 0;
 
   // For 3D case, the simplex shape is a slightly irregular tetrahedron.
   // Determine which simplex we're in
-  int hi = u >= w ? u >= v ? 0 : 1 : v >= w ? 1 : 2;
-  int lo = u < w ? u < v ? 0 : 1 : v < w ? 1 : 2;
+  int hi = simpleNoise.u >= simpleNoise.w ? simpleNoise.u >= simpleNoise.v ? 0 : 1 : simpleNoise.v >= simpleNoise.w ? 1 : 2;
+  int lo = simpleNoise.u < simpleNoise.w ? simpleNoise.u < simpleNoise.v ? 0 : 1 : simpleNoise.v < simpleNoise.w ? 1 : 2;
 
   return k_fn(hi) + k_fn(3 - hi - lo) + k_fn(lo) + k_fn(0);
 }
 
 float k_fn(int a)
 {
-  s = (A[0] + A[1] + A[2]) * onesixth;
-  float x = u - A[0] + s;
-  float y = v - A[1] + s;
-  float z = w - A[2] + s;
+  simpleNoise.s = (simpleNoise.A[0] + simpleNoise.A[1] + simpleNoise.A[2]) * onesixth;
+  float x = simpleNoise.u - simpleNoise.A[0] + simpleNoise.s;
+  float y = simpleNoise.v - simpleNoise.A[1] + simpleNoise.s;
+  float z = simpleNoise.w - simpleNoise.A[2] + simpleNoise.s;
   float t = 0.6f - x * x - y * y - z * z;
-  int h = shuffle(i + A[0], j + A[1], k + A[2]);
-  A[a]++;
+  int h = shuffle(simpleNoise.g + simpleNoise.A[0], simpleNoise.j + simpleNoise.A[1], simpleNoise.k + simpleNoise.A[2]);
+  simpleNoise.A[a]++;
   if (t < 0)
     return 0;
   int b5 = h >> 5 & 1;

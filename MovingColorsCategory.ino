@@ -331,32 +331,32 @@ void MovingColoredBars(int colorBarLength, long colorPallete[], int numberOfColo
     {
       leds[x] = leds[x + 1];
     }
-    if (clearLEDS)
+    if (globalLED.clearLEDS)
     {
-      leds[NUM_LEDS - 1] = colorPallete[palletPosition];
+      leds[NUM_LEDS - 1] = colorPallete[patternSettings.palletPosition];
     }
-    if ((colorBarPosition <= colorBarLength) && !clearLEDS)
+    if ((patternSettings.colorBarPosition <= colorBarLength) && !globalLED.clearLEDS)
     {
-      leds[NUM_LEDS - 1] = colorPallete[palletPosition];
-      colorBarPosition++;
+      leds[NUM_LEDS - 1] = colorPallete[patternSettings.palletPosition];
+      patternSettings.colorBarPosition++;
     }
-    if ((palletPosition == numberOfColors - 1) && (colorBarPosition > colorBarLength) && !clearLEDS)
+    if ((patternSettings.palletPosition == numberOfColors - 1) && (patternSettings.colorBarPosition > colorBarLength) && !globalLED.clearLEDS)
     {
-      leds[NUM_LEDS - 1] = colorPallete[palletPosition];
-      palletPosition = 0;
-      colorBarPosition = 1;
-      clearLEDS = true;
+      leds[NUM_LEDS - 1] = colorPallete[patternSettings.palletPosition];
+      patternSettings.palletPosition = 0;
+      patternSettings.colorBarPosition = 1;
+      globalLED.clearLEDS = true;
     }
-    if ((colorBarPosition > colorBarLength) && !clearLEDS)
+    if ((patternSettings.colorBarPosition > colorBarLength) && !globalLED.clearLEDS)
     {
-      colorBarPosition = 1;
-      palletPosition = palletPosition + 1;
+      patternSettings.colorBarPosition = 1;
+      patternSettings.palletPosition = patternSettings.palletPosition + 1;
     }
-    //if (clearLEDS && !leds(0,NUM_LEDS-1))  //Not using this for of test any more
-    if (clearLEDS && leds[0] == (CRGB)(colorPallete[numberOfColors - 1])) //restarts as soon as last color makes it past the end
+    //if (globalLED.clearLEDS && !leds(0,NUM_LEDS-1))  //Not using this for of test any more
+    if (globalLED.clearLEDS && leds[0] == (CRGB)(colorPallete[numberOfColors - 1])) //restarts as soon as last color makes it past the end
     {
       //Serial.print( leds[0].r );  Serial.print("\t"), Serial.print( leds[0].g ); Serial.print("\t"), Serial.println( leds[0].b );  //Print out RGB colors it's triggering on
-      clearLEDS = false;
+      globalLED.clearLEDS = false;
     }
 
   } //end_EVERY_N
@@ -479,7 +479,7 @@ void BlendIntoRainbow(CRGB color1, CRGB color2, CRGB color3)
 
   EVERY_N_MILLISECONDS(150)
   {
-    if (moving)
+    if (patternSettings.moving)
     {
       pos++;
       if (pos == NUM_LEDS)
@@ -491,7 +491,7 @@ void BlendIntoRainbow(CRGB color1, CRGB color2, CRGB color3)
 
   EVERY_N_MILLISECONDS(5)
   {
-    if (!moving)
+    if (!patternSettings.moving)
     {
       hue2 = hue2 - 1;
     }
@@ -564,8 +564,8 @@ void HeartBeat(uint8_t bloodHue, uint8_t bloodSat)
 int sumPulse(int time_shift)
 {
   //time_shift = 0;  //Uncomment to heart beat/pulse all LEDs together
-  int pulse1 = pulseWave8(millis() + time_shift, cycleLength, pulseLength);
-  int pulse2 = pulseWave8(millis() + time_shift + pulseOffset, cycleLength, pulseLength);
+  int pulse1 = pulseWave8(millis() + time_shift, patternSettings.cycleLength, patternSettings.pulseLength);
+  int pulse2 = pulseWave8(millis() + time_shift + patternSettings.pulseOffset, patternSettings.cycleLength, patternSettings.pulseLength);
   return qadd8(pulse1, pulse2); // Add pulses together without overflow
 }
 
@@ -723,8 +723,8 @@ void RepeatingPattern(uint8_t hue, uint8_t saturation, uint16_t repeatEvery, uin
 void RepeatingBlockPattern(uint8_t hue, uint8_t saturation, uint8_t blockSize, uint16_t loopStart, uint16_t loopEnd)
 {
   // https://github.com/marmilicious/FastLED_examples/blob/master/repeating_block_pattern.ino
-  loopStart = count * blockSize;
-  loopEnd = blockSize + count * blockSize;
+  loopStart = patternSettings.count * blockSize;
+  loopEnd = blockSize + patternSettings.count * blockSize;
 
   // Trying to write data to pixels that don't exit is bad.
   // Check to make sure we are still within our NUM_LEDS range
@@ -750,18 +750,18 @@ void RepeatingBlockPattern(uint8_t hue, uint8_t saturation, uint8_t blockSize, u
       leds[i].fadeToBlackBy(220); // fade down
     }
 
-    count++; // increase count by one
+    patternSettings.count++; // increase count by one
 
     // reset count if we have come to the end of the strip
-    if ((count * blockSize) >= NUM_LEDS)
+    if ((patternSettings.count * blockSize) >= NUM_LEDS)
     {
-      count = 0;
+      patternSettings.count = 0;
       // Only change the block size when starting over on the strip
       // and after the minimum time has passed (from timer below).
-      if (sizeUpdate)
+      if (patternSettings.sizeUpdate)
       {
         blockSize = random8(2, 9); // for fun, pick a new random block size
-        sizeUpdate = false;
+        patternSettings.sizeUpdate = false;
       }
     }
 
@@ -769,7 +769,7 @@ void RepeatingBlockPattern(uint8_t hue, uint8_t saturation, uint8_t blockSize, u
 
   EVERY_N_SECONDS(5)
   {
-    sizeUpdate = true; // trigger size update
+    patternSettings.sizeUpdate = true; // trigger size update
   }
 }
 
@@ -1026,11 +1026,11 @@ void Marqueev2(uint8_t spacing, uint16_t holdTime)
   // https://github.com/marmilicious/FastLED_examples/blob/master/marquee_v2.ino
   EVERY_N_SECONDS(40)
   { // Change direction every N seconds.
-    delta2 = -1 * delta2;
+    patternSettings.delta2 = -1 * patternSettings.delta2;
   }
   EVERY_N_SECONDS(40)
   { // Change direction every N seconds.
-    delta2 = -1 * delta2;
+    patternSettings.delta2 = -1 * patternSettings.delta2;
   }
 
   EVERY_N_SECONDS(10)
@@ -1054,28 +1054,28 @@ void Marqueev2(uint8_t spacing, uint16_t holdTime)
 
     for (int i = 0; i < (NUM_LEDS / spacing); i++)
     {
-      pos = (spacing * (i - 1) + spacing + advance) % NUM_LEDS;
+      pos = (spacing * (i - 1) + spacing + patternSettings.advance) % NUM_LEDS;
       leds[pos] = CHSV(hue, 255, 255);
     }
 
     FastLED.show();
 
     // Fade out tail or set back to black for next loop around.
-    if (fadingTail == 1)
+    if (patternSettings.fadingTail == true)
     {
-      fadeToBlackBy(leds, NUM_LEDS, fadeRate);
+      fadeToBlackBy(leds, NUM_LEDS, patternSettings.fadeRate);
     }
     else
     {
       for (int i = 0; i < (NUM_LEDS / spacing); i++)
       {
-        pos = (spacing * (i - 1) + spacing + advance) % NUM_LEDS;
+        pos = (spacing * (i - 1) + spacing + patternSettings.advance) % NUM_LEDS;
         leds[pos] = CRGB::Black;
       }
     }
 
     // Advance pixel postion down strip, and rollover if needed.
-    advance = (advance + delta2 + NUM_LEDS) % NUM_LEDS;
+    patternSettings.advance = (patternSettings.advance + patternSettings.delta2 + NUM_LEDS) % NUM_LEDS;
   }
 }
 
@@ -1084,7 +1084,7 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
   //https: //github.com/marmilicious/FastLED_examples/blob/master/marquee_v3.ino
   EVERY_N_SECONDS(10)
   { // Demo: Change direction every N seconds.
-    delta2 = -1 * delta2;
+    patternSettings.delta2 = -1 * patternSettings.delta2;
   }
 
   //EVERY_N_SECONDS(10){  // Demo: Changing the pixel spacing every N seconds.
@@ -1102,12 +1102,12 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
   { // Advance pixels to next position.
 
     // Advance pixel postion down strip, and rollover if needed.
-    advance = (advance + delta2 + NUM_LEDS) % NUM_LEDS;
+    patternSettings.advance = (patternSettings.advance + patternSettings.delta2 + NUM_LEDS) % NUM_LEDS;
 
     // Fade out tail or set back to black for next loop around.
-    if (fadingTail == 1)
+    if (patternSettings.fadingTail == true)
     {
-      fadeToBlackBy(leds, NUM_LEDS, fadeRate);
+      fadeToBlackBy(leds, NUM_LEDS, patternSettings.fadeRate);
     }
     else
     {
@@ -1115,8 +1115,8 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
       {
         for (uint8_t w = 0; w < width; w++)
         {
-          //pos = (spacing * (i-1) + spacing + advance + w) % NUM_LEDS;
-          pos = (spacing * (i - 1) + spacing + advance + w - 1) % NUM_LEDS;
+          //pos = (spacing * (i-1) + spacing + patternSettings.advance + w) % NUM_LEDS;
+          pos = (spacing * (i - 1) + spacing + patternSettings.advance + w - 1) % NUM_LEDS;
           leds[pos] = CRGB::Black;
         }
       }
@@ -1127,17 +1127,17 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
     {
       for (uint8_t w = 0; w < width; w++)
       {
-        pos = (spacing * (i - 1) + spacing + advance + w) % NUM_LEDS;
+        pos = (spacing * (i - 1) + spacing + patternSettings.advance + w) % NUM_LEDS;
         if (w % 2 == 0)
         { // Is w even or odd?
-          colorStorage = hue;
+          patternSettings.colorStorage = hue;
         }
         else
         {
-          colorStorage = hue + hue2Shift;
+          patternSettings.colorStorage = hue + hue2Shift;
         }
 
-        leds[pos] = CHSV(colorStorage, 255, 255);
+        leds[pos] = CHSV(patternSettings.colorStorage, 255, 255);
       }
     }
 
@@ -1213,13 +1213,13 @@ void BeatWave(CRGBPalette16 currentPalette, CRGBPalette16 targetPalette, TBlendT
 void BlendWave(accum88 bpm, accum88 bpm2)
 {
   // https://github.com/atuline/FastLED-Demos/blob/master/blendwave/blendwave.ino
-  speed = beatsin8(bpm, 0, 255);
+  patternSettings.speed = beatsin8(bpm, 0, 255);
 
-  globals.clr1 = blend(CHSV(beatsin8(3, 0, 255), 255, 255), CHSV(beatsin8(4, 0, 255), 255, 255), speed);
-  globals.clr2 = blend(CHSV(beatsin8(4, 0, 255), 255, 255), CHSV(beatsin8(3, 0, 255), 255, 255), speed);
+  globals.clr1 = blend(CHSV(beatsin8(3, 0, 255), 255, 255), CHSV(beatsin8(4, 0, 255), 255, 255), patternSettings.speed);
+  globals.clr2 = blend(CHSV(beatsin8(4, 0, 255), 255, 255), CHSV(beatsin8(3, 0, 255), 255, 255), patternSettings.speed);
 
-  loc1 = beatsin8(bpm2, 0, NUM_LEDS - 1);
+  patternSettings.loc1 = beatsin8(bpm2, 0, NUM_LEDS - 1);
 
-  fill_gradient_RGB(leds, 0, globals.clr2, loc1, globals.clr1);
-  fill_gradient_RGB(leds, loc1, globals.clr2, NUM_LEDS - 1, globals.clr1);
+  fill_gradient_RGB(leds, 0, globals.clr2, patternSettings.loc1, globals.clr1);
+  fill_gradient_RGB(leds, patternSettings.loc1, globals.clr2, NUM_LEDS - 1, globals.clr1);
 }

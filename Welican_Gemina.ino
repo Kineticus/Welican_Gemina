@@ -239,8 +239,10 @@ struct GlobalTime
   unsigned long currentMillis;
   const unsigned long period;
   int save;
+  int timeOut;
+  unsigned long touchTime;
 };
-GlobalTime globalTime = {0, 100, 5, 1, 0, 0, 0, 0, 1000, 0};
+GlobalTime globalTime = {0, 100, 5, 1, 0, 0, 0, 0, 1000, 0, 30000, 0};
 
 struct GlobalUtils
 {
@@ -494,7 +496,7 @@ void setup()
 
   //FastLED Declation
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
-  //FastLED.addLeds<LED_TYPE, DATA_PIN_A, COLOR_ORDER>(leds, NUM_LEDS);
+  FastLED.addLeds<LED_TYPE, DATA_PIN_A, COLOR_ORDER>(leds, NUM_LEDS);
 
   /* Load Save Settings
 
@@ -589,6 +591,14 @@ void loop()
       //tetris();
       break;
     }
+    break;
+  case 3: //Clock/Weather/Info modes
+    drawClock();
+    showBrightnessDisplay();
+    break;
+  case -1: //Reset
+    globalTime.touchTime = millis(); //Last touch time back to default
+    globals.runMode = 0; //Back to normal
     break;
   }
 

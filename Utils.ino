@@ -154,7 +154,7 @@ void updateEncoders()
   {
     //if yes we should set a debounce variable
     knob1.debounce = 3;
-
+    
     //And set click for Knob 1 to True!
     knob1.click = 1;
 
@@ -192,6 +192,13 @@ void updateEncoders()
         knob1.click = 0;         //Null out clicks so menu doesn't get confused on first run
         knob2.click = 0;
       }
+
+      //Are we in clock/weather/visualizer/sleep mode?
+      if (globals.runMode == 3)
+      {
+        globals.runMode = -1;
+        knob1.click = 0;
+      } 
     }
   }
   if ((globals.tempValue == true) && (knob1.debounce > 0)) //No button press and there is debounce to reduce?
@@ -205,6 +212,12 @@ void updateEncoders()
   {
     knob2.debounce = 3;
     knob2.click = 1;
+
+    if (globals.runMode == 3)
+    {
+      globals.runMode = -1;
+      knob2.click = 0;
+    } 
   }
   else if ((globals.tempValue == false) && (knob2.debounce > 0))
   {
@@ -235,7 +248,6 @@ void updateEncoders()
       globals.tempValue -= 4;
       knob1.temp += 4;
       pattern[globals.mode] += 1;
-      globalTime.save = 100;
       smoothOperatorStart();
     }
     while (globals.tempValue <= -4)
@@ -243,7 +255,6 @@ void updateEncoders()
       globals.tempValue += 4;
       knob1.temp -= 4;
       pattern[globals.mode] -= 1;
-      globalTime.save = 100;
       smoothOperatorStart();
     }
 
@@ -300,7 +311,22 @@ void updateEncoders()
       player.X -= 4;
     }
   }
+  else if (globals.runMode == 3)
+  {
+    while (globals.tempValue >= 4)
+    { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
+      globals.tempValue -= 4;
+      knob1.temp += 4;
+      globals.runMode = -1;
+    }
+    while (globals.tempValue <= -4)
+    {
+      globals.tempValue += 4;
+      knob1.temp -= 4;
+      globals.runMode = -1;
+    }
 
+  }
   //check for out of sync condition (knob is reseting at value that is not divisible by 4)
   if ((abs(globals.encoder.getCount()) % 4) > 0)
   {
@@ -321,7 +347,7 @@ void updateEncoders()
   globals.tempValue = globals.encoder2.getCount() - knob2.temp; //Read current knob position vs. last time we checked
   knob2.temp = globals.encoder2.getCount();                     //Store this position to compare next time around
 
-  if (globals.runMode == 0)
+  if ((globals.runMode == 0) || (globals.runMode == 3))
   {
     if (globals.tempValue != 0)
     {
@@ -440,8 +466,8 @@ void endGameMode()
   //Don't want to see brightness indicator when we leave
   brightness.debounce = 0;
 
-  //Set globals.runMode (like Run mode) back to default, 0
-  globals.runMode = 0;
+  //Set globals.runMode to -1 to reset system vars and runMode back to 0
+  globals.runMode = -1;
 }
 
 void showBrightnessDisplay()
@@ -799,7 +825,7 @@ void drawMenu()
     switch (globals.currentMenu)
     {
     case 0: //main menu
-      globals.runMode = 0;
+      globals.runMode = -1;
       break;
     case 1: //Games Menu
       globals.currentMenu = 0;
@@ -816,7 +842,7 @@ void drawMenu()
       break;
 
     case 10: //Add New Favorite
-      globals.runMode = 0;
+      globals.runMode = -1;
       break;
     }
   }
@@ -838,7 +864,7 @@ void drawMenu()
         //stuff
         break;
       case 3:
-        globals.runMode = 0; //exit
+        globals.runMode = -1; //exit
         break;
       }
       break;
@@ -915,13 +941,13 @@ void drawMenu()
       case 1: //Yes
         resetFavorites();
         //picture of trash can or something and small delay later
-        globals.runMode = 0;
+        globals.runMode = -1;
         break;
       }
       break;
     case 10:
       saveFavorites(); //New Favorite click
-      globals.runMode = 0;
+      globals.runMode = -1;
       break;
     }
   }
@@ -1060,10 +1086,15 @@ void smoothOperator()
 void smoothOperatorStart()
 {
   globalLED.interfade = globalLED.interfadeMax;
+
   for (int i = 0; i < NUM_LEDS; i++)
   {
     ledsTemp[i] = leds[i];
   }
+  
+  globalTime.save = 100;
+  
+  globalTime.touchTime = millis();
 }
 
 void updateTime()
@@ -1177,6 +1208,8 @@ void saveTimeCheck()
 
   if (globalTime.save == 1)
   {
+    globalTime.touchTime = millis();
+
     EEPROM.write(0, globals.mode);
     EEPROM.write(1, brightness.current);
 
@@ -1186,6 +1219,52 @@ void saveTimeCheck()
     }
     EEPROM.commit();
   }
+
+  if (globals.runMode == 0)
+  {
+    if ((millis() - globalTime.touchTime) > globalTime.timeOut)
+    {
+      globals.runMode = 3;
+    }
+  }
+}
+
+void drawClock()
+{
+  u8g2.setFont(u8g2_font_7Segments_26x42_mn);
+  u8g2.setDrawColor(1);
+  
+  
+
+  if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
+  {
+    u8g2.setCursor(20, 64);
+
+    if (globalTime.currentHour > 9)
+    {
+      u8g2.setCursor(-12, 64);
+    }
+
+    u8g2.print(globalTime.currentHour);
+    
+    u8g2.setCursor(52, 64);
+    u8g2.print(":");
+    
+    u8g2.setCursor(68, 64);
+    if (globalTime.currentMinute < 10)
+    {
+      u8g2.print("0");
+    }
+    u8g2.print(globalTime.currentMinute);
+  } else
+  {
+    //u8g2.print("0:00");
+  }
+  
+
+  //Show logo
+  //u8g2.setBitmapMode(true /* transparent*/);
+  //u8g2.drawXBMP(32, 0, myBitmap_width, myBitmap_height, myBitmap);
 }
 
 void showLogo(int millisTime)

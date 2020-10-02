@@ -365,7 +365,7 @@ void MovingColoredBars(int colorBarLength, long colorPallete[], int numberOfColo
 void BreathingEffect(float pulseSpeed, bool red, bool green, bool blue)
 {
   //https://github.com/marmilicious/FastLED_examples/blob/master/breath_effect_v2.ino
-  float dV = ((exp(sin(pulseSpeed * millis() / 2000.0 * PI)) - 0.36787944) * delta);
+  float dV = ((exp(sin(pulseSpeed * millis() / 2000.0 * PI)) - 0.36787944) * patternSettings.delta);
   val = valueMin + dV;
   hue = map(val, valueMin, valueMax, hueA, hueB); // Map hue based on current val
   sat = map(val, valueMin, valueMax, satA, satB); // Map sat based on current val

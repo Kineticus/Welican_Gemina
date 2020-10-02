@@ -161,7 +161,19 @@ struct Globals
   double vReal[SAMPLES];
   double vImag[SAMPLES];
 };
-Globals globals = {{}, -5, 0, 10, 0, 0, 0, 0, 0, MAX_MODES, 0, 0};
+Globals globals = {
+    .temp = {},
+    .timeZone = -5,
+    .tempValue = 0,
+    .currentSpeed = 10,
+    .newTime = 0,
+    .samplingPeriodUs = 0,
+    .runMode = 0,
+    .mode = 0,
+    .currentMenu = 0,
+    .modeMax = MAX_MODES,
+    .tempPattern = 0,
+    .pixelNumber = 0};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
 
 struct DevEnvironment
@@ -170,7 +182,10 @@ struct DevEnvironment
   int fftps; //dev, speed tracking for fft task
   int breathing;
 };
-DevEnvironment devEnv = {0, 0, 1};
+DevEnvironment devEnv = {
+    .fps = 0,
+    .fftps = 0,
+    .breathing = 1};
 
 struct GlobalStrings
 {
@@ -179,7 +194,11 @@ struct GlobalStrings
   char categoryNameOutString[20];
   char functionNameOutString[20];
 };
-GlobalStrings globalStrings = {"", "", {}, {}};
+GlobalStrings globalStrings = {
+    .categoryName = "",
+    .functionName = "",
+    .categoryNameOutString = {},
+    .functionNameOutString = {}};
 
 struct GlobalTime
 {
@@ -196,13 +215,26 @@ struct GlobalTime
   int timeOut;
   unsigned long touchTime;
 };
-GlobalTime globalTime = {0, 100, 5, 1, 0, 0, 0, 0, 1000, 0, 30000, 0};
+GlobalTime globalTime = {
+    .currentMinute = 0,
+    .currentHour = 100,
+    .curerntDay = 5,
+    .currentDate = 1,
+    .currentMonth = 0,
+    .currentPM = 0,
+    .startMillis = 0,
+    .currentMillis = 0,
+    .period = 1000,
+    .save = 0,
+    .timeout = 30000,
+    .touchTime = 0};
 
 struct GlobalUtils
 {
   int encoderUnstick;
 };
-GlobalUtils utils = {0};
+GlobalUtils utils = {
+    .encoderUnstick = 0};
 
 struct GlobalLED
 {
@@ -214,7 +246,14 @@ struct GlobalLED
   int fadeDirectionHTemp; // 1 or 0, positive or negative
   bool clearLEDS;
 };
-GlobalLED globalLED = {18, 18, 14, 0, 0, 0, false};
+GlobalLED globalLED = {
+    .interfade = 18,
+    .interfadeMax = 18,
+    .interfadeSpeed = 14,
+    .fadeDirection = 0,
+    .fadeDirection2 = 0,
+    .fadeDirectionHTemp = 0,
+    .clearLEDS = false};
 
 struct SimplexNoiseModel
 {
@@ -315,7 +354,13 @@ struct Brightness
   int fadeAmount;         // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
   uint8_t baseBrightness; // Brightness of LEDs when not pulsing. Set to 0 for off.
 };
-Brightness brightness = {0, 0, 0, false, 5, 10};
+Brightness brightness = {
+    .current = 0,
+    .temp = 0,
+    .debounce = 0,
+    .useFade = false,
+    .fadeAmount = 5,
+    .baseBrightness = 10};
 
 struct StarModel
 {
@@ -344,18 +389,26 @@ struct Player
   int X;
   int Y;
 };
-Player player = {64, 8};
+Player player = {
+    .X = 64,
+    .Y = 8};
 
 struct Fallios
 {
   unsigned int score;
-  unsigned int score_top;
+  unsigned int scoreTop;
   int motion;
   int motionHistory;
   int Y;
   float tunnelGenerator;
 };
-Fallios fallios = {0, 0, 0, 0, 8, 0};
+Fallios fallios = {
+    .score = 0,
+    .scoreTop = 0,
+    .motion = 0,
+    .motionHistory = 0,
+    .Y = 8,
+    .tunnelGenerator = 0};
 
 byte fallios_wall[64];
 byte fallios_wallDistance[64];
@@ -377,7 +430,18 @@ struct BlockBreaker
   int messageTimer;
   int running;
 };
-BlockBreaker blockBreaker = {0, 0, 0, 0, 0, 4, 2, 16, 0, 0, 0};
+BlockBreaker blockBreaker = {
+    .score = 0,
+    .ballX = 0,
+    .ballY = 0,
+    .ballXvel = 0,
+    .ballYvel = 0,
+    .ballWidth = 4,
+    .paddleHeight = 2,
+    .paddleWidth = 16,
+    .message = 0,
+    .messageTimer = 0,
+    .running = 0};
 
 // WEATHER
 struct OpenWeatherSettings
@@ -386,7 +450,10 @@ struct OpenWeatherSettings
   String countryCode;
   unsigned long weatherTimerDelay;
 };
-OpenWeatherSettings weatherSettings = {"33701", "US", 70000};
+OpenWeatherSettings weatherSettings = {
+    .zipCode = "33701",
+    .countryCode = "US",
+    .weatherTimerDelay = 70000};
 
 struct OpenWeatherObject
 {
@@ -418,13 +485,32 @@ Knob knob2;
 
 struct VisualizerTriangle
 {
-  int x, y;
+  int x;
+  int y;
   int radius;
-  float point1, point2, point3;
-  int x1, x2, x3;
-  int y1, y2, y3;
+  float point1;
+  float point2;
+  float point3;
+  int x1;
+  int x2;
+  int x3;
+  int y1;
+  int y2;
+  int y3;
 };
-VisualizerTriangle t1 = {64, 42, 18, 0.0, 2.1, 4.2, 0, 0, 0, 0, 0, 0};
+VisualizerTriangle t1 = {
+    .x = 64,
+    .y = 42,
+    .radius = 18,
+    .point1 = 0.0,
+    .point2 = 2.1,
+    .point3 = 4.2,
+    .x1 = 0,
+    .x2 = 0,
+    .x3 = 0,
+    .y1 = 0,
+    .y2 = 0,
+    .y3 = 0};
 
 // ----------------------------------------------------------------
 // SETUP
@@ -552,7 +638,7 @@ void setup()
 
   unsigned int word = EEPROM.read(20) + EEPROM.read(21) * 256;
 
-  fallios.score_top = word;
+  fallios.scoreTop = word;
 
   globals.mode = EEPROM.read(0);
   brightness.current = EEPROM.read(1);

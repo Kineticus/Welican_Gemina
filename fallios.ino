@@ -14,7 +14,7 @@ void fallios_game()
 
     //Display high score
     u8g2.setCursor(SCREEN_WIDTH - 30, SCREEN_HEIGHT);
-    u8g2.print(fallios.score_top);
+    u8g2.print(fallios.scoreTop);
 
     //Build barriers, repeating once for each row of screen height
     for (int i = 1; i < SCREEN_HEIGHT + 1; i++)
@@ -76,18 +76,18 @@ void fallios_game()
         u8g2.print("G A M E  O V E R !!!");
 
         //Did we beat the top score?
-        if (fallios.score > fallios.score_top)
+        if (fallios.score > fallios.scoreTop)
         {
             //Update top score to new high score
-            fallios.score_top = fallios.score;
+            fallios.scoreTop = fallios.score;
 
             //Place the cursor and draw a high score message
             u8g2.setCursor(12, SCREEN_HEIGHT / 2);
             u8g2.print("New High Score !!!");
 
             //Break score into 2 bytes as EEPROM is 1 byte per space. Score is a (16 bit) unsigned integer
-            uint8_t xlow = fallios.score_top & 0xff;
-            uint8_t xhigh = (fallios.score_top >> 8);
+            uint8_t xlow = fallios.scoreTop & 0xff;
+            uint8_t xhigh = (fallios.scoreTop >> 8);
 
             //Save the 16 bit unsigned integer into two bytes of EEPROM
             EEPROM.write(20, xlow);

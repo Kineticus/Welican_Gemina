@@ -1171,7 +1171,7 @@ void updateWeather()
   {
     if (WiFi.status() == WL_CONNECTED)
     {
-      String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + String(weatherSettings.zipCode) + "," + weatherSettings.countryCode + "&units=imperial&APPID=" + openWeatherMapApiKey;
+      String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + String(weatherSettings.zipCode) + "," + weatherSettings.countryCode + "&units=imperial&APPID=" + globals.openWeatherMapApiKey;
 
       weather.jsonBuffer = httpGETRequest(serverPath.c_str());
       weather.weatherJson = JSON.parse(weather.jsonBuffer);

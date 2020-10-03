@@ -229,18 +229,6 @@ GlobalLED globalLED = {
     .fadeDirectionHTemp = 0,
     .clearLEDS = false};
 
-struct MenuModel
-{
-  int menu[12];
-  int menuMax[12];
-  int patternMax[6];
-};
-MenuModel globalMenu = {
-    .menu = {},
-    //Root Menu Items, Game Menu Items, Settings Menu Items
-    .menuMax = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, NUM_FAVORITES, 99999},
-    .patternMax = {12, 12, 22, 65, 80, NUM_FAVORITES}};
-
 struct SimplexNoiseModel
 {
   int nodeSpacing;
@@ -369,14 +357,14 @@ HSV2RGB globalHSV2RGB;
 
 struct MenuModel
 {
-  int menu[11];
-  int menuMax[11];
+  int menu[12];
+  int menuMax[12];
   int patternMax[6];
 };
 MenuModel globalMenu = {
     .menu = {},
     //Root Menu Items, Game Menu Items, Settings Menu Items
-    .menuMax = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, patternSettings.numberOfFavorites},
+    .menuMax = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, patternSettings.numberOfFavorites, 99999},
     .patternMax = {12, 12, 22, 65, 80, patternSettings.numberOfFavorites}};
 
 struct Brightness

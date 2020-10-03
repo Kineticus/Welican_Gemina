@@ -329,20 +329,20 @@ void MovingColoredBars(int colorBarLength, long colorPallete[], int numberOfColo
 
     for (int x = 0; x < NUM_LEDS - 1; x++)
     {
-      leds[x] = leds[x + 1];
+      patternSettings.leds[x] = patternSettings.leds[x + 1];
     }
     if (globalLED.clearLEDS)
     {
-      leds[NUM_LEDS - 1] = colorPallete[patternSettings.palletPosition];
+      patternSettings.leds[NUM_LEDS - 1] = colorPallete[patternSettings.palletPosition];
     }
     if ((patternSettings.colorBarPosition <= colorBarLength) && !globalLED.clearLEDS)
     {
-      leds[NUM_LEDS - 1] = colorPallete[patternSettings.palletPosition];
+      patternSettings.leds[NUM_LEDS - 1] = colorPallete[patternSettings.palletPosition];
       patternSettings.colorBarPosition++;
     }
     if ((patternSettings.palletPosition == numberOfColors - 1) && (patternSettings.colorBarPosition > colorBarLength) && !globalLED.clearLEDS)
     {
-      leds[NUM_LEDS - 1] = colorPallete[patternSettings.palletPosition];
+      patternSettings.leds[NUM_LEDS - 1] = colorPallete[patternSettings.palletPosition];
       patternSettings.palletPosition = 0;
       patternSettings.colorBarPosition = 1;
       globalLED.clearLEDS = true;
@@ -353,9 +353,9 @@ void MovingColoredBars(int colorBarLength, long colorPallete[], int numberOfColo
       patternSettings.palletPosition = patternSettings.palletPosition + 1;
     }
     //if (globalLED.clearLEDS && !leds(0,NUM_LEDS-1))  //Not using this for of test any more
-    if (globalLED.clearLEDS && leds[0] == (CRGB)(colorPallete[numberOfColors - 1])) //restarts as soon as last color makes it past the end
+    if (globalLED.clearLEDS && patternSettings.leds[0] == (CRGB)(colorPallete[numberOfColors - 1])) //restarts as soon as last color makes it past the end
     {
-      //Serial.print( leds[0].r );  Serial.print("\t"), Serial.print( leds[0].g ); Serial.print("\t"), Serial.println( leds[0].b );  //Print out RGB colors it's triggering on
+      //Serial.print( patternSettings.leds[0].r );  Serial.print("\t"), Serial.print( patternSettings.leds[0].g ); Serial.print("\t"), Serial.println( patternSettings.leds[0].b );  //Print out RGB colors it's triggering on
       globalLED.clearLEDS = false;
     }
 
@@ -366,29 +366,29 @@ void BreathingEffect(float pulseSpeed, bool red, bool green, bool blue)
 {
   //https://github.com/marmilicious/FastLED_examples/blob/master/breath_effect_v2.ino
   float dV = ((exp(sin(pulseSpeed * millis() / 2000.0 * PI)) - 0.36787944) * patternSettings.delta);
-  val = patternSettings.valueMin + dV;
-  hue = map(val, patternSettings.valueMin, patternSettings.valueMax, hueA, hueB); // Map hue based on current val
-  sat = map(val, patternSettings.valueMin, patternSettings.valueMax, satA, satB); // Map sat based on current val
+  patternSettings.val = patternSettings.valueMin + dV;
+  patternSettings.hue = map(patternSettings.val, patternSettings.valueMin, patternSettings.valueMax, patternSettings.hueA, patternSettings.hueB); // Map hue based on current val
+  patternSettings.sat = map(patternSettings.val, patternSettings.valueMin, patternSettings.valueMax, patternSettings.satA, patternSettings.satB); // Map sat based on current val
 
   for (int i = 0; i < NUM_LEDS; i++)
   {
-    leds[i] = CHSV(hue, sat, val);
+    patternSettings.leds[i] = CHSV(patternSettings.hue, patternSettings.sat, patternSettings.val);
 
     // You can experiment with commenting out these dim8_video lines
     // to get a different sort of look.
     if (red)
     {
-      leds[i].r = dim8_video(leds[i].r);
+      patternSettings.leds[i].r = dim8_video(patternSettings.leds[i].r);
     }
     if (green)
     {
 
-      leds[i].g = dim8_video(leds[i].g);
+      patternSettings.leds[i].g = dim8_video(patternSettings.leds[i].g);
     }
     if (blue)
     {
 
-      leds[i].b = dim8_video(leds[i].b);
+      patternSettings.leds[i].b = dim8_video(patternSettings.leds[i].b);
     }
   }
 }
@@ -421,11 +421,11 @@ void CandyCane(uint16_t ts, uint8_t numColors, uint8_t stripeLength, CRGB color1
       {
         if ((i + offset) % ((numColors)*stripeLength) < stripeLength)
         {
-          leds[i] = color2;
+          patternSettings.leds[i] = color2;
         }
         else
         {
-          leds[i] = color1;
+          patternSettings.leds[i] = color1;
         }
       }
     }
@@ -436,15 +436,15 @@ void CandyCane(uint16_t ts, uint8_t numColors, uint8_t stripeLength, CRGB color1
       {
         if ((i + offset) % ((numColors + 1) * stripeLength) < stripeLength)
         {
-          leds[i] = color2;
+          patternSettings.leds[i] = color2;
         }
         else if ((i + offset + (2 * stripeLength)) % ((numColors + 1) * stripeLength) < stripeLength)
         {
-          leds[i] = color3;
+          patternSettings.leds[i] = color3;
         }
         else
         {
-          leds[i] = color1;
+          patternSettings.leds[i] = color1;
         }
       }
     }
@@ -471,11 +471,11 @@ void BlendIntoRainbow(CRGB color1, CRGB color2, CRGB color3)
   //https://github.com/marmilicious/FastLED_examples/blob/master/blend_into_rainbow_v2.ino
   EVERY_N_MILLISECONDS(60)
   {
-    hue++;
+    patternSettings.hue++;
   }
 
-  fill_rainbow(leds, NUM_LEDS, hue, 255 / NUM_LEDS / 4); // draw part of the rainbow into the strip
-  fadeToBlackBy(leds, NUM_LEDS, 128);                    // fade the whole rainbow down some
+  fill_rainbow(patternSettings.leds, NUM_LEDS, patternSettings.hue, 255 / NUM_LEDS / 4); // draw part of the rainbow into the strip
+  fadeToBlackBy(patternSettings.leds, NUM_LEDS, 128);                                    // fade the whole rainbow down some
 
   EVERY_N_MILLISECONDS(150)
   {
@@ -493,60 +493,60 @@ void BlendIntoRainbow(CRGB color1, CRGB color2, CRGB color3)
   {
     if (!patternSettings.moving)
     {
-      hue2 = hue2 - 1;
+      patternSettings.hue2 = patternSettings.hue2 - 1;
     }
   }
 
   // colors to blend into background
-  CRGB blendThisIn = CHSV(hue2, 140, 255);
-  CRGB blendThisIn2 = CHSV(hue2, 170, 255);
-  CRGB blendThisIn3 = CHSV(hue2, 210, 255);
-  CRGB blendThisIn4 = CHSV(hue2, 255, 255);
+  CRGB blendThisIn = CHSV(patternSettings.hue2, 140, 255);
+  CRGB blendThisIn2 = CHSV(patternSettings.hue2, 170, 255);
+  CRGB blendThisIn3 = CHSV(patternSettings.hue2, 210, 255);
+  CRGB blendThisIn4 = CHSV(patternSettings.hue2, 255, 255);
 
   static uint8_t blendAmount = 128; // amount of blend  [range: 0-255]
 
   // https://www.reddit.com/r/FastLED/comments/dhoce6/nblend_function_explanation/
   // nblend (CRGB &existing, const CRGB &overlay, fract8 amountOfOverlay)
-  nblend(leds[patternSettings.pos], blendThisIn4, blendAmount / 3);
-  nblend(leds[mod8(patternSettings.pos + 1, NUM_LEDS)], blendThisIn3, blendAmount / 2);
-  nblend(leds[mod8(patternSettings.pos + 2, NUM_LEDS)], blendThisIn2, blendAmount);
-  nblend(leds[mod8(patternSettings.pos + 3, NUM_LEDS)], blendThisIn, blendAmount);
-  nblend(leds[mod8(patternSettings.pos + 4, NUM_LEDS)], blendThisIn2, blendAmount);
-  nblend(leds[mod8(patternSettings.pos + 5, NUM_LEDS)], blendThisIn3, blendAmount / 2);
-  nblend(leds[mod8(patternSettings.pos + 6, NUM_LEDS)], blendThisIn4, blendAmount / 3);
+  nblend(patternSettings.leds[patternSettings.pos], blendThisIn4, blendAmount / 3);
+  nblend(patternSettings.leds[mod8(patternSettings.pos + 1, NUM_LEDS)], blendThisIn3, blendAmount / 2);
+  nblend(patternSettings.leds[mod8(patternSettings.pos + 2, NUM_LEDS)], blendThisIn2, blendAmount);
+  nblend(patternSettings.leds[mod8(patternSettings.pos + 3, NUM_LEDS)], blendThisIn, blendAmount);
+  nblend(patternSettings.leds[mod8(patternSettings.pos + 4, NUM_LEDS)], blendThisIn2, blendAmount);
+  nblend(patternSettings.leds[mod8(patternSettings.pos + 5, NUM_LEDS)], blendThisIn3, blendAmount / 2);
+  nblend(patternSettings.leds[mod8(patternSettings.pos + 6, NUM_LEDS)], blendThisIn4, blendAmount / 3);
 
   patternSettings.posR = beatsin8(5, 0, (NUM_LEDS - 1));
   patternSettings.posG = beatsin8(7, 0, (NUM_LEDS - 1));
   patternSettings.posB = beatsin8(9, 0, (NUM_LEDS - 1));
 
   CRGB tempColor = color1;
-  temp[patternSettings.posR] = tempColor;
+  patternSettings.tempPatternCollection[patternSettings.posR] = tempColor;
   tempColor = color2;
-  nblend(temp[patternSettings.posG], tempColor, 128);
+  nblend(patternSettings.tempPatternCollection[patternSettings.posG], tempColor, 128);
   tempColor = color3;
-  nblend(temp[patternSettings.posB], tempColor, 128);
+  nblend(patternSettings.tempPatternCollection[patternSettings.posB], tempColor, 128);
 
   EVERY_N_MILLISECONDS(2)
   {
-    fadeToBlackBy(temp, NUM_LEDS, 1); // create fading tail effect
+    fadeToBlackBy(patternSettings.tempPatternCollection, NUM_LEDS, 1); // create fading tail effect
   }
 
   for (int i = 0; i < NUM_LEDS; i++)
   {
-    nblend(leds[i], temp[i], 128);
+    nblend(patternSettings.leds[i], patternSettings.tempPatternCollection[i], 128);
   }
 
-  nblend(leds[mod8(patternSettings.posR, NUM_LEDS)], color1, 90);
-  nblend(leds[mod8(patternSettings.posR + 1, NUM_LEDS)], color1, 128);
-  nblend(leds[mod8(patternSettings.posR + 2, NUM_LEDS)], color1, 90);
+  nblend(patternSettings.leds[mod8(patternSettings.posR, NUM_LEDS)], color1, 90);
+  nblend(patternSettings.leds[mod8(patternSettings.posR + 1, NUM_LEDS)], color1, 128);
+  nblend(patternSettings.leds[mod8(patternSettings.posR + 2, NUM_LEDS)], color1, 90);
 
-  nblend(leds[mod8(patternSettings.posG, NUM_LEDS)], color2, 90);
-  nblend(leds[mod8(patternSettings.posG + 1, NUM_LEDS)], color2, 128);
-  nblend(leds[mod8(patternSettings.posG + 2, NUM_LEDS)], color2, 90);
+  nblend(patternSettings.leds[mod8(patternSettings.posG, NUM_LEDS)], color2, 90);
+  nblend(patternSettings.leds[mod8(patternSettings.posG + 1, NUM_LEDS)], color2, 128);
+  nblend(patternSettings.leds[mod8(patternSettings.posG + 2, NUM_LEDS)], color2, 90);
 
-  nblend(leds[mod8(patternSettings.posB, NUM_LEDS)], color3, 90);
-  nblend(leds[mod8(patternSettings.posB + 1, NUM_LEDS)], color3, 128);
-  nblend(leds[mod8(patternSettings.posB + 2, NUM_LEDS)], color3, 90);
+  nblend(patternSettings.leds[mod8(patternSettings.posB, NUM_LEDS)], color3, 90);
+  nblend(patternSettings.leds[mod8(patternSettings.posB + 1, NUM_LEDS)], color3, 128);
+  nblend(patternSettings.leds[mod8(patternSettings.posB + 2, NUM_LEDS)], color3, 90);
 }
 
 //===============================================================
@@ -557,7 +557,7 @@ void HeartBeat(uint8_t bloodHue, uint8_t bloodSat)
   for (int i = 0; i < NUM_LEDS; i++)
   {
     uint8_t bloodVal = sumPulse((5 / NUM_LEDS / 2) + (NUM_LEDS / 2) * i * patternSettings.flowDirection);
-    leds[i] = CHSV(bloodHue, bloodSat, bloodVal);
+    patternSettings.leds[i] = CHSV(bloodHue, bloodSat, bloodVal);
   }
 }
 
@@ -620,7 +620,7 @@ void FireFullStrip()
   for (int j = 0; j < NUM_LEDS; j++)
   {
     CRGB color = HeatColor(heat[j]);
-    leds_temp[j] = color;
+    patternSettings.tempLeds[j] = color;
   }
 }
 
@@ -654,28 +654,28 @@ void FireHalfStrip()
   for (int j = 0; j < NUM_LEDS / 2; j++)
   {
     CRGB color = HeatColor(heat[j]);
-    leds_temp[j] = color;
+    patternSettings.tempLeds[j] = color;
   }
 }
 
 void mirror2ndHalf()
 {
-  //copy and mirror pixel data from leds_temp to leds array.
+  //copy and mirror pixel data from patternSettings.leds_temp to leds array.
 
   if (patternSettings.gReverseDirection == false)
   { //false is center outward
     for (int i = 0; i < NUM_LEDS / 2; i++)
     {
-      leds[(NUM_LEDS / 2) - 1 - i] = leds_temp[i];
-      leds[(NUM_LEDS / 2) + i] = leds_temp[i];
+      patternSettings.leds[(NUM_LEDS / 2) - 1 - i] = patternSettings.tempLeds[i];
+      patternSettings.leds[(NUM_LEDS / 2) + i] = patternSettings.tempLeds[i];
     }
   }
   else
   { //true is from ends inward
     for (int i = 0; i < NUM_LEDS / 2; i++)
     {
-      leds[i] = leds_temp[i];
-      leds[(NUM_LEDS - 1) - i] = leds_temp[i];
+      patternSettings.leds[i] = patternSettings.tempLeds[i];
+      patternSettings.leds[(NUM_LEDS - 1) - i] = patternSettings.tempLeds[i];
     }
   }
 }
@@ -689,7 +689,7 @@ void RepeatingPattern(uint8_t hue, uint8_t saturation, uint16_t repeatEvery, uin
 
   EVERY_N_MILLISECONDS(50)
   {
-    fadeToBlackBy(leds, NUM_LEDS, 1); // slowly fade out pixels
+    fadeToBlackBy(patternSettings.leds, NUM_LEDS, 1); // slowly fade out pixels
   }
 
   EVERY_N_MILLISECONDS(interval)
@@ -697,8 +697,8 @@ void RepeatingPattern(uint8_t hue, uint8_t saturation, uint16_t repeatEvery, uin
     static uint8_t offset;
     static uint8_t shift;
 
-    hue = ((255 / repeatEvery) * offset) + shift; // Change the hue for each pixel set.
-    // hue = (20 * offset) + shift; // Change the hue for each pixel set.
+    patternSettings.hue = ((255 / repeatEvery) * offset) + shift; // Change the hue for each pixel set.
+    // patternSettings.hue = (20 * offset) + shift; // Change the hue for each pixel set.
 
     for (uint16_t x = 0; x < numberOfRepeats + 1; x++)
     {
@@ -706,7 +706,7 @@ void RepeatingPattern(uint8_t hue, uint8_t saturation, uint16_t repeatEvery, uin
       i = (repeatEvery * (x - 1)) + repeatEvery + offset; // The pixel number to draw
       if (i < NUM_LEDS)
       { // Only draw pixel numbers within NUM_LEDS
-        leds[i] = CHSV(hue, saturation, 255);
+        patternSettings.leds[i] = CHSV(patternSettings.hue, saturation, 255);
       }
     }
 
@@ -734,20 +734,20 @@ void RepeatingBlockPattern(uint8_t hue, uint8_t saturation, uint8_t blockSize, u
     loopEnd = NUM_LEDS; // limit maximum to NUM_LEDS
   }
 
-  hue = hue + random8(8, 17); // for fun, pick a new color for each block
+  patternSettings.hue = patternSettings.hue + random8(8, 17); // for fun, pick a new color for each block
 
   EVERY_N_MILLISECONDS(250)
   {
     for (uint16_t i = loopStart; i < loopEnd; i++)
     {
-      leds[i] = CHSV(hue, saturation, 255);
+      patternSettings.leds[i] = CHSV(patternSettings.hue, saturation, 255);
     }
 
     FastLED.show();
 
     for (uint16_t i = loopStart; i < loopEnd; i++)
     {
-      leds[i].fadeToBlackBy(220); // fade down
+      patternSettings.leds[i].fadeToBlackBy(220); // fade down
     }
 
     patternSettings.count++; // increase count by one
@@ -783,15 +783,15 @@ void Twinkle(uint8_t thisfade, int twinkrate, uint8_t thishue, uint8_t thissat, 
   int i = random16(twinkrate); // A random number based on twinkrate. Higher number => fewer twinkles.
   if (randhue)
   {
-    thishue = random16(0, 255); // Randomize every LED if TRUE
+    patternSettings.hue = random16(0, 255); // Randomize every LED if TRUE
   }
   if (i < NUM_LEDS)
   {
-    leds[i] = CHSV(thishue, thissat, thisbri); // Only the lowest probability twinkles will do. You could even randomize the hue/saturation.
+    patternSettings.leds[i] = CHSV(thishue, thissat, thisbri); // Only the lowest probability twinkles will do. You could even randomize the hue/saturation.
   }
   for (int j = 0; j < NUM_LEDS; j++)
   {
-    leds[j].fadeToBlackBy(thisfade); // Use the FastLED fade method.
+    patternSettings.leds[j].fadeToBlackBy(thisfade); // Use the FastLED fade method.
   }
 }
 
@@ -914,10 +914,10 @@ void Mover(uint8_t thisfade, uint8_t hue)
   if (globalTime.currentMillis - globalTime.startMillis >= beatsin8(15, 25, 100))
   {
     globalTime.startMillis = globalTime.currentMillis;
-    leds[globals.pixelNumber] += CHSV(hue, 255, 255);
-    leds[(globals.pixelNumber + 5) % NUM_LEDS] += CHSV(hue + 85, 255, 255);   // We use modulus so that the location is between 0 and NUM_LEDS
-    leds[(globals.pixelNumber + 10) % NUM_LEDS] += CHSV(hue + 170, 255, 255); // Same here.
-    fadeToBlackBy(leds, NUM_LEDS, thisfade);                                  // Low values = slower fade.
+    patternSettings.leds[globals.pixelNumber] += CHSV(patternSettings.hue, 255, 255);
+    patternSettings.leds[(globals.pixelNumber + 5) % NUM_LEDS] += CHSV(patternSettings.hue + 85, 255, 255);   // We use modulus so that the location is between 0 and NUM_LEDS
+    patternSettings.leds[(globals.pixelNumber + 10) % NUM_LEDS] += CHSV(patternSettings.hue + 170, 255, 255); // Same here.
+    fadeToBlackBy(patternSettings.leds, NUM_LEDS, thisfade);                                                  // Low values = slower fade.
 
     if (++globals.pixelNumber >= NUM_LEDS)
     {
@@ -1009,11 +1009,11 @@ void Meteor(uint8_t red, uint8_t green, uint8_t blue)
   {
     globalTime.startMillis = globalTime.currentMillis;
 
-    leds[globals.pixelNumber] = CRGB(red, green, blue);
-    blur1d(leds, NUM_LEDS, beatsin8(7, 20, 80));
+    patternSettings.leds[globals.pixelNumber] = CRGB(red, green, blue);
+    blur1d(patternSettings.leds, NUM_LEDS, beatsin8(7, 20, 80));
 
     FastLED.show();
-    leds[globals.pixelNumber] = CRGB::Black;
+    patternSettings.leds[globals.pixelNumber] = CRGB::Black;
     if (++globals.pixelNumber >= NUM_LEDS)
     {
       globals.pixelNumber = 0;
@@ -1043,8 +1043,8 @@ void Marqueev2(uint8_t spacing, uint16_t holdTime)
     if (spacing > 4)
     {
       spacing = 8;
-    }                            // Jump spacing up to 8
-    hue = hue + random8(30, 61); // Shift the hue to something new.
+    }                                                            // Jump spacing up to 8
+    patternSettings.hue = patternSettings.hue + random8(30, 61); // Shift the hue to something new.
   }
 
   EVERY_N_MILLISECONDS(holdTime)
@@ -1055,7 +1055,7 @@ void Marqueev2(uint8_t spacing, uint16_t holdTime)
     for (int i = 0; i < (NUM_LEDS / spacing); i++)
     {
       patternSettings.pos = (spacing * (i - 1) + spacing + patternSettings.advance) % NUM_LEDS;
-      leds[patternSettings.pos] = CHSV(hue, 255, 255);
+      patternSettings.leds[patternSettings.pos] = CHSV(patternSettings.hue, 255, 255);
     }
 
     FastLED.show();
@@ -1063,14 +1063,14 @@ void Marqueev2(uint8_t spacing, uint16_t holdTime)
     // Fade out tail or set back to black for next loop around.
     if (patternSettings.fadingTail == true)
     {
-      fadeToBlackBy(leds, NUM_LEDS, patternSettings.fadeRate);
+      fadeToBlackBy(patternSettings.leds, NUM_LEDS, patternSettings.fadeRate);
     }
     else
     {
       for (int i = 0; i < (NUM_LEDS / spacing); i++)
       {
         patternSettings.pos = (spacing * (i - 1) + spacing + patternSettings.advance) % NUM_LEDS;
-        leds[patternSettings.pos] = CRGB::Black;
+        patternSettings.leds[patternSettings.pos] = CRGB::Black;
       }
     }
 
@@ -1094,8 +1094,8 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
   //}
 
   EVERY_N_SECONDS(10)
-  {                              // Demo: Change the hue every N seconds.
-    hue = hue + random8(30, 61); // Shift the hue to something new.
+  {                                                              // Demo: Change the hue every N seconds.
+    patternSettings.hue = patternSettings.hue + random8(30, 61); // Shift the hue to something new.
   }
 
   EVERY_N_MILLISECONDS(holdTime)
@@ -1107,7 +1107,7 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
     // Fade out tail or set back to black for next loop around.
     if (patternSettings.fadingTail == true)
     {
-      fadeToBlackBy(leds, NUM_LEDS, patternSettings.fadeRate);
+      fadeToBlackBy(patternSettings.leds, NUM_LEDS, patternSettings.fadeRate);
     }
     else
     {
@@ -1117,7 +1117,7 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
         {
           //patternSettings.pos = (spacing * (i-1) + spacing + patternSettings.advance + w) % NUM_LEDS;
           patternSettings.pos = (spacing * (i - 1) + spacing + patternSettings.advance + w - 1) % NUM_LEDS;
-          leds[patternSettings.pos] = CRGB::Black;
+          patternSettings.leds[patternSettings.pos] = CRGB::Black;
         }
       }
     }
@@ -1130,14 +1130,14 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
         patternSettings.pos = (spacing * (i - 1) + spacing + patternSettings.advance + w) % NUM_LEDS;
         if (w % 2 == 0)
         { // Is w even or odd?
-          patternSettings.colorStorage = hue;
+          patternSettings.colorStorage = patternSettings.hue;
         }
         else
         {
-          patternSettings.colorStorage = hue + hue2Shift;
+          patternSettings.colorStorage = patternSettings.hue + hue2Shift;
         }
 
-        leds[patternSettings.pos] = CHSV(patternSettings.colorStorage, 255, 255);
+        patternSettings.leds[patternSettings.pos] = CHSV(patternSettings.colorStorage, 255, 255);
       }
     }
 
@@ -1156,9 +1156,9 @@ void Sawtooth(int bpm, CRGBPalette16 currentPalette, TBlendType currentBlending)
   int cur_led = ((millis() % ms_per_beat) / ms_per_led) % (NUM_LEDS); // Using millis to count up the strand, with %NUM_LEDS at the end as a safety factor.
 
   if (cur_led == 0)
-    fill_solid(leds, NUM_LEDS, CRGB::Black);
+    fill_solid(patternSettings.leds, NUM_LEDS, CRGB::Black);
   else
-    leds[cur_led] = ColorFromPalette(currentPalette, 0, 255, currentBlending); // I prefer to use palettes instead of CHSV or CRGB assignments.
+    patternSettings.leds[cur_led] = ColorFromPalette(currentPalette, 0, 255, currentBlending); // I prefer to use palettes instead of CHSV or CRGB assignments.
 }
 
 void Plasma(CRGBPalette16 currentPalette, CRGBPalette16 targetPalette, TBlendType currentBlending)
@@ -1190,7 +1190,7 @@ void RainbowMarch(uint8_t thisdelay, uint8_t deltahue)
   // thishue = beat8(50);                                       // This uses a FastLED sawtooth generator. Again, the '50' should not change on the fly.
   // thishue = beatsin8(50,0,255);                              // This can change speeds on the fly. You can also add these to each other.
 
-  fill_rainbow(leds, NUM_LEDS, thishue, deltahue); // Use FastLED's fill_rainbow routine.
+  fill_rainbow(patternSettings.leds, NUM_LEDS, thishue, deltahue); // Use FastLED's fill_rainbow routine.
 }
 
 void BeatWave(CRGBPalette16 currentPalette, CRGBPalette16 targetPalette, TBlendType currentBlending)
@@ -1220,6 +1220,6 @@ void BlendWave(accum88 bpm, accum88 bpm2)
 
   patternSettings.loc1 = beatsin8(bpm2, 0, NUM_LEDS - 1);
 
-  fill_gradient_RGB(leds, 0, globals.clr2, patternSettings.loc1, globals.clr1);
-  fill_gradient_RGB(leds, patternSettings.loc1, globals.clr2, NUM_LEDS - 1, globals.clr1);
+  fill_gradient_RGB(patternSettings.leds, 0, globals.clr2, patternSettings.loc1, globals.clr1);
+  fill_gradient_RGB(patternSettings.leds, patternSettings.loc1, globals.clr2, NUM_LEDS - 1, globals.clr1);
 }

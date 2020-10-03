@@ -20,12 +20,12 @@ void fallios_game()
     for (int i = 1; i < SCREEN_HEIGHT + 1; i++)
     {
         //Shift array value down one
-        fallios_tunnel_1[i - 1] = fallios_tunnel_1[i];
-        fallios_tunnel_2[i - 1] = fallios_tunnel_2[i];
+        fallios.tunnel1[i - 1] = fallios.tunnel1[i];
+        fallios.tunnel2[i - 1] = fallios.tunnel2[i];
 
         //draw pixel at array value
-        u8g2.drawPixel(fallios_tunnel_1[i - 1], i - 1);
-        u8g2.drawPixel(fallios_tunnel_2[i - 1], i - 1);
+        u8g2.drawPixel(fallios.tunnel1[i - 1], i - 1);
+        u8g2.drawPixel(fallios.tunnel2[i - 1], i - 1);
     }
 
     player.X += player.Y;
@@ -41,35 +41,35 @@ void fallios_game()
     //Has simplex noise has gone up since last time? move tunnel right
     if (fallios.motion > fallios.motionHistory)
     {
-        fallios_tunnel_1[SCREEN_HEIGHT] += 1;
+        fallios.tunnel1[SCREEN_HEIGHT] += 1;
     }
 
     //Has simplex noise has gone down since last time? move tunnel left
     if (fallios.motion < fallios.motionHistory)
     {
-        fallios_tunnel_1[SCREEN_HEIGHT] -= 1;
+        fallios.tunnel1[SCREEN_HEIGHT] -= 1;
     }
 
     //Lower boundry check, can't go off screen to left
-    if (fallios_tunnel_1[SCREEN_HEIGHT] <= 0)
+    if (fallios.tunnel1[SCREEN_HEIGHT] <= 0)
     {
-        fallios_tunnel_1[SCREEN_HEIGHT] = 0;
+        fallios.tunnel1[SCREEN_HEIGHT] = 0;
     }
 
     //Upper boundry check, can't go off screen to right, including current tunnel width
-    if ((fallios_tunnel_1[SCREEN_HEIGHT] + fallios_tunnelWidth) > SCREEN_WIDTH)
+    if ((fallios.tunnel1[SCREEN_HEIGHT] + fallios.tunnelWidth) > SCREEN_WIDTH)
     {
-        fallios_tunnel_1[SCREEN_HEIGHT] = SCREEN_WIDTH - fallios_tunnelWidth;
+        fallios.tunnel1[SCREEN_HEIGHT] = SCREEN_WIDTH - fallios.tunnelWidth;
     }
 
     //Calculate right wall boundry based on current width
-    fallios_tunnel_2[SCREEN_HEIGHT] = fallios_tunnel_1[SCREEN_HEIGHT] + fallios_tunnelWidth;
+    fallios.tunnel2[SCREEN_HEIGHT] = fallios.tunnel1[SCREEN_HEIGHT] + fallios.tunnelWidth;
 
     //Store the current simplex noise point to compare next loop
     fallios.motionHistory = fallios.motion;
 
     //Collision detection, needs padding as player. object is more than 1 pixel wide
-    if ((player.X > fallios_tunnel_2[fallios.Y] - 3) || (player.X < fallios_tunnel_1[fallios.Y] + 3))
+    if ((player.X > fallios.tunnel2[fallios.Y] - 3) || (player.X < fallios.tunnel1[fallios.Y] + 3))
     {
         //Place the cursor and draw some game over message
         u8g2.setCursor(8, SCREEN_HEIGHT / 1.5);
@@ -128,12 +128,12 @@ void fallios_reset()
     fallios.motionHistory = 0;
 
     //Wide tunnel width
-    fallios_tunnelWidth = SCREEN_WIDTH / 2;
+    fallios.tunnelWidth = SCREEN_WIDTH / 2;
 
     //Reset wall arrays into centered straight lines using current width
     for (int i = 0; i < SCREEN_HEIGHT + 1; i++)
     {
-        fallios_tunnel_1[i] = SCREEN_WIDTH / 4;
-        fallios_tunnel_2[i] = (SCREEN_WIDTH / 4) + fallios_tunnelWidth;
+        fallios.tunnel1[i] = SCREEN_WIDTH / 4;
+        fallios.tunnel2[i] = (SCREEN_WIDTH / 4) + fallios.tunnelWidth;
     }
 }

@@ -911,7 +911,7 @@ void drawMenu()
         break;
       case 1: //Set Max
         globals.currentMenu = 6;
-        globalMenu.menu[6] = NUM_FAVORITES;
+        globalMenu.menu[6] = patternSettings.numberOfFavorites;
         break;
       case 2: //Reset
         globals.currentMenu = 7;
@@ -923,10 +923,10 @@ void drawMenu()
       break;
 
     case 6: //Set Max Favorites Click
-      NUM_FAVORITES = globalMenu.menu[globals.currentMenu];
-      globalMenu.patternMax[5] = NUM_FAVORITES;
-      globalMenu.menuMax[11] = NUM_FAVORITES;
-      EEPROM.write(99, NUM_FAVORITES);
+      patternSettings.numberOfFavorites = globalMenu.menu[globals.currentMenu];
+      globalMenu.patternMax[5] = patternSettings.numberOfFavorites;
+      globalMenu.menuMax[11] = patternSettings.numberOfFavorites;
+      EEPROM.write(99, patternSettings.numberOfFavorites);
       EEPROM.commit();
       globals.currentMenu = 5;
       break;
@@ -957,7 +957,7 @@ void newFavoritesMenu()
   u8g2.setCursor(0, 8);
   u8g2.print("Add New Favorite");
 
-  //This is a menu with NUM_FAVORITES 'selections', each indicating a favorite slot
+  //This is a menu with patternSettings.numberOfFavorites 'selections', each indicating a favorite slot
   if (globalMenu.menu[globals.currentMenu] < 10)
   {
     u8g2.setCursor(57, 26);
@@ -1032,9 +1032,9 @@ void readFavorites()
     }
   }
 
-  NUM_FAVORITES = EEPROM.read(99);
-  globalMenu.patternMax[5] = NUM_FAVORITES;
-  globalMenu.menuMax[11] = NUM_FAVORITES;
+  patternSettings.numberOfFavorites = EEPROM.read(99);
+  globalMenu.patternMax[5] = patternSettings.numberOfFavorites;
+  globalMenu.menuMax[11] = patternSettings.numberOfFavorites;
 }
 
 void resetFavorites()
@@ -1061,14 +1061,14 @@ void smoothOperator()
     //take snapshot
     for (int i = 0; i < NUM_LEDS; i++)
     {
-      ledsTemp[i] = leds[i];
+      patternSettings.tempLeds[i] = patternSettings.leds[i];
     }
   }
   else
   {
     for (int i = 0; i < NUM_LEDS; i++)
     {
-      leds[i] = blend(leds[i], ledsTemp[i], globalLED.interfade * globalLED.interfadeSpeed);
+      patternSettings.leds[i] = blend(patternSettings.leds[i], patternSettings.tempLeds[i], globalLED.interfade * globalLED.interfadeSpeed);
     }
 
     //Only want to interfade for a bit
@@ -1088,7 +1088,7 @@ void smoothOperatorStart()
 
   for (int i = 0; i < NUM_LEDS; i++)
   {
-    ledsTemp[i] = leds[i];
+    patternSettings.tempLeds[i] = patternSettings.leds[i];
   }
 
   globalTime.save = 100;
@@ -1102,7 +1102,7 @@ void updateTime()
   {
     if (globalTime.currentHour == 100)
     {
-      configTime(3600 * globals.timeZone, 0, ntpServer, NULL, NULL);
+      configTime(3600 * globals.timeZone, 0, globals.ntpServer, NULL, NULL);
 
       setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1);
     }
@@ -1132,7 +1132,7 @@ void updateWeather()
   {
     if (WiFi.status() == WL_CONNECTED)
     {
-      String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + weatherSettings.zipCode + "," + weatherSettings.countryCode + "&units=imperial&APPID=" + openWeatherMapApiKey;
+      String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + weatherSettings.zipCode + "," + weatherSettings.countryCode + "&units=imperial&APPID=" + globals.openWeatherMapApiKey;
 
       weather.jsonBuffer = httpGETRequest(serverPath.c_str());
       weather.weatherJson = JSON.parse(weather.jsonBuffer);
@@ -1417,13 +1417,13 @@ void addGlitter(fract8 chanceOfGlitter)
 {
   if (random8() < chanceOfGlitter)
   {
-    leds[random16(NUM_LEDS)] += CRGB::White;
+    patternSettings.leds[random16(NUM_LEDS)] += CRGB::White;
   }
 }
 
 void customColor(int r, int g, int b)
 {
-  fill_solid(leds, LEDS_IN_STRIP, CRGB(r, g, b));
+  fill_solid(patternSettings.leds, LEDS_IN_STRIP, CRGB(r, g, b));
 }
 
 void plasma(CRGBPalette16 currentPalette, TBlendType currentBlending)
@@ -1438,7 +1438,7 @@ void plasma(CRGBPalette16 currentPalette, TBlendType currentBlending)
     int colorIndex = cubicwave8((k * 23) + thisPhase) / 2 + cos8((k * 15) + thatPhase) / 2; // Create a wave and add a phase change and add another wave with its own phase change.. Hey, you can even change the frequencies if you wish.
     int thisBright = QSUBA(colorIndex, beatsin8(7, 0, 96));                                 // qsub gives it a bit of 'black' dead space by setting sets a minimum value. If colorIndex < current value of beatsin8(), then bright = 0. Otherwise, bright = colorIndex..
 
-    leds[k] = ColorFromPalette(currentPalette, colorIndex, thisBright, currentBlending); // Let's now add the foreground colour.
+    patternSettings.leds[k] = ColorFromPalette(currentPalette, colorIndex, thisBright, currentBlending); // Let's now add the foreground colour.
   }
 }
 void beatwave(CRGBPalette16 currentPalette, TBlendType currentBlending)
@@ -1452,7 +1452,7 @@ void beatwave(CRGBPalette16 currentPalette, TBlendType currentBlending)
 
   for (int i = 0; i < NUM_LEDS; i++)
   {
-    leds[i] = ColorFromPalette(currentPalette, i + wave1 + wave2 + wave3 + wave4, 255, currentBlending);
+    patternSettings.leds[i] = ColorFromPalette(currentPalette, i + wave1 + wave2 + wave3 + wave4, 255, currentBlending);
   }
 }
 
@@ -1482,15 +1482,15 @@ void setPixel(int pixel, byte red, byte green, byte blue)
 #ifndef ADAFRUIT_NEOPIXEL_H
 
   // FastLED
-  leds[pixel] = CRGB(red, green, blue);
+  patternSettings.leds[pixel] = CRGB(red, green, blue);
 
-  // leds[pixel].setRGB(red, green, blue);
+  // patternSettings.leds[pixel].setRGB(red, green, blue);
 
-  // leds[pixel].r = red;
+  // patternSettings.leds[pixel].r = red;
 
-  // leds[pixel].g = green;
+  // patternSettings.leds[pixel].g = green;
 
-  // leds[pixel].b = blue;
+  // patternSettings.leds[pixel].b = blue;
 
 #endif
 }
@@ -1508,9 +1508,9 @@ void setPixel(int pixel, CRGB color)
 #ifndef ADAFRUIT_NEOPIXEL_H
 
   // FastLED
-  leds[pixel] = CRGB(color);
+  patternSettings.leds[pixel] = CRGB(color);
 
-  // leds[pixel].setRGB(color);
+  // patternSettings.leds[pixel].setRGB(color);
 
 #endif
 }
@@ -1531,7 +1531,7 @@ void fadeLightBy(int pixel, int brightnes)
 
   // FastLED
 
-  leds[pixel].fadeLightBy(brightnes);
+  patternSettings.leds[pixel].fadeLightBy(brightnes);
 #endif
 }
 
@@ -1556,7 +1556,7 @@ void fadeToBlack(int ledNo, byte fadeValue)
 // #endif
 #ifndef ADAFRUIT_NEOPIXEL_H
   // FastLED
-  leds[ledNo].fadeToBlackBy(fadeValue);
+  patternSettings.leds[ledNo].fadeToBlackBy(fadeValue);
 #endif
 }
 
@@ -1685,17 +1685,17 @@ String websiteProcessor(const String &var)
 void confettiCustom(int saturation, int value, int random)
 {
   // random colored speckles that blink in and fade smoothly
-  fadeToBlackBy(leds, NUM_LEDS, 10);
+  fadeToBlackBy(patternSettings.leds, NUM_LEDS, 10);
   int pos = random16(NUM_LEDS);
-  leds[pos] += CHSV(patternSettings.gHue + random8(random), saturation, value);
+  patternSettings.leds[pos] += CHSV(patternSettings.gHue + random8(random), saturation, value);
 }
 
 void sinelonCustom(int saturation, int value, int speed, int fadeBy)
 {
   // a colored dot sweeping back and forth, with fading trails
-  fadeToBlackBy(leds, NUM_LEDS, fadeBy);
+  fadeToBlackBy(patternSettings.leds, NUM_LEDS, fadeBy);
   int pos = beatsin16(speed, 0, NUM_LEDS - 1);
-  leds[pos] += CHSV(patternSettings.gHue, saturation, value);
+  patternSettings.leds[pos] += CHSV(patternSettings.gHue, saturation, value);
 }
 
 void u8g2_horizontal_line(uint8_t a)
@@ -1788,7 +1788,7 @@ void SimplexNoisePatternInterpolated(float spaceInc, float timeInc, float yoffse
     }
     //Convert to 24 bit output for WS2811
 
-    leds[i] = CRGB(r, g, b);
+    patternSettings.leds[i] = CRGB(r, g, b);
   }
 
   if (simplexNoise.yoffset >= 16000)

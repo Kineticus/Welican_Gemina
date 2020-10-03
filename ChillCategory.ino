@@ -102,45 +102,45 @@ void chill_category(int patternMode)
 void redHsv()
 {
     globalStrings.functionName = "redHsv";
-    fill_solid(leds, NUM_LEDS, CHSV(0, 255, 255));
+    fill_solid(patternSettings.leds, NUM_LEDS, CHSV(0, 255, 255));
 }
 void aquaHsv()
 {
     globalStrings.functionName = "aquaHsv";
-    fill_solid(leds, NUM_LEDS, CHSV(128, 255, 255));
+    fill_solid(patternSettings.leds, NUM_LEDS, CHSV(128, 255, 255));
 }
 void yellowHsv()
 {
     globalStrings.functionName = "yellowHsv";
-    fill_solid(leds, NUM_LEDS, CHSV(64, 255, 255));
+    fill_solid(patternSettings.leds, NUM_LEDS, CHSV(64, 255, 255));
 }
 void purpleHsv()
 {
     globalStrings.functionName = "purpleHsv";
-    fill_solid(leds, NUM_LEDS, CHSV(192, 255, 255));
+    fill_solid(patternSettings.leds, NUM_LEDS, CHSV(192, 255, 255));
 }
 void redGlitterHsv()
 {
     globalStrings.functionName = "redGlitterHsv";
-    fill_solid(leds, NUM_LEDS, CHSV(0, 255, 255));
+    fill_solid(patternSettings.leds, NUM_LEDS, CHSV(0, 255, 255));
     addGlitter(80);
 }
 void aquaGlitterHsv()
 {
     globalStrings.functionName = "aquaGlitterHsv";
-    fill_solid(leds, NUM_LEDS, CHSV(128, 255, 255));
+    fill_solid(patternSettings.leds, NUM_LEDS, CHSV(128, 255, 255));
     addGlitter(80);
 }
 void yellowGlitterHsv()
 {
     globalStrings.functionName = "yellowGlitterHsv";
-    fill_solid(leds, NUM_LEDS, CHSV(64, 255, 255));
+    fill_solid(patternSettings.leds, NUM_LEDS, CHSV(64, 255, 255));
     addGlitter(40);
 }
 void purpleGlitterHsv()
 {
     globalStrings.functionName = "purpleGlitterHsv";
-    fill_solid(leds, NUM_LEDS, CHSV(192, 255, 255));
+    fill_solid(patternSettings.leds, NUM_LEDS, CHSV(192, 255, 255));
     addGlitter(40);
 }
 void confettiOne()

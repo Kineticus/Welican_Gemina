@@ -28,8 +28,10 @@
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
 #include "time.h"
-#include "WifiCredentials.h"
+#include "Secrets.h"
 #include <arduinoFFT.h>
+
+FASTLED_USING_NAMESPACE
 
 // ----------------------------------------------------------------
 // DEFINEs
@@ -77,54 +79,29 @@
 // ----------------------------------------------------------------
 // GLOBALs
 // ----------------------------------------------------------------
-FASTLED_USING_NAMESPACE
 AsyncWebServer server(80);
 TaskHandle_t inputComputeTask = NULL;
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
-
-struct tm timeinfo;
-CRGB temp[NUM_LEDS];
-CRGB leds_temp[NUM_LEDS / 2]; // half the total number of pixels
-CRGB leds[NUM_LEDS];
-CRGB ledsTemp[NUM_LEDS];
-
-String openWeatherMapApiKey = OPEN_WEATHER_API_KEY;
-const char *ssid = WIFI_SSID;
-const char *password = WIFI_PASSWORD;
-
 /*
 For EST - UTC -5.00 : -5 * 60 * 60 : -18000
 For EDT - UTC -4.00 : -4 * 60 * 60 : -14400
 For UTC +0.00 : 0 * 60 * 60 : 0
 */
-const char *ntpServer = "pool.ntp.org";
-int NUM_FAVORITES = 25; //Max 50, loads all 50 at program load, dynamically assignable
-
-// basic, music, chill, moving colors, legacy
+struct tm timeinfo;
 
 /***********************************************************
   Simplex Noise Variable Declaration
 ***********************************************************/
 //Define simplex noise node for each LED
 
-uint8_t hueA = 15;  // Start hue at valueMin.
-uint8_t satA = 230; // Start saturation at valueMin.
-uint8_t hueB = 95;  // End hue at valueMax.
-uint8_t satB = 255; // End saturation at valueMax.
-// used in Blendwave
 int red, green, blue;    // used in hsv2rgb color functions
 int red2, green2, blue2; // used in hsv2rgb color functions
 int red3, green3, blue3; // used in hsv2rgb color functions
-uint8_t hue = hueA;      // Do Not Edit
-uint8_t hue2 = hueB;     // Do Not Edit
-uint8_t sat = satA;      // Do Not Edit
-// Extra fake LED at the end, to avoid fencepost problem.
-// It is used by simplex node and interpolation code.
 
 int T[] = {0x15, 0x38, 0x32, 0x2c, 0x0d, 0x13, 0x07, 0x2a};
-
 static float onethird = 0.333333333;
 static float onesixth = 0.166666667;
+
 // ----------------------------------------------------------------
 // STRUCTs
 // ----------------------------------------------------------------
@@ -143,6 +120,10 @@ struct Globals
   int tempPattern;
   int pixelNumber;
   String ipAddress;
+  String openWeatherMapApiKey;
+  const char *ssid;
+  const char *password;
+  const char *ntpServer;
 
   ESP32Encoder encoder;
   ESP32Encoder encoder2;
@@ -164,7 +145,11 @@ Globals globals = {
     .modeMax = MAX_MODES,
     .tempPattern = 0,
     .pixelNumber = 0,
-    .ipAddress = ""};
+    .ipAddress = "",
+    .openWeatherMapApiKey = OPEN_WEATHER_API_KEY,
+    .ssid = WIFI_SSID,
+    .password = WIFI_PASSWORD,
+    .ntpServer = "pool.ntp.org"};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
 
 struct DevEnvironment
@@ -246,18 +231,6 @@ GlobalLED globalLED = {
     .fadeDirectionHTemp = 0,
     .clearLEDS = false};
 
-struct MenuModel
-{
-  int menu[11];
-  int menuMax[11];
-  int patternMax[6];
-};
-MenuModel globalMenu = {
-    .menu = {},
-    //Root Menu Items, Game Menu Items, Settings Menu Items
-    .menuMax = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, NUM_FAVORITES},
-    .patternMax = {12, 12, 22, 65, 80, NUM_FAVORITES}};
-
 struct SimplexNoiseModel
 {
   int nodeSpacing;
@@ -295,6 +268,7 @@ struct PatternSettings
   int pattern[6];
   int favoritePattern[50]; //all are used under the hood
   int favoriteMode[50];    //declare memory for all 50 favorites
+  int numberOfFavorites;   //Max 50, loads all 50 at program load, dynamically assignable
 
   uint8_t gHue;           // rotating "base color" used by many of the patterns
   int flowDirection;      // Use either 1 or -1 to set flow direction
@@ -322,11 +296,24 @@ struct PatternSettings
   uint8_t posG;
   uint8_t posB; // positions of moving R,G,B dots
   uint8_t pos;  // stores a position for color being blended in
+  uint8_t hueA; // Start hue at valueMin.
+  uint8_t satA; // Start saturation at valueMin.
+  uint8_t hueB; // End hue at valueMax.
+  uint8_t hue;  // Do Not Edit
+  uint8_t hue2; // Do Not Edit
+  uint8_t sat;  // Do Not Edit
+  uint8_t satB; // End saturation at valueMax.
+  float val;
+  CRGB tempPatternCollection[NUM_LEDS];
+  CRGB tempHalfLeds[NUM_LEDS / 2]; // half the total number of pixels
+  CRGB leds[NUM_LEDS];
+  CRGB tempLeds[NUM_LEDS];
 };
 PatternSettings patternSettings = {
     .pattern = {},
     .favoritePattern = {},
     .favoriteMode = {},
+    .numberOfFavorites = 25,
     .gHue = 0,
     .flowDirection = -1,
     .gReverseDirection = false,
@@ -352,8 +339,27 @@ PatternSettings patternSettings = {
     .posR = 0,
     .posG = 0,
     .posB = 0,
-    .pos = 0};
-float val = patternSettings.valueMin; // Do Not Edit
+    .pos = 0,
+    .hueA = 15,
+    .satA = 230,
+    .hueB = 95,
+    .hue = patternSettings.hueA,
+    .hue2 = patternSettings.hueB,
+    .sat = patternSettings.satA,
+    .satB = 255,
+    .val = patternSettings.valueMin};
+
+struct MenuModel
+{
+  int menu[11];
+  int menuMax[11];
+  int patternMax[6];
+};
+MenuModel globalMenu = {
+    .menu = {},
+    //Root Menu Items, Game Menu Items, Settings Menu Items
+    .menuMax = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, patternSettings.numberOfFavorites},
+    .patternMax = {12, 12, 22, 65, 80, patternSettings.numberOfFavorites}};
 
 struct Brightness
 {
@@ -410,7 +416,11 @@ struct Fallios
   int motion;
   int motionHistory;
   int Y;
+
   float tunnelGenerator;
+  int tunnel1[SCREEN_HEIGHT + 1];
+  int tunnel2[SCREEN_HEIGHT + 1];
+  int tunnelWidth;
 };
 Fallios fallios = {
     .score = 0,
@@ -418,13 +428,10 @@ Fallios fallios = {
     .motion = 0,
     .motionHistory = 0,
     .Y = 8,
-    .tunnelGenerator = 0};
-
-byte fallios_wall[64];
-byte fallios_wallDistance[64];
-int fallios_tunnel_1[SCREEN_HEIGHT + 1];
-int fallios_tunnel_2[SCREEN_HEIGHT + 1];
-int fallios_tunnelWidth = SCREEN_WIDTH / 2;
+    .tunnelGenerator = 0,
+    .tunnel1 = {},
+    .tunnel2 = {},
+    .tunnelWidth = (SCREEN_WIDTH / 2)};
 
 struct BlockBreaker
 {
@@ -593,7 +600,7 @@ void setup()
 
   WiFi.enableSTA(true);
 
-  WiFi.begin(ssid, password);
+  WiFi.begin(globals.ssid, globals.password);
   //WiFi.status();
   //WiFi.localIP();
 
@@ -646,8 +653,8 @@ void setup()
   u8g2.begin();
 
   //FastLED Declation
-  FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
-  FastLED.addLeds<LED_TYPE, DATA_PIN_A, COLOR_ORDER>(leds, NUM_LEDS);
+  FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(patternSettings.leds, NUM_LEDS);
+  FastLED.addLeds<LED_TYPE, DATA_PIN_A, COLOR_ORDER>(patternSettings.leds, NUM_LEDS);
 
   /* Load Save Settings
 

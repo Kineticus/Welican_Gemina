@@ -737,8 +737,9 @@ void drawMenu()
     break;
   case 4:
     //ZIP CODE MAIN MENU
-     u8g2.setCursor(54, 26);
-
+    u8g2.setCursor(0, 8);
+    u8g2.print("Current ZIP Code");
+    u8g2.setCursor(54, 26);
     u8g2.print(weatherSettings.zipCode);
     break;
 

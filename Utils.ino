@@ -738,7 +738,8 @@ void drawMenu()
   case 4:
     //ZIP CODE MAIN MENU
      u8g2.setCursor(54, 26);
-    u8g2.print(globalMenu.menu[11]);
+
+    u8g2.print(weatherSettings.zipCode);
     break;
 
   case 5:
@@ -851,6 +852,29 @@ void drawMenu()
     case 10: //Add New Favorite
       globals.runMode = -1;
       break;
+    case 11:
+      //ZIP Code, advance one
+      int temp = globals.currentMenuMultiplier;
+      switch(temp)
+      {
+        case 10000:
+          globals.currentMenuMultiplier = 1;
+          globals.currentMenu = 4; //Go back to main 
+          globals.currentMenuMultiplier = 1;
+          break;
+        case 1000:
+          globals.currentMenuMultiplier = 10000;
+          break;
+        case 100:
+          globals.currentMenuMultiplier = 1000;
+          break;
+        case 10:
+          globals.currentMenuMultiplier = 100;
+          break;
+        case 1:
+          globals.currentMenuMultiplier = 10;
+          break;
+      }
     }
   }
   //Forward/Confirm Button
@@ -981,16 +1005,18 @@ void drawMenu()
           globals.currentMenuMultiplier = 1;
           break;
         case 1:
-          globals.currentMenuMultiplier = 1;
-          globals.currentMenu = 4; //Go back to main 
           weatherSettings.zipCode = globalMenu.menu[11]; //Update ZIP Code
+          globals.currentMenuMultiplier = 1;
+          globals.currentMenu = 2; //Go back to main 
+          writeZipCode();
+          updateZipCodeString();
           break;
       }
 
       if (globals.currentMenuMultiplier > 10000)
       {
         globals.currentMenuMultiplier = 1;
-        globals.currentMenu = 4;
+        globals.currentMenu = 2;
       }
       break;
     }
@@ -1003,6 +1029,23 @@ void setZipCodeMenu()
   u8g2.print("Set ZIP Code");
   
   u8g2.setCursor(54, 26);
+  if (globalMenu.menu[globals.currentMenu] < 10000)
+  {
+    u8g2.print("0");
+  }
+  if (globalMenu.menu[globals.currentMenu] < 1000)
+  {
+    u8g2.print("0");
+  }
+  if (globalMenu.menu[globals.currentMenu] < 100)
+  {
+    u8g2.print("0");
+  }
+  if (globalMenu.menu[globals.currentMenu] < 10)
+  {
+    u8g2.print("0");
+  }
+
   u8g2.print(globalMenu.menu[globals.currentMenu]);
 
   u8g2.setCursor(54, 46);
@@ -1012,20 +1055,69 @@ void setZipCodeMenu()
       u8g2.print("^");
       break;
     case 1000:
-      u8g2.print(" ^");
-      break;
-    case 100:
       u8g2.print("  ^");
       break;
+    case 100:
+      u8g2.print("    ^");
+      break;
     case 10:
-      u8g2.print("   ^");
+      u8g2.print("      ^");
       break;
     case 1:
-      u8g2.print("    ^");
+      u8g2.print("        ^");
       break;
   }
 }
 
+void writeZipCode()
+{
+  //Break ZIP into 3 bytes as EEPROM is 1 byte per space. ZIP is a (16 bit) unsigned integer
+  uint8_t xlow = globalMenu.menu[11] & 0xff;
+  uint8_t xmed = (globalMenu.menu[11] >> 8) & 0xff;
+  uint8_t xhigh = (globalMenu.menu[11] >> 16) & 0xff;
+  //Save the 16 bit unsigned integer into two bytes of EEPROM
+  EEPROM.write(90, xlow);
+  EEPROM.write(91, xmed);
+  EEPROM.write(92, xhigh);
+  EEPROM.commit();
+}
+
+void readZipCode()
+{
+    //readZipCode
+  globalMenu.menu[11] = EEPROM.read(90) + (EEPROM.read(91) * 256) + (EEPROM.read(92) * 65536);
+  
+  if (globalMenu.menu[11] > 99999)
+  {
+    globalMenu.menu[11] = 33701;
+  }
+}
+
+void updateZipCodeString()
+{
+  weatherSettings.zipCode = String(globalMenu.menu[11]);
+
+  if (globalMenu.menu[11] < 10000)
+  {
+    weatherSettings.zipCode = "0" + String(globalMenu.menu[11]);
+  }
+  if (globalMenu.menu[11] < 1000)
+  {
+    weatherSettings.zipCode = "00" + String(globalMenu.menu[11]);
+  }
+  if (globalMenu.menu[11] < 100)
+  {
+    weatherSettings.zipCode = "000" + String(globalMenu.menu[11]);
+  }
+  if (globalMenu.menu[11] < 10)
+  {
+    weatherSettings.zipCode = "0000" + String(globalMenu.menu[11]);
+  }
+  if (globalMenu.menu[11] == 0)
+  {
+    weatherSettings.zipCode = "000000";
+  }
+}
 
 void newFavoritesMenu()
 {
@@ -1207,7 +1299,8 @@ void updateWeather()
   {
     if (WiFi.status() == WL_CONNECTED)
     {
-      String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + String(weatherSettings.zipCode) + "," + weatherSettings.countryCode + "&units=imperial&APPID=" + globals.openWeatherMapApiKey;
+      weatherSettings.zipCode = globalMenu.menu[11];
+      String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + weatherSettings.zipCode + "," + weatherSettings.countryCode + "&units=imperial&APPID=" + globals.openWeatherMapApiKey;
 
       weather.jsonBuffer = httpGETRequest(serverPath.c_str());
       weather.weatherJson = JSON.parse(weather.jsonBuffer);

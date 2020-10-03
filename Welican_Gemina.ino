@@ -469,12 +469,12 @@ BlockBreaker blockBreaker = {
 // WEATHER
 struct OpenWeatherSettings
 {
-  int zipCode;
+  String zipCode;
   String countryCode;
   unsigned long weatherTimerDelay;
 };
 OpenWeatherSettings weatherSettings = {
-    .zipCode = 33701,
+    .zipCode = "33701",
     .countryCode = "US",
     .weatherTimerDelay = 70000};
 
@@ -606,6 +606,7 @@ void setup()
 
   WiFi.enableSTA(true);
 
+  //WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   WiFi.begin(globals.ssid, globals.password);
   //WiFi.status();
   //WiFi.localIP();
@@ -704,10 +705,9 @@ void setup()
 
   readFavorites();
 
-  //readZipCode
-  //weatherSettings.zipCode = EEPROM.read(90) + EEPROM.read(91) * 256;
-  weatherSettings.zipCode = 33713;
-  globalMenu.menu[11] = weatherSettings.zipCode; 
+  readZipCode();
+  
+  updateZipCodeString();
 
   //Begin a task named 'fftComputeTask' to handle FFT on the other core
   //This task also takes care of reading the button inputs and computing encoder positions

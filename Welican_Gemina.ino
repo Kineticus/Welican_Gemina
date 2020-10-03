@@ -94,10 +94,6 @@ struct tm timeinfo;
 ***********************************************************/
 //Define simplex noise node for each LED
 
-int red, green, blue;    // used in hsv2rgb color functions
-int red2, green2, blue2; // used in hsv2rgb color functions
-int red3, green3, blue3; // used in hsv2rgb color functions
-
 int T[] = {0x15, 0x38, 0x32, 0x2c, 0x0d, 0x13, 0x07, 0x2a};
 static float onethird = 0.333333333;
 static float onesixth = 0.166666667;
@@ -348,6 +344,14 @@ PatternSettings patternSettings = {
     .sat = patternSettings.satA,
     .satB = 255,
     .val = patternSettings.valueMin};
+
+struct HSV2RGB
+{
+  int red, green, blue;    // used in hsv2rgb color functions
+  int red2, green2, blue2; // used in hsv2rgb color functions
+  int red3, green3, blue3; // used in hsv2rgb color functions
+};
+HSV2RGB globalHSV2RGB;
 
 struct MenuModel
 {

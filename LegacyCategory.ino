@@ -346,24 +346,16 @@ void LargeGroupColorFlowBounce(float hHigh, float hLow, float speed, float color
     hTemp += 1;
   }
 
-  hsv2rgb(float(simplexNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
-  hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red2, green2, blue2);
+  hsv2rgb(float(simplexNoise.h), 1, (float(brightness.current) / 255.0), globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
+  hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), globalHSV2RGB.red2, globalHSV2RGB.green2, globalHSV2RGB.blue2);
 
   for (uint16_t i = 0; i < NUM_LEDS; i = i + ledSpacing)
   {
     switch (ledSpacing)
     {
-    // case 6:
-    //   setPixel(i, red, green, blue);
-    //   setPixel(i + 1, red2, green2, blue2);
-    //   break;
-    // case 4:
-    //   setPixel(i, red, green, blue);
-    //   setPixel(i + 1, red2, green2, blue2);
-    //   break;
     default:
-      setPixel(i, red, green, blue);
-      setPixel(i + 1, red2, green2, blue2);
+      setPixel(i, globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
+      setPixel(i + 1, globalHSV2RGB.red2, globalHSV2RGB.green2, globalHSV2RGB.blue2);
       break;
     }
   }
@@ -394,14 +386,14 @@ void DualColorFlow(float hHigh, float hLow, float hHigh2, float hLow2, float hSp
 
   hTemp = simplexNoise.h - spacing; // space between colors
 
-  hsv2rgb(float(simplexNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
+  hsv2rgb(float(simplexNoise.h), 1, (float(brightness.current) / 255.0), globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
 
-  hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red2, green2, blue2);
+  hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), globalHSV2RGB.red2, globalHSV2RGB.green2, globalHSV2RGB.blue2);
 
   for (uint16_t i = 0; i < NUM_LEDS; i = i + 2)
   {
-    setPixel(i, red, green, blue);
-    setPixel(i + 1, red2, green2, blue2);
+    setPixel(i, globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
+    setPixel(i + 1, globalHSV2RGB.red2, globalHSV2RGB.green2, globalHSV2RGB.blue2);
   }
 }
 void DualColorFlowTwo(float hStart, float spacing)
@@ -429,14 +421,14 @@ void DualColorFlowTwo(float hStart, float spacing)
     hTemp += 1;
   }
 
-  hsv2rgb(float(simplexNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
+  hsv2rgb(float(simplexNoise.h), 1, (float(brightness.current) / 255.0), globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
 
-  hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red2, green2, blue2);
+  hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), globalHSV2RGB.red2, globalHSV2RGB.green2, globalHSV2RGB.blue2);
 
   for (uint16_t i = 0; i < NUM_LEDS; i = i + 2)
   {
-    setPixel(i, red, green, blue);
-    setPixel(i + 1, red2, green2, blue2);
+    setPixel(i, globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
+    setPixel(i + 1, globalHSV2RGB.red2, globalHSV2RGB.green2, globalHSV2RGB.blue2);
   }
 }
 void DualColorFlowBounce(float hHigh, float hLow, float speed, float colorSpacing, int ledSpacing)
@@ -454,30 +446,16 @@ void DualColorFlowBounce(float hHigh, float hLow, float speed, float colorSpacin
     hTemp += 1;
   }
 
-  hsv2rgb(float(simplexNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
-  hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red2, green2, blue2);
+  hsv2rgb(float(simplexNoise.h), 1, (float(brightness.current) / 255.0), globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
+  hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), globalHSV2RGB.red2, globalHSV2RGB.green2, globalHSV2RGB.blue2);
 
   for (uint16_t i = 0; i < NUM_LEDS; i = i + ledSpacing)
   {
     switch (ledSpacing)
     {
-    // case 6:
-    //   setPixel(i, CRGB(red, green, blue));
-    //   setPixel(i + 1, CRGB(red, green, blue));
-    //   setPixel(i + 2, CRGB(red, green, blue));
-    //   setPixel(i + 3, CRGB(red2, green2, blue2));
-    //   setPixel(i + 4, CRGB(red2, green2, blue2));
-    //   setPixel(i + 5, CRGB(red2, green2, blue2));
-    //   break;
-    // case 4:
-    //   setPixel(i, CRGB(red, green, blue));
-    //   setPixel(i + 1, CRGB(red, green, blue));
-    //   setPixel(i + 2, CRGB(red2, green2, blue2));
-    //   setPixel(i + 3, CRGB(red2, green2, blue2));
-    //   break;
     default:
-      setPixel(i, red, green, blue);
-      setPixel(i + 1, red2, green2, blue2);
+      setPixel(i, globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
+      setPixel(i + 1, globalHSV2RGB.red2, globalHSV2RGB.green2, globalHSV2RGB.blue2);
       break;
     }
   }
@@ -491,8 +469,8 @@ void RainbowNoFlow(float colorSpacing)
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
-    hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red, green, blue);
-    setPixel(i, red, green, blue);
+    hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
+    setPixel(i, globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
 
     // slowly increment 'h' by small increments to make color flow
     hTemp += colorSpacing; // decrease to space out the colors
@@ -516,8 +494,8 @@ void RainbowFlow(float hHigh, float hLow, float speed, float colorSpacing)
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
-    hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red, green, blue);
-    setPixel(i, red, green, blue);
+    hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
+    setPixel(i, globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
 
     // slowly increment 'h' by small increments to make color flow
     hTemp += colorSpacing; // decrease to space out the colors
@@ -548,8 +526,8 @@ void RainbowFlowSlow(float hSpeed, float colorSpacing)
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
-    hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red, green, blue);
-    setPixel(i, red, green, blue);
+    hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
+    setPixel(i, globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
 
     // slowly increment 'h' by small increments to make color flow
     hTemp += colorSpacing; // decrease to space out the colors
@@ -616,11 +594,11 @@ void RainbowHsv(float hHigh, float hLow, float speed)
 {
   simplexNoise.h = GetH_BouncingWithLimits(speed, hHigh, hLow);
 
-  hsv2rgb(float(simplexNoise.h), 1, (float(brightness.current) / 255.0), red, green, blue);
+  hsv2rgb(float(simplexNoise.h), 1, (float(brightness.current) / 255.0), globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
 
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
-    setPixel(i, red, green, blue);
+    setPixel(i, globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
   }
 }
 
@@ -703,8 +681,8 @@ void MovingHue(uint8_t hStart, float hMod)
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
 
-    hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red, green, blue);
-    setPixel(i, red, green, blue);
+    hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
+    setPixel(i, globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
 
     // slowly increment 'h' by small increments to make color flow
     hTemp += hMod; // decrease to space out the colors
@@ -728,8 +706,8 @@ void MovingHue(uint8_t hStart, float hMod, float spacing)
   for (uint16_t i = 0; i < NUM_LEDS; i++)
   {
 
-    hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), red, green, blue);
-    setPixel(i, red, green, blue);
+    hsv2rgb(float(hTemp), 1, (float(brightness.current) / 255.0), globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
+    setPixel(i, globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
 
     // slowly increment 'h' by small increments to make color flow
     hTemp += hMod; // decrease to space out the colors
@@ -757,8 +735,8 @@ void SteadyRGB(int ledSpacing)
       setPixel(i + 2, 0, 0, 255);
       break;
     default:
-      setPixel(i, red, green, blue);
-      setPixel(i + 1, red2, green2, blue2);
+      setPixel(i, globalHSV2RGB.red, globalHSV2RGB.green, globalHSV2RGB.blue);
+      setPixel(i + 1, globalHSV2RGB.red2, globalHSV2RGB.green2, globalHSV2RGB.blue2);
       break;
     }
     if (brightness.useFade == true)

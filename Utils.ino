@@ -119,7 +119,7 @@ void drawDebug()
   u8g2.print("Knob 1: ");
   //u8g2.print(globals.encoder.getCount());
   u8g2.setCursor(80, 24);
-  u8g2.print(pattern[globals.mode]);
+  u8g2.print(patternSettings.pattern[globals.mode]);
 
   if (knob1.click == true)
   {
@@ -247,27 +247,27 @@ void updateEncoders()
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
       globals.tempValue -= 4;
       knob1.temp += 4;
-      pattern[globals.mode] += 1;
+      patternSettings.pattern[globals.mode] += 1;
       smoothOperatorStart();
     }
     while (globals.tempValue <= -4)
     {
       globals.tempValue += 4;
       knob1.temp -= 4;
-      pattern[globals.mode] -= 1;
+      patternSettings.pattern[globals.mode] -= 1;
       smoothOperatorStart();
     }
 
     //Constrain Mode - add switch to allow 3 options - constrain; rollover back to beginning/end; rollover to next/previous mode
-    if (pattern[globals.mode] > globalMenu.patternMax[globals.mode])
+    if (patternSettings.pattern[globals.mode] > globalMenu.patternMax[globals.mode])
     {
       //Mode 1 - constrain
-      pattern[globals.mode] = globalMenu.patternMax[globals.mode];
+      patternSettings.pattern[globals.mode] = globalMenu.patternMax[globals.mode];
     }
-    if (pattern[globals.mode] <= 0)
+    if (patternSettings.pattern[globals.mode] <= 0)
     {
       //Mode 1 - constrain
-      pattern[globals.mode] = 0;
+      patternSettings.pattern[globals.mode] = 0;
     }
   }
   else if (globals.runMode == 1)
@@ -413,31 +413,31 @@ void favorites_category(int patternMode)
 {
   globalStrings.categoryName = "FAVORITES";
 
-  switch (favorite_mode[patternMode])
+  switch (patternSettings.favoriteMode[patternMode])
   {
   case 0:
-    basic_category(favorite_pattern[patternMode]);
+    basic_category(patternSettings.favoritePattern[patternMode]);
     break;
   case 1:
-    music_category(favorite_pattern[patternMode]);
+    music_category(patternSettings.favoritePattern[patternMode]);
     break;
   case 2:
-    chill_category(favorite_pattern[patternMode]);
+    chill_category(patternSettings.favoritePattern[patternMode]);
     break;
   case 3:
-    moving_colors_category(favorite_pattern[patternMode]);
+    moving_colors_category(patternSettings.favoritePattern[patternMode]);
     break;
   case 4:
-    legacy_category(favorite_pattern[patternMode]);
+    legacy_category(patternSettings.favoritePattern[patternMode]);
     break;
   }
 }
 
 void setGameMode()
 {
-  globals.runMode = 2;                         //game mode
-  brightness.temp = brightness.current;        //save brightness
-  globals.tempPattern = pattern[globals.mode]; //and program in case they get messed up
+  globals.runMode = 2;                                         //game mode
+  brightness.temp = brightness.current;                        //save brightness
+  globals.tempPattern = patternSettings.pattern[globals.mode]; //and program in case they get messed up
 
   switch (globalMenu.menu[1]) //Call reset code for whatever game we're about to run
   {
@@ -460,7 +460,7 @@ void endGameMode()
 
   //Set values to right when game mode started in case they got dorked with
   brightness.current = brightness.temp;
-  pattern[globals.mode] = globals.tempPattern;
+  patternSettings.pattern[globals.mode] = globals.tempPattern;
 
   //Don't want to see brightness indicator when we leave
   brightness.debounce = 0;
@@ -550,7 +550,7 @@ void drawTop()
 
   //u8g2.print(globals.mode);
   u8g2.setCursor(12, 8);
-  u8g2.print(pattern[globals.mode]);
+  u8g2.print(patternSettings.pattern[globals.mode]);
   u8g2.setCursor(32, 8);
   u8g2.print(globalStrings.functionNameOutString);
   //u8g2.drawXBMP(42,0,donut_width, donut_height, donut);
@@ -566,7 +566,7 @@ void drawBottom()
 
   if (globals.mode == 5) //favorites
   {
-    tempMode = favorite_mode[pattern[globals.mode]];
+    tempMode = patternSettings.favoriteMode[patternSettings.pattern[globals.mode]];
   }
 
   switch (tempMode)
@@ -983,7 +983,7 @@ void newFavoritesMenu()
   u8g2.print("Current Setting");
   //u8g2.print(globalStrings.categoryNameOutString);
 
-  switch (favorite_mode[globalMenu.menu[globals.currentMenu]])
+  switch (patternSettings.favoriteMode[globalMenu.menu[globals.currentMenu]])
   {
   case 0:
     u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_HEIGHT, starshape);
@@ -1008,13 +1008,13 @@ void newFavoritesMenu()
 
 void saveFavorites()
 {
-  EEPROM.write(100 + globalMenu.menu[globals.currentMenu] * 2, pattern[globals.mode]); //the pattern we're on
-  EEPROM.write(101 + (globalMenu.menu[globals.currentMenu] * 2), globals.mode);        //the mode we're on
+  EEPROM.write(100 + globalMenu.menu[globals.currentMenu] * 2, patternSettings.pattern[globals.mode]); //the pattern we're on
+  EEPROM.write(101 + (globalMenu.menu[globals.currentMenu] * 2), globals.mode);                        //the mode we're on
 
   EEPROM.commit(); //write it to memory
 
-  favorite_mode[globalMenu.menu[globals.currentMenu]] = globals.mode;             //update running variables
-  favorite_pattern[globalMenu.menu[globals.currentMenu]] = pattern[globals.mode]; //first updated in readFavorites
+  patternSettings.favoriteMode[globalMenu.menu[globals.currentMenu]] = globals.mode;                             //update running variables
+  patternSettings.favoritePattern[globalMenu.menu[globals.currentMenu]] = patternSettings.pattern[globals.mode]; //first updated in readFavorites
 }
 
 void readFavorites()
@@ -1022,13 +1022,13 @@ void readFavorites()
   //Read the favorites from EEPROM
   for (int i = 0; i < 50; i++)
   {
-    favorite_pattern[i] = EEPROM.read(100 + i * 2);
-    favorite_mode[i] = EEPROM.read(101 + i * 2);
+    patternSettings.favoritePattern[i] = EEPROM.read(100 + i * 2);
+    patternSettings.favoriteMode[i] = EEPROM.read(101 + i * 2);
     //check for out of range data, 255 indicates default setting
-    if (favorite_pattern[i] == 255 || favorite_mode[i] == 255)
+    if (patternSettings.favoritePattern[i] == 255 || patternSettings.favoriteMode[i] == 255)
     {
-      favorite_pattern[i] = 0;
-      favorite_mode[i] = 0;
+      patternSettings.favoritePattern[i] = 0;
+      patternSettings.favoriteMode[i] = 0;
     }
   }
 
@@ -1042,8 +1042,8 @@ void resetFavorites()
   for (int i = 0; i < 50; i++)
   {
     //Set everything to 0
-    favorite_pattern[i] = 0;
-    favorite_mode[i] = 0;
+    patternSettings.favoritePattern[i] = 0;
+    patternSettings.favoriteMode[i] = 0;
 
     //including EEPROM area
     EEPROM.write((100 + (i * 2)), 0);
@@ -1214,7 +1214,7 @@ void saveTimeCheck()
 
     for (int i = 0; i <= globals.modeMax; i++)
     {
-      EEPROM.write(2 + i, pattern[i]);
+      EEPROM.write(2 + i, patternSettings.pattern[i]);
     }
     EEPROM.commit();
   }
@@ -1410,7 +1410,7 @@ void drawProgressBar()
   {
     boxWidth = 4;
   }
-  u8g2.drawBox(((float(SCREEN_WIDTH - boxWidth) / globalMenu.patternMax[globals.mode]) * pattern[globals.mode]), 12, boxWidth, 4);
+  u8g2.drawBox(((float(SCREEN_WIDTH - boxWidth) / globalMenu.patternMax[globals.mode]) * patternSettings.pattern[globals.mode]), 12, boxWidth, 4);
 }
 
 void addGlitter(fract8 chanceOfGlitter)

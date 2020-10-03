@@ -100,9 +100,6 @@ For UTC +0.00 : 0 * 60 * 60 : 0
 const char *ntpServer = "pool.ntp.org";
 int NUM_FAVORITES = 25; //Max 50, loads all 50 at program load, dynamically assignable
 
-int pattern[6];
-int favorite_mode[50];    //declare memory for all 50 favorites
-int favorite_pattern[50]; //all are used under the hood
 // basic, music, chill, moving colors, legacy
 
 /***********************************************************
@@ -295,6 +292,10 @@ SimplexNoiseModel simplexNoise = {
 
 struct PatternSettings
 {
+  int pattern[6];
+  int favoritePattern[50]; //all are used under the hood
+  int favoriteMode[50];    //declare memory for all 50 favorites
+
   uint8_t gHue;           // rotating "base color" used by many of the patterns
   int flowDirection;      // Use either 1 or -1 to set flow direction
   bool gReverseDirection; //false = center outward, true = from ends inward
@@ -323,6 +324,9 @@ struct PatternSettings
   uint8_t pos;  // stores a position for color being blended in
 };
 PatternSettings patternSettings = {
+    .pattern = {},
+    .favoritePattern = {},
+    .favoriteMode = {},
     .gHue = 0,
     .flowDirection = -1,
     .gReverseDirection = false,
@@ -669,12 +673,12 @@ void setup()
   //Read the pattern setting for each mode
   for (int i = 0; i <= globals.modeMax; i++)
   {
-    pattern[i] = EEPROM.read(2 + i);
+    patternSettings.pattern[i] = EEPROM.read(2 + i);
 
     //check for out of range data
-    if (pattern[i] > globalMenu.patternMax[i])
+    if (patternSettings.pattern[i] > globalMenu.patternMax[i])
     {
-      pattern[i] = 0;
+      patternSettings.pattern[i] = 0;
     }
   }
 
@@ -788,22 +792,22 @@ void loop()
   switch (globals.mode)
   {
   case 0:
-    basic_category(pattern[globals.mode]);
+    basic_category(patternSettings.pattern[globals.mode]);
     break;
   case 1:
-    music_category(pattern[globals.mode]);
+    music_category(patternSettings.pattern[globals.mode]);
     break;
   case 2:
-    chill_category(pattern[globals.mode]);
+    chill_category(patternSettings.pattern[globals.mode]);
     break;
   case 3:
-    moving_colors_category(pattern[globals.mode]);
+    moving_colors_category(patternSettings.pattern[globals.mode]);
     break;
   case 4:
-    legacy_category(pattern[globals.mode]);
+    legacy_category(patternSettings.pattern[globals.mode]);
     break;
   case 5:
-    favorites_category(pattern[globals.mode]);
+    favorites_category(patternSettings.pattern[globals.mode]);
     break;
   }
 

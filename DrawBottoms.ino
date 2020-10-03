@@ -42,7 +42,7 @@ void drawDiscSectionsEQ()
 
 void drawEQ()
 {
-  int pos = 16;
+  patternSettings.pos = 16;
   int min = 0;
   int max = 80;
 
@@ -57,9 +57,9 @@ void drawEQ()
     globals.temp[0] = max;
   }
   u8g2.setDrawColor(1);
-  u8g2.drawBox(0, pos, globals.temp[0], 7);
+  u8g2.drawBox(0, patternSettings.pos, globals.temp[0], 7);
   globals.temp[2] = eqBands.peak[0] / AMPLITUDE;
-  u8g2.drawBox(globals.temp[2], pos, 1, 7);
+  u8g2.drawBox(globals.temp[2], patternSettings.pos, 1, 7);
 
   globals.temp[1] = eqBands.bandValues[1] / AMPLITUDE;
   globals.temp[1] -= 7;

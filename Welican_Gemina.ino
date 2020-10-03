@@ -676,9 +676,7 @@ void setup()
   //EEPROM.write(21, 0);
   //EEPROM.commit();
 
-  unsigned int word = EEPROM.read(20) + EEPROM.read(21) * 256;
-
-  fallios.scoreTop = word;
+  fallios.scoreTop = EEPROM.read(20) + EEPROM.read(21) * 256;
 
   globals.mode = EEPROM.read(0);
   brightness.current = EEPROM.read(1);
@@ -707,7 +705,9 @@ void setup()
   readFavorites();
 
   //readZipCode
-  globalMenu.menu[11] = 33713;
+  //weatherSettings.zipCode = EEPROM.read(90) + EEPROM.read(91) * 256;
+  weatherSettings.zipCode = 33713;
+  globalMenu.menu[11] = weatherSettings.zipCode; 
 
   //Begin a task named 'fftComputeTask' to handle FFT on the other core
   //This task also takes care of reading the button inputs and computing encoder positions

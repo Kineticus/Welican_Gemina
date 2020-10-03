@@ -707,7 +707,7 @@ void drawMenu()
     u8g2.setCursor(0, 8);
     u8g2.print("Settings");
     u8g2.setCursor(5, 24);
-    u8g2.print("LED Count");
+    u8g2.print("LED Conf");
     u8g2.setCursor(69, 24);
     u8g2.print("Favorites");
     u8g2.setCursor(5, 44);
@@ -737,6 +737,8 @@ void drawMenu()
     break;
   case 4:
     //ZIP CODE MAIN MENU
+     u8g2.setCursor(54, 26);
+    u8g2.print(globalMenu.menu[11]);
     break;
 
   case 5:
@@ -817,6 +819,9 @@ void drawMenu()
     //ADD NEW
     newFavoritesMenu();
     break;
+  case 11:
+    setZipCodeMenu();
+    break;
   }
 
   //Back Button
@@ -833,7 +838,9 @@ void drawMenu()
     case 2: //Settings Menu
       globals.currentMenu = 0;
       break;
-
+    case 4: //Zip Code Menu
+      globals.currentMenu = 2;
+      break;
     case 5: //Favorites Main Menu
       globals.currentMenu = 2;
       break;
@@ -894,12 +901,19 @@ void drawMenu()
       case 1: //Favorites Settings Menu
         globals.currentMenu = 5;
         break;
-      case 2: //IP Address
+      case 2: //ZIP Code
+        globals.currentMenu = 4;
         break;
       case 3: //Wifi
         break;
       }
       break;
+
+    case 4: //ZIP Code settings click
+      globals.currentMenuMultiplier = 10000;
+      globals.currentMenu = 11;
+      break;
+
 
     case 5: //Favorites Setting Menu Click
       switch (globalMenu.menu[globals.currentMenu])
@@ -926,7 +940,7 @@ void drawMenu()
     case 6: //Set Max Favorites Click
       patternSettings.numberOfFavorites = globalMenu.menu[globals.currentMenu];
       globalMenu.patternMax[5] = patternSettings.numberOfFavorites;
-      globalMenu.menuMax[11] = patternSettings.numberOfFavorites;
+      globalMenu.menuMax[10] = patternSettings.numberOfFavorites;
       EEPROM.write(99, patternSettings.numberOfFavorites);
       EEPROM.commit();
       globals.currentMenu = 5;
@@ -983,11 +997,33 @@ void drawMenu()
   }
 }
 
-void setZipCode()
+void setZipCodeMenu()
 {
   u8g2.setCursor(0, 8);
   u8g2.print("Set ZIP Code");
   
+  u8g2.setCursor(54, 26);
+  u8g2.print(globalMenu.menu[globals.currentMenu]);
+
+  u8g2.setCursor(54, 46);
+  switch(globals.currentMenuMultiplier)
+  { 
+    case 10000:
+      u8g2.print("^");
+      break;
+    case 1000:
+      u8g2.print(" ^");
+      break;
+    case 100:
+      u8g2.print("  ^");
+      break;
+    case 10:
+      u8g2.print("   ^");
+      break;
+    case 1:
+      u8g2.print("    ^");
+      break;
+  }
 }
 
 
@@ -1073,7 +1109,7 @@ void readFavorites()
 
   patternSettings.numberOfFavorites = EEPROM.read(99);
   globalMenu.patternMax[5] = patternSettings.numberOfFavorites;
-  globalMenu.menuMax[11] = patternSettings.numberOfFavorites;
+  globalMenu.menuMax[10] = patternSettings.numberOfFavorites;
 }
 
 void resetFavorites()

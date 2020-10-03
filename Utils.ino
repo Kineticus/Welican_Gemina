@@ -189,6 +189,7 @@ void updateEncoders()
         //Change the globals.runMode variable to Menu
         globals.runMode = 1;
         globals.currentMenu = 0; //Select main menu page
+        globals.currentMenuMultiplier = 1; //Set multiplier back to 1, just in case (used in ZIP Code)
         knob1.click = 0;         //Null out clicks so menu doesn't get confused on first run
         knob2.click = 0;
       }
@@ -230,7 +231,7 @@ void updateEncoders()
 
   if ((knob2.heldTime > 69) && (globals.mode != 5)) //Can't set a favorite of a favorite
   {
-    //Save Favorite
+    //Save Favorite Menu
     knob2.heldTime = 0;
     globals.runMode = 1;      //enter Menu Mode
     globals.currentMenu = 10; //Select the 10th menu, New Favorite
@@ -276,13 +277,13 @@ void updateEncoders()
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
       globals.tempValue -= 4;
       knob1.temp += 4;
-      globalMenu.menu[globals.currentMenu] += 1;
+      globalMenu.menu[globals.currentMenu] += 1 * globals.currentMenuMultiplier;
     }
     while (globals.tempValue <= -4)
     {
       globals.tempValue += 4;
       knob1.temp -= 4;
-      globalMenu.menu[globals.currentMenu] -= 1;
+      globalMenu.menu[globals.currentMenu] -= 1 * globals.currentMenuMultiplier;
     }
 
     if (globalMenu.menu[globals.currentMenu] > globalMenu.menuMax[globals.currentMenu])
@@ -710,7 +711,7 @@ void drawMenu()
     u8g2.setCursor(69, 24);
     u8g2.print("Favorites");
     u8g2.setCursor(5, 44);
-    u8g2.print("IP Address");
+    u8g2.print("ZIP Code");
     u8g2.setCursor(69, 44);
     u8g2.print("WiFi");
     switch (globalMenu.menu[globals.currentMenu])
@@ -735,7 +736,7 @@ void drawMenu()
 
     break;
   case 4:
-    // IP ADDRESS MENU
+    //ZIP CODE MAIN MENU
     break;
 
   case 5:
@@ -948,9 +949,47 @@ void drawMenu()
       saveFavorites(); //New Favorite click
       globals.runMode = -1;
       break;
+    case 11:
+      //ZIP Code, advance one
+      int temp = globals.currentMenuMultiplier;
+      switch(temp)
+      {
+        case 10000:
+          globals.currentMenuMultiplier = 1000;
+          break;
+        case 1000:
+          globals.currentMenuMultiplier = 100;
+          break;
+        case 100:
+          globals.currentMenuMultiplier = 10;
+          break;
+        case 10:
+          globals.currentMenuMultiplier = 1;
+          break;
+        case 1:
+          globals.currentMenuMultiplier = 1;
+          globals.currentMenu = 4; //Go back to main 
+          weatherSettings.zipCode = globalMenu.menu[11]; //Update ZIP Code
+          break;
+      }
+
+      if (globals.currentMenuMultiplier > 10000)
+      {
+        globals.currentMenuMultiplier = 1;
+        globals.currentMenu = 4;
+      }
+      break;
     }
   }
 }
+
+void setZipCode()
+{
+  u8g2.setCursor(0, 8);
+  u8g2.print("Set ZIP Code");
+  
+}
+
 
 void newFavoritesMenu()
 {
@@ -1132,7 +1171,7 @@ void updateWeather()
   {
     if (WiFi.status() == WL_CONNECTED)
     {
-      String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + weatherSettings.zipCode + "," + weatherSettings.countryCode + "&units=imperial&APPID=" + openWeatherMapApiKey;
+      String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + String(weatherSettings.zipCode) + "," + weatherSettings.countryCode + "&units=imperial&APPID=" + openWeatherMapApiKey;
 
       weather.jsonBuffer = httpGETRequest(serverPath.c_str());
       weather.weatherJson = JSON.parse(weather.jsonBuffer);

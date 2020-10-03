@@ -112,6 +112,7 @@ struct Globals
   int runMode;
   int mode;
   int currentMenu;
+  int currentMenuMultiplier;
   int modeMax;
   int tempPattern;
   int pixelNumber;
@@ -138,6 +139,7 @@ Globals globals = {
     .runMode = 0,
     .mode = 0,
     .currentMenu = 0,
+    .currentMenuMultiplier = 1,
     .modeMax = MAX_MODES,
     .tempPattern = 0,
     .pixelNumber = 0,
@@ -226,6 +228,18 @@ GlobalLED globalLED = {
     .fadeDirection2 = 0,
     .fadeDirectionHTemp = 0,
     .clearLEDS = false};
+
+struct MenuModel
+{
+  int menu[12];
+  int menuMax[12];
+  int patternMax[6];
+};
+MenuModel globalMenu = {
+    .menu = {},
+    //Root Menu Items, Game Menu Items, Settings Menu Items
+    .menuMax = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, NUM_FAVORITES, 99999},
+    .patternMax = {12, 12, 22, 65, 80, NUM_FAVORITES}};
 
 struct SimplexNoiseModel
 {
@@ -467,12 +481,12 @@ BlockBreaker blockBreaker = {
 // WEATHER
 struct OpenWeatherSettings
 {
-  String zipCode;
+  int zipCode;
   String countryCode;
   unsigned long weatherTimerDelay;
 };
 OpenWeatherSettings weatherSettings = {
-    .zipCode = "33701",
+    .zipCode = 33701,
     .countryCode = "US",
     .weatherTimerDelay = 70000};
 
@@ -703,6 +717,9 @@ void setup()
   FastLED.setBrightness(brightness.current);
 
   readFavorites();
+
+  //readZipCode
+  globalMenu.menu[11] = 33713;
 
   //Begin a task named 'fftComputeTask' to handle FFT on the other core
   //This task also takes care of reading the button inputs and computing encoder positions

@@ -1872,7 +1872,7 @@ int shuffle(int i, int j, int k)
 }
 int b(int i, int j, int k, int B)
 {
-  return simplexNoise.T[b(i, B) << 2 | b(j, B) << 1 | b(k, B)];
+  return T[b(i, B) << 2 | b(j, B) << 1 | b(k, B)];
 }
 int b(int N, int B)
 {

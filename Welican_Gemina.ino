@@ -120,6 +120,7 @@ struct Globals
   String openWeatherMapApiKey;
   const char *ssid;
   const char *password;
+  int networkScan;
   const char *ntpServer;
 
   ESP32Encoder encoder;
@@ -147,6 +148,7 @@ Globals globals = {
     .openWeatherMapApiKey = OPEN_WEATHER_API_KEY,
     .ssid = WIFI_SSID,
     .password = WIFI_PASSWORD,
+    .networkScan = 0,
     .ntpServer = "pool.ntp.org"};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
 
@@ -357,14 +359,14 @@ HSV2RGB globalHSV2RGB;
 
 struct MenuModel
 {
-  int menu[12];
-  int menuMax[12];
+  int menu[13];
+  int menuMax[13];
   int patternMax[6];
 };
 MenuModel globalMenu = {
     .menu = {},
     //Root Menu Items, Game Menu Items, Settings Menu Items
-    .menuMax = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, patternSettings.numberOfFavorites, 99999},
+    .menuMax = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, patternSettings.numberOfFavorites, 99999, 5},
     .patternMax = {12, 12, 22, 65, 80, patternSettings.numberOfFavorites}};
 
 struct Brightness
@@ -607,8 +609,8 @@ void setup()
   WiFi.enableSTA(true);
 
   //WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  WiFi.begin(globals.ssid, globals.password);
-  //WiFi.begin(); //Will connect to last connected to AP, even after power loss
+  //WiFi.begin(globals.ssid, globals.password);
+  WiFi.begin(); //Will connect to last connected to AP, even after power loss
   //WiFi.status();
   //WiFi.localIP();
 

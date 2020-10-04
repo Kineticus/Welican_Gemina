@@ -738,8 +738,11 @@ void drawMenu()
   case 4:
     //ZIP CODE MAIN MENU
     u8g2.setCursor(0, 8);
-    u8g2.print("Current ZIP Code");
-    u8g2.setCursor(54, 26);
+    u8g2.print("Settings > ZIP Code");
+    u8g2.setCursor(16, 50);
+    u8g2.print("Current ZIP Code ");
+    u8g2.setCursor(44, 30);
+    updateZipCodeString();
     u8g2.print(weatherSettings.zipCode);
     break;
 
@@ -817,12 +820,117 @@ void drawMenu()
       break;
     }
     break;
+
+  case 8:
+    // WIFI MENU
+    u8g2.setCursor(0, 8);
+    u8g2.print("Settings > WiFi");
+    u8g2.setCursor(5, 24);
+    u8g2.print("Scan");
+    u8g2.setCursor(69, 24);
+    u8g2.print("Host");
+    u8g2.setCursor(5, 38);
+    u8g2.print("Connect");
+    u8g2.setCursor(69, 38);
+    u8g2.print("Disconn.");
+    
+    u8g2.setCursor(10, 64);
+
+    if (WiFi.status() == WL_CONNECTED)
+    {
+      int temp = WiFi.SSID().length();
+
+      temp = 58 - (temp * 2);
+
+      if (temp < 0)
+      {
+        temp = 0;
+      }
+
+      u8g2.setCursor(temp, 51);
+      u8g2.print(WiFi.SSID());
+
+      
+
+      globals.ipAddress = WiFi.localIP().toString();
+      temp = globals.ipAddress.length();
+
+      temp = 58 - (temp * 2);
+
+      if (temp < 0)
+      {
+        temp = 0;
+      }
+
+      u8g2.setCursor(temp, 64);
+      u8g2.print(globals.ipAddress);
+    } else
+    {
+      u8g2.setCursor(25, 60);
+      u8g2.print("Not Connected");
+    }
+    
+    switch (globalMenu.menu[globals.currentMenu])
+    {
+    case 0:
+      // u8g2.print("Add New");
+      u8g2.drawRFrame(0, 12, 64, 16, 7);
+      break;
+    case 1:
+      //Set Max
+      u8g2.drawRFrame(64, 12, 64, 16, 7);
+      break;
+    case 2:
+      u8g2.drawRFrame(0, 26, 64, 16, 7);
+      // u8g2.print("Exit");
+      break;
+    case 3:
+      u8g2.drawRFrame(64, 26, 64, 16, 7);
+      break;
+    }
+    break;
+
   case 10:
     //ADD NEW
     newFavoritesMenu();
     break;
   case 11:
     setZipCodeMenu();
+    break;
+  case 12:
+    u8g2.setCursor(0, 8);
+    u8g2.print("WiFi Scan Results");
+    u8g2.setCursor(15, 60);
+
+    if (globals.networkScan == WIFI_SCAN_FAILED)
+    {
+      u8g2.print("Scan Failed");
+    }
+    
+    if(globals.networkScan == 0) 
+    {
+      Serial.println("No Networks Found");
+    } 
+
+    if(globals.networkScan > 0)
+    {
+      if (globals.networkScan > 6)
+      {
+        globals.networkScan = 6;
+      }
+
+      for (int i = 0; i < globals.networkScan; ++i)
+      {
+          u8g2.setCursor(10, 19 + (9 * i));
+          u8g2.print(RSSItoPercent(WiFi.RSSI(i)));
+          u8g2.setCursor(30, 19 + (9 * i));
+          u8g2.print(WiFi.SSID(i));
+      }
+
+      u8g2.setCursor(0, 19 + (9 * globalMenu.menu[globals.currentMenu]));
+      u8g2.print(">");
+    }
+
     break;
   }
 
@@ -849,11 +957,14 @@ void drawMenu()
     case 6: //Favorites Set Max
       globals.currentMenu = 5;
       break;
-
+    case 8: //WiFi Menu
+      globals.currentMenu = 2;
+      break;
     case 10: //Add New Favorite
       globals.runMode = -1;
       break;
     case 11:
+      {
       //ZIP Code, advance one
       int temp = globals.currentMenuMultiplier;
       switch(temp)
@@ -876,6 +987,11 @@ void drawMenu()
           globals.currentMenuMultiplier = 10;
           break;
       }
+      }
+    case 12:
+      globals.currentMenu = 8;
+      WiFi.begin();
+      break;
     }
   }
   //Forward/Confirm Button
@@ -930,6 +1046,7 @@ void drawMenu()
         globals.currentMenu = 4;
         break;
       case 3: //Wifi
+        globals.currentMenu = 8;
         break;
       }
       break;
@@ -985,11 +1102,33 @@ void drawMenu()
         break;
       }
       break;
+
+    case 8:
+      switch (globalMenu.menu[globals.currentMenu])
+      {
+      case 0: //Scan
+        globals.currentMenu = 12;
+        WiFiScan();
+        globalMenu.menuMax[13] = globals.networkScan;
+        break;
+      case 1: //Host
+        break;
+      case 2: //Connect
+        WiFi.begin();
+        break;
+      case 3: //Disconnect
+        WiFi.disconnect();
+        break;
+      }
+      break;
+
     case 10:
       saveFavorites(); //New Favorite click
       globals.runMode = -1;
       break;
+
     case 11:
+    {
       //ZIP Code, advance one
       int temp = globals.currentMenuMultiplier;
       switch(temp)
@@ -1014,7 +1153,6 @@ void drawMenu()
           updateZipCodeString();
           break;
       }
-
       if (globals.currentMenuMultiplier > 10000)
       {
         globals.currentMenuMultiplier = 1;
@@ -1022,9 +1160,43 @@ void drawMenu()
       }
       break;
     }
+    
+    
+    case 12:
+      
+      break;
+    }
   }
 }
 
+
+void WiFiScan()
+{
+  //Serial.println("scan starting");
+  //globals.currentMenu = 12;
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  globals.networkScan = WiFi.scanNetworks();
+  //Serial.println((WiFi.encryptionType(i) == WIFI_AUTH_OPEN)?" ":"*");
+
+}
+
+int RSSItoPercent(int RSSI)
+{
+  int percent = RSSI + 30;
+
+  percent = abs(percent);
+
+  percent = percent * 1.4;
+  if (percent > 99)
+  {
+    percent = 99;
+  }
+
+  percent = 100 - percent;
+
+  return percent;
+}
 void setZipCodeMenu()
 {
   u8g2.setCursor(0, 8);
@@ -1121,7 +1293,7 @@ void updateZipCodeString()
   }
   if (globalMenu.menu[11] == 0)
   {
-    weatherSettings.zipCode = "000000";
+    weatherSettings.zipCode = "00000";
   }
 }
 
@@ -1206,6 +1378,10 @@ void readFavorites()
   }
 
   patternSettings.numberOfFavorites = EEPROM.read(99);
+  if (patternSettings.numberOfFavorites == 0)
+  {
+    patternSettings.numberOfFavorites = 25;
+  }
   globalMenu.patternMax[5] = patternSettings.numberOfFavorites;
   globalMenu.menuMax[10] = patternSettings.numberOfFavorites;
 }

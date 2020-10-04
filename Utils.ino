@@ -937,6 +937,7 @@ void drawMenu()
     case 4: //ZIP Code settings click
       globals.currentMenuMultiplier = 10000;
       globals.currentMenu = 11;
+      readZipCode();
       break;
 
 
@@ -1502,7 +1503,7 @@ void drawClock()
 
     if (globalTime.currentHour > 9)
     {
-      u8g2.setCursor(8, 60);
+      u8g2.setCursor(0, 60);
     }
 
     u8g2.print(globalTime.currentHour);

@@ -269,7 +269,7 @@ struct PatternSettings
   int numberOfFavorites;   //Max 50, loads all 50 at program load, dynamically assignable
 
   uint8_t gHue;           // rotating "base color" used by many of the patterns
-  int flowDirection;      // Use either 1 or -1 to set flow direction
+  int8_t flowDirection;      // Use either 1 or -1 to set flow direction
   bool gReverseDirection; //false = center outward, true = from ends inward
   bool sizeUpdate;
   bool moving;
@@ -608,6 +608,7 @@ void setup()
 
   //WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   WiFi.begin(globals.ssid, globals.password);
+  //WiFi.begin(); //Will connect to last connected to AP, even after power loss
   //WiFi.status();
   //WiFi.localIP();
 

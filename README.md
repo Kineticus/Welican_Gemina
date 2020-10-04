@@ -14,7 +14,7 @@ This repository contains:
 
 - WIFI Manager
 - Saving Favorites
-  - Favorites Menu
+  - Favorites Menu (DONE)
 - Settings
   - Set Led Count
   - Show IP
@@ -86,6 +86,7 @@ This project requires the [Arduino IDE](https://www.arduino.cc/en/Main/Software)
 6. Libraries `Tools > Manage Libraries` (Location is User Directory\Documents\Arduino\libraries)
   - [ESP32Encoder](https://github.com/madhephaestus/ESP32Encoder)
   - [FastLED](https://github.com/FastLED/FastLED/wiki)
+    - [FastLED Samguyer Fork](https://github.com/samguyer/FastLED) *Optional
   - [arduinoFFT](https://github.com/kosme/arduinoFFT)
   - [U8g2](https://github.com/olikraus/u8g2/wiki/u8g2reference)
   - [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) *Must be installed manually

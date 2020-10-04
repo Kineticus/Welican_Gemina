@@ -1086,13 +1086,17 @@ void writeZipCode()
 
 void readZipCode()
 {
-    //readZipCode
-  globalMenu.menu[11] = EEPROM.read(90) + (EEPROM.read(91) * 256) + (EEPROM.read(92) * 65536);
+  //readZipCode
+  //globalMenu.menu[11] = EEPROM.read(90) + (EEPROM.read(91) * 256) + (EEPROM.read(92) * 65536);
   
-  if (globalMenu.menu[11] > 99999)
+  EEPROM.get(90, globalMenu.menu[11]);
+
+  //Make sure data is in range. If not, set to default ZIP code  
+  if ((globalMenu.menu[11] > 99999) || (globalMenu.menu[11] == 0))
   {
     globalMenu.menu[11] = 33701;
   }
+
 }
 
 void updateZipCodeString()
@@ -1208,6 +1212,7 @@ void readFavorites()
 
 void resetFavorites()
 {
+  //Just Favorites
   for (int i = 0; i < 50; i++)
   {
     //Set everything to 0
@@ -1217,6 +1222,12 @@ void resetFavorites()
     //including EEPROM area
     EEPROM.write((100 + (i * 2)), 0);
     EEPROM.write((101 + (i * 2)), 0);
+  }
+
+  //TESTING - Reset ALL MEMORY WITH THIS FUNCTION
+  for (int i = 0; i < 511; i++)
+  {
+    EEPROM.write(i, 0);
   }
 
   EEPROM.commit(); //write it to memory

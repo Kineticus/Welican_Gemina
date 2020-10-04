@@ -678,7 +678,8 @@ void setup()
   //EEPROM.write(21, 0);
   //EEPROM.commit();
 
-  fallios.scoreTop = EEPROM.read(20) + EEPROM.read(21) * 256;
+  //fallios.scoreTop = EEPROM.read(20) + EEPROM.read(21) * 256;
+  EEPROM.get(20, fallios.scoreTop);
 
   globals.mode = EEPROM.read(0);
   brightness.current = EEPROM.read(1);

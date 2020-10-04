@@ -157,6 +157,7 @@ void drawIPAddress()
   {
     //Convert WiFi.localIP() from 4 bytes to 1 nice pretty string
     globals.ipAddress = String() + WiFi.localIP()[0] + "." + WiFi.localIP()[1] + "." + WiFi.localIP()[2] + "." + WiFi.localIP()[3];
+    globals.ipAddress = WiFi.localIP().toString();
     u8g2.print(globals.ipAddress);
 
     u8g2.setCursor(10, 50);

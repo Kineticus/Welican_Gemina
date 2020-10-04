@@ -85,14 +85,9 @@ void fallios_game()
             u8g2.setCursor(12, SCREEN_HEIGHT / 2);
             u8g2.print("New High Score !!!");
 
-            //Break score into 2 bytes as EEPROM is 1 byte per space. Score is a (16 bit) unsigned integer
-            uint8_t xlow = fallios.scoreTop & 0xff;
-            uint8_t xhigh = (fallios.scoreTop >> 8);
-
-            //Save the 16 bit unsigned integer into two bytes of EEPROM
-            EEPROM.write(20, xlow);
-            EEPROM.write(21, xhigh);
-
+            //Write Integer (4 bytes) to EEPROM
+            EEPROM.put(20, fallios.scoreTop);
+            
             //Commit to memory
             EEPROM.commit();
         }

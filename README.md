@@ -14,7 +14,7 @@ This repository contains:
 
 - WIFI Manager
 - Saving Favorites
-  - Favorites Menu
+  - Favorites Menu (DONE)
 - Settings
   - Set Led Count
   - Show IP
@@ -86,18 +86,21 @@ This project requires the [Arduino IDE](https://www.arduino.cc/en/Main/Software)
 6. Libraries `Tools > Manage Libraries` (Location is User Directory\Documents\Arduino\libraries)
   - [ESP32Encoder](https://github.com/madhephaestus/ESP32Encoder)
   - [FastLED](https://github.com/FastLED/FastLED/wiki)
+    - [FastLED Samguyer Fork](https://github.com/samguyer/FastLED) *Optional
   - [arduinoFFT](https://github.com/kosme/arduinoFFT)
   - [U8g2](https://github.com/olikraus/u8g2/wiki/u8g2reference)
   - [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) *Must be installed manually
   - [ASyncTCP](https://github.com/me-no-dev/AsyncTCP) *Must be installed manually
-
+  - [ESP32 File System Tool](https://github.com/me-no-dev/arduino-esp32fs-plugin) *Must be installed manually by copying to Tools folder!! Read instructions carefully.
+  
 ### Create Wifi Credentials file
 
-7. Create a file called `WifiCredentials.h` in the main folder.
+7. Create a file called `Secrets.h` in the main folder.
 That file should include the following:
 ```
 #define WIFI_SSID "your-wifi-ssid-goes-here"
 #define WIFI_PASSWORD "your-wifi-password-goes-here"
+#define OPEN_WEATHER_API_KEY "your-open-weather-api-key"
 ```
 
 You will need to replace the strings with your WIFI SSID and PASSWORD

@@ -1307,16 +1307,15 @@ void drawMenu()
         { 
           case 0:
           {
-            WiFi.mode(WIFI_AP);
+            //WiFi.mode(WIFI_AP); //Disable STA Mode, not actually needed though? Not calling allows both to work simultaneously
             globals.softAPEnable = WiFi.softAP("Welican Gemina");
-            //server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER);
           }
           break;
 
           case 1:
           {
+            WiFi.mode(WIFI_STA); //Disable AP Mode
             globals.softAPEnable = WiFi.softAPdisconnect();
-            WiFi.mode(WIFI_STA);
           }
           break;
         }

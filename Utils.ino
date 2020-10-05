@@ -822,6 +822,7 @@ void drawMenu()
     break;
 
   case 8:
+  {
     // WIFI MENU
     u8g2.setCursor(0, 8);
     u8g2.print("Settings > WiFi");
@@ -888,7 +889,8 @@ void drawMenu()
       u8g2.drawRFrame(64, 26, 64, 16, 7);
       break;
     }
-    break;
+  }
+  break;
 
   case 10:
     //ADD NEW
@@ -914,16 +916,13 @@ void drawMenu()
 
     if(globals.networkScan > 0)
     {
-      if (globals.networkScan > 6)
-      {
-        globals.networkScan = 6;
-      }
-
       for (int i = 0; i < globals.networkScan; ++i)
       {
           u8g2.setCursor(10, 19 + (9 * i));
           u8g2.print(RSSItoPercent(WiFi.RSSI(i)));
-          u8g2.setCursor(30, 19 + (9 * i));
+          u8g2.setCursor(25, 19 + (9 * i));
+          u8g2.print((WiFi.encryptionType(i) == WIFI_AUTH_OPEN)?" ":"*");
+          u8g2.setCursor(35, 19 + (9 * i));
           u8g2.print(WiFi.SSID(i));
       }
 
@@ -932,6 +931,119 @@ void drawMenu()
     }
 
     break;
+  case 13: //Enter WiFi PW
+  {
+    u8g2.setCursor(0, 8);
+    u8g2.print("Enter WiFi Password");
+
+    if (globalMenu.menu[globals.currentMenu] < 33)
+    {
+      globalMenu.menu[globals.currentMenu] = 33;
+    }
+
+    u8g2.setCursor(0, 24);
+    u8g2.print(globals.ssid);
+
+    u8g2.setCursor(0, 40);
+    u8g2.print(globals.password);
+
+    if (globalMenu.menu[globals.currentMenu] > 127)
+    {
+      u8g2.setCursor(0, 60);
+      u8g2.print("Connect!");
+    } else
+    {
+      WiFi.SSID().length();
+      u8g2.setCursor(30, 60);
+      u8g2.print((char)globalMenu.menu[globals.currentMenu]);
+
+      //u8g2.setCursor(70, 60);
+      //u8g2.print(globalMenu.menu[globals.currentMenu]);
+    }
+    
+    
+
+    //32 = " "
+    //33 = !
+    //126 = ~
+  }
+  break;
+
+  case 14: //Test connection to new WiFi
+  {
+    u8g2.setCursor(0, 8);
+    u8g2.print("Test Connection");
+    
+    if (WiFi.status() == WL_CONNECTED)
+    {
+      u8g2.setCursor(0, 30);
+      
+      int temp = WiFi.SSID().length();
+
+      temp = 58 - (temp * 2);
+
+      if (temp < 0)
+      {
+        temp = 0;
+      }
+
+      u8g2.setCursor(temp, 51);
+      u8g2.print(WiFi.SSID());
+
+      
+
+      globals.ipAddress = WiFi.localIP().toString();
+      temp = globals.ipAddress.length();
+
+      temp = 58 - (temp * 2);
+
+      if (temp < 0)
+      {
+        temp = 0;
+      }
+
+      u8g2.setCursor(temp, 64);
+      u8g2.print(globals.ipAddress);
+    } else
+    {
+      u8g2.setCursor(5, 60);
+      u8g2.print("Trying to Connect...");
+      if ((millis() - globals.networkReconnect) > 3000)
+      {
+        globals.networkReconnect = millis();
+        WiFi.disconnect();
+        delay(10);
+        WiFi.begin();
+        //WiFi.begin((const char*)globals.ssid.c_str(), (const char*)globals.password.c_str());
+      }
+    }
+    u8g2.setCursor(30, 30);
+      switch(WiFi.status())
+      {
+        case 0:
+          u8g2.print("IDLE_STATUS");
+          break;
+        case 1:
+          u8g2.print("NO_SSID_AVAIL");
+          break;
+        case 2:
+          u8g2.print("SCAN_COMPLETED");
+          break;
+        case 3:
+          u8g2.print("CONNECTED");
+          break;
+        case 4:
+          u8g2.print("IDLE_STATUS");
+          break;
+        case 5:
+          u8g2.print("CONNECTION_LOST");
+          break;
+        case 6:
+          u8g2.print("DISCONNECTED");
+          break;
+      }
+  }
+  break;
   }
 
   //Back Button
@@ -988,9 +1100,29 @@ void drawMenu()
           break;
       }
       }
+      break;
     case 12:
+    {
       globals.currentMenu = 8;
       WiFi.begin();
+    }
+    break;
+    case 13:
+      {
+      int temp = globals.password.length();
+      if (temp > 1)
+      {
+        //globals.password -= " ";
+        globals.password.remove(temp - 1, 1);
+      }else
+      {
+        globals.currentMenu = 8;
+      }
+      }
+      break;
+    case 14:
+      globalMenu.menu[13] = 0;
+      globals.currentMenu = 12;
       break;
     }
   }
@@ -1000,6 +1132,7 @@ void drawMenu()
     switch (globals.currentMenu)
     {
     case 0: //main menu
+    {
       switch (globalMenu.menu[globals.currentMenu])
       {
       case 0:
@@ -1033,8 +1166,10 @@ void drawMenu()
         globals.currentMenu = 0; //back to main menu
         break;
       }
-      break;
+    }
+    break;
     case 2: //Settings click
+    {
       switch (globalMenu.menu[globals.currentMenu])
       {
       case 0: //LED Count
@@ -1049,16 +1184,20 @@ void drawMenu()
         globals.currentMenu = 8;
         break;
       }
-      break;
+    }
+    break;
 
     case 4: //ZIP Code settings click
+    {
       globals.currentMenuMultiplier = 10000;
       globals.currentMenu = 11;
       readZipCode();
-      break;
+    }
+    break;
 
 
     case 5: //Favorites Setting Menu Click
+    {
       switch (globalMenu.menu[globals.currentMenu])
       {
       case 0: //Add New, can't favorite a favorite!
@@ -1078,18 +1217,22 @@ void drawMenu()
         globals.currentMenu = 2;
         break;
       }
-      break;
+    }
+    break;
 
     case 6: //Set Max Favorites Click
+    {
       patternSettings.numberOfFavorites = globalMenu.menu[globals.currentMenu];
       globalMenu.patternMax[5] = patternSettings.numberOfFavorites;
       globalMenu.menuMax[10] = patternSettings.numberOfFavorites;
       EEPROM.write(99, patternSettings.numberOfFavorites);
       EEPROM.commit();
       globals.currentMenu = 5;
-      break;
+    }
+    break;
 
     case 7: //Reset Favorites Click
+    {
       switch (globalMenu.menu[globals.currentMenu])
       {
       case 0: //No
@@ -1101,15 +1244,24 @@ void drawMenu()
         globals.runMode = -1;
         break;
       }
-      break;
+    }
+    break;
 
     case 8:
+    {
       switch (globalMenu.menu[globals.currentMenu])
       {
       case 0: //Scan
         globals.currentMenu = 12;
         WiFiScan();
-        globalMenu.menuMax[13] = globals.networkScan;
+
+        //Limit to first 6 results
+        if (globals.networkScan > 6)
+        {
+          globals.networkScan = 6;
+        }
+
+        globalMenu.menuMax[12] = globals.networkScan - 1;
         break;
       case 1: //Host
         break;
@@ -1120,12 +1272,15 @@ void drawMenu()
         WiFi.disconnect();
         break;
       }
-      break;
+    }
+    break;
 
     case 10:
+    {
       saveFavorites(); //New Favorite click
       globals.runMode = -1;
-      break;
+    }
+    break;
 
     case 11:
     {
@@ -1158,17 +1313,45 @@ void drawMenu()
         globals.currentMenuMultiplier = 1;
         globals.currentMenu = 2;
       }
-      break;
+      
     }
-    
+    break;
     
     case 12:
-      
-      break;
+    {
+      globals.ssid = WiFi.SSID(globalMenu.menu[globals.currentMenu]);
+      globals.currentMenu = 13;
+      //globalMenu.menu[13] = 40;
+      if (WiFi.encryptionType(globalMenu.menu[globals.currentMenu]) == WIFI_AUTH_OPEN)
+      {
+        globals.password = "";
+        globals.currentMenu = 14;
+      }
+    }
+    break;
+    
+    case 13:
+    {
+      if (globalMenu.menu[globals.currentMenu] > 126)
+      {
+        globals.currentMenu = 14;
+      } else
+      {
+        globals.password += (char)globalMenu.menu[globals.currentMenu];
+      }
+         
+    }  
+    break;
+    
+    case 14:
+    {
+      globals.currentMenu = 8;
+      globalMenu.menu[13] = 0;
+    }
+    break;
     }
   }
 }
-
 
 void WiFiScan()
 {
@@ -1192,11 +1375,16 @@ int RSSItoPercent(int RSSI)
   {
     percent = 99;
   }
+  if (percent < 1)
+  {
+    percent = 1;
+  }
 
   percent = 100 - percent;
 
   return percent;
 }
+
 void setZipCodeMenu()
 {
   u8g2.setCursor(0, 8);
@@ -1484,6 +1672,8 @@ void updateTime()
 
 void updateWeather()
 {
+  if (globals.runMode == 3)
+  {
   EVERY_N_MILLISECONDS(weatherSettings.weatherTimerDelay)
   {
     if (WiFi.status() == WL_CONNECTED)
@@ -1552,6 +1742,7 @@ void updateWeather()
     {
       Serial.println("Weather - No Connection");
     }
+  }
   }
 }
 

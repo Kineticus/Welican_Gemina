@@ -118,8 +118,9 @@ struct Globals
   int pixelNumber;
   String ipAddress;
   String openWeatherMapApiKey;
-  const char *ssid;
-  const char *password;
+  String ssid;
+  String password;
+  unsigned long networkReconnect;
   int networkScan;
   const char *ntpServer;
 
@@ -148,6 +149,7 @@ Globals globals = {
     .openWeatherMapApiKey = OPEN_WEATHER_API_KEY,
     .ssid = WIFI_SSID,
     .password = WIFI_PASSWORD,
+    .networkReconnect = 0,
     .networkScan = 0,
     .ntpServer = "pool.ntp.org"};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
@@ -359,14 +361,14 @@ HSV2RGB globalHSV2RGB;
 
 struct MenuModel
 {
-  int menu[13];
-  int menuMax[13];
+  int menu[14];
+  int menuMax[14];
   int patternMax[6];
 };
 MenuModel globalMenu = {
     .menu = {},
     //Root Menu Items, Game Menu Items, Settings Menu Items
-    .menuMax = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, patternSettings.numberOfFavorites, 99999, 5},
+    .menuMax = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, patternSettings.numberOfFavorites, 99999, 0, 128},
     .patternMax = {12, 12, 22, 65, 80, patternSettings.numberOfFavorites}};
 
 struct Brightness

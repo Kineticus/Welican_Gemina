@@ -557,6 +557,28 @@ void drawTop()
   //u8g2.drawXBMP(42,0,donut_width, donut_height, donut);
   //u8g2.drawXBMP(54,0,musicNote_width, musicNote_height, musicNote);
   //u8g2.drawXBMP(68,0,heart_width, heart_height, heart);
+
+  //Hosting our own AP?
+  u8g2.setCursor(112, 8);
+  u8g2.print(globals.softAPEnable);
+
+  /*
+  WL_IDLE_STATUS	0
+  WL_NO_SSID_AVAIL	1
+  WL_SCAN_COMPLETED	2
+  WL_CONNECTED	3
+  WL_CONNECT_FAILED	4
+  WL_CONNECTION_LOST	5
+  WL_DISCONNECTED	6
+  */
+  //WiFi Status, see codes above
+  u8g2.setCursor(120, 8);
+  u8g2.print(WiFi.status());
+ 
+
+  //WiFi Strength % (99 is MAX, 1 is MIN)
+  //RSSItoPercent(WiFi.RSSI());
+
   u8g2_horizontal_line(16);
   drawProgressBar();
 }
@@ -829,7 +851,8 @@ void drawMenu()
     u8g2.setCursor(5, 24);
     u8g2.print("Scan");
     u8g2.setCursor(69, 24);
-    u8g2.print("Host");
+    u8g2.print("Host  ");
+    u8g2.print(globals.softAPEnable);
     u8g2.setCursor(5, 38);
     u8g2.print("Connect");
     u8g2.setCursor(69, 38);
@@ -841,7 +864,7 @@ void drawMenu()
     {
       int temp = WiFi.SSID().length();
 
-      temp = 58 - (temp * 2);
+      temp = 44 - (temp * 2);
 
       if (temp < 0)
       {
@@ -850,6 +873,10 @@ void drawMenu()
 
       u8g2.setCursor(temp, 51);
       u8g2.print(WiFi.SSID());
+      
+      u8g2.print("   ");
+      u8g2.print(RSSItoPercent(WiFi.RSSI()));
+      u8g2.print("%");
 
       
 
@@ -1013,8 +1040,9 @@ void drawMenu()
         globals.networkReconnect = millis();
         WiFi.disconnect();
         delay(10);
-        WiFi.begin();
-        //WiFi.begin((const char*)globals.ssid.c_str(), (const char*)globals.password.c_str());
+        //WiFi.begin();
+        WiFi.begin((const char*)globals.ssid.c_str(), (const char*)globals.password.c_str());
+        delay(42);
       }
     }
     u8g2.setCursor(30, 30);
@@ -1252,6 +1280,7 @@ void drawMenu()
       switch (globalMenu.menu[globals.currentMenu])
       {
       case 0: //Scan
+      {
         globals.currentMenu = 12;
         WiFiScan();
 
@@ -1262,12 +1291,36 @@ void drawMenu()
         }
 
         globalMenu.menuMax[12] = globals.networkScan - 1;
-        break;
+      }
+      break;
       case 1: //Host
-        break;
+      {
+        //https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/soft-access-point-class.html
+        
+        switch (globals.softAPEnable)
+        { 
+          case 0:
+          {
+            WiFi.mode(WIFI_AP);
+            globals.softAPEnable = WiFi.softAP("Welican Gemina");
+          }
+          break;
+
+          case 1:
+          {
+            WiFi.mode(WIFI_STA);
+            globals.softAPEnable = WiFi.softAPdisconnect();
+          }
+          break;
+        }
+      } 
+      break;
       case 2: //Connect
+      {
+        WiFi.enableSTA(true);
         WiFi.begin();
-        break;
+      }
+      break;
       case 3: //Disconnect
         WiFi.disconnect();
         break;

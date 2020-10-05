@@ -122,6 +122,7 @@ struct Globals
   String password;
   unsigned long networkReconnect;
   int networkScan;
+  int softAPEnable;
   const char *ntpServer;
 
   ESP32Encoder encoder;
@@ -151,6 +152,7 @@ Globals globals = {
     .password = WIFI_PASSWORD,
     .networkReconnect = 0,
     .networkScan = 0,
+    .softAPEnable = 0,
     .ntpServer = "pool.ntp.org"};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
 

@@ -24,6 +24,7 @@
 #include <ESP32Encoder.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <DNSServer.h>
 #include <Arduino_JSON.h>
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
@@ -80,6 +81,29 @@ FASTLED_USING_NAMESPACE
 // GLOBALs
 // ----------------------------------------------------------------
 AsyncWebServer server(80);
+DNSServer dnsServer; //Used for Captive Portal
+
+class CaptiveRequestHandler : public AsyncWebHandler {
+public:
+  CaptiveRequestHandler() {}
+  virtual ~CaptiveRequestHandler() {}
+
+  bool canHandle(AsyncWebServerRequest *request){
+    //request->addInterestingHeader("ANY");
+    return true;
+  }
+
+  void handleRequest(AsyncWebServerRequest *request) {
+    AsyncResponseStream *response = request->beginResponseStream("text/html");
+    response->print("<!DOCTYPE html><html><head><title>Captive Portal</title></head><body>");
+    response->print("<p>This is out captive portal front page.</p>");
+    response->printf("<p>You were trying to reach: http://%s%s</p>", request->host().c_str(), request->url().c_str());
+    response->printf("<p>Try opening <a href='http://%s'>this link</a> instead</p>", WiFi.softAPIP().toString().c_str());
+    response->print("</body></html>");
+    request->send(response);
+  }
+};
+
 TaskHandle_t inputComputeTask = NULL;
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
 /*
@@ -647,6 +671,9 @@ void setup()
     request->send(SPIFFS, "/index.html", String(), false, websiteProcessor);
   });
 
+  dnsServer.start(53, "*", WiFi.softAPIP());
+  server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER);//only when requested from AP
+           
   // Start server
   server.begin();
 

@@ -103,6 +103,12 @@ void inputCompute(void *parameter)
 
     updateWeather();
 
+    //We are only serving DNS requests to Soft AP clients
+    if (globals.softAPEnable == 1)
+    {
+      dnsServer.processNextRequest();
+    }
+
     devEnv.fftps++; //Debug, tracking loops per second
 
     //Serial.println(xPortGetFreeHeapSize()); //How much memory is left in the task heap? If out we get a panic with "Stack canary watchpoint triggered"
@@ -1303,13 +1309,14 @@ void drawMenu()
           {
             WiFi.mode(WIFI_AP);
             globals.softAPEnable = WiFi.softAP("Welican Gemina");
+            //server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER);
           }
           break;
 
           case 1:
           {
-            WiFi.mode(WIFI_STA);
             globals.softAPEnable = WiFi.softAPdisconnect();
+            WiFi.mode(WIFI_STA);
           }
           break;
         }
@@ -1655,11 +1662,13 @@ void smoothOperator()
   //Check for interfade
   if (globalLED.interfade == 0)
   {
+    /*
     //take snapshot
     for (int i = 0; i < NUM_LEDS; i++)
     {
       patternSettings.tempLeds[i] = patternSettings.leds[i];
     }
+    */
   }
   else
   {

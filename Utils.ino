@@ -915,3 +915,49 @@ String websiteProcessor(const String &var)
 
   return String();
 }
+
+void startBreathing()
+{
+  //future toggle of breathing indicator vs static
+  if (devEnv.breathing == 1)
+  {
+    patternSettings.breath = (exp(sin(millis() / 4200.0 * PI)) - 0.36787944) * 108.0;
+    patternSettings.breath = patternSettings.breath / 2;
+    if (patternSettings.breath <= 4)
+    {
+      patternSettings.breath = 4;
+    }
+  }
+  else
+  {
+    patternSettings.breath = 4;
+  }
+}
+
+void readPatternSettings()
+{
+  //Read the pattern setting for each mode
+  for (int i = 0; i <= globals.modeMax; i++)
+  {
+    patternSettings.pattern[i] = EEPROM.read(2 + i);
+
+    //check for out of range data
+    if (patternSettings.pattern[i] > globalMenu.patternMax[i])
+    {
+      patternSettings.pattern[i] = 0;
+    }
+  }
+}
+
+void seedThings()
+{
+  //Seed variables
+  for (int i = 0; i < MAX_STARS; i++)
+  {
+    ball.x[i] = random(0, VISUALIZER_X);
+    ball.xx[i] = random(1, 4);
+    ball.y[i] = random(0, VISUALIZER_Y);
+    ball.yy[i] = random(1, 4);
+    ball.z[i] = random(1, 4);
+  }
+}

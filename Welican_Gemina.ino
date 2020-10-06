@@ -701,34 +701,7 @@ void setup()
   //WiFi.status();
   //WiFi.localIP();
 
-  // Route for root / web page
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(SPIFFS, "/index.html", String(), false, websiteProcessor);
-  });
-
-  // Route to load style.css file
-  server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(SPIFFS, "/style.css", "text/css");
-  });
-
-  server.on("/main.js", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(SPIFFS, "/main.js", "text/javascript");
-  });
-
-  // server.on("/obama_not_bad.jpg", HTTP_GET, [](AsyncWebServerRequest *request) {
-  //   request->send(SPIFFS, "/obama_not_bad.jpg", "image/jpg");
-  // });
-  // Route to set GPIO to HIGH
-  server.on("/on", HTTP_GET, [](AsyncWebServerRequest *request) {
-    brightness.current = 255;
-    request->send(SPIFFS, "/index.html", String(), false, websiteProcessor);
-  });
-
-  // Route to set GPIO to LOW
-  server.on("/off", HTTP_GET, [](AsyncWebServerRequest *request) {
-    brightness.current = 0;
-    request->send(SPIFFS, "/index.html", String(), false, websiteProcessor);
-  });
+  setupWebsiteRoutes();
 
   dnsServer.start(53, "*", WiFi.softAPIP());
   server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER); //only when requested from AP
@@ -736,15 +709,7 @@ void setup()
   // Start server
   server.begin();
 
-  //Seed variables
-  for (int i = 0; i < MAX_STARS; i++)
-  {
-    ball.x[i] = random(0, VISUALIZER_X);
-    ball.xx[i] = random(1, 4);
-    ball.y[i] = random(0, VISUALIZER_Y);
-    ball.yy[i] = random(1, 4);
-    ball.z[i] = random(1, 4);
-  }
+  seedThings();
 
   //For troubleshooting
   Serial.begin(115200);
@@ -776,17 +741,7 @@ void setup()
   globals.mode = EEPROM.read(0);
   brightness.current = EEPROM.read(1);
 
-  //Read the pattern setting for each mode
-  for (int i = 0; i <= globals.modeMax; i++)
-  {
-    patternSettings.pattern[i] = EEPROM.read(2 + i);
-
-    //check for out of range data
-    if (patternSettings.pattern[i] > globalMenu.patternMax[i])
-    {
-      patternSettings.pattern[i] = 0;
-    }
-  }
+  readPatternSettings();
 
   //Make sure values aren't out of range
   if (globals.mode > globals.modeMax)
@@ -882,20 +837,8 @@ void loop()
   //Write buffer to display
   u8g2.sendBuffer();
 
-  //future toggle of breathing indicator vs static
-  if (devEnv.breathing == 1)
-  {
-    patternSettings.breath = (exp(sin(millis() / 4200.0 * PI)) - 0.36787944) * 108.0;
-    patternSettings.breath = patternSettings.breath / 2;
-    if (patternSettings.breath <= 4)
-    {
-      patternSettings.breath = 4;
-    }
-  }
-  else
-  {
-    patternSettings.breath = 4;
-  }
+  startBreathing();
+
   //Write current breath value to status LED
   ledcWrite(STATUS_LED, patternSettings.breath);
 
@@ -941,7 +884,6 @@ void loop()
 
     //delay(9); // This delay sets speed of the fade. I usually do from 5-75 but you can always go higher.
   }
-  //FastLED.delay(1000/FRAMES_PER_SECOND);
 
   devEnv.fps++; //For tracking frame rate/ debug logging
 
@@ -961,5 +903,6 @@ void loop()
     Serial.println(((millis() / 1000) / 60));
   }
 
-  EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; } // slowly cycle the "base color" through the rainbow
+  // slowly cycle the "base color" through the rainbow
+  EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; }
 }

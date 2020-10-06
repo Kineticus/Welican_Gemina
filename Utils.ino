@@ -119,8 +119,9 @@ void inputCompute(void *parameter)
 void drawDebug()
 {
   u8g2.setFont(u8g2_font_ncenB08_tr);
-  u8g2.setCursor(0, 8);
-  u8g2.print(VERSION_INFO);
+
+  drawMenuTop(VERSION_INFO);
+
   u8g2.setCursor(0, 24);
   u8g2.print("Knob 1: ");
   //u8g2.print(globals.encoder.getCount());
@@ -656,107 +657,36 @@ time_t timeConvert(String timeToConvert)
  *  5 - Favorites Page
  *        6 - Max Favs    7 - Reset Favs   8 - New Fav 
  * *****************************************************************/
-
 void drawMenu()
 {
+}
+void drawMenuCommander()
+{
   u8g2.setFont(u8g2_font_ncenB08_tr);
-  u8g2.setCursor(0, 8);
-  //u8g2.print("Menu");
+
   u8g2_horizontal_line(9);
 
   switch (globalMenu.currentMenu)
   {
   case 0: // Draw Image
   {
-    u8g2.setCursor(0, 8);
-    u8g2.print("Welican Gemina");
-    u8g2.setCursor(5, 24);
-    u8g2.print("Games");
-    u8g2.setCursor(69, 24);
-    u8g2.print("Settings");
-    u8g2.setCursor(5, 44);
-    u8g2.print("Stuff");
-    u8g2.setCursor(69, 44);
-    u8g2.print("Exit");
-    switch (globalMenu.menu[globalMenu.currentMenu])
-    {
-    case 0:
-      // u8g2.print("Games");
-      u8g2.drawRFrame(0, 12, 64, 16, 7);
-      break;
-    case 1:
-      // u8g2.print("Settings");
-      u8g2.drawRFrame(64, 12, 64, 16, 7);
-      break;
-    case 2:
-      u8g2.drawRFrame(0, 32, 64, 16, 7);
-      // u8g2.print("Exit");
-      break;
-    case 3:
-      u8g2.drawRFrame(64, 32, 64, 16, 7);
-      break;
-    }
+    drawMenuWords("Welican Gemina",
+                  "Games", "Settings", "Stuff", "Exit");
+    drawMenuFrame();
   }
   break;
   case 1: // Draw Games
   {
-    u8g2.setCursor(0, 8);
-    u8g2.print("Games");
-    u8g2.setCursor(5, 24);
-    u8g2.print("Fallios");
-    u8g2.setCursor(69, 24);
-    u8g2.print("Block Breaker");
-    u8g2.setCursor(5, 44);
-    u8g2.print("Tetris");
-    u8g2.setCursor(69, 44);
-    u8g2.print("Back");
-    switch (globalMenu.menu[globalMenu.currentMenu])
-    {
-    case 0:
-      // u8g2.print("Games");
-      u8g2.drawRFrame(0, 12, 64, 16, 7);
-      break;
-    case 1:
-      // u8g2.print("Settings");
-      u8g2.drawRFrame(64, 12, 64, 16, 7);
-      break;
-    case 2:
-      u8g2.drawRFrame(0, 32, 64, 16, 7);
-      // u8g2.print("Exit");
-      break;
-    case 3:
-      u8g2.drawRFrame(64, 32, 64, 16, 7);
-      break;
-    }
+    drawMenuWords("Games",
+                  "Fallios", "Block Breaker", "Tetris");
+    drawMenuFrame();
   }
   break;
   case 2: // Draw Settings
   {
-    u8g2.setCursor(0, 8);
-    u8g2.print("Settings");
-    u8g2.setCursor(5, 24);
-    u8g2.print("LED Conf");
-    u8g2.setCursor(69, 24);
-    u8g2.print("Favorites");
-    u8g2.setCursor(5, 44);
-    u8g2.print("ZIP Code");
-    u8g2.setCursor(69, 44);
-    u8g2.print("WiFi");
-    switch (globalMenu.menu[globalMenu.currentMenu])
-    {
-    case 0:
-      u8g2.drawRFrame(0, 12, 64, 16, 7);
-      break;
-    case 1:
-      u8g2.drawRFrame(64, 12, 64, 16, 7);
-      break;
-    case 2:
-      u8g2.drawRFrame(0, 32, 64, 16, 7);
-      break;
-    case 3:
-      u8g2.drawRFrame(64, 32, 64, 16, 7);
-      break;
-    }
+    drawMenuWords("Settings",
+                  "LED Config", "Favorites", "ZIP Code", "WIFI");
+    drawMenuFrame();
   }
   break;
   case 3: // Led Count Menu
@@ -766,51 +696,25 @@ void drawMenu()
   break;
   case 4: // Zip Code Menu
   {
-    u8g2.setCursor(0, 8);
-    u8g2.print("Settings > ZIP Code");
+    drawMenuTop("Settings > ZIP Code");
+
     u8g2.setCursor(16, 50);
     u8g2.print("Current ZIP Code ");
-    u8g2.setCursor(44, 30);
+
     updateZipCodeString();
     u8g2.print(weatherSettings.zipCode);
   }
   break;
   case 5: // Favorites Menu
   {
-    u8g2.setCursor(0, 8);
-    u8g2.print("Settings > Favorites");
-    u8g2.setCursor(5, 24);
-    u8g2.print("Add New");
-    u8g2.setCursor(69, 24);
-    u8g2.print("Set Max");
-    u8g2.setCursor(5, 44);
-    u8g2.print("Reset");
-    u8g2.setCursor(69, 44);
-    u8g2.print("Back");
-    switch (globalMenu.menu[globalMenu.currentMenu])
-    {
-    case 0:
-      // u8g2.print("Add New");
-      u8g2.drawRFrame(0, 12, 64, 16, 7);
-      break;
-    case 1:
-      //Set Max
-      u8g2.drawRFrame(64, 12, 64, 16, 7);
-      break;
-    case 2:
-      u8g2.drawRFrame(0, 32, 64, 16, 7);
-      // u8g2.print("Exit");
-      break;
-    case 3:
-      u8g2.drawRFrame(64, 32, 64, 16, 7);
-      break;
-    }
+    drawMenuWords("Settings > Favorites",
+                  "Add New", "Set Max", "Reset", "Back");
+    drawMenuFrame();
   }
   break;
   case 6:
   {
-    u8g2.setCursor(0, 8);
-    u8g2.print("Set Max Favorites");
+    drawMenuTop("Set Max Favorites");
 
     if (globalMenu.menu[globalMenu.currentMenu] < 10)
     {
@@ -832,39 +736,13 @@ void drawMenu()
   break;
   case 7: // Favorites Reset Menu
   {
-    u8g2.setCursor(0, 8);
-    u8g2.print("Reset All Favorites?");
-    u8g2.setCursor(5, 24);
-    u8g2.print("No");
-    u8g2.setCursor(69, 24);
-    u8g2.print("Yes");
-    switch (globalMenu.menu[globalMenu.currentMenu])
-    {
-    case 0:
-      //No
-      u8g2.drawRFrame(0, 12, 64, 16, 7);
-      break;
-    case 1:
-      //Yes
-      u8g2.drawRFrame(64, 12, 64, 16, 7);
-      break;
-    }
+    drawYesNoMenuFrame("Reset All Favorites?");
   }
   break;
-  case 8:
+  case 8: // WIFI Menu
   {
-    // WIFI MENU
-    u8g2.setCursor(0, 8);
-    u8g2.print("Settings > WiFi");
-    u8g2.setCursor(5, 24);
-    u8g2.print("Scan");
-    u8g2.setCursor(69, 24);
-    u8g2.print("Host  ");
-    u8g2.print(globals.softAPEnable);
-    u8g2.setCursor(5, 38);
-    u8g2.print("Connect");
-    u8g2.setCursor(69, 38);
-    u8g2.print("Disconn.");
+    drawMenuWords("Settings > WiFi",
+                  "Scan", "Host " + globals.softAPEnable, "Connect", "Disconn.");
 
     u8g2.setCursor(10, 64);
 
@@ -904,25 +782,7 @@ void drawMenu()
       u8g2.setCursor(25, 60);
       u8g2.print("Not Connected");
     }
-
-    switch (globalMenu.menu[globalMenu.currentMenu])
-    {
-    case 0:
-      // u8g2.print("Add New");
-      u8g2.drawRFrame(0, 12, 64, 16, 7);
-      break;
-    case 1:
-      //Set Max
-      u8g2.drawRFrame(64, 12, 64, 16, 7);
-      break;
-    case 2:
-      u8g2.drawRFrame(0, 26, 64, 16, 7);
-      // u8g2.print("Exit");
-      break;
-    case 3:
-      u8g2.drawRFrame(64, 26, 64, 16, 7);
-      break;
-    }
+    drawMenuFrame();
   }
   break;
   case 10: // Add New Favorites Menu
@@ -937,8 +797,7 @@ void drawMenu()
   break;
   case 12: // WIFI Scan Results
   {
-    u8g2.setCursor(0, 8);
-    u8g2.print("WiFi Scan Results");
+    drawMenuTop("WiFi Scan Results");
     u8g2.setCursor(15, 60);
 
     if (globals.networkScan == WIFI_SCAN_FAILED)
@@ -970,8 +829,7 @@ void drawMenu()
   break;
   case 13: // Enter WiFi PW
   {
-    u8g2.setCursor(0, 8);
-    u8g2.print("Enter WiFi Password");
+    drawMenuTop("Enter WiFi Password");
 
     if (globalMenu.menu[globalMenu.currentMenu] < 33)
     {
@@ -1006,8 +864,7 @@ void drawMenu()
   break;
   case 14: // Test connection to new WiFi
   {
-    u8g2.setCursor(0, 8);
-    u8g2.print("Test Connection");
+    drawMenuTop("Test Connection");
 
     if (WiFi.status() == WL_CONNECTED)
     {
@@ -1435,8 +1292,7 @@ int RSSItoPercent(int RSSI)
 
 void setZipCodeMenu()
 {
-  u8g2.setCursor(0, 8);
-  u8g2.print("Set ZIP Code");
+  drawMenuTop("Set ZIP Code");
 
   u8g2.setCursor(54, 26);
   if (globalMenu.menu[globalMenu.currentMenu] < 10000)
@@ -1508,6 +1364,8 @@ void readZipCode()
 
 void updateZipCodeString()
 {
+  u8g2.setCursor(44, 30);
+
   weatherSettings.zipCode = String(globalMenu.menu[11]);
 
   if (globalMenu.menu[11] < 10000)
@@ -1534,8 +1392,7 @@ void updateZipCodeString()
 
 void newFavoritesMenu()
 {
-  u8g2.setCursor(0, 8);
-  u8g2.print("Add New Favorite");
+  drawMenuTop("Add New Favorite");
 
   //This is a menu with patternSettings.numberOfFavorites 'selections', each indicating a favorite slot
   if (globalMenu.menu[globalMenu.currentMenu] < 10)

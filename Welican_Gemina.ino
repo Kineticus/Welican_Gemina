@@ -386,6 +386,8 @@ struct MenuModel
   int patternMax[6];
   int currentMenu;
   int currentMenuMultiplier;
+  u8g2_uint_t firstLineHorizontal;
+  u8g2_uint_t secondLineHorizontal;
 };
 MenuModel globalMenu = {
     .menu = {},
@@ -394,7 +396,8 @@ MenuModel globalMenu = {
     .patternMax = {12, 12, 22, 65, 80, patternSettings.numberOfFavorites},
     .currentMenu = 0,
     .currentMenuMultiplier = 1,
-};
+    .firstLineHorizontal = 24,
+    .secondLineHorizontal = 38};
 
 struct Brightness
 {
@@ -777,7 +780,7 @@ void loop()
     showBrightnessDisplay();
     break;
   case 1: //Menu mode
-    drawMenu();
+    drawMenuCommander();
     break;
   case 2: //Game mode
     switch (globalMenu.menu[1])

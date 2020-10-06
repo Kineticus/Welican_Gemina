@@ -521,13 +521,13 @@ void setZipCodeMenu()
   }
 }
 
-void writeZipCode()
+void putZipCode()
 {
   EEPROM.put(90, globalMenu.menu[11]);
   EEPROM.commit();
 }
 
-void readZipCode()
+void getZipCode()
 {
   EEPROM.get(90, globalMenu.menu[11]);
 
@@ -566,63 +566,7 @@ void updateZipCodeString()
   }
 }
 
-void newFavoritesMenu()
-{
-  drawMenuTop("Add New Favorite");
-
-  //This is a menu with patternSettings.numberOfFavorites 'selections', each indicating a favorite slot
-  if (globalMenu.menu[globalMenu.currentMenu] < 10)
-  {
-    u8g2.setCursor(57, 26);
-  }
-  else
-  {
-    u8g2.setCursor(54, 26);
-  }
-
-  u8g2.print(globalMenu.menu[globalMenu.currentMenu]);
-
-  u8g2.drawRFrame(50, 14, 20, 16, 3);
-
-  //Call the favorite for the slot we're looking at
-  //The real function call is below this, so LEDs will not show bad data
-  favorites_category(globalMenu.menu[globalMenu.currentMenu]);
-
-  //Convert the strings
-  globalStrings.functionName.toCharArray(globalStrings.functionNameOutString, 20);
-  globalStrings.categoryName.toCharArray(globalStrings.categoryNameOutString, 20);
-
-  u8g2.setCursor(16, 44);
-  u8g2.print("Current Setting");
-  //u8g2.print(globalStrings.categoryNameOutString);
-
-  switch (patternSettings.favoriteMode[globalMenu.menu[globalMenu.currentMenu]])
-  {
-  case 0:
-    u8g2.drawXBMP(2, 53, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
-    break;
-  case 1:
-    // u8g2.drawXBMP(2, 53, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
-    u8g2.drawXBMP(0, 0, MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
-    break;
-  case 2:
-    u8g2.drawXBMP(2, 53, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);
-    break;
-  case 3:
-    u8g2.drawXBMP(2, 53, DONUT_WIDTH, DONUT_HEIGHT, DONUT);
-    break;
-  case 4:
-    u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
-    break;
-  case 5:
-    u8g2.drawXBMP(2, 53, HEART_WIDTH, HEART_HEIGHT, HEART);
-    break;
-  }
-  u8g2.setCursor(12, 60);
-  u8g2.print(globalStrings.functionNameOutString);
-}
-
-void saveFavorites()
+void writeFavorites()
 {
   EEPROM.write(100 + globalMenu.menu[globalMenu.currentMenu] * 2, patternSettings.pattern[globals.mode]); //the pattern we're on
   EEPROM.write(101 + (globalMenu.menu[globalMenu.currentMenu] * 2), globals.mode);                        //the mode we're on
@@ -843,67 +787,6 @@ String httpGETRequest(const char *serverName)
   http.end();
 
   return payload;
-}
-
-String websiteProcessor(const String &var)
-{
-  if (var == "BRIGHTNESS")
-  {
-    if (brightness.current == 0)
-    {
-      return "Off";
-    }
-    else if (brightness.current == 255)
-    {
-      return "Max";
-    }
-    else if (brightness.current > 200)
-    {
-      return "Bright";
-    }
-    else if (brightness.current > 160)
-    {
-      return "Half";
-    }
-    else if (brightness.current > 120)
-    {
-      return "Third";
-    }
-    else if (brightness.current > 80)
-    {
-      return "Quarter";
-    }
-    else if (brightness.current > 40)
-    {
-      return "Dim";
-    }
-    else if (brightness.current > 0)
-    {
-      return "Moody";
-    }
-  }
-
-  if (var == "IP_ADDRESS")
-  {
-    return globals.ipAddress;
-  }
-
-  if (var == "CATEGORY_NAME")
-  {
-    return globalStrings.categoryNameOutString;
-  }
-
-  if (var == "FUNCTION_NAME")
-  {
-    return globalStrings.functionNameOutString;
-  }
-
-  if (var == "MODE")
-  {
-    return website.returnText;
-  }
-
-  return String();
 }
 
 void startBreathing()

@@ -449,7 +449,7 @@ void drawMenuCommander()
     {
       globalMenu.currentMenuMultiplier = 10000;
       globalMenu.currentMenu = 11;
-      readZipCode();
+      getZipCode();
     }
     break;
     case 5: // Favorites Setting Menu Click
@@ -554,7 +554,7 @@ void drawMenuCommander()
     break;
     case 10: // New Favorites Click
     {
-      saveFavorites();
+      writeFavorites();
       globals.runMode = -1;
     }
     break;
@@ -579,7 +579,7 @@ void drawMenuCommander()
         weatherSettings.zipCode = globalMenu.menu[11]; //Update ZIP Code
         globalMenu.currentMenuMultiplier = 1;
         globalMenu.currentMenu = 2; //Go back to main
-        writeZipCode();
+        putZipCode();
         updateZipCodeString();
         break;
       }

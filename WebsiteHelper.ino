@@ -45,3 +45,64 @@ void startWebsite(AsyncWebServer *server)
   // Start server
   server->begin();
 }
+
+String websiteProcessor(const String &var)
+{
+  if (var == "BRIGHTNESS")
+  {
+    if (brightness.current == 0)
+    {
+      return "Off";
+    }
+    else if (brightness.current == 255)
+    {
+      return "Max";
+    }
+    else if (brightness.current > 200)
+    {
+      return "Bright";
+    }
+    else if (brightness.current > 160)
+    {
+      return "Half";
+    }
+    else if (brightness.current > 120)
+    {
+      return "Third";
+    }
+    else if (brightness.current > 80)
+    {
+      return "Quarter";
+    }
+    else if (brightness.current > 40)
+    {
+      return "Dim";
+    }
+    else if (brightness.current > 0)
+    {
+      return "Moody";
+    }
+  }
+
+  if (var == "IP_ADDRESS")
+  {
+    return globals.ipAddress;
+  }
+
+  if (var == "CATEGORY_NAME")
+  {
+    return globalStrings.categoryNameOutString;
+  }
+
+  if (var == "FUNCTION_NAME")
+  {
+    return globalStrings.functionNameOutString;
+  }
+
+  if (var == "MODE")
+  {
+    return website.returnText;
+  }
+
+  return String();
+}

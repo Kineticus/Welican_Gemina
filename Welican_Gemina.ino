@@ -748,7 +748,7 @@ void setup()
 
   readFavorites();
 
-  readZipCode();
+  getZipCode();
 
   updateZipCodeString();
 

@@ -539,7 +539,7 @@ void drawTop()
   switch (globals.mode)
   {
   case 0:
-    u8g2.drawXBMP(0, 0, STAR_WIDTH, STAR_HEIGHT, starshape);
+    u8g2.drawXBMP(0, 0, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
     break;
   case 1:
     u8g2.drawXBMP(0, 0, wave_width, wave_height, wave);
@@ -1411,7 +1411,7 @@ void newFavoritesMenu()
   switch (patternSettings.favoriteMode[globalMenu.menu[globalMenu.currentMenu]])
   {
   case 0:
-    u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_HEIGHT, starshape);
+    u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
     break;
   case 1:
     u8g2.drawXBMP(2, 53, wave_width, wave_height, wave);

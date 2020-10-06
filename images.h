@@ -583,7 +583,7 @@ static const unsigned char wave[] = {
 
 #define STAR_WIDTH 8
 #define STAR_HEIGHT 8
-static const unsigned char starshape[] = {
+static const unsigned char STAR_SHAPE[] = {
     0x00,
     0x00,
     0x18,

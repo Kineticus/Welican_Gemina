@@ -446,6 +446,13 @@ struct DvdModel
 DvdModel dvd1 = {random(0, 32), random(0, 32), 1, 1};
 DvdModel dvd2 = {random(0, 32), random(0, 32), 1, 1};
 DvdModel dvd3 = {random(0, 32), random(0, 32), 1, 1};
+DvdModel dvd4 = {random(0, 32), random(0, 32), 1, 1};
+DvdModel dvd5 = {random(0, 32), random(0, 32), 1, 1};
+DvdModel dvd6 = {random(0, 32), random(0, 32), 1, 1};
+DvdModel dvd7 = {random(0, 32), random(0, 32), 1, 1};
+DvdModel dvd8 = {random(0, 32), random(0, 32), 1, 1};
+DvdModel dvd9 = {random(0, 32), random(0, 32), 1, 1};
+DvdModel dvd10 = {random(0, 32), random(0, 32), 1, 1};
 
 // GAMES
 struct Player

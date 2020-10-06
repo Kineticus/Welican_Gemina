@@ -81,7 +81,7 @@ FASTLED_USING_NAMESPACE
 // GLOBALs
 // ----------------------------------------------------------------
 AsyncWebServer server(80);
-DNSServer dnsServer; //Used for Captive Portal
+DNSServer dnsServer; // Used for Captive Portal
 
 class CaptiveRequestHandler : public AsyncWebHandler
 {
@@ -115,12 +115,6 @@ For EDT - UTC -4.00 : -4 * 60 * 60 : -14400
 For UTC +0.00 : 0 * 60 * 60 : 0
 */
 struct tm timeinfo;
-
-/***********************************************************
-  Simplex Noise Variable Declaration
-***********************************************************/
-//Define simplex noise node for each LED
-
 int T[] = {0x15, 0x38, 0x32, 0x2c, 0x0d, 0x13, 0x07, 0x2a};
 static float onethird = 0.333333333;
 static float onesixth = 0.166666667;

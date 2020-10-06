@@ -968,7 +968,7 @@ void drawMenu()
     }
   }
   break;
-  case 13: //Enter WiFi PW
+  case 13: // Enter WiFi PW
   {
     u8g2.setCursor(0, 8);
     u8g2.print("Enter WiFi Password");
@@ -1004,7 +1004,7 @@ void drawMenu()
     //126 = ~
   }
   break;
-  case 14: //Test connection to new WiFi
+  case 14: // Test connection to new WiFi
   {
     u8g2.setCursor(0, 8);
     u8g2.print("Test Connection");
@@ -1081,7 +1081,7 @@ void drawMenu()
   break;
   }
 
-  //Back Button
+  // Back Button
   if (knob2.click == 1)
   {
     switch (globalMenu.currentMenu)
@@ -1162,7 +1162,8 @@ void drawMenu()
       break;
     }
   }
-  //Forward/Confirm Button
+
+  // Forward/Confirm Button
   if (knob1.click == 1)
   {
     switch (globalMenu.currentMenu)
@@ -1204,7 +1205,7 @@ void drawMenu()
       }
     }
     break;
-    case 2: //Settings click
+    case 2: // Settings click
     {
       switch (globalMenu.menu[globalMenu.currentMenu])
       {
@@ -1252,7 +1253,7 @@ void drawMenu()
       }
     }
     break;
-    case 6: //Set Max Favorites Click
+    case 6: // Set Max Favorites Click
     {
       patternSettings.numberOfFavorites = globalMenu.menu[globalMenu.currentMenu];
       globalMenu.patternMax[5] = patternSettings.numberOfFavorites;
@@ -1262,7 +1263,7 @@ void drawMenu()
       globalMenu.currentMenu = 5;
     }
     break;
-    case 7: //Reset Favorites Click
+    case 7: // Reset Favorites Click
     {
       switch (globalMenu.menu[globalMenu.currentMenu])
       {

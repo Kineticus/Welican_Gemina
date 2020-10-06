@@ -517,8 +517,8 @@ static const unsigned char myBitmap[] = {
     0x00,
 };
 
-#define DVD_width 16
-#define DVD_height 10
+#define DVD_WIDTH 16
+#define DVD_HEIGHT 10
 static const unsigned char DVD[] = {
     // DVD LOGO, 16x10px
     0x7F, 0xFC, 0xD2, 0x96, 0x92, 0x92, 0x92, 0x93, 0x1F, 0xF9, 0x00, 0x00,

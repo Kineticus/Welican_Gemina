@@ -346,67 +346,19 @@ void movingCircles()
 
 void dvdBounce()
 {
-  dvd1.y += dvd1.vy;
-  dvd1.x += dvd1.vx;
-
-  if (dvd1.y <= 0)
-  {
-    dvd1.vy = 1;
-  }
-  if (dvd1.y >= (VISUALIZER_Y - DVD_width))
-  {
-    dvd1.vy = -1;
-  }
-
-  if (dvd1.x <= 0)
-  {
-    dvd1.vx = 1;
-  }
-  if (dvd1.x >= (VISUALIZER_X - DVD_height))
-  {
-    dvd1.vx = -1;
-  }
-
-  //u8g2.drawDisc(dvd1.y, dvd1.x + 18, 2, U8G2_DRAW_ALL);
-  u8g2.drawXBMP(dvd1.y, dvd1.x + 16, DVD_width, DVD_height, DVD);
+  objectBounce(&bounceModel1, DVD_WIDTH, DVD_HEIGHT, DVD);
 }
 
-void objectBounce(DvdModel *item1, u8g2_uint_t objectWidth, u8g2_uint_t objectHeight, const unsigned char object[])
-{
-  item1->y += item1->vy;
-  item1->x += item1->vx;
-
-  if (item1->y <= 0)
-  {
-    item1->vy = 1;
-  }
-  if (item1->y >= (VISUALIZER_Y - objectWidth))
-  {
-    item1->vy = -1;
-  }
-
-  if (item1->x <= 0)
-  {
-    item1->vx = 1;
-  }
-  if (item1->x >= (VISUALIZER_X - objectHeight))
-  {
-    item1->vx = -1;
-  }
-
-  u8g2.drawXBMP(item1->y, item1->x + 16,
-                objectWidth, objectHeight, object);
-}
 void starBounce()
 {
-  objectBounce(&dvd1, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
-  objectBounce(&dvd2, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
-  objectBounce(&dvd3, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
-  objectBounce(&dvd4, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
-  objectBounce(&dvd5, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
-  objectBounce(&dvd6, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
-  objectBounce(&dvd7, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
-  objectBounce(&dvd8, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
-  objectBounce(&dvd9, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
-  objectBounce(&dvd10, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
+  objectBounce(&bounceModel1, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
+  objectBounce(&bounceModel2, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
+  objectBounce(&bounceModel3, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
+  objectBounce(&bounceModel4, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
+  objectBounce(&bounceModel5, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
+  objectBounce(&bounceModel6, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
+  objectBounce(&bounceModel7, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
+  objectBounce(&bounceModel8, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
+  objectBounce(&bounceModel9, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
+  objectBounce(&bounceModel10, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
 }

@@ -436,23 +436,23 @@ struct StarModel
 };
 StarModel star;
 
-struct DvdModel
+struct BounceModel
 {
   int x;
   int y;
   int vx;
   int vy;
 };
-DvdModel dvd1 = {random(random(0, 32), random(0, 32)), random(random(0, 32), random(0, 32)), 1, 1};
-DvdModel dvd2 = {random(random(0, 32), random(0, 32)), random(random(0, 32), random(0, 32)), 1, 1};
-DvdModel dvd3 = {random(random(0, 32), random(0, 32)), random(random(0, 32), random(0, 32)), 1, 1};
-DvdModel dvd4 = {random(random(0, 32), random(0, 32)), random(random(0, 32), random(0, 32)), 1, 1};
-DvdModel dvd5 = {random(random(0, 32), random(0, 32)), random(random(0, 32), random(0, 32)), 1, 1};
-DvdModel dvd6 = {random(random(0, 32), random(0, 32)), random(random(0, 32), random(0, 32)), 1, 1};
-DvdModel dvd7 = {random(random(0, 32), random(0, 32)), random(random(0, 32), random(0, 32)), 1, 1};
-DvdModel dvd8 = {random(random(0, 32), random(0, 32)), random(random(0, 32), random(0, 32)), 1, 1};
-DvdModel dvd9 = {random(random(0, 32), random(0, 32)), random(random(0, 32), random(0, 32)), 1, 1};
-DvdModel dvd10 = {random(random(0, 32), random(0, 32)), random(random(0, 32), random(0, 32)), 1, 1};
+BounceModel bounceModel1 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
+BounceModel bounceModel2 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
+BounceModel bounceModel3 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
+BounceModel bounceModel4 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
+BounceModel bounceModel5 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
+BounceModel bounceModel6 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
+BounceModel bounceModel7 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
+BounceModel bounceModel8 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
+BounceModel bounceModel9 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
+BounceModel bounceModel10 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
 
 // GAMES
 struct Player

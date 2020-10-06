@@ -31,7 +31,7 @@ void createRoutes(AsyncWebServer *server)
   });
 }
 
-void setupWebsiteRoutes(AsyncWebServer *server)
+void startWebsite(AsyncWebServer *server)
 {
   createRoutes(server);
 

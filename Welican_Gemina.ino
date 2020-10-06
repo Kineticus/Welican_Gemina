@@ -386,8 +386,13 @@ struct MenuModel
   int patternMax[6];
   int currentMenu;
   int currentMenuMultiplier;
+  u8g2_uint_t verticalDividePosition;
   u8g2_uint_t firstLineHorizontal;
   u8g2_uint_t secondLineHorizontal;
+  u8g2_uint_t selectionBubblePadding;
+  u8g2_uint_t selectionBubbleWidth;
+  u8g2_uint_t selectionBubbleHeight;
+  u8g2_uint_t selectionBubbleRadius;
 };
 MenuModel globalMenu = {
     .menu = {},
@@ -396,8 +401,13 @@ MenuModel globalMenu = {
     .patternMax = {12, 12, 22, 65, 80, patternSettings.numberOfFavorites},
     .currentMenu = 0,
     .currentMenuMultiplier = 1,
+    .verticalDividePosition = 64,
     .firstLineHorizontal = 24,
-    .secondLineHorizontal = 38};
+    .secondLineHorizontal = 38,
+    .selectionBubblePadding = 12,
+    .selectionBubbleWidth = 64,
+    .selectionBubbleHeight = 16,
+    .selectionBubbleRadius = 7};
 
 struct Brightness
 {

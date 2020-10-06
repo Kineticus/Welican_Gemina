@@ -21,23 +21,37 @@ void drawMenuWords(String menuName, String first, String second, String third, S
   }
 }
 
-void drawMenuFrame()
+void drawMenuSelectionFrames()
 {
-  u8g2_uint_t secondLineHorizontal = 38;
-
   switch (globalMenu.menu[globalMenu.currentMenu])
   {
   case 0: // First Selection
-    u8g2.drawRFrame(0, 12, 64, 16, 7);
+    u8g2.drawRFrame(0,
+                    globalMenu.firstLineHorizontal - globalMenu.selectionBubblePadding,
+                    globalMenu.selectionBubbleWidth,
+                    globalMenu.selectionBubbleHeight,
+                    globalMenu.selectionBubbleRadius);
     break;
   case 1: // Second Selection
-    u8g2.drawRFrame(64, 12, 64, 16, 7);
+    u8g2.drawRFrame(globalMenu.verticalDividePosition,
+                    globalMenu.firstLineHorizontal - globalMenu.selectionBubblePadding,
+                    globalMenu.selectionBubbleWidth,
+                    globalMenu.selectionBubbleHeight,
+                    globalMenu.selectionBubbleRadius);
     break;
   case 2: // Third Selection
-    u8g2.drawRFrame(0, globalMenu.secondLineHorizontal - 12, 64, 16, 7);
+    u8g2.drawRFrame(0,
+                    globalMenu.secondLineHorizontal - globalMenu.selectionBubblePadding,
+                    globalMenu.selectionBubbleWidth,
+                    globalMenu.selectionBubbleHeight,
+                    globalMenu.selectionBubbleRadius);
     break;
   case 3: // Fourth Selection
-    u8g2.drawRFrame(64, globalMenu.secondLineHorizontal - 12, 64, 16, 7);
+    u8g2.drawRFrame(globalMenu.verticalDividePosition,
+                    globalMenu.secondLineHorizontal - globalMenu.selectionBubblePadding,
+                    globalMenu.selectionBubbleWidth,
+                    globalMenu.selectionBubbleHeight,
+                    globalMenu.selectionBubbleRadius);
     break;
   }
 }
@@ -52,18 +66,26 @@ void drawYesNoMenuFrame(String question)
 {
   drawMenuTop(question);
 
-  u8g2.setCursor(5, 24);
+  u8g2.setCursor(5, globalMenu.firstLineHorizontal);
   u8g2.print("No");
-  u8g2.setCursor(69, 24);
+  u8g2.setCursor(69, globalMenu.firstLineHorizontal);
   u8g2.print("Yes");
 
   switch (globalMenu.menu[globalMenu.currentMenu])
   {
   case 0: // No
-    u8g2.drawRFrame(0, 12, 64, 16, 7);
+    u8g2.drawRFrame(0,
+                    globalMenu.selectionBubblePadding,
+                    globalMenu.selectionBubbleWidth,
+                    globalMenu.selectionBubbleHeight,
+                    globalMenu.selectionBubbleRadius);
     break;
   case 1: // Yes
-    u8g2.drawRFrame(64, 12, 64, 16, 7);
+    u8g2.drawRFrame(globalMenu.verticalDividePosition,
+                    globalMenu.firstLineHorizontal - globalMenu.selectionBubblePadding,
+                    globalMenu.selectionBubbleWidth,
+                    globalMenu.selectionBubbleHeight,
+                    globalMenu.selectionBubbleRadius);
     break;
   }
 }

@@ -672,21 +672,21 @@ void drawMenuCommander()
   {
     drawMenuWords("Welican Gemina",
                   "Games", "Settings", "Stuff", "Exit");
-    drawMenuFrame();
+    drawMenuSelectionFrames();
   }
   break;
   case 1: // Draw Games
   {
     drawMenuWords("Games",
                   "Fallios", "Block Breaker", "Tetris");
-    drawMenuFrame();
+    drawMenuSelectionFrames();
   }
   break;
   case 2: // Draw Settings
   {
     drawMenuWords("Settings",
                   "LED Config", "Favorites", "ZIP Code", "WIFI");
-    drawMenuFrame();
+    drawMenuSelectionFrames();
   }
   break;
   case 3: // Led Count Menu
@@ -709,7 +709,7 @@ void drawMenuCommander()
   {
     drawMenuWords("Settings > Favorites",
                   "Add New", "Set Max", "Reset", "Back");
-    drawMenuFrame();
+    drawMenuSelectionFrames();
   }
   break;
   case 6:
@@ -782,7 +782,7 @@ void drawMenuCommander()
       u8g2.setCursor(25, 60);
       u8g2.print("Not Connected");
     }
-    drawMenuFrame();
+    drawMenuSelectionFrames();
   }
   break;
   case 10: // Add New Favorites Menu

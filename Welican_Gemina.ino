@@ -701,13 +701,7 @@ void setup()
   //WiFi.status();
   //WiFi.localIP();
 
-  setupWebsiteRoutes();
-
-  dnsServer.start(53, "*", WiFi.softAPIP());
-  server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER); //only when requested from AP
-
-  // Start server
-  server.begin();
+  startWebsite(&server);
 
   seedThings();
 

@@ -1,7 +1,7 @@
 //U8X8_PROGMEM
-#define myBitmap_width 64
-#define myBitmap_height 64
-static const unsigned char myBitmap[] = {
+#define WELICAN_LOGO_WIDTH 64
+#define WELICAN_LOGO_HEIGHT 64
+static const unsigned char WELICAN_LOGO[] = {
     // 'OLED3, 64x64px
     0x00,
     0x00,
@@ -524,9 +524,9 @@ static const unsigned char DVD[] = {
     0x7F, 0xFC, 0xD2, 0x96, 0x92, 0x92, 0x92, 0x93, 0x1F, 0xF9, 0x00, 0x00,
     0x00, 0x00, 0xFC, 0x3F, 0x7F, 0xFC, 0xFC, 0x3F};
 
-#define heart_width 8
-#define heart_height 8
-static const unsigned char heart[] = {
+#define HEART_WIDTH 8
+#define HEART_HEIGHT 8
+static const unsigned char HEART[] = {
     0x00,
     0x66,
     0xFF,
@@ -537,14 +537,14 @@ static const unsigned char heart[] = {
     0x00,
 };
 
-#define musicNote_width 8
-#define musicNote_height 8
-static const unsigned char musicNote[] = {
+#define MUSIC_NOTE_WIDTH 8
+#define MUSIC_NOTE_HEIGHT 8
+static const unsigned char MUSIC_NOTE[] = {
     0xF8, 0xFC, 0x84, 0x84, 0xE4, 0xE7, 0xE7, 0x07};
 
-#define hashtag_width 8
-#define hashtag_height 8
-static const unsigned char hashtag[] = {
+#define HASHTAG_WIDTH 8
+#define HASHTAG_HEIGHT 8
+static const unsigned char HASHTAG[] = {
     0xDB,
     0xDB,
     0x00,
@@ -555,9 +555,9 @@ static const unsigned char hashtag[] = {
     0xDB,
 };
 
-#define donut_width 8
-#define donut_height 8
-static const unsigned char donut[] = {
+#define DONUT_WIDTH 8
+#define DONUT_HEIGHT 8
+static const unsigned char DONUT[] = {
     0x00,
     0x3C,
     0x42,
@@ -568,9 +568,9 @@ static const unsigned char donut[] = {
     0x00,
 };
 
-#define wave_width 8
-#define wave_height 8
-static const unsigned char wave[] = {
+#define WAVE_WIDTH 8
+#define WAVE_HEIGHT 8
+static const unsigned char WAVE[] = {
     0x10,
     0x14,
     0x54,

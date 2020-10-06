@@ -542,17 +542,17 @@ void drawTop()
     u8g2.drawXBMP(0, 0, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
     break;
   case 1:
-    u8g2.drawXBMP(0, 0, wave_width, wave_height, wave);
-    // u8g2.drawXBMP(0,0,musicNote_width, musicNote_height, musicNote);
+    u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+    // u8g2.drawXBMP(0,0,MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
     break;
   case 2:
-    u8g2.drawXBMP(0, 0, hashtag_width, hashtag_height, hashtag);
+    u8g2.drawXBMP(0, 0, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);
     break;
   case 3:
-    u8g2.drawXBMP(0, 0, donut_width, donut_height, donut);
+    u8g2.drawXBMP(0, 0, DONUT_WIDTH, DONUT_HEIGHT, DONUT);
     break;
   case 4:
-    u8g2.drawXBMP(0, 0, heart_width, heart_height, heart);
+    u8g2.drawXBMP(0, 0, HEART_WIDTH, HEART_HEIGHT, HEART);
     break;
   }
 
@@ -561,9 +561,9 @@ void drawTop()
   u8g2.print(patternSettings.pattern[globals.mode]);
   u8g2.setCursor(32, 8);
   u8g2.print(globalStrings.functionNameOutString);
-  //u8g2.drawXBMP(42,0,donut_width, donut_height, donut);
-  //u8g2.drawXBMP(54,0,musicNote_width, musicNote_height, musicNote);
-  //u8g2.drawXBMP(68,0,heart_width, heart_height, heart);
+  //u8g2.drawXBMP(42,0,DONUT_WIDTH, DONUT_HEIGHT, DONUT);
+  //u8g2.drawXBMP(54,0,MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
+  //u8g2.drawXBMP(68,0,HEART_WIDTH, HEART_HEIGHT, HEART);
 
   //Hosting our own AP?
   u8g2.setCursor(112, 8);
@@ -1415,17 +1415,17 @@ void newFavoritesMenu()
     u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
     break;
   case 1:
-    u8g2.drawXBMP(2, 53, wave_width, wave_height, wave);
-    // u8g2.drawXBMP(0,0,musicNote_width, musicNote_height, musicNote);
+    u8g2.drawXBMP(2, 53, WAVE_WIDTH, WAVE_HEIGHT, wave);
+    // u8g2.drawXBMP(0,0,MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
     break;
   case 2:
-    u8g2.drawXBMP(2, 53, hashtag_width, hashtag_height, hashtag);
+    u8g2.drawXBMP(2, 53, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);
     break;
   case 3:
-    u8g2.drawXBMP(2, 53, donut_width, donut_height, donut);
+    u8g2.drawXBMP(2, 53, DONUT_WIDTH, DONUT_HEIGHT, DONUT);
     break;
   case 4:
-    u8g2.drawXBMP(2, 53, heart_width, heart_height, heart);
+    u8g2.drawXBMP(2, 53, HEART_WIDTH, HEART_HEIGHT, HEART);
     break;
   }
   u8g2.setCursor(12, 60);
@@ -1796,12 +1796,6 @@ void drawClock()
     //u8g2.print("0:00");
     //Decided to just show nothing if we don't have a time sync
   }
-
-  //Show logo
-  /*
-  u8g2.setBitmapMode(true);
-  u8g2.drawXBMP(32, 0, myBitmap_width, myBitmap_height, myBitmap);
-  */
 }
 
 void showLogo(int millisTime)
@@ -1813,7 +1807,7 @@ void showLogo(int millisTime)
 
     //Show logo
     u8g2.setBitmapMode(true /* transparent*/);
-    u8g2.drawXBMP(32, 0, myBitmap_width, myBitmap_height, myBitmap);
+    u8g2.drawXBMP(32, 0, WELICAN_LOGO_WIDTH, WELICAN_LOGO_HEIGHT, WELICAN_LOGO);
   }
 }
 

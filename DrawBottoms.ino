@@ -227,44 +227,42 @@ void gravityWell()
 {
   for (int i = 0; i < MAX_STARS; i++)
   {
-    if (star.xx[i] > -7)
+    if (ball.xx[i] > -7)
     {
-      star.xx[i] -= 1;
+      ball.xx[i] -= 1;
     }
 
-    star.y[i] += star.yy[i];
-    star.x[i] += star.xx[i];
+    ball.y[i] += ball.yy[i];
+    ball.x[i] += ball.xx[i];
 
-    if (star.x[i] < 0)
+    if (ball.x[i] < 0)
     {
-      if (star.xx[i] == -1)
+      if (ball.xx[i] == -1)
       {
-        star.xx[i] = 1;
+        ball.xx[i] = 1;
       }
       else
       {
-        star.xx[i] = abs(star.xx[i]) - 1;
+        ball.xx[i] = abs(ball.xx[i]) - 1;
       }
-      star.x[i] = 0;
+      ball.x[i] = 0;
     }
 
-    if (star.x[i] < 0)
+    if (ball.x[i] < 0)
     {
-      star.xx[i] = abs(star.xx[i]);
+      ball.xx[i] = abs(ball.xx[i]);
     }
 
-    if (((star.y[i] > VISUALIZER_Y) || (star.y[i] < 0)) || ((star.yy[i] == 0) && (star.x[i] <= 0))) // || (star.x[i] > VISUALIZER_X) || (star.x[i] < 0)
+    if (((ball.y[i] > VISUALIZER_Y) || (ball.y[i] < 0)) || ((ball.yy[i] == 0) && (ball.x[i] <= 0)))
     {
-      //star.y[i] = random(0, VISUALIZER_Y);
-      //star.x[i] = random(0, VISUALIZER_X);
-      star.y[i] = VISUALIZER_Y / 2;
-      star.x[i] = 0;
-      star.yy[i] = random(-4, 4);
-      star.xx[i] = random(4, 10);
-      star.z[i] = random(1, 5);
+      ball.y[i] = VISUALIZER_Y / 2;
+      ball.x[i] = 0;
+      ball.yy[i] = random(-4, 4);
+      ball.xx[i] = random(4, 10);
+      ball.z[i] = random(1, 5);
     }
 
-    u8g2.drawDisc(star.y[i], (VISUALIZER_X - star.x[i]) + (14 - star.z[i]), star.z[i], U8G2_DRAW_ALL);
+    u8g2.drawDisc(ball.y[i], (VISUALIZER_X - ball.x[i]) + (14 - ball.z[i]), ball.z[i], U8G2_DRAW_ALL);
   }
 }
 
@@ -333,14 +331,14 @@ void movingCircles()
 {
   for (int i = 0; i < 8; i++)
   {
-    star.y[i] += star.z[i];
-    if (star.y[i] > VISUALIZER_Y)
+    ball.y[i] += ball.z[i];
+    if (ball.y[i] > VISUALIZER_Y)
     {
-      star.y[i] = 0;
-      star.x[i] = random(0, VISUALIZER_X);
-      star.yy[i] = random(1, 4);
+      ball.y[i] = 0;
+      ball.x[i] = random(0, VISUALIZER_X);
+      ball.yy[i] = random(1, 4);
     }
-    u8g2.drawDisc(star.y[i], star.x[i] + 18, 2, U8G2_DRAW_ALL);
+    u8g2.drawDisc(ball.y[i], ball.x[i] + 18, 2, U8G2_DRAW_ALL);
   }
 }
 

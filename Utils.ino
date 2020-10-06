@@ -601,7 +601,6 @@ void drawBottom()
   switch (tempMode)
   {
   case 0:
-    //dvdBounce();
     movingTriangles();
     break;
   case 1:
@@ -614,10 +613,12 @@ void drawBottom()
     break;
   case 3:
     drawIPAddress();
-    //gravityWell();
     break;
   case 4:
     starBounce();
+    break;
+  case 5:
+    dvdBounce();
     break;
   }
 }

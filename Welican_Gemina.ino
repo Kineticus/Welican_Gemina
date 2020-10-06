@@ -426,7 +426,7 @@ Brightness brightness = {
     .fadeAmount = 5,
     .baseBrightness = 10};
 
-struct StarModel
+struct BallModel
 {
   int x[MAX_STARS];
   int xx[MAX_STARS];
@@ -434,7 +434,7 @@ struct StarModel
   int yy[MAX_STARS];
   int z[MAX_STARS];
 };
-StarModel star;
+BallModel ball;
 
 struct BounceModel
 {
@@ -443,16 +443,56 @@ struct BounceModel
   int vx;
   int vy;
 };
-BounceModel bounceModel1 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
-BounceModel bounceModel2 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
-BounceModel bounceModel3 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
-BounceModel bounceModel4 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
-BounceModel bounceModel5 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
-BounceModel bounceModel6 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
-BounceModel bounceModel7 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
-BounceModel bounceModel8 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
-BounceModel bounceModel9 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
-BounceModel bounceModel10 = {random(random(0, 64), random(0, 64)), random(random(0, 64), random(0, 64)), 1, 1};
+BounceModel bounceModel1 = {
+    .x = random(random(0, 64), random(0, 64)),
+    .y = random(random(0, 64), random(0, 64)),
+    .vx = random(random(0, 64), random(0, 64)),
+    .vy = random(random(0, 64), random(0, 64))};
+BounceModel bounceModel2 = {
+    .x = random(random(0, 64), random(0, 64)),
+    .y = random(random(0, 64), random(0, 64)),
+    .vx = random(random(0, 64), random(0, 64)),
+    .vy = random(random(0, 64), random(0, 64))};
+BounceModel bounceModel3 = {
+    .x = random(random(0, 64), random(0, 64)),
+    .y = random(random(0, 64), random(0, 64)),
+    .vx = random(random(0, 64), random(0, 64)),
+    .vy = random(random(0, 64), random(0, 64))};
+BounceModel bounceModel4 = {
+    .x = random(random(0, 64), random(0, 64)),
+    .y = random(random(0, 64), random(0, 64)),
+    .vx = random(random(0, 64), random(0, 64)),
+    .vy = random(random(0, 64), random(0, 64))};
+BounceModel bounceModel5 = {
+    .x = random(random(0, 64), random(0, 64)),
+    .y = random(random(0, 64), random(0, 64)),
+    .vx = random(random(0, 64), random(0, 64)),
+    .vy = random(random(0, 64), random(0, 64))};
+BounceModel bounceModel6 = {
+    .x = random(random(0, 64), random(0, 64)),
+    .y = random(random(0, 64), random(0, 64)),
+    .vx = random(random(0, 64), random(0, 64)),
+    .vy = random(random(0, 64), random(0, 64))};
+BounceModel bounceModel7 = {
+    .x = random(random(0, 64), random(0, 64)),
+    .y = random(random(0, 64), random(0, 64)),
+    .vx = random(random(0, 64), random(0, 64)),
+    .vy = random(random(0, 64), random(0, 64))};
+BounceModel bounceModel8 = {
+    .x = random(random(0, 64), random(0, 64)),
+    .y = random(random(0, 64), random(0, 64)),
+    .vx = random(random(0, 64), random(0, 64)),
+    .vy = random(random(0, 64), random(0, 64))};
+BounceModel bounceModel9 = {
+    .x = random(random(0, 64), random(0, 64)),
+    .y = random(random(0, 64), random(0, 64)),
+    .vx = random(random(0, 64), random(0, 64)),
+    .vy = random(random(0, 64), random(0, 64))};
+BounceModel bounceModel10 = {
+    .x = random(random(0, 64), random(0, 64)),
+    .y = random(random(0, 64), random(0, 64)),
+    .vx = random(random(0, 64), random(0, 64)),
+    .vy = random(random(0, 64), random(0, 64))};
 
 // GAMES
 struct Player
@@ -699,11 +739,11 @@ void setup()
   //Seed variables
   for (int i = 0; i < MAX_STARS; i++)
   {
-    star.x[i] = random(0, VISUALIZER_X);
-    star.xx[i] = random(1, 4);
-    star.y[i] = random(0, VISUALIZER_Y);
-    star.yy[i] = random(1, 4);
-    star.z[i] = random(1, 4);
+    ball.x[i] = random(0, VISUALIZER_X);
+    ball.xx[i] = random(1, 4);
+    ball.y[i] = random(0, VISUALIZER_Y);
+    ball.yy[i] = random(1, 4);
+    ball.z[i] = random(1, 4);
   }
 
   //For troubleshooting

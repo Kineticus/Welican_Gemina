@@ -1415,7 +1415,7 @@ void newFavoritesMenu()
     u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
     break;
   case 1:
-    u8g2.drawXBMP(2, 53, WAVE_WIDTH, WAVE_HEIGHT, wave);
+    u8g2.drawXBMP(2, 53, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
     // u8g2.drawXBMP(0,0,MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
     break;
   case 2:

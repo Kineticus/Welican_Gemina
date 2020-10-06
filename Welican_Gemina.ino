@@ -83,17 +83,20 @@ FASTLED_USING_NAMESPACE
 AsyncWebServer server(80);
 DNSServer dnsServer; //Used for Captive Portal
 
-class CaptiveRequestHandler : public AsyncWebHandler {
+class CaptiveRequestHandler : public AsyncWebHandler
+{
 public:
   CaptiveRequestHandler() {}
   virtual ~CaptiveRequestHandler() {}
 
-  bool canHandle(AsyncWebServerRequest *request){
+  bool canHandle(AsyncWebServerRequest *request)
+  {
     //request->addInterestingHeader("ANY");
     return true;
   }
 
-  void handleRequest(AsyncWebServerRequest *request) {
+  void handleRequest(AsyncWebServerRequest *request)
+  {
     AsyncResponseStream *response = request->beginResponseStream("text/html");
     response->print("<!DOCTYPE html><html><head><title>Captive Portal</title></head><body>");
     response->print("<p>This is out captive portal front page.</p>");
@@ -135,11 +138,9 @@ struct Globals
   unsigned int samplingPeriodUs;
   int runMode;
   int mode;
-  int currentMenu;
-  int currentMenuMultiplier;
+
   int modeMax;
   int tempPattern;
-  int pixelNumber;
   String ipAddress;
   String openWeatherMapApiKey;
   String ssid;
@@ -165,11 +166,8 @@ Globals globals = {
     .samplingPeriodUs = 0,
     .runMode = 0,
     .mode = 0,
-    .currentMenu = 0,
-    .currentMenuMultiplier = 1,
     .modeMax = MAX_MODES,
     .tempPattern = 0,
-    .pixelNumber = 0,
     .ipAddress = "",
     .openWeatherMapApiKey = OPEN_WEATHER_API_KEY,
     .ssid = WIFI_SSID,
@@ -242,6 +240,7 @@ GlobalUtils utils = {
 
 struct GlobalLED
 {
+  int pixelNumber;
   int interfade; //set this to 0 to disable fade in on boot. Set to 25 for fade in.
   int interfadeMax;
   int interfadeSpeed;
@@ -251,6 +250,7 @@ struct GlobalLED
   bool clearLEDS;
 };
 GlobalLED globalLED = {
+    .pixelNumber = 0,
     .interfade = 18,
     .interfadeMax = 18,
     .interfadeSpeed = 14,
@@ -299,7 +299,7 @@ struct PatternSettings
   int numberOfFavorites;   //Max 50, loads all 50 at program load, dynamically assignable
 
   uint8_t gHue;           // rotating "base color" used by many of the patterns
-  int8_t flowDirection;      // Use either 1 or -1 to set flow direction
+  int8_t flowDirection;   // Use either 1 or -1 to set flow direction
   bool gReverseDirection; //false = center outward, true = from ends inward
   bool sizeUpdate;
   bool moving;
@@ -390,12 +390,17 @@ struct MenuModel
   int menu[14];
   int menuMax[14];
   int patternMax[6];
+  int currentMenu;
+  int currentMenuMultiplier;
 };
 MenuModel globalMenu = {
     .menu = {},
     //Root Menu Items, Game Menu Items, Settings Menu Items
     .menuMax = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, patternSettings.numberOfFavorites, 99999, 0, 128},
-    .patternMax = {12, 12, 22, 65, 80, patternSettings.numberOfFavorites}};
+    .patternMax = {12, 12, 22, 65, 80, patternSettings.numberOfFavorites},
+    .currentMenu = 0,
+    .currentMenuMultiplier = 1,
+};
 
 struct Brightness
 {
@@ -672,8 +677,8 @@ void setup()
   });
 
   dnsServer.start(53, "*", WiFi.softAPIP());
-  server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER);//only when requested from AP
-           
+  server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER); //only when requested from AP
+
   // Start server
   server.begin();
 
@@ -741,7 +746,7 @@ void setup()
   readFavorites();
 
   readZipCode();
-  
+
   updateZipCodeString();
 
   //Begin a task named 'fftComputeTask' to handle FFT on the other core

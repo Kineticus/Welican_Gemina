@@ -914,14 +914,14 @@ void Mover(uint8_t thisfade, uint8_t hue)
   if (globalTime.currentMillis - globalTime.startMillis >= beatsin8(15, 25, 100))
   {
     globalTime.startMillis = globalTime.currentMillis;
-    patternSettings.leds[globals.pixelNumber] += CHSV(patternSettings.hue, 255, 255);
-    patternSettings.leds[(globals.pixelNumber + 5) % NUM_LEDS] += CHSV(patternSettings.hue + 85, 255, 255);   // We use modulus so that the location is between 0 and NUM_LEDS
-    patternSettings.leds[(globals.pixelNumber + 10) % NUM_LEDS] += CHSV(patternSettings.hue + 170, 255, 255); // Same here.
-    fadeToBlackBy(patternSettings.leds, NUM_LEDS, thisfade);                                                  // Low values = slower fade.
+    patternSettings.leds[globalLED.pixelNumber] += CHSV(patternSettings.hue, 255, 255);
+    patternSettings.leds[(globalLED.pixelNumber + 5) % NUM_LEDS] += CHSV(patternSettings.hue + 85, 255, 255);   // We use modulus so that the location is between 0 and NUM_LEDS
+    patternSettings.leds[(globalLED.pixelNumber + 10) % NUM_LEDS] += CHSV(patternSettings.hue + 170, 255, 255); // Same here.
+    fadeToBlackBy(patternSettings.leds, NUM_LEDS, thisfade);                                                    // Low values = slower fade.
 
-    if (++globals.pixelNumber >= NUM_LEDS)
+    if (++globalLED.pixelNumber >= NUM_LEDS)
     {
-      globals.pixelNumber = 0;
+      globalLED.pixelNumber = 0;
     }
   }
 }
@@ -990,9 +990,9 @@ void MeteorRain(byte red, byte green, byte blue, byte meteorSize, byte meteorTra
     // draw meteor
     for (int j = 0; j < meteorSize; j++)
     {
-      if ((globals.pixelNumber - j < NUM_LEDS) && (globals.pixelNumber - j >= 0))
+      if ((globalLED.pixelNumber - j < NUM_LEDS) && (globalLED.pixelNumber - j >= 0))
       {
-        setPixel(globals.pixelNumber - j, red, green, blue);
+        setPixel(globalLED.pixelNumber - j, red, green, blue);
       }
     }
 
@@ -1009,14 +1009,14 @@ void Meteor(uint8_t red, uint8_t green, uint8_t blue)
   {
     globalTime.startMillis = globalTime.currentMillis;
 
-    patternSettings.leds[globals.pixelNumber] = CRGB(red, green, blue);
+    patternSettings.leds[globalLED.pixelNumber] = CRGB(red, green, blue);
     blur1d(patternSettings.leds, NUM_LEDS, beatsin8(7, 20, 80));
 
     FastLED.show();
-    patternSettings.leds[globals.pixelNumber] = CRGB::Black;
-    if (++globals.pixelNumber >= NUM_LEDS)
+    patternSettings.leds[globalLED.pixelNumber] = CRGB::Black;
+    if (++globalLED.pixelNumber >= NUM_LEDS)
     {
-      globals.pixelNumber = 0;
+      globalLED.pixelNumber = 0;
     }
   }
 }

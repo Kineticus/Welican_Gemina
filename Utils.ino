@@ -194,9 +194,9 @@ void updateEncoders()
         //brightness knob is clicked at the same time as the program knob?
         //Change the globals.runMode variable to Menu
         globals.runMode = 1;
-        globals.currentMenu = 0; //Select main menu page
-        globals.currentMenuMultiplier = 1; //Set multiplier back to 1, just in case (used in ZIP Code)
-        knob1.click = 0;         //Null out clicks so menu doesn't get confused on first run
+        globalMenu.currentMenu = 0;           //Select main menu page
+        globalMenu.currentMenuMultiplier = 1; //Set multiplier back to 1, just in case (used in ZIP Code)
+        knob1.click = 0;                      //Null out clicks so menu doesn't get confused on first run
         knob2.click = 0;
       }
     }
@@ -239,8 +239,8 @@ void updateEncoders()
   {
     //Save Favorite Menu
     knob2.heldTime = 0;
-    globals.runMode = 1;      //enter Menu Mode
-    globals.currentMenu = 10; //Select the 10th menu, New Favorite
+    globals.runMode = 1;         //enter Menu Mode
+    globalMenu.currentMenu = 10; //Select the 10th menu, New Favorite
     //globalMenu.menu[10] = 0;
   }
 
@@ -283,24 +283,24 @@ void updateEncoders()
     { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
       globals.tempValue -= 4;
       knob1.temp += 4;
-      globalMenu.menu[globals.currentMenu] += 1 * globals.currentMenuMultiplier;
+      globalMenu.menu[globalMenu.currentMenu] += 1 * globalMenu.currentMenuMultiplier;
     }
     while (globals.tempValue <= -4)
     {
       globals.tempValue += 4;
       knob1.temp -= 4;
-      globalMenu.menu[globals.currentMenu] -= 1 * globals.currentMenuMultiplier;
+      globalMenu.menu[globalMenu.currentMenu] -= 1 * globalMenu.currentMenuMultiplier;
     }
 
-    if (globalMenu.menu[globals.currentMenu] > globalMenu.menuMax[globals.currentMenu])
+    if (globalMenu.menu[globalMenu.currentMenu] > globalMenu.menuMax[globalMenu.currentMenu])
     {
       //Mode 1 - constrain
-      globalMenu.menu[globals.currentMenu] = globalMenu.menuMax[globals.currentMenu];
+      globalMenu.menu[globalMenu.currentMenu] = globalMenu.menuMax[globalMenu.currentMenu];
     }
-    else if (globalMenu.menu[globals.currentMenu] < 0)
+    else if (globalMenu.menu[globalMenu.currentMenu] < 0)
     {
       //Mode 1 - constrain
-      globalMenu.menu[globals.currentMenu] = 0;
+      globalMenu.menu[globalMenu.currentMenu] = 0;
     }
   }
   else if (globals.runMode == 2)
@@ -580,7 +580,6 @@ void drawTop()
   //WiFi Status, see codes above
   u8g2.setCursor(120, 8);
   u8g2.print(WiFi.status());
- 
 
   //WiFi Strength % (99 is MAX, 1 is MIN)
   //RSSItoPercent(WiFi.RSSI());
@@ -647,7 +646,7 @@ time_t timeConvert(String timeToConvert)
   return t;
 }
 /*******************************************************************
- *  Menu System - globals.currentMenu sets menu page. globalMenu.menu[] contains selection
+ *  Menu System - globalMenu.currentMenu sets menu page. globalMenu.menu[] contains selection
  *                globalMenu.menuMax[] specifies max selection
  *  0 - Main Page
  *  1 - Games Page
@@ -665,10 +664,10 @@ void drawMenu()
   //u8g2.print("Menu");
   u8g2_horizontal_line(9);
 
-  switch (globals.currentMenu)
+  switch (globalMenu.currentMenu)
   {
-  case 0:
-    // DRAW IMAGE
+  case 0: // Draw Image
+  {
     u8g2.setCursor(0, 8);
     u8g2.print("Welican Gemina");
     u8g2.setCursor(5, 24);
@@ -679,8 +678,7 @@ void drawMenu()
     u8g2.print("Stuff");
     u8g2.setCursor(69, 44);
     u8g2.print("Exit");
-
-    switch (globalMenu.menu[globals.currentMenu])
+    switch (globalMenu.menu[globalMenu.currentMenu])
     {
     case 0:
       // u8g2.print("Games");
@@ -698,9 +696,10 @@ void drawMenu()
       u8g2.drawRFrame(64, 32, 64, 16, 7);
       break;
     }
-    break;
-  case 1:
-    // DRAW GAMES MENU
+  }
+  break;
+  case 1: // Draw Games
+  {
     u8g2.setCursor(0, 8);
     u8g2.print("Games");
     u8g2.setCursor(5, 24);
@@ -711,7 +710,7 @@ void drawMenu()
     u8g2.print("Tetris");
     u8g2.setCursor(69, 44);
     u8g2.print("Back");
-    switch (globalMenu.menu[globals.currentMenu])
+    switch (globalMenu.menu[globalMenu.currentMenu])
     {
     case 0:
       // u8g2.print("Games");
@@ -729,9 +728,10 @@ void drawMenu()
       u8g2.drawRFrame(64, 32, 64, 16, 7);
       break;
     }
-    break;
-  case 2:
-    // DRAW SETTINGS MENU
+  }
+  break;
+  case 2: // Draw Settings
+  {
     u8g2.setCursor(0, 8);
     u8g2.print("Settings");
     u8g2.setCursor(5, 24);
@@ -742,7 +742,7 @@ void drawMenu()
     u8g2.print("ZIP Code");
     u8g2.setCursor(69, 44);
     u8g2.print("WiFi");
-    switch (globalMenu.menu[globals.currentMenu])
+    switch (globalMenu.menu[globalMenu.currentMenu])
     {
     case 0:
       u8g2.drawRFrame(0, 12, 64, 16, 7);
@@ -757,14 +757,15 @@ void drawMenu()
       u8g2.drawRFrame(64, 32, 64, 16, 7);
       break;
     }
-    break;
-  case 3:
-    // LED COUNT MENU
+  }
+  break;
+  case 3: // Led Count Menu
+  {
     u8g2.print("LED Count");
-
-    break;
-  case 4:
-    //ZIP CODE MAIN MENU
+  }
+  break;
+  case 4: // Zip Code Menu
+  {
     u8g2.setCursor(0, 8);
     u8g2.print("Settings > ZIP Code");
     u8g2.setCursor(16, 50);
@@ -772,10 +773,10 @@ void drawMenu()
     u8g2.setCursor(44, 30);
     updateZipCodeString();
     u8g2.print(weatherSettings.zipCode);
-    break;
-
-  case 5:
-    // FAVORITES MENU
+  }
+  break;
+  case 5: // Favorites Menu
+  {
     u8g2.setCursor(0, 8);
     u8g2.print("Settings > Favorites");
     u8g2.setCursor(5, 24);
@@ -786,7 +787,7 @@ void drawMenu()
     u8g2.print("Reset");
     u8g2.setCursor(69, 44);
     u8g2.print("Back");
-    switch (globalMenu.menu[globals.currentMenu])
+    switch (globalMenu.menu[globalMenu.currentMenu])
     {
     case 0:
       // u8g2.print("Add New");
@@ -804,13 +805,14 @@ void drawMenu()
       u8g2.drawRFrame(64, 32, 64, 16, 7);
       break;
     }
-    break;
-
+  }
+  break;
   case 6:
+  {
     u8g2.setCursor(0, 8);
     u8g2.print("Set Max Favorites");
 
-    if (globalMenu.menu[globals.currentMenu] < 10)
+    if (globalMenu.menu[globalMenu.currentMenu] < 10)
     {
       u8g2.setCursor(57, 36);
     }
@@ -819,24 +821,24 @@ void drawMenu()
       u8g2.setCursor(54, 36);
     }
 
-    if (globalMenu.menu[globals.currentMenu] < 1) //gotta have at least 1 favorite
+    if (globalMenu.menu[globalMenu.currentMenu] < 1) //gotta have at least 1 favorite
     {
-      globalMenu.menu[globals.currentMenu] = 1;
+      globalMenu.menu[globalMenu.currentMenu] = 1;
     }
-    u8g2.print(globalMenu.menu[globals.currentMenu]);
+    u8g2.print(globalMenu.menu[globalMenu.currentMenu]);
 
     u8g2.drawRFrame(50, 24, 20, 16, 3);
-    break;
-
-  case 7:
-    // FAVORITES RESET MENU
+  }
+  break;
+  case 7: // Favorites Reset Menu
+  {
     u8g2.setCursor(0, 8);
     u8g2.print("Reset All Favorites?");
     u8g2.setCursor(5, 24);
     u8g2.print("No");
     u8g2.setCursor(69, 24);
     u8g2.print("Yes");
-    switch (globalMenu.menu[globals.currentMenu])
+    switch (globalMenu.menu[globalMenu.currentMenu])
     {
     case 0:
       //No
@@ -847,8 +849,8 @@ void drawMenu()
       u8g2.drawRFrame(64, 12, 64, 16, 7);
       break;
     }
-    break;
-
+  }
+  break;
   case 8:
   {
     // WIFI MENU
@@ -863,7 +865,7 @@ void drawMenu()
     u8g2.print("Connect");
     u8g2.setCursor(69, 38);
     u8g2.print("Disconn.");
-    
+
     u8g2.setCursor(10, 64);
 
     if (WiFi.status() == WL_CONNECTED)
@@ -879,12 +881,10 @@ void drawMenu()
 
       u8g2.setCursor(temp, 51);
       u8g2.print(WiFi.SSID());
-      
+
       u8g2.print("   ");
       u8g2.print(RSSItoPercent(WiFi.RSSI()));
       u8g2.print("%");
-
-      
 
       globals.ipAddress = WiFi.localIP().toString();
       temp = globals.ipAddress.length();
@@ -898,13 +898,14 @@ void drawMenu()
 
       u8g2.setCursor(temp, 64);
       u8g2.print(globals.ipAddress);
-    } else
+    }
+    else
     {
       u8g2.setCursor(25, 60);
       u8g2.print("Not Connected");
     }
-    
-    switch (globalMenu.menu[globals.currentMenu])
+
+    switch (globalMenu.menu[globalMenu.currentMenu])
     {
     case 0:
       // u8g2.print("Add New");
@@ -924,15 +925,18 @@ void drawMenu()
     }
   }
   break;
-
-  case 10:
-    //ADD NEW
+  case 10: // Add New Favorites Menu
+  {
     newFavoritesMenu();
-    break;
-  case 11:
+  }
+  break;
+  case 11: // Set Zip Code Menu
+  {
     setZipCodeMenu();
-    break;
-  case 12:
+  }
+  break;
+  case 12: // WIFI Scan Results
+  {
     u8g2.setCursor(0, 8);
     u8g2.print("WiFi Scan Results");
     u8g2.setCursor(15, 60);
@@ -941,37 +945,37 @@ void drawMenu()
     {
       u8g2.print("Scan Failed");
     }
-    
-    if(globals.networkScan == 0) 
+
+    if (globals.networkScan == 0)
     {
       Serial.println("No Networks Found");
-    } 
+    }
 
-    if(globals.networkScan > 0)
+    if (globals.networkScan > 0)
     {
       for (int i = 0; i < globals.networkScan; ++i)
       {
-          u8g2.setCursor(10, 19 + (9 * i));
-          u8g2.print(RSSItoPercent(WiFi.RSSI(i)));
-          u8g2.setCursor(25, 19 + (9 * i));
-          u8g2.print((WiFi.encryptionType(i) == WIFI_AUTH_OPEN)?" ":"*");
-          u8g2.setCursor(35, 19 + (9 * i));
-          u8g2.print(WiFi.SSID(i));
+        u8g2.setCursor(10, 19 + (9 * i));
+        u8g2.print(RSSItoPercent(WiFi.RSSI(i)));
+        u8g2.setCursor(25, 19 + (9 * i));
+        u8g2.print((WiFi.encryptionType(i) == WIFI_AUTH_OPEN) ? " " : "*");
+        u8g2.setCursor(35, 19 + (9 * i));
+        u8g2.print(WiFi.SSID(i));
       }
 
-      u8g2.setCursor(0, 19 + (9 * globalMenu.menu[globals.currentMenu]));
+      u8g2.setCursor(0, 19 + (9 * globalMenu.menu[globalMenu.currentMenu]));
       u8g2.print(">");
     }
-
-    break;
+  }
+  break;
   case 13: //Enter WiFi PW
   {
     u8g2.setCursor(0, 8);
     u8g2.print("Enter WiFi Password");
 
-    if (globalMenu.menu[globals.currentMenu] < 33)
+    if (globalMenu.menu[globalMenu.currentMenu] < 33)
     {
-      globalMenu.menu[globals.currentMenu] = 33;
+      globalMenu.menu[globalMenu.currentMenu] = 33;
     }
 
     u8g2.setCursor(0, 24);
@@ -980,37 +984,35 @@ void drawMenu()
     u8g2.setCursor(0, 40);
     u8g2.print(globals.password);
 
-    if (globalMenu.menu[globals.currentMenu] > 127)
+    if (globalMenu.menu[globalMenu.currentMenu] > 127)
     {
       u8g2.setCursor(0, 60);
       u8g2.print("Connect!");
-    } else
+    }
+    else
     {
       WiFi.SSID().length();
       u8g2.setCursor(30, 60);
-      u8g2.print((char)globalMenu.menu[globals.currentMenu]);
+      u8g2.print((char)globalMenu.menu[globalMenu.currentMenu]);
 
       //u8g2.setCursor(70, 60);
-      //u8g2.print(globalMenu.menu[globals.currentMenu]);
+      //u8g2.print(globalMenu.menu[globalMenu.currentMenu]);
     }
-    
-    
 
     //32 = " "
     //33 = !
     //126 = ~
   }
   break;
-
   case 14: //Test connection to new WiFi
   {
     u8g2.setCursor(0, 8);
     u8g2.print("Test Connection");
-    
+
     if (WiFi.status() == WL_CONNECTED)
     {
       u8g2.setCursor(0, 30);
-      
+
       int temp = WiFi.SSID().length();
 
       temp = 58 - (temp * 2);
@@ -1022,8 +1024,6 @@ void drawMenu()
 
       u8g2.setCursor(temp, 51);
       u8g2.print(WiFi.SSID());
-
-      
 
       globals.ipAddress = WiFi.localIP().toString();
       temp = globals.ipAddress.length();
@@ -1037,7 +1037,8 @@ void drawMenu()
 
       u8g2.setCursor(temp, 64);
       u8g2.print(globals.ipAddress);
-    } else
+    }
+    else
     {
       u8g2.setCursor(5, 60);
       u8g2.print("Trying to Connect...");
@@ -1047,35 +1048,35 @@ void drawMenu()
         WiFi.disconnect();
         delay(10);
         //WiFi.begin();
-        WiFi.begin((const char*)globals.ssid.c_str(), (const char*)globals.password.c_str());
+        WiFi.begin((const char *)globals.ssid.c_str(), (const char *)globals.password.c_str());
         delay(42);
       }
     }
     u8g2.setCursor(30, 30);
-      switch(WiFi.status())
-      {
-        case 0:
-          u8g2.print("IDLE_STATUS");
-          break;
-        case 1:
-          u8g2.print("NO_SSID_AVAIL");
-          break;
-        case 2:
-          u8g2.print("SCAN_COMPLETED");
-          break;
-        case 3:
-          u8g2.print("CONNECTED");
-          break;
-        case 4:
-          u8g2.print("IDLE_STATUS");
-          break;
-        case 5:
-          u8g2.print("CONNECTION_LOST");
-          break;
-        case 6:
-          u8g2.print("DISCONNECTED");
-          break;
-      }
+    switch (WiFi.status())
+    {
+    case 0:
+      u8g2.print("IDLE_STATUS");
+      break;
+    case 1:
+      u8g2.print("NO_SSID_AVAIL");
+      break;
+    case 2:
+      u8g2.print("SCAN_COMPLETED");
+      break;
+    case 3:
+      u8g2.print("CONNECTED");
+      break;
+    case 4:
+      u8g2.print("IDLE_STATUS");
+      break;
+    case 5:
+      u8g2.print("CONNECTION_LOST");
+      break;
+    case 6:
+      u8g2.print("DISCONNECTED");
+      break;
+    }
   }
   break;
   }
@@ -1083,97 +1084,98 @@ void drawMenu()
   //Back Button
   if (knob2.click == 1)
   {
-    switch (globals.currentMenu)
+    switch (globalMenu.currentMenu)
     {
     case 0: //main menu
       globals.runMode = -1;
       break;
     case 1: //Games Menu
-      globals.currentMenu = 0;
+      globalMenu.currentMenu = 0;
       break;
     case 2: //Settings Menu
-      globals.currentMenu = 0;
+      globalMenu.currentMenu = 0;
       break;
     case 4: //Zip Code Menu
-      globals.currentMenu = 2;
+      globalMenu.currentMenu = 2;
       break;
     case 5: //Favorites Main Menu
-      globals.currentMenu = 2;
+      globalMenu.currentMenu = 2;
       break;
     case 6: //Favorites Set Max
-      globals.currentMenu = 5;
+      globalMenu.currentMenu = 5;
       break;
     case 8: //WiFi Menu
-      globals.currentMenu = 2;
+      globalMenu.currentMenu = 2;
       break;
     case 10: //Add New Favorite
       globals.runMode = -1;
       break;
     case 11:
-      {
+    {
       //ZIP Code, advance one
-      int temp = globals.currentMenuMultiplier;
-      switch(temp)
+      int temp = globalMenu.currentMenuMultiplier;
+      switch (temp)
       {
-        case 10000:
-          globals.currentMenuMultiplier = 1;
-          globals.currentMenu = 4; //Go back to main 
-          globals.currentMenuMultiplier = 1;
-          break;
-        case 1000:
-          globals.currentMenuMultiplier = 10000;
-          break;
-        case 100:
-          globals.currentMenuMultiplier = 1000;
-          break;
-        case 10:
-          globals.currentMenuMultiplier = 100;
-          break;
-        case 1:
-          globals.currentMenuMultiplier = 10;
-          break;
+      case 10000:
+        globalMenu.currentMenuMultiplier = 1;
+        globalMenu.currentMenu = 4; //Go back to main
+        globalMenu.currentMenuMultiplier = 1;
+        break;
+      case 1000:
+        globalMenu.currentMenuMultiplier = 10000;
+        break;
+      case 100:
+        globalMenu.currentMenuMultiplier = 1000;
+        break;
+      case 10:
+        globalMenu.currentMenuMultiplier = 100;
+        break;
+      case 1:
+        globalMenu.currentMenuMultiplier = 10;
+        break;
       }
-      }
-      break;
+    }
+    break;
     case 12:
     {
-      globals.currentMenu = 8;
+      globalMenu.currentMenu = 8;
       WiFi.begin();
     }
     break;
     case 13:
-      {
+    {
       int temp = globals.password.length();
       if (temp > 1)
       {
         //globals.password -= " ";
         globals.password.remove(temp - 1, 1);
-      }else
+      }
+      else
       {
-        globals.currentMenu = 8;
+        globalMenu.currentMenu = 8;
       }
-      }
-      break;
+    }
+    break;
     case 14:
       globalMenu.menu[13] = 0;
-      globals.currentMenu = 12;
+      globalMenu.currentMenu = 12;
       break;
     }
   }
   //Forward/Confirm Button
   if (knob1.click == 1)
   {
-    switch (globals.currentMenu)
+    switch (globalMenu.currentMenu)
     {
-    case 0: //main menu
+    case 0: // Main Menu
     {
-      switch (globalMenu.menu[globals.currentMenu])
+      switch (globalMenu.menu[globalMenu.currentMenu])
       {
       case 0:
-        globals.currentMenu = 1; //games
+        globalMenu.currentMenu = 1; //games
         break;
       case 1:
-        globals.currentMenu = 2; //settings
+        globalMenu.currentMenu = 2; //settings
         break;
       case 2:
         //stuff
@@ -1184,7 +1186,7 @@ void drawMenu()
       }
       break;
     case 1: // games menu click
-      switch (globalMenu.menu[globals.currentMenu])
+      switch (globalMenu.menu[globalMenu.currentMenu])
       {
       case 0:
         globals.runMode = 2; //game mode
@@ -1197,80 +1199,75 @@ void drawMenu()
       case 2:
         break;
       case 4:
-        globals.currentMenu = 0; //back to main menu
+        globalMenu.currentMenu = 0; //back to main menu
         break;
       }
     }
     break;
     case 2: //Settings click
     {
-      switch (globalMenu.menu[globals.currentMenu])
+      switch (globalMenu.menu[globalMenu.currentMenu])
       {
       case 0: //LED Count
         break;
       case 1: //Favorites Settings Menu
-        globals.currentMenu = 5;
+        globalMenu.currentMenu = 5;
         break;
       case 2: //ZIP Code
-        globals.currentMenu = 4;
+        globalMenu.currentMenu = 4;
         break;
       case 3: //Wifi
-        globals.currentMenu = 8;
+        globalMenu.currentMenu = 8;
         break;
       }
     }
     break;
-
-    case 4: //ZIP Code settings click
+    case 4: // ZIP Code settings click
     {
-      globals.currentMenuMultiplier = 10000;
-      globals.currentMenu = 11;
+      globalMenu.currentMenuMultiplier = 10000;
+      globalMenu.currentMenu = 11;
       readZipCode();
     }
     break;
-
-
-    case 5: //Favorites Setting Menu Click
+    case 5: // Favorites Setting Menu Click
     {
-      switch (globalMenu.menu[globals.currentMenu])
+      switch (globalMenu.menu[globalMenu.currentMenu])
       {
       case 0: //Add New, can't favorite a favorite!
         if (globals.mode != 5)
         {
-          globals.currentMenu = 10;
+          globalMenu.currentMenu = 10;
         }
         break;
       case 1: //Set Max
-        globals.currentMenu = 6;
+        globalMenu.currentMenu = 6;
         globalMenu.menu[6] = patternSettings.numberOfFavorites;
         break;
       case 2: //Reset
-        globals.currentMenu = 7;
+        globalMenu.currentMenu = 7;
         break;
       case 3: //Back to settings
-        globals.currentMenu = 2;
+        globalMenu.currentMenu = 2;
         break;
       }
     }
     break;
-
     case 6: //Set Max Favorites Click
     {
-      patternSettings.numberOfFavorites = globalMenu.menu[globals.currentMenu];
+      patternSettings.numberOfFavorites = globalMenu.menu[globalMenu.currentMenu];
       globalMenu.patternMax[5] = patternSettings.numberOfFavorites;
       globalMenu.menuMax[10] = patternSettings.numberOfFavorites;
       EEPROM.write(99, patternSettings.numberOfFavorites);
       EEPROM.commit();
-      globals.currentMenu = 5;
+      globalMenu.currentMenu = 5;
     }
     break;
-
     case 7: //Reset Favorites Click
     {
-      switch (globalMenu.menu[globals.currentMenu])
+      switch (globalMenu.menu[globalMenu.currentMenu])
       {
       case 0: //No
-        globals.currentMenu = 5;
+        globalMenu.currentMenu = 5;
         break;
       case 1: //Yes
         resetFavorites();
@@ -1280,14 +1277,13 @@ void drawMenu()
       }
     }
     break;
-
-    case 8:
+    case 8: // Network Scan
     {
-      switch (globalMenu.menu[globals.currentMenu])
+      switch (globalMenu.menu[globalMenu.currentMenu])
       {
       case 0: //Scan
       {
-        globals.currentMenu = 12;
+        globalMenu.currentMenu = 12;
         WiFiScan();
 
         //Limit to first 6 results
@@ -1302,24 +1298,24 @@ void drawMenu()
       case 1: //Host
       {
         //https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/soft-access-point-class.html
-        
-        switch (globals.softAPEnable)
-        { 
-          case 0:
-          {
-            //WiFi.mode(WIFI_AP); //Disable STA Mode, not actually needed though? Not calling allows both to work simultaneously
-            globals.softAPEnable = WiFi.softAP("Welican Gemina");
-          }
-          break;
 
-          case 1:
-          {
-            WiFi.mode(WIFI_STA); //Disable AP Mode
-            globals.softAPEnable = WiFi.softAPdisconnect();
-          }
-          break;
+        switch (globals.softAPEnable)
+        {
+        case 0:
+        {
+          //WiFi.mode(WIFI_AP); //Disable STA Mode, not actually needed though? Not calling allows both to work simultaneously
+          globals.softAPEnable = WiFi.softAP("Welican Gemina");
         }
-      } 
+        break;
+
+        case 1:
+        {
+          WiFi.mode(WIFI_STA); //Disable AP Mode
+          globals.softAPEnable = WiFi.softAPdisconnect();
+        }
+        break;
+        }
+      }
       break;
       case 2: //Connect
       {
@@ -1333,78 +1329,71 @@ void drawMenu()
       }
     }
     break;
-
-    case 10:
+    case 10: // New Favorites Click
     {
-      saveFavorites(); //New Favorite click
+      saveFavorites();
       globals.runMode = -1;
     }
     break;
-
-    case 11:
+    case 11: // Zip Code
     {
-      //ZIP Code, advance one
-      int temp = globals.currentMenuMultiplier;
-      switch(temp)
+      int temp = globalMenu.currentMenuMultiplier;
+      switch (temp)
       {
-        case 10000:
-          globals.currentMenuMultiplier = 1000;
-          break;
-        case 1000:
-          globals.currentMenuMultiplier = 100;
-          break;
-        case 100:
-          globals.currentMenuMultiplier = 10;
-          break;
-        case 10:
-          globals.currentMenuMultiplier = 1;
-          break;
-        case 1:
-          weatherSettings.zipCode = globalMenu.menu[11]; //Update ZIP Code
-          globals.currentMenuMultiplier = 1;
-          globals.currentMenu = 2; //Go back to main 
-          writeZipCode();
-          updateZipCodeString();
-          break;
+      case 10000:
+        globalMenu.currentMenuMultiplier = 1000;
+        break;
+      case 1000:
+        globalMenu.currentMenuMultiplier = 100;
+        break;
+      case 100:
+        globalMenu.currentMenuMultiplier = 10;
+        break;
+      case 10:
+        globalMenu.currentMenuMultiplier = 1;
+        break;
+      case 1:
+        weatherSettings.zipCode = globalMenu.menu[11]; //Update ZIP Code
+        globalMenu.currentMenuMultiplier = 1;
+        globalMenu.currentMenu = 2; //Go back to main
+        writeZipCode();
+        updateZipCodeString();
+        break;
       }
-      if (globals.currentMenuMultiplier > 10000)
+      if (globalMenu.currentMenuMultiplier > 10000)
       {
-        globals.currentMenuMultiplier = 1;
-        globals.currentMenu = 2;
+        globalMenu.currentMenuMultiplier = 1;
+        globalMenu.currentMenu = 2;
       }
-      
     }
     break;
-    
-    case 12:
+    case 12: // WIFI SSID / Password
     {
-      globals.ssid = WiFi.SSID(globalMenu.menu[globals.currentMenu]);
-      globals.currentMenu = 13;
+      globals.ssid = WiFi.SSID(globalMenu.menu[globalMenu.currentMenu]);
+      globalMenu.currentMenu = 13;
       //globalMenu.menu[13] = 40;
-      if (WiFi.encryptionType(globalMenu.menu[globals.currentMenu]) == WIFI_AUTH_OPEN)
+      if (WiFi.encryptionType(globalMenu.menu[globalMenu.currentMenu]) == WIFI_AUTH_OPEN)
       {
         globals.password = "";
-        globals.currentMenu = 14;
+        globalMenu.currentMenu = 14;
       }
     }
     break;
-    
-    case 13:
+    case 13: // Password
     {
-      if (globalMenu.menu[globals.currentMenu] > 126)
+      if (globalMenu.menu[globalMenu.currentMenu] > 126)
       {
-        globals.currentMenu = 14;
-      } else
-      {
-        globals.password += (char)globalMenu.menu[globals.currentMenu];
+        globalMenu.currentMenu = 14;
       }
-         
-    }  
+      else
+      {
+        globals.password += (char)globalMenu.menu[globalMenu.currentMenu];
+      }
+    }
     break;
-    
-    case 14:
+    case 14: //
     {
-      globals.currentMenu = 8;
+      globalMenu.currentMenu = 8;
       globalMenu.menu[13] = 0;
     }
     break;
@@ -1415,12 +1404,11 @@ void drawMenu()
 void WiFiScan()
 {
   //Serial.println("scan starting");
-  //globals.currentMenu = 12;
+  //globalMenu.currentMenu = 12;
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
   globals.networkScan = WiFi.scanNetworks();
   //Serial.println((WiFi.encryptionType(i) == WIFI_AUTH_OPEN)?" ":"*");
-
 }
 
 int RSSItoPercent(int RSSI)
@@ -1448,45 +1436,45 @@ void setZipCodeMenu()
 {
   u8g2.setCursor(0, 8);
   u8g2.print("Set ZIP Code");
-  
+
   u8g2.setCursor(54, 26);
-  if (globalMenu.menu[globals.currentMenu] < 10000)
+  if (globalMenu.menu[globalMenu.currentMenu] < 10000)
   {
     u8g2.print("0");
   }
-  if (globalMenu.menu[globals.currentMenu] < 1000)
+  if (globalMenu.menu[globalMenu.currentMenu] < 1000)
   {
     u8g2.print("0");
   }
-  if (globalMenu.menu[globals.currentMenu] < 100)
+  if (globalMenu.menu[globalMenu.currentMenu] < 100)
   {
     u8g2.print("0");
   }
-  if (globalMenu.menu[globals.currentMenu] < 10)
+  if (globalMenu.menu[globalMenu.currentMenu] < 10)
   {
     u8g2.print("0");
   }
 
-  u8g2.print(globalMenu.menu[globals.currentMenu]);
+  u8g2.print(globalMenu.menu[globalMenu.currentMenu]);
 
   u8g2.setCursor(54, 46);
-  switch(globals.currentMenuMultiplier)
-  { 
-    case 10000:
-      u8g2.print("^");
-      break;
-    case 1000:
-      u8g2.print("  ^");
-      break;
-    case 100:
-      u8g2.print("    ^");
-      break;
-    case 10:
-      u8g2.print("      ^");
-      break;
-    case 1:
-      u8g2.print("        ^");
-      break;
+  switch (globalMenu.currentMenuMultiplier)
+  {
+  case 10000:
+    u8g2.print("^");
+    break;
+  case 1000:
+    u8g2.print("  ^");
+    break;
+  case 100:
+    u8g2.print("    ^");
+    break;
+  case 10:
+    u8g2.print("      ^");
+    break;
+  case 1:
+    u8g2.print("        ^");
+    break;
   }
 }
 
@@ -1507,15 +1495,14 @@ void readZipCode()
 {
   //readZipCode
   //globalMenu.menu[11] = EEPROM.read(90) + (EEPROM.read(91) * 256) + (EEPROM.read(92) * 65536);
-  
+
   EEPROM.get(90, globalMenu.menu[11]);
 
-  //Make sure data is in range. If not, set to default ZIP code  
+  //Make sure data is in range. If not, set to default ZIP code
   if ((globalMenu.menu[11] > 99999) || (globalMenu.menu[11] == 0))
   {
     globalMenu.menu[11] = 33701;
   }
-
 }
 
 void updateZipCodeString()
@@ -1550,7 +1537,7 @@ void newFavoritesMenu()
   u8g2.print("Add New Favorite");
 
   //This is a menu with patternSettings.numberOfFavorites 'selections', each indicating a favorite slot
-  if (globalMenu.menu[globals.currentMenu] < 10)
+  if (globalMenu.menu[globalMenu.currentMenu] < 10)
   {
     u8g2.setCursor(57, 26);
   }
@@ -1559,13 +1546,13 @@ void newFavoritesMenu()
     u8g2.setCursor(54, 26);
   }
 
-  u8g2.print(globalMenu.menu[globals.currentMenu]);
+  u8g2.print(globalMenu.menu[globalMenu.currentMenu]);
 
   u8g2.drawRFrame(50, 14, 20, 16, 3);
 
   //Call the favorite for the slot we're looking at
   //The real function call is below this, so LEDs will not show bad data
-  favorites_category(globalMenu.menu[globals.currentMenu]);
+  favorites_category(globalMenu.menu[globalMenu.currentMenu]);
 
   //Convert the strings
   globalStrings.functionName.toCharArray(globalStrings.functionNameOutString, 20);
@@ -1575,7 +1562,7 @@ void newFavoritesMenu()
   u8g2.print("Current Setting");
   //u8g2.print(globalStrings.categoryNameOutString);
 
-  switch (patternSettings.favoriteMode[globalMenu.menu[globals.currentMenu]])
+  switch (patternSettings.favoriteMode[globalMenu.menu[globalMenu.currentMenu]])
   {
   case 0:
     u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_HEIGHT, starshape);
@@ -1600,13 +1587,13 @@ void newFavoritesMenu()
 
 void saveFavorites()
 {
-  EEPROM.write(100 + globalMenu.menu[globals.currentMenu] * 2, patternSettings.pattern[globals.mode]); //the pattern we're on
-  EEPROM.write(101 + (globalMenu.menu[globals.currentMenu] * 2), globals.mode);                        //the mode we're on
+  EEPROM.write(100 + globalMenu.menu[globalMenu.currentMenu] * 2, patternSettings.pattern[globals.mode]); //the pattern we're on
+  EEPROM.write(101 + (globalMenu.menu[globalMenu.currentMenu] * 2), globals.mode);                        //the mode we're on
 
   EEPROM.commit(); //write it to memory
 
-  patternSettings.favoriteMode[globalMenu.menu[globals.currentMenu]] = globals.mode;                             //update running variables
-  patternSettings.favoritePattern[globalMenu.menu[globals.currentMenu]] = patternSettings.pattern[globals.mode]; //first updated in readFavorites
+  patternSettings.favoriteMode[globalMenu.menu[globalMenu.currentMenu]] = globals.mode;                             //update running variables
+  patternSettings.favoritePattern[globalMenu.menu[globalMenu.currentMenu]] = patternSettings.pattern[globals.mode]; //first updated in readFavorites
 }
 
 void readFavorites()
@@ -1735,75 +1722,75 @@ void updateWeather()
 {
   if (globals.runMode == 3)
   {
-  EVERY_N_MILLISECONDS(weatherSettings.weatherTimerDelay)
-  {
-    if (WiFi.status() == WL_CONNECTED)
+    EVERY_N_MILLISECONDS(weatherSettings.weatherTimerDelay)
     {
-      weatherSettings.zipCode = globalMenu.menu[11];
-      String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + weatherSettings.zipCode + "," + weatherSettings.countryCode + "&units=imperial&APPID=" + globals.openWeatherMapApiKey;
-
-      weather.jsonBuffer = httpGETRequest(serverPath.c_str());
-      weather.weatherJson = JSON.parse(weather.jsonBuffer);
-
-      // JSON.typeof(jsonVar) can be used to get the type of the var
-      if (JSON.typeof(weather.weatherJson) == "undefined")
+      if (WiFi.status() == WL_CONNECTED)
       {
-        Serial.println("Parsing input failed!");
-        return;
+        weatherSettings.zipCode = globalMenu.menu[11];
+        String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + weatherSettings.zipCode + "," + weatherSettings.countryCode + "&units=imperial&APPID=" + globals.openWeatherMapApiKey;
+
+        weather.jsonBuffer = httpGETRequest(serverPath.c_str());
+        weather.weatherJson = JSON.parse(weather.jsonBuffer);
+
+        // JSON.typeof(jsonVar) can be used to get the type of the var
+        if (JSON.typeof(weather.weatherJson) == "undefined")
+        {
+          Serial.println("Parsing input failed!");
+          return;
+        }
+
+        Serial.println("JSON object = ");
+        Serial.println(weather.weatherJson);
+
+        weather.currentTemperature = weather.weatherJson["main"]["temp"];
+        weather.currentTemperatureMax = weather.weatherJson["main"]["temp_max"];
+        weather.currentTemperatureMax = weather.weatherJson["main"]["temp_min"];
+        weather.currentHumidity = weather.weatherJson["main"]["humidity"];
+        weather.currentWindSpeed = weather.weatherJson["wind"]["speed"];
+        weather.currentWeatherId = weather.weatherJson["weather"][0]["id"];
+        weather.currentWeatherTitle = weather.weatherJson["weather"][0]["main"];
+        weather.currentWeatherDescription = weather.weatherJson["weather"][0]["description"];
+        weather.sunrise = weather.weatherJson["sys"]["sunrise"];
+        weather.sunset = weather.weatherJson["sys"]["sunset"];
+
+        convertUnixToTime(timeConvert(weather.sunrise));
+        convertUnixToTime(timeConvert(weather.sunset));
+
+        Serial.print("Temperature: ");
+        Serial.println(weather.weatherJson["main"]["temp"]);
+
+        Serial.print("Temperature Max: ");
+        Serial.println(weather.weatherJson["main"]["temp_max"]);
+
+        Serial.print("Temperature Min: ");
+        Serial.println(weather.weatherJson["main"]["temp_min"]);
+
+        Serial.print("Humidity: ");
+        Serial.println(weather.weatherJson["main"]["humidity"]);
+
+        Serial.print("Wind Speed: ");
+        Serial.println(weather.weatherJson["wind"]["speed"]);
+
+        Serial.print("Sunrise: ");
+        Serial.println(weather.weatherJson["sys"]["sunrise"]);
+
+        Serial.print("Sunset: ");
+        Serial.println(weather.weatherJson["sys"]["sunset"]);
+
+        Serial.print("currentWeatherId: ");
+        Serial.println(weather.weatherJson["weather"][0]["id"]);
+
+        Serial.print("currentWeatherTitle: ");
+        Serial.println(weather.currentWeatherTitle);
+
+        Serial.print("currentWeatherDescription: ");
+        Serial.println(weather.currentWeatherDescription);
       }
-
-      Serial.println("JSON object = ");
-      Serial.println(weather.weatherJson);
-
-      weather.currentTemperature = weather.weatherJson["main"]["temp"];
-      weather.currentTemperatureMax = weather.weatherJson["main"]["temp_max"];
-      weather.currentTemperatureMax = weather.weatherJson["main"]["temp_min"];
-      weather.currentHumidity = weather.weatherJson["main"]["humidity"];
-      weather.currentWindSpeed = weather.weatherJson["wind"]["speed"];
-      weather.currentWeatherId = weather.weatherJson["weather"][0]["id"];
-      weather.currentWeatherTitle = weather.weatherJson["weather"][0]["main"];
-      weather.currentWeatherDescription = weather.weatherJson["weather"][0]["description"];
-      weather.sunrise = weather.weatherJson["sys"]["sunrise"];
-      weather.sunset = weather.weatherJson["sys"]["sunset"];
-
-      convertUnixToTime(timeConvert(weather.sunrise));
-      convertUnixToTime(timeConvert(weather.sunset));
-
-      Serial.print("Temperature: ");
-      Serial.println(weather.weatherJson["main"]["temp"]);
-
-      Serial.print("Temperature Max: ");
-      Serial.println(weather.weatherJson["main"]["temp_max"]);
-
-      Serial.print("Temperature Min: ");
-      Serial.println(weather.weatherJson["main"]["temp_min"]);
-
-      Serial.print("Humidity: ");
-      Serial.println(weather.weatherJson["main"]["humidity"]);
-
-      Serial.print("Wind Speed: ");
-      Serial.println(weather.weatherJson["wind"]["speed"]);
-
-      Serial.print("Sunrise: ");
-      Serial.println(weather.weatherJson["sys"]["sunrise"]);
-
-      Serial.print("Sunset: ");
-      Serial.println(weather.weatherJson["sys"]["sunset"]);
-
-      Serial.print("currentWeatherId: ");
-      Serial.println(weather.weatherJson["weather"][0]["id"]);
-
-      Serial.print("currentWeatherTitle: ");
-      Serial.println(weather.currentWeatherTitle);
-
-      Serial.print("currentWeatherDescription: ");
-      Serial.println(weather.currentWeatherDescription);
+      else
+      {
+        Serial.println("Weather - No Connection");
+      }
     }
-    else
-    {
-      Serial.println("Weather - No Connection");
-    }
-  }
   }
 }
 

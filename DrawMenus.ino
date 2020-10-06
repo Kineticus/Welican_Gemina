@@ -21,6 +21,22 @@ void drawMenuWords(String menuName, String first, String second, String third, S
   }
 }
 
+void drawNumberInput(String menuName, int numberValue)
+{
+  drawMenuTop(menuName);
+
+  if (numberValue < 10)
+  {
+    u8g2.setCursor(57, 36);
+  }
+  else
+  {
+    u8g2.setCursor(54, 36);
+  }
+
+  u8g2.print(numberValue);
+  u8g2.drawRFrame(50, 24, 20, 16, 3);
+}
 void drawMenuSelectionFrames()
 {
   switch (globalMenu.menu[globalMenu.currentMenu])

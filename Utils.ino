@@ -689,9 +689,9 @@ void drawMenuCommander()
     drawMenuSelectionFrames();
   }
   break;
-  case 3: // Led Count Menu
+  case 3: // LED Count Menu
   {
-    u8g2.print("LED Count");
+    drawMenuTop("Settings > LED Count");
   }
   break;
   case 4: // Zip Code Menu
@@ -714,24 +714,14 @@ void drawMenuCommander()
   break;
   case 6:
   {
-    drawMenuTop("Set Max Favorites");
 
-    if (globalMenu.menu[globalMenu.currentMenu] < 10)
-    {
-      u8g2.setCursor(57, 36);
-    }
-    else
-    {
-      u8g2.setCursor(54, 36);
-    }
+    drawNumberInput("Set Max Favorites",
+                    globalMenu.menu[globalMenu.currentMenu]);
 
     if (globalMenu.menu[globalMenu.currentMenu] < 1) //gotta have at least 1 favorite
     {
       globalMenu.menu[globalMenu.currentMenu] = 1;
     }
-    u8g2.print(globalMenu.menu[globalMenu.currentMenu]);
-
-    u8g2.drawRFrame(50, 24, 20, 16, 3);
   }
   break;
   case 7: // Favorites Reset Menu
@@ -745,7 +735,6 @@ void drawMenuCommander()
                   "Scan", "Host " + globals.softAPEnable, "Connect", "Disconn.");
 
     u8g2.setCursor(10, 64);
-
     if (WiFi.status() == WL_CONNECTED)
     {
       int temp = WiFi.SSID().length();
@@ -798,8 +787,8 @@ void drawMenuCommander()
   case 12: // WIFI Scan Results
   {
     drawMenuTop("WiFi Scan Results");
-    u8g2.setCursor(15, 60);
 
+    u8g2.setCursor(15, 60);
     if (globals.networkScan == WIFI_SCAN_FAILED)
     {
       u8g2.print("Scan Failed");
@@ -1030,16 +1019,15 @@ void drawMenuCommander()
       switch (globalMenu.menu[globalMenu.currentMenu])
       {
       case 0:
-        globalMenu.currentMenu = 1; //games
+        globalMenu.currentMenu = 1; // games
         break;
       case 1:
-        globalMenu.currentMenu = 2; //settings
+        globalMenu.currentMenu = 2; // settings
         break;
-      case 2:
-        //stuff
+      case 2: // stuff
         break;
       case 3:
-        globals.runMode = -1; //exit
+        globals.runMode = -1; // exit
         break;
       }
       break;
@@ -1047,17 +1035,17 @@ void drawMenuCommander()
       switch (globalMenu.menu[globalMenu.currentMenu])
       {
       case 0:
-        globals.runMode = 2; //game mode
+        globals.runMode = 2; // game mode
         setGameMode();
         break;
       case 1:
-        globals.runMode = 2; //game mode
+        globals.runMode = 2; // game mode
         setGameMode();
         break;
       case 2:
         break;
       case 4:
-        globalMenu.currentMenu = 0; //back to main menu
+        globalMenu.currentMenu = 0; // back to main menu
         break;
       }
     }
@@ -1068,13 +1056,13 @@ void drawMenuCommander()
       {
       case 0: //LED Count
         break;
-      case 1: //Favorites Settings Menu
+      case 1: // Favorites Settings Menu
         globalMenu.currentMenu = 5;
         break;
-      case 2: //ZIP Code
+      case 2: // ZIP Code
         globalMenu.currentMenu = 4;
         break;
-      case 3: //Wifi
+      case 3: // Wifi
         globalMenu.currentMenu = 8;
         break;
       }
@@ -1091,20 +1079,20 @@ void drawMenuCommander()
     {
       switch (globalMenu.menu[globalMenu.currentMenu])
       {
-      case 0: //Add New, can't favorite a favorite!
+      case 0: // Add New, can't favorite a favorite!
         if (globals.mode != 5)
         {
           globalMenu.currentMenu = 10;
         }
         break;
-      case 1: //Set Max
+      case 1: // Set Max
         globalMenu.currentMenu = 6;
         globalMenu.menu[6] = patternSettings.numberOfFavorites;
         break;
-      case 2: //Reset
+      case 2: // Reset
         globalMenu.currentMenu = 7;
         break;
-      case 3: //Back to settings
+      case 3: // Back to settings
         globalMenu.currentMenu = 2;
         break;
       }
@@ -1124,12 +1112,12 @@ void drawMenuCommander()
     {
       switch (globalMenu.menu[globalMenu.currentMenu])
       {
-      case 0: //No
+      case 0: // No
         globalMenu.currentMenu = 5;
         break;
-      case 1: //Yes
+      case 1: // Yes
         resetFavorites();
-        //picture of trash can or something and small delay later
+        // picture of trash can or something and small delay later
         globals.runMode = -1;
         break;
       }
@@ -1139,12 +1127,12 @@ void drawMenuCommander()
     {
       switch (globalMenu.menu[globalMenu.currentMenu])
       {
-      case 0: //Scan
+      case 0: // Scan
       {
         globalMenu.currentMenu = 12;
         WiFiScan();
 
-        //Limit to first 6 results
+        // Limit to first 6 results
         if (globals.networkScan > 6)
         {
           globals.networkScan = 6;
@@ -1153,7 +1141,7 @@ void drawMenuCommander()
         globalMenu.menuMax[12] = globals.networkScan - 1;
       }
       break;
-      case 1: //Host
+      case 1: // Host
       {
         //https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/soft-access-point-class.html
 
@@ -1161,27 +1149,27 @@ void drawMenuCommander()
         {
         case 0:
         {
-          //WiFi.mode(WIFI_AP); //Disable STA Mode, not actually needed though? Not calling allows both to work simultaneously
+          //WiFi.mode(WIFI_AP); // Disable STA Mode, not actually needed though? Not calling allows both to work simultaneously
           globals.softAPEnable = WiFi.softAP("Welican Gemina");
         }
         break;
 
         case 1:
         {
-          WiFi.mode(WIFI_STA); //Disable AP Mode
+          WiFi.mode(WIFI_STA); // Disable AP Mode
           globals.softAPEnable = WiFi.softAPdisconnect();
         }
         break;
         }
       }
       break;
-      case 2: //Connect
+      case 2: // Connect
       {
         WiFi.enableSTA(true);
         WiFi.begin();
       }
       break;
-      case 3: //Disconnect
+      case 3: // Disconnect
         WiFi.disconnect();
         break;
       }

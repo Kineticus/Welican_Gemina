@@ -371,6 +371,30 @@ void dvdBounce()
   u8g2.drawXBMP(dvd1.y, dvd1.x + 16, DVD_width, DVD_height, DVD);
 }
 
+void objectBounce(DvdModel item1)
+{
+  item1.y += item1.vy;
+  item1.x += item1.vx;
+
+  if (item1.y <= 0)
+  {
+    item1.vy = 1;
+  }
+  if (item1.y >= (VISUALIZER_Y - STAR_WIDTH))
+  {
+    item1.vy = -1;
+  }
+
+  if (item1.x <= 0)
+  {
+    item1.vx = 1;
+  }
+  if (item1.x >= (VISUALIZER_X - STAR_HEIGHT))
+  {
+    item1.vx = -1;
+  }
+  u8g2.drawXBMP(item1.y, item1.x + 16, STAR_WIDTH, STAR_HEIGHT, starshape);
+}
 void starBounce()
 {
   dvd1.y += dvd1.vy;
@@ -435,7 +459,9 @@ void starBounce()
   {
     dvd3.vx = -1;
   }
-
+  // objectBounce(dvd1);
+  // objectBounce(dvd2);
+  // objectBounce(dvd3);
   u8g2.drawXBMP(dvd1.y, dvd1.x + 16, STAR_WIDTH, STAR_HEIGHT, starshape);
   u8g2.drawXBMP(dvd2.y, dvd2.x + 16, STAR_WIDTH, STAR_HEIGHT, starshape);
   u8g2.drawXBMP(dvd3.y, dvd3.x + 16, STAR_WIDTH, STAR_HEIGHT, starshape);

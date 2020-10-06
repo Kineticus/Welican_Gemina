@@ -1412,7 +1412,7 @@ void newFavoritesMenu()
   switch (patternSettings.favoriteMode[globalMenu.menu[globalMenu.currentMenu]])
   {
   case 0:
-    u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
+    u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_HEIGHT, WAVE);
     break;
   case 1:
     u8g2.drawXBMP(2, 53, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
@@ -1425,6 +1425,9 @@ void newFavoritesMenu()
     u8g2.drawXBMP(2, 53, DONUT_WIDTH, DONUT_HEIGHT, DONUT);
     break;
   case 4:
+    u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
+    break;
+  case 5:
     u8g2.drawXBMP(2, 53, HEART_WIDTH, HEART_HEIGHT, HEART);
     break;
   }

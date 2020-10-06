@@ -523,22 +523,12 @@ void setZipCodeMenu()
 
 void writeZipCode()
 {
-  //Break ZIP into 3 bytes as EEPROM is 1 byte per space. ZIP is a (16 bit) unsigned integer
-  uint8_t xlow = globalMenu.menu[11] & 0xff;
-  uint8_t xmed = (globalMenu.menu[11] >> 8) & 0xff;
-  uint8_t xhigh = (globalMenu.menu[11] >> 16) & 0xff;
-  //Save the 16 bit unsigned integer into two bytes of EEPROM
-  EEPROM.write(90, xlow);
-  EEPROM.write(91, xmed);
-  EEPROM.write(92, xhigh);
+  EEPROM.put(90, globalMenu.menu[11]);
   EEPROM.commit();
 }
 
 void readZipCode()
 {
-  //readZipCode
-  //globalMenu.menu[11] = EEPROM.read(90) + (EEPROM.read(91) * 256) + (EEPROM.read(92) * 65536);
-
   EEPROM.get(90, globalMenu.menu[11]);
 
   //Make sure data is in range. If not, set to default ZIP code

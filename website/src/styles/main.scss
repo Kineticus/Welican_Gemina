@@ -1,9 +1,9 @@
 // Vendor
 @charset 'utf-8';
 @import 'vendor/reset';
-@import '../../node_modules/bulma/bulma.sass';
+@import '../../node_modules/mini.css/src/flavors/mini-dark.scss';
+
 html {
-  font-family: Helvetica;
   display: inline-block;
   margin: 0px auto;
   text-align: center;
@@ -15,9 +15,6 @@ body {
 h1 {
   color: #0f3376;
   padding: 2vh;
-}
-p {
-  font-size: 1.5rem;
 }
 
 .not-bad {

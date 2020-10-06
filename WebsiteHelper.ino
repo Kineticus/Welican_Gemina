@@ -3,6 +3,20 @@ void createRoutes(AsyncWebServer *server)
 {
   // Route for root / web page
   server->on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    int paramsNr = request->params();
+    for (int i = 0; i < paramsNr; i++)
+    {
+      AsyncWebParameter *p = request->getParam(i);
+      Serial.print("Param name: ");
+      Serial.println(p->name());
+      Serial.print("Param value: ");
+      Serial.println(p->value());
+      Serial.println("------");
+      if (p->name() == "brightness")
+      {
+        brightness.current = p->value().toInt();
+      }
+    }
     request->send(SPIFFS, "/index.html", String(), false, websiteProcessor);
   });
 
@@ -18,17 +32,6 @@ void createRoutes(AsyncWebServer *server)
   // server->on("/obama_not_bad.jpg", HTTP_GET, [](AsyncWebServerRequest *request) {
   //   request->send(SPIFFS, "/obama_not_bad.jpg", "image/jpg");
   // });
-  // Route to set GPIO to HIGH
-  server->on("/on", HTTP_GET, [](AsyncWebServerRequest *request) {
-    brightness.current = 255;
-    request->send(SPIFFS, "/index.html", String(), false, websiteProcessor);
-  });
-
-  // Route to set GPIO to LOW
-  server->on("/off", HTTP_GET, [](AsyncWebServerRequest *request) {
-    brightness.current = 0;
-    request->send(SPIFFS, "/index.html", String(), false, websiteProcessor);
-  });
 }
 
 void startWebsite(AsyncWebServer *server)

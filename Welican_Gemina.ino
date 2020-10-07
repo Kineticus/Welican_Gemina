@@ -132,11 +132,7 @@ struct Globals
   unsigned int samplingPeriodUs;
   int runMode;
   int mode;
-
   int modeMax;
-  int tempPattern;
-  int currentPattern;
-  int randomPattern;
   int randomInterval;
   unsigned long randomTime;
   int randomMode;
@@ -167,10 +163,7 @@ Globals globals = {
     .runMode = 0,
     .mode = 0,
     .modeMax = MAX_MODES,
-    .tempPattern = 0,
-    .currentPattern = 0,
-    .randomPattern = 0,
-    .randomInterval  = 0,
+    .randomInterval = 0,
     .randomTime = 0,
     .randomMode = 0,
     .ipAddress = "",
@@ -303,7 +296,9 @@ struct PatternSettings
   int favoritePattern[50]; //all are used under the hood
   int favoriteMode[50];    //declare memory for all 50 favorites
   int numberOfFavorites;   //Max 50, loads all 50 at program load, dynamically assignable
-
+  int tempPattern;
+  int currentPattern;
+  int randomPattern;
   uint8_t gHue;           // rotating "base color" used by many of the patterns
   int8_t flowDirection;   // Use either 1 or -1 to set flow direction
   bool gReverseDirection; //false = center outward, true = from ends inward
@@ -348,6 +343,9 @@ PatternSettings patternSettings = {
     .favoritePattern = {},
     .favoriteMode = {},
     .numberOfFavorites = 25,
+    .tempPattern = 0,
+    .currentPattern = 0,
+    .randomPattern = 0,
     .gHue = 0,
     .flowDirection = -1,
     .gReverseDirection = false,
@@ -839,21 +837,20 @@ void loop()
 
   int displayPattern = patternSettings.pattern[globals.mode] - 1;
 
-
   if (displayPattern == -1)
   {
     if ((millis() - globals.randomTime) > globals.randomInterval)
     {
-      globals.randomPattern = random(1, globalMenu.patternMax[globals.mode]);
+      patternSettings.randomPattern = random(1, globalMenu.patternMax[globals.mode]);
       globals.randomInterval = random(30000, 240000);
       globals.randomTime = millis();
-      Serial.print(globals.randomPattern);
+      Serial.print(patternSettings.randomPattern);
       Serial.print(" - ");
       Serial.println(globals.randomInterval);
       smoothOperatorStart();
     }
 
-    displayPattern = globals.randomPattern;
+    displayPattern = patternSettings.randomPattern;
   }
 
   switch (globals.mode)

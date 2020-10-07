@@ -386,9 +386,9 @@ void updateEncoders()
 
 void setGameMode()
 {
-  globals.runMode = 2;                                         //game mode
-  brightness.temp = brightness.current;                        //save brightness
-  globals.tempPattern = patternSettings.pattern[globals.mode]; //and program in case they get messed up
+  globals.runMode = 2;                                                 //game mode
+  brightness.temp = brightness.current;                                //save brightness
+  patternSettings.tempPattern = patternSettings.pattern[globals.mode]; //and program in case they get messed up
 
   switch (globalMenu.menu[1]) //Call reset code for whatever game we're about to run
   {
@@ -411,7 +411,7 @@ void endGameMode()
 
   //Set values to right when game mode started in case they got dorked with
   brightness.current = brightness.temp;
-  patternSettings.pattern[globals.mode] = globals.tempPattern;
+  patternSettings.pattern[globals.mode] = patternSettings.tempPattern;
 
   //Don't want to see brightness indicator when we leave
   brightness.debounce = 0;
@@ -651,13 +651,14 @@ void updateTime()
     }
 
     globalTime.currentMinute = timeinfo.tm_min; //Update minutes
-  } else if ((WiFi.status() == 4) && (globals.networkTries < 5))
+  }
+  else if ((WiFi.status() == 4) && (globals.networkTries < 5))
   {
     EVERY_N_MILLISECONDS(5000)
     {
-        globals.networkTries++;
-        WiFi.enableSTA(true);
-        WiFi.begin();
+      globals.networkTries++;
+      WiFi.enableSTA(true);
+      WiFi.begin();
     }
   }
 }

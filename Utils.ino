@@ -234,10 +234,10 @@ void updateEncoders()
     }
 
     //Constrain Mode - add switch to allow 3 options - constrain; rollover back to beginning/end; rollover to next/previous mode
-    if (patternSettings.pattern[globals.mode] > globalMenu.patternMax[globals.mode])
+    if (patternSettings.pattern[globals.mode] > globalMenu.patternMax[globals.mode] + 1)
     {
       //Mode 1 - constrain
-      patternSettings.pattern[globals.mode] = globalMenu.patternMax[globals.mode];
+      patternSettings.pattern[globals.mode] = globalMenu.patternMax[globals.mode] + 1;
     }
     if (patternSettings.pattern[globals.mode] <= 0)
     {
@@ -651,6 +651,14 @@ void updateTime()
     }
 
     globalTime.currentMinute = timeinfo.tm_min; //Update minutes
+  } else if ((WiFi.status() == 4) && (globals.networkTries < 5))
+  {
+    EVERY_N_MILLISECONDS(5000)
+    {
+        globals.networkTries++;
+        WiFi.enableSTA(true);
+        WiFi.begin();
+    }
   }
 }
 

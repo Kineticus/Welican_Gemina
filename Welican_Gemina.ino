@@ -135,11 +135,17 @@ struct Globals
 
   int modeMax;
   int tempPattern;
+  int currentPattern;
+  int randomPattern;
+  int randomInterval;
+  unsigned long randomTime;
+  int randomMode;
   String ipAddress;
   String openWeatherMapApiKey;
   String ssid;
   String password;
   unsigned long networkReconnect;
+  int networkTries;
   int networkScan;
   int softAPEnable;
   const char *ntpServer;
@@ -162,11 +168,17 @@ Globals globals = {
     .mode = 0,
     .modeMax = MAX_MODES,
     .tempPattern = 0,
+    .currentPattern = 0,
+    .randomPattern = 0,
+    .randomInterval  = 0,
+    .randomTime = 0,
+    .randomMode = 0,
     .ipAddress = "",
     .openWeatherMapApiKey = OPEN_WEATHER_API_KEY,
     .ssid = WIFI_SSID,
     .password = WIFI_PASSWORD,
     .networkReconnect = 0,
+    .networkTries = 0,
     .networkScan = 0,
     .softAPEnable = 0,
     .ntpServer = "pool.ntp.org"};
@@ -770,8 +782,6 @@ void setup()
 // ----------------------------------------------------------------
 void loop()
 {
-  //fftCompute();   //Only needed if not using task
-
   globalStrings.functionName.toCharArray(globalStrings.functionNameOutString, 20);
   globalStrings.categoryName.toCharArray(globalStrings.categoryNameOutString, 20);
 
@@ -819,15 +829,6 @@ void loop()
   knob1.click = 0;
   knob2.click = 0;
 
-  //Pause the fft task to prevent analogRead contention issues during encoder updates
-  //vTaskSuspend(fftComputeTask);
-
-  //int tempTime = micros();
-  //Wait a moment for the task to finish up
-  //while (micros() < (globals.newTime + 1000)) { /* chill */ }
-
-  //start fft processing again
-  //vTaskResume(fftComputeTask);
   //Write buffer to display
   u8g2.sendBuffer();
 
@@ -836,25 +837,44 @@ void loop()
   //Write current breath value to status LED
   ledcWrite(STATUS_LED, patternSettings.breath);
 
+  int displayPattern = patternSettings.pattern[globals.mode] - 1;
+
+
+  if (displayPattern == -1)
+  {
+    if ((millis() - globals.randomTime) > globals.randomInterval)
+    {
+      globals.randomPattern = random(1, globalMenu.patternMax[globals.mode]);
+      globals.randomInterval = random(30000, 240000);
+      globals.randomTime = millis();
+      Serial.print(globals.randomPattern);
+      Serial.print(" - ");
+      Serial.println(globals.randomInterval);
+      smoothOperatorStart();
+    }
+
+    displayPattern = globals.randomPattern;
+  }
+
   switch (globals.mode)
   {
   case 0:
-    basic_category(patternSettings.pattern[globals.mode]);
+    basic_category(displayPattern);
     break;
   case 1:
-    music_category(patternSettings.pattern[globals.mode]);
+    music_category(displayPattern);
     break;
   case 2:
-    chill_category(patternSettings.pattern[globals.mode]);
+    chill_category(displayPattern);
     break;
   case 3:
-    moving_colors_category(patternSettings.pattern[globals.mode]);
+    moving_colors_category(displayPattern);
     break;
   case 4:
-    legacy_category(patternSettings.pattern[globals.mode]);
+    legacy_category(displayPattern);
     break;
   case 5:
-    favorites_category(patternSettings.pattern[globals.mode]);
+    favorites_category(displayPattern);
     break;
   }
 

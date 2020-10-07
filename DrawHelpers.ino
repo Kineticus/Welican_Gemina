@@ -68,7 +68,14 @@ void drawTop()
 
   //u8g2.print(globals.mode);
   u8g2.setCursor(12, 8);
-  u8g2.print(patternSettings.pattern[globals.mode]);
+  if (patternSettings.pattern[globals.mode] == 0)
+  {
+    u8g2.print("R"); 
+  } else
+  {
+    u8g2.print(patternSettings.pattern[globals.mode]);
+  }
+  
   u8g2.setCursor(32, 8);
   u8g2.print(globalStrings.functionNameOutString);
   //u8g2.drawXBMP(42,0,DONUT_WIDTH, DONUT_HEIGHT, DONUT);
@@ -140,12 +147,12 @@ void u8g2_horizontal_line(uint8_t a)
 
 void drawProgressBar()
 {
-  int boxWidth = (SCREEN_WIDTH / globalMenu.patternMax[globals.mode]);
+  int boxWidth = (SCREEN_WIDTH / (globalMenu.patternMax[globals.mode] + 1));
   if (boxWidth < 4)
   {
     boxWidth = 4;
   }
-  u8g2.drawBox(((float(SCREEN_WIDTH - boxWidth) / globalMenu.patternMax[globals.mode]) * patternSettings.pattern[globals.mode]), 12, boxWidth, 4);
+  u8g2.drawBox(((float(SCREEN_WIDTH - boxWidth) / (globalMenu.patternMax[globals.mode] + 1)) * patternSettings.pattern[globals.mode]), 12, boxWidth, 4);
 }
 
 void showLogo(int millisTime)

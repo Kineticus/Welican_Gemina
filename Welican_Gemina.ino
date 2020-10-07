@@ -658,6 +658,9 @@ WebsiteModel website = {
 
 void setup()
 {
+  //For troubleshooting
+  Serial.begin(115200);
+
   //Board Status LED Setup
 
   // setting PWM properties
@@ -704,6 +707,8 @@ void setup()
     return;
   }
 
+  openSpiffFile("/magic.txt");
+
   WiFi.enableSTA(true);
 
   //WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
@@ -715,9 +720,6 @@ void setup()
   startWebsite(&server);
 
   seedThings();
-
-  //For troubleshooting
-  Serial.begin(115200);
 
   //Display library initialization
   u8g2.begin();

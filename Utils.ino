@@ -843,3 +843,28 @@ void seedThings()
     ball.z[i] = random(1, 4);
   }
 }
+
+void openSpiffFile(String fileLocation)
+{
+  Serial.println("Opening File: ");
+  Serial.println(fileLocation);
+
+  File file = SPIFFS.open(fileLocation);
+
+  if (!file)
+  {
+    Serial.println("Failed to open file for reading");
+    return;
+  }
+
+  Serial.println("File Content:");
+  char buffer[64];
+  while (file.available())
+  {
+    int len = file.readBytesUntil('\n', buffer, sizeof(buffer) - 1);
+    buffer[len] = 0;
+    Serial.println(buffer);
+  }
+
+  file.close();
+}

@@ -6,7 +6,6 @@ void magic_game()
 
   if (magicWordsGame.answerMode == false)
   {
-    resetQA();
 
     u8g2.setCursor(SCREEN_WIDTH_HALF - 30, SCREEN_HEIGHT_HALF);
     u8g2.print(MAGIC_QUESTION[magicWordsGame.randomQuestionNumber]);
@@ -24,6 +23,7 @@ void magic_game()
     if (knob1.click == 1)
     {
       magicWordsGame.answerMode = false;
+      resetQA();
     }
   }
 

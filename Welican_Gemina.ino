@@ -574,20 +574,31 @@ struct MagicWords
   int randomQuestionNumber;
   int randomAnswerArrSize;
   int randomAnswerNumber;
+  bool answerMode;
 };
 char MAGIC_ANSWERS[][40] = {
     "Yes",
     "No",
-    "Maybe"};
+    "Maybe",
+    "Not Sure",
+    "Check back later",
+    "Who cares?",
+    "Who knows?",
+    "I am not a god",
+    "Wake up neo"};
 char MAGIC_QUESTION[][40] = {
     "What is up?",
-    "What do you want to know?"};
+    "What do you want to know?",
+    "What is your question?",
+    "What is going on?",
+    "Sup?"};
 MagicWords magicWordsGame = {
     .gameName = "Magic Words",
     .randomQuestionArrSize = sizeof(MAGIC_QUESTION) / sizeof(MAGIC_QUESTION[0]),
     .randomQuestionNumber = random(0, magicWordsGame.randomQuestionArrSize),
     .randomAnswerArrSize = sizeof(MAGIC_ANSWERS) / sizeof(MAGIC_ANSWERS[0]),
-    .randomAnswerNumber = random(0, magicWordsGame.randomAnswerArrSize)};
+    .randomAnswerNumber = random(0, magicWordsGame.randomAnswerArrSize),
+    .answerMode = false};
 
 // WEATHER
 struct OpenWeatherSettings

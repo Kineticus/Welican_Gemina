@@ -6,6 +6,8 @@ void magic_game()
 
   if (magicWordsGame.answerMode == false)
   {
+    resetQA();
+
     u8g2.setCursor(SCREEN_WIDTH_HALF - 30, SCREEN_HEIGHT_HALF);
     u8g2.print(MAGIC_QUESTION[magicWordsGame.randomQuestionNumber]);
 
@@ -34,4 +36,12 @@ void magic_game()
 void magic_reset()
 {
   magicWordsGame.answerMode = false;
+}
+
+void resetQA()
+{
+  magicWordsGame.randomQuestionArrSize = sizeof(MAGIC_QUESTION) / sizeof(MAGIC_QUESTION[0]);
+  magicWordsGame.randomQuestionNumber = random(0, magicWordsGame.randomQuestionArrSize);
+  magicWordsGame.randomAnswerArrSize = sizeof(MAGIC_ANSWERS) / sizeof(MAGIC_ANSWERS[0]);
+  magicWordsGame.randomAnswerNumber = random(0, magicWordsGame.randomAnswerArrSize);
 }

@@ -565,6 +565,23 @@ BlockBreaker blockBreaker = {
     .messageTimer = 0,
     .running = 0};
 
+struct MagicWords
+{
+  String gameName;
+};
+MagicWords magicWordsGame = {
+    .gameName = "Magic Words"};
+char MAGIC_ANSWERS[][40] = {"What is up?", "hi"};
+char MAGIC_QUESTION[][40] = {"What is up?", "hi"};
+
+// magicWordsGame.answers[0] = "Yes";
+// magicWordsGame.answers[1] = "No";
+// magicWordsGame.answers[2] = "Maybe";
+
+// magicWordsGame.questions[0] = "What is up?";
+// magicWordsGame.questions[1] = "What would you like to know?";
+// magicWordsGame.questions[2] = "You Rang?";
+
 // WEATHER
 struct OpenWeatherSettings
 {
@@ -809,7 +826,7 @@ void loop()
       blockbreaker_game();
       break;
     case 2:
-      //tetris();
+      magic_game();
       break;
     }
     break;

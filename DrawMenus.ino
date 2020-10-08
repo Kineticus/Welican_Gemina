@@ -55,7 +55,7 @@ void drawMenuCommander()
   case 1: // Draw Games
   {
     drawMenuWords("Games",
-                  "Fallios", "Block Breaker", "Tetris");
+                  "Fallios", "Block Breaker", "Magic");
     drawMenuSelectionFrames();
   }
   break;

@@ -399,7 +399,7 @@ void setGameMode()
     blockbreaker_reset();
     break;
   case 2:
-    //tetris_reset();
+    magic_reset();
     break;
   }
 }

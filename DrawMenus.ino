@@ -10,10 +10,6 @@
  *        6 - Max Favs    7 - Reset Favs   8 - New Fav 
  * *****************************************************************/
 
-void drawMenu()
-{
-}
-
 void drawMenuWords(String menuName, String first, String second, String third, String fourth = "")
 {
   drawMenuTop(menuName);
@@ -416,10 +412,12 @@ void drawMenuCommander()
         setGameMode();
         break;
       case 1:
-        globals.runMode = 2; // game mode
+        globals.runMode = 2;
         setGameMode();
         break;
       case 2:
+        globals.runMode = 2;
+        setGameMode();
         break;
       case 4:
         globalMenu.currentMenu = 0; // back to main menu

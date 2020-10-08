@@ -54,7 +54,9 @@ FASTLED_USING_NAMESPACE
 #define TOP 32
 #define FRAMES_PER_SECOND 120
 #define SCREEN_WIDTH 127
+#define SCREEN_WIDTH_HALF 63
 #define SCREEN_HEIGHT 63
+#define SCREEN_HEIGHT_HALF 31
 #define MAX_STARS 32
 #define QSUBD(x, b) ((x > b) ? b : 0)     // Digital unsigned subtraction macro. if result <0, then => 0. Otherwise, take on fixed value.
 #define QSUBA(x, b) ((x > b) ? x - b : 0) // Analog Unsigned subtraction macro. if result <0, then => 0

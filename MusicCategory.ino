@@ -5,7 +5,7 @@ void music_category(int patternMode)
     switch (patternMode)
     {
     case 0:
-        musicZero();
+        globalStrings.functionName = "Random";
         break;
     case 1:
         musicOne();
@@ -42,6 +42,9 @@ void music_category(int patternMode)
         break;
     case 12:
         musicTwelve();
+        break;
+    case 13:
+        musicZero();
         break;
     }
 }

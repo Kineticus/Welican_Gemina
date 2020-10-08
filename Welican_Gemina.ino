@@ -300,6 +300,7 @@ struct PatternSettings
   int numberOfFavorites;   //Max 50, loads all 50 at program load, dynamically assignable
   int tempPattern;
   int currentPattern;
+  int displayPattern;
   int randomPattern;
   uint8_t gHue;           // rotating "base color" used by many of the patterns
   int8_t flowDirection;   // Use either 1 or -1 to set flow direction
@@ -347,6 +348,7 @@ PatternSettings patternSettings = {
     .numberOfFavorites = 25,
     .tempPattern = 0,
     .currentPattern = 0,
+    .displayPattern = 0,
     .randomPattern = 0,
     .gHue = 0,
     .flowDirection = -1,
@@ -410,7 +412,7 @@ MenuModel globalMenu = {
     .menu = {},
     //Root Menu Items, Game Menu Items, Settings Menu Items
     .menuMax = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, patternSettings.numberOfFavorites, 99999, 0, 128},
-    .patternMax = {12, 12, 22, 65, 80, patternSettings.numberOfFavorites},
+    .patternMax = {13, 13, 23, 66, 81, patternSettings.numberOfFavorites},
     .currentMenu = 0,
     .currentMenuMultiplier = 1,
     .verticalDividePosition = 64,
@@ -873,37 +875,37 @@ void loop()
   //Write current breath value to status LED
   ledcWrite(STATUS_LED, patternSettings.breath);
 
-  int displayPattern = patternSettings.pattern[globals.mode];
+  patternSettings.displayPattern = patternSettings.pattern[globals.mode];
 
-  if (displayPattern == 0)
+  if (patternSettings.displayPattern == 0)
   {
     if ((millis() - globals.randomTime) > globals.randomInterval)
     {
       pickRandom();
     }
 
-    displayPattern = patternSettings.randomPattern;
+    patternSettings.displayPattern = patternSettings.randomPattern;
   }
 
   switch (globals.mode)
   {
   case 0:
-    basic_category(displayPattern);
+    basic_category(patternSettings.displayPattern);
     break;
   case 1:
-    music_category(displayPattern);
+    music_category(patternSettings.displayPattern);
     break;
   case 2:
-    chill_category(displayPattern);
+    chill_category(patternSettings.displayPattern);
     break;
   case 3:
-    moving_colors_category(displayPattern);
+    moving_colors_category(patternSettings.displayPattern);
     break;
   case 4:
-    legacy_category(displayPattern);
+    legacy_category(patternSettings.displayPattern);
     break;
   case 5:
-    favorites_category(displayPattern);
+    favorites_category(patternSettings.displayPattern);
     break;
   }
 

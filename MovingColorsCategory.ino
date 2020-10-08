@@ -6,10 +6,7 @@ void moving_colors_category(int patternMode)
   {
   case 0:
   {
-    globalStrings.functionName = "MC 0";
-    long pattern[] = {CRGB::Green, CRGB::Grey, CRGB::Red, CRGB::Grey, CRGB::Red, CRGB::Grey, CRGB::Red, CRGB::Green, CRGB::Green, CRGB::Green};
-    const int numberOfColors = sizeof(pattern) / sizeof(int); //Auto calculate your specified number of color bars
-    MovingColoredBars(NUM_LEDS - 1, pattern, numberOfColors);
+    globalStrings.functionName = "Random";
   }
   break;
   case 1:
@@ -291,6 +288,14 @@ void moving_colors_category(int patternMode)
     globalStrings.functionName = "BeatWave 3";
     BeatWave(ForestColors_p, CloudColors_p, LINEARBLEND);
     break;
+  case 66:
+    {
+    globalStrings.functionName = "MC 0";
+    long pattern[] = {CRGB::Green, CRGB::Grey, CRGB::Red, CRGB::Grey, CRGB::Red, CRGB::Grey, CRGB::Red, CRGB::Green, CRGB::Green, CRGB::Green};
+    const int numberOfColors = sizeof(pattern) / sizeof(int); //Auto calculate your specified number of color bars
+    MovingColoredBars(NUM_LEDS - 1, pattern, numberOfColors);
+    }
+    break;
   }
 }
 
@@ -557,18 +562,20 @@ void HeartBeat(uint8_t bloodHue, uint8_t bloodSat)
   for (int i = 0; i < NUM_LEDS; i++)
   {
     uint8_t bloodVal = sumPulse((5 / NUM_LEDS / 2) + (NUM_LEDS / 2) * i * patternSettings.flowDirection);
+    //uint8_t bloodVal = sumPulse(1);
     patternSettings.leds[i] = CHSV(bloodHue, bloodSat, bloodVal);
   }
 }
 
-int sumPulse(int time_shift)
+int sumPulse(uint8_t time_shift)
 {
   //time_shift = 0;  //Uncomment to heart beat/pulse all LEDs together
-  int pulse1 = pulseWave8(millis() + time_shift, patternSettings.cycleLength, patternSettings.pulseLength);
-  int pulse2 = pulseWave8(millis() + time_shift + patternSettings.pulseOffset, patternSettings.cycleLength, patternSettings.pulseLength);
+  uint8_t pulse1 = 1; //pulseWave8(millis() + time_shift, patternSettings.cycleLength, patternSettings.pulseLength);
+  uint8_t pulse2 = 1; //pulseWave8(millis() + time_shift + patternSettings.pulseOffset, patternSettings.cycleLength, patternSettings.pulseLength);
   return qadd8(pulse1, pulse2); // Add pulses together without overflow
 }
 
+//This function is having some trouble now. Getting divide by 0 error, commenting out this for now. 
 uint8_t pulseWave8(uint32_t ms, uint16_t cycleLength, uint16_t pulseLength)
 {
   uint16_t T = ms % cycleLength;

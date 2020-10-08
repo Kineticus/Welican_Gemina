@@ -5,8 +5,7 @@ void legacy_category(int patternMode)
   switch (patternMode)
   {
   case 0:
-    globalStrings.functionName = "RainbowOneYoffset";
-    RainbowOneYoffset();
+    globalStrings.functionName = "Random";
     break;
   case 1:
     globalStrings.functionName = "RainbowTwoYoffset";
@@ -327,6 +326,10 @@ void legacy_category(int patternMode)
   case 80:
     globalStrings.functionName = "RainbowHsv 6";
     RainbowHsv(.00001, .55, .25);
+    break;
+  case 81:
+    globalStrings.functionName = "RainbowOneYoffset";
+    RainbowOneYoffset();
     break;
   }
 }

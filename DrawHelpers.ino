@@ -309,6 +309,11 @@ void newFavoritesMenu()
     u8g2.setCursor(54, 26);
   }
 
+  if (globalMenu.menu[globalMenu.currentMenu] < 1)
+  {
+    globalMenu.menu[globalMenu.currentMenu] = 1;
+  }
+
   u8g2.print(globalMenu.menu[globalMenu.currentMenu]);
 
   u8g2.drawRFrame(50, 14, 20, 16, 3);

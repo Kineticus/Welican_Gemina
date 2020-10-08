@@ -5,8 +5,7 @@ void chill_category(int patternMode)
     switch (patternMode)
     {
     case 0:
-        globalStrings.functionName = "redHsv";
-        redHsv();
+        globalStrings.functionName = "Random";
         break;
     case 1:
         globalStrings.functionName = "aquaHsv";
@@ -75,6 +74,10 @@ void chill_category(int patternMode)
     case 17:
         globalStrings.functionName = "sinelonFive";
         sinelonFive();
+        break;
+    case 18:
+        globalStrings.functionName = "redHsv";
+        redHsv();
         break;
         // case 18:
         //     RainbowOneYoffset();

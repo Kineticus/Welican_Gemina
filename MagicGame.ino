@@ -14,7 +14,15 @@ void magic_game()
 
     if (knob1.click == 1)
     {
-      magicWordsGame.answerMode = true;
+      u8g2.clear();
+
+      // movingCircles();
+      gravityWell();
+
+      EVERY_N_SECONDS(3)
+      {
+        magicWordsGame.answerMode = true;
+      }
     }
   }
   else

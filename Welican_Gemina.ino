@@ -857,19 +857,13 @@ void loop()
   //Write current breath value to status LED
   ledcWrite(STATUS_LED, patternSettings.breath);
 
-  int displayPattern = patternSettings.pattern[globals.mode] - 1;
+  int displayPattern = patternSettings.pattern[globals.mode];
 
-  if (displayPattern == -1)
+  if (displayPattern == 0)
   {
     if ((millis() - globals.randomTime) > globals.randomInterval)
     {
-      patternSettings.randomPattern = random(1, globalMenu.patternMax[globals.mode]);
-      globals.randomInterval = random(30000, 240000);
-      globals.randomTime = millis();
-      Serial.print(patternSettings.randomPattern);
-      Serial.print(" - ");
-      Serial.println(globals.randomInterval);
-      smoothOperatorStart();
+      pickRandom();
     }
 
     displayPattern = patternSettings.randomPattern;

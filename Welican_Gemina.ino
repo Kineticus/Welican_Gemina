@@ -570,19 +570,24 @@ BlockBreaker blockBreaker = {
 struct MagicWords
 {
   String gameName;
+  int randomQuestionArrSize;
+  int randomQuestionNumber;
+  int randomAnswerArrSize;
+  int randomAnswerNumber;
 };
+char MAGIC_ANSWERS[][40] = {
+    "Yes",
+    "No",
+    "Maybe"};
+char MAGIC_QUESTION[][40] = {
+    "What is up?",
+    "What do you want to know?"};
 MagicWords magicWordsGame = {
-    .gameName = "Magic Words"};
-char MAGIC_ANSWERS[][40] = {"What is up?", "hi"};
-char MAGIC_QUESTION[][40] = {"What is up?", "hi"};
-
-// magicWordsGame.answers[0] = "Yes";
-// magicWordsGame.answers[1] = "No";
-// magicWordsGame.answers[2] = "Maybe";
-
-// magicWordsGame.questions[0] = "What is up?";
-// magicWordsGame.questions[1] = "What would you like to know?";
-// magicWordsGame.questions[2] = "You Rang?";
+    .gameName = "Magic Words",
+    .randomQuestionArrSize = sizeof(MAGIC_QUESTION) / sizeof(MAGIC_QUESTION[0]),
+    .randomQuestionNumber = random(0, magicWordsGame.randomQuestionArrSize),
+    .randomAnswerArrSize = sizeof(MAGIC_ANSWERS) / sizeof(MAGIC_ANSWERS[0]),
+    .randomAnswerNumber = random(0, magicWordsGame.randomAnswerArrSize)};
 
 // WEATHER
 struct OpenWeatherSettings

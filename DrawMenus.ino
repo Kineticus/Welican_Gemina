@@ -408,15 +408,9 @@ void drawMenuCommander()
       switch (globalMenu.menu[globalMenu.currentMenu])
       {
       case 0:
-        globals.runMode = 2; // game mode
-        setGameMode();
-        break;
       case 1:
-        globals.runMode = 2;
-        setGameMode();
-        break;
       case 2:
-        globals.runMode = 2;
+        globals.runMode = 2; // game mode
         setGameMode();
         break;
       case 4:

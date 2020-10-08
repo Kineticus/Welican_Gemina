@@ -147,12 +147,12 @@ void u8g2_horizontal_line(uint8_t a)
 
 void drawProgressBar()
 {
-  int boxWidth = (SCREEN_WIDTH / (globalMenu.patternMax[globals.mode] + 1));
+  int boxWidth = (SCREEN_WIDTH / globalMenu.patternMax[globals.mode]);
   if (boxWidth < 4)
   {
     boxWidth = 4;
   }
-  u8g2.drawBox(((float(SCREEN_WIDTH - boxWidth) / (globalMenu.patternMax[globals.mode] + 1)) * patternSettings.pattern[globals.mode]), 12, boxWidth, 4);
+  u8g2.drawBox(((float(SCREEN_WIDTH - boxWidth) / globalMenu.patternMax[globals.mode]) * patternSettings.pattern[globals.mode]), 12, boxWidth, 4);
 }
 
 void showLogo(int millisTime)

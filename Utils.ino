@@ -147,6 +147,9 @@ void updateEncoders()
         //And let the fade function know to start
         smoothOperatorStart();
 
+        //New random mode
+        pickRandom();
+
         //Check to make sure we haven't gone over the maximum amount of modes
         if (globals.mode > globals.modeMax)
         {
@@ -223,6 +226,7 @@ void updateEncoders()
       globals.tempValue -= 4;
       knob1.temp += 4;
       patternSettings.pattern[globals.mode] += 1;
+      pickRandom();
       smoothOperatorStart();
     }
     while (globals.tempValue <= -4)
@@ -230,14 +234,15 @@ void updateEncoders()
       globals.tempValue += 4;
       knob1.temp -= 4;
       patternSettings.pattern[globals.mode] -= 1;
+      pickRandom();
       smoothOperatorStart();
     }
 
     //Constrain Mode - add switch to allow 3 options - constrain; rollover back to beginning/end; rollover to next/previous mode
-    if (patternSettings.pattern[globals.mode] > globalMenu.patternMax[globals.mode] + 1)
+    if (patternSettings.pattern[globals.mode] > globalMenu.patternMax[globals.mode])
     {
       //Mode 1 - constrain
-      patternSettings.pattern[globals.mode] = globalMenu.patternMax[globals.mode] + 1;
+      patternSettings.pattern[globals.mode] = globalMenu.patternMax[globals.mode];
     }
     if (patternSettings.pattern[globals.mode] <= 0)
     {
@@ -402,6 +407,14 @@ void setGameMode()
     magic_reset();
     break;
   }
+}
+
+void pickRandom()
+{
+  patternSettings.randomPattern = random(1, globalMenu.patternMax[globals.mode]);
+  globals.randomInterval = random(30000, 240000);
+  globals.randomTime = millis();
+  smoothOperatorStart(); 
 }
 
 void endGameMode()

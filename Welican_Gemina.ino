@@ -532,6 +532,8 @@ struct Fallios
   int tunnel1[SCREEN_HEIGHT + 1];
   int tunnel2[SCREEN_HEIGHT + 1];
   int tunnelWidth;
+  int tunnelTracker;
+  int tunnelWildcard;
 };
 Fallios fallios = {
     .score = 0,
@@ -542,7 +544,9 @@ Fallios fallios = {
     .tunnelGenerator = 0,
     .tunnel1 = {},
     .tunnel2 = {},
-    .tunnelWidth = (SCREEN_WIDTH / 2)};
+    .tunnelWidth = (SCREEN_WIDTH / 2),
+    .tunnelTracker = 100,
+    .tunnelWildcard = 0};
 
 struct BlockBreaker
 {

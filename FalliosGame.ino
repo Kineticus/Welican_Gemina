@@ -104,6 +104,19 @@ void fallios_game()
 
     //We didn't collide? Add a point to the board
     fallios.score += 1;
+
+    //for difficulty tracking
+    fallios.tunnelTracker += 1;
+
+    if (fallios.tunnelTracker > 100)
+    {
+        if (fallios.tunnelWidth > 20)
+        {
+            fallios.tunnelWidth -= 1;    
+        }
+
+        fallios.tunnelTracker = 0;
+    }
 }
 
 void fallios_reset()

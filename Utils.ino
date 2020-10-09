@@ -489,6 +489,31 @@ int RSSItoPercent(int RSSI)
   return percent;
 }
 
+int RSSItoStrength(int RSSI)
+{
+  //RSSI range is 0 (best) to -120 (worst)
+  int signalStrength = 0;
+
+  if (RSSI > -50)
+  {
+    signalStrength = 4;
+  } 
+  else if (RSSI > -75)
+  {
+    signalStrength = 3;
+  } 
+  else if (RSSI > -100)
+  {
+    signalStrength = 2;
+  } 
+  else
+  {
+    signalStrength = 1;
+  }
+
+  return signalStrength;
+}
+
 void setZipCodeMenu()
 {
   drawMenuTop("Set ZIP Code");
@@ -668,9 +693,10 @@ void updateTime()
 
     globalTime.currentMinute = timeinfo.tm_min; //Update minutes
   }
-  else if ((WiFi.status() == 4) && (globals.networkTries < 5))
+  else if ((WiFi.status() == 4) && (globals.networkTries < 3))
   {
-    EVERY_N_MILLISECONDS(5000)
+    //Try to connect a few times if not connected
+    EVERY_N_MILLISECONDS(750)
     {
       globals.networkTries++;
       WiFi.enableSTA(true);
@@ -773,7 +799,7 @@ void saveTimeCheck()
     {
       EEPROM.write(2 + i, patternSettings.pattern[i]);
     }
-    EEPROM.commit();
+    EEPROM.commit(); //EEPROM commit should not be called while showStrip is running
   }
 
   if (globals.runMode == 0)

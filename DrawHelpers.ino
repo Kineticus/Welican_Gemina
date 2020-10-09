@@ -83,8 +83,12 @@ void drawTop()
   //u8g2.drawXBMP(68,0,HEART_WIDTH, HEART_HEIGHT, HEART);
 
   //Hosting our own AP?
-  u8g2.setCursor(112, 8);
-  u8g2.print(globals.softAPEnable);
+  if (globals.softAPEnable == 1)
+  {
+    u8g2.setCursor(112, 8);
+    u8g2.print("T");   
+  }
+  
 
   /*
   WL_IDLE_STATUS	0
@@ -96,9 +100,39 @@ void drawTop()
   WL_DISCONNECTED	6
   */
   //WiFi Status, see codes above
-  u8g2.setCursor(120, 8);
-  u8g2.print(WiFi.status());
+  //u8g2.setCursor(120, 8);
+  //u8g2.print(WiFi.status());
 
+  EVERY_N_MILLISECONDS(1000)
+  {
+    globals.signalStrength = 0;
+
+    if (WiFi.status() == 3)
+    {
+      globals.signalStrength = RSSItoStrength(WiFi.RSSI());
+    }
+  }
+
+  switch (globals.signalStrength)
+  {
+  case 0:
+    u8g2.drawXBMP(119, 0, WIFI_0_WIDTH, WIFI_0_HEIGHT, WIFI_0);
+    break;
+  case 1:
+    // u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+    u8g2.drawXBMP(119, 0,  WIFI_1_WIDTH, WIFI_1_HEIGHT, WIFI_1);
+    break;
+  case 2:
+    u8g2.drawXBMP(119, 0,  WIFI_2_WIDTH, WIFI_2_HEIGHT, WIFI_2);
+    break;
+  case 3:
+    u8g2.drawXBMP(119, 0,  WIFI_3_WIDTH, WIFI_3_HEIGHT, WIFI_3);
+    break;
+  case 4:
+    u8g2.drawXBMP(119, 0,  WIFI_4_WIDTH, WIFI_4_HEIGHT, WIFI_4);
+    break;
+  }
+  
   //WiFi Strength % (99 is MAX, 1 is MIN)
   //RSSItoPercent(WiFi.RSSI());
 

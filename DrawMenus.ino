@@ -104,15 +104,31 @@ void drawMenuCommander()
   break;
   case 8: // WIFI Menu
   {
+    switch(globals.softAPEnable)
+    {
+      case 0:
+      {
+        drawMenuWords("Settings > WiFi",
+                  "Scan", "Host", "Connect", "Disconn.");
+      }
+      break;
+      
+      case 1:
+      {
+        drawMenuWords("Settings > WiFi",
+                  "Scan", "Hosting!", "Connect", "Disconn.");
+      }
+      break;
+    }
     drawMenuWords("Settings > WiFi",
-                  "Scan", "Host " + globals.softAPEnable, "Connect", "Disconn.");
+                  "Scan", "Host", "Connect", "Disconn.");
 
     u8g2.setCursor(10, 64);
     if (WiFi.status() == WL_CONNECTED)
     {
       int temp = WiFi.SSID().length();
 
-      temp = 44 - (temp * 2);
+      temp = 64 - (temp * 2);
 
       if (temp < 0)
       {
@@ -122,9 +138,10 @@ void drawMenuCommander()
       u8g2.setCursor(temp, 51);
       u8g2.print(WiFi.SSID());
 
-      u8g2.print("   ");
-      u8g2.print(RSSItoPercent(WiFi.RSSI()));
-      u8g2.print("%");
+      //u8g2.print("   ");
+      //u8g2.print(RSSItoPercent(WiFi.RSSI()));
+      //u8g2.print(WiFi.RSSI());
+      //u8g2.print("%");
 
       globals.ipAddress = WiFi.localIP().toString();
       temp = globals.ipAddress.length();

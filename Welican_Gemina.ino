@@ -145,6 +145,7 @@ struct Globals
   unsigned long networkReconnect;
   int networkTries;
   int networkScan;
+  int signalStrength;
   int softAPEnable;
   const char *ntpServer;
 
@@ -175,6 +176,7 @@ Globals globals = {
     .networkReconnect = 0,
     .networkTries = 0,
     .networkScan = 0,
+    .signalStrength = 0,
     .softAPEnable = 0,
     .ntpServer = "pool.ntp.org"};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);

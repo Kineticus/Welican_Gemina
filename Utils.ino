@@ -616,25 +616,28 @@ void readFavorites()
 
 void resetFavorites()
 {
-  //Just Favorites
-  for (int i = 0; i < 50; i++)
-  {
-    //Set everything to 0
-    patternSettings.favoritePattern[i] = 0;
-    patternSettings.favoriteMode[i] = 0;
-
-    //including EEPROM area
-    EEPROM.write((100 + (i * 2)), 0);
-    EEPROM.write((101 + (i * 2)), 0);
-  }
-
   //TESTING - Reset ALL MEMORY WITH THIS FUNCTION
   for (int i = 0; i < 511; i++)
   {
     EEPROM.write(i, 0);
   }
 
-  EEPROM.commit(); //write it to memory
+
+  //JUST FAVORITES
+  for (int i = 0; i < 50; i++)
+  {
+    //Set everything to deault Mode 0 Pattern 1;
+    patternSettings.favoritePattern[i] = 1;
+    patternSettings.favoriteMode[i] = 0;
+
+
+    //Set everything to deault Mode 0 Pattern 1;
+    EEPROM.write((100 + (i * 2)), 1);
+    EEPROM.write((101 + (i * 2)), 0);
+  }
+
+  //Write it to memory
+  EEPROM.commit();
 }
 
 void updateTime()

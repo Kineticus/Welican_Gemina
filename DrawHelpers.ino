@@ -68,9 +68,9 @@ void drawTop()
 
   //u8g2.print(globals.mode);
   u8g2.setCursor(12, 8);
-  if (patternSettings.pattern[globals.mode] == 0)
+  if ((patternSettings.pattern[globals.mode] == 0) || ((globals.mode == 5) && (patternSettings.favoritePattern[patternSettings.pattern[globals.mode]] == 0)))
   {
-    u8g2.print("R"); 
+    u8g2.print("RM"); 
   } else
   {
     u8g2.print(patternSettings.pattern[globals.mode]);
@@ -320,7 +320,14 @@ void newFavoritesMenu()
 
   //Call the favorite for the slot we're looking at
   //The real function call is below this, so LEDs will not show bad data
-  favorites_category(globalMenu.menu[globalMenu.currentMenu]);
+
+  if (patternSettings.favoritePattern[globalMenu.menu[globalMenu.currentMenu]] == 0)
+  {
+    globalStrings.functionName = "Randomizer";
+  } else 
+  {
+    favorites_category(globalMenu.menu[globalMenu.currentMenu]);
+  }
 
   //Convert the strings
   globalStrings.functionName.toCharArray(globalStrings.functionNameOutString, 20);
@@ -333,11 +340,11 @@ void newFavoritesMenu()
   switch (patternSettings.favoriteMode[globalMenu.menu[globalMenu.currentMenu]])
   {
   case 0:
-    u8g2.drawXBMP(2, 53, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+    u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_HEIGHT, WAVE);
     break;
   case 1:
-    // u8g2.drawXBMP(2, 53, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
-    u8g2.drawXBMP(0, 0, MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
+    // u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+    u8g2.drawXBMP(2, 53, MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
     break;
   case 2:
     u8g2.drawXBMP(2, 53, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);

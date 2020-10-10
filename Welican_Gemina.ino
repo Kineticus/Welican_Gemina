@@ -66,8 +66,6 @@ FASTLED_USING_NAMESPACE
 #define COLOR_ORDER RGB
 #define MAX_LEDS 500
 int NUM_LEDS = 200;
-//int *numberLEDs = &NUM_LEDS; 
-//#define LEDS_IN_STRIP 200
 #define LEDS_FOR_SIMPLEX 6
 #define VISUALIZER_X 48
 #define VISUALIZER_Y 128
@@ -252,6 +250,7 @@ struct GlobalLED
   int fadeDirection;      // 1 or 0, positive or negative
   int fadeDirection2;     // 1 or 0, positive or negative
   int fadeDirectionHTemp; // 1 or 0, positive or negative
+  byte colorOrder;
   bool clearLEDS;
 };
 GlobalLED globalLED = {
@@ -262,6 +261,7 @@ GlobalLED globalLED = {
     .fadeDirection = 0,
     .fadeDirection2 = 0,
     .fadeDirectionHTemp = 0,
+    .colorOrder = 0,
     .clearLEDS = false};
 
 struct SimplexNoiseModel
@@ -431,7 +431,9 @@ MenuModel globalMenu = {
       0,      //WiFi Scan Results (dynamically set)
       128,    // WiFi Password
       3,      //WiFi Test
-      (MAX_LEDS / 5)},   //# LEDs
+      (MAX_LEDS / 5),   //# LEDs
+      3       //LED Color mode
+      },
     .patternMax = {
       13, 
       13, 
@@ -854,9 +856,25 @@ void setup()
   readNumberOfLEDs();
 
   //FastLED Declation
-  FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(patternSettings.leds, NUM_LEDS);
-  FastLED.addLeds<LED_TYPE, DATA_PIN_A, COLOR_ORDER>(patternSettings.leds, NUM_LEDS);
-
+  if (globalLED.colorOrder == 1)
+  {
+    //GRB, most common for Strips / Reels
+    FastLED.addLeds<LED_TYPE, DATA_PIN, GRB>(patternSettings.leds, NUM_LEDS);
+    FastLED.addLeds<LED_TYPE, DATA_PIN_A, GRB>(patternSettings.leds, NUM_LEDS);
+  }
+  else if (globalLED.colorOrder == 2)
+  {
+    //BGR, rare
+    FastLED.addLeds<LED_TYPE, DATA_PIN, BGR>(patternSettings.leds, NUM_LEDS);
+    FastLED.addLeds<LED_TYPE, DATA_PIN_A, BGR>(patternSettings.leds, NUM_LEDS);
+  }
+  else
+  {
+    //RGB, most common for 12mm Pixel types
+    FastLED.addLeds<LED_TYPE, DATA_PIN, RGB>(patternSettings.leds, NUM_LEDS);
+    FastLED.addLeds<LED_TYPE, DATA_PIN_A, RGB>(patternSettings.leds, NUM_LEDS);
+  }
+  
 
   //Begin a task named 'fftComputeTask' to handle FFT on the other core
   //This task also takes care of reading the button inputs and computing encoder positions

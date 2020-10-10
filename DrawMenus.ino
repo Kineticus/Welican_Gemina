@@ -330,6 +330,13 @@ void drawMenuCommander()
                     globalMenu.menu[globalMenu.currentMenu] * 5);
   }
   break;
+  case 16:
+  {
+    drawMenuWords("Settings > LED > Order",
+                  "RGB", "GRB", "BGR");
+    drawMenuSelectionFrames();
+  }
+  break;
   }
 
   // Back Button Action
@@ -421,6 +428,11 @@ void drawMenuCommander()
       globalMenu.currentMenu = 3;
     }
     break;
+    case 16:
+    {
+      globalMenu.currentMenu = 3;
+    }
+    break;
     }
   }
 
@@ -490,7 +502,7 @@ void drawMenuCommander()
         globalMenu.currentMenu = 15;
         break;
       case 1: //Order
-        globalMenu.currentMenu = 2;
+        globalMenu.currentMenu = 16;
         break;
       case 2: //Fade
         globalMenu.currentMenu = 2;
@@ -678,8 +690,17 @@ void drawMenuCommander()
     break;
     case 15: //
     {
-      globalMenu.currentMenu = 3;
       saveNumberOfLEDs();
+    }
+    break;
+    case 16:
+    {
+      if (globalMenu.menu[globalMenu.currentMenu] != 3)
+      {
+        globalLED.colorOrder = globalMenu.menu[globalMenu.currentMenu];
+        saveNumberOfLEDs();
+      }
+      globalMenu.menu[globalMenu.currentMenu] = 3;
     }
     break;
     }

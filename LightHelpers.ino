@@ -70,17 +70,7 @@ void setAll(byte red, byte green, byte blue)
 void smoothOperator()
 {
   //Check for interfade
-  if (globalLED.interfade == 0)
-  {
-    /*
-    //take snapshot
-    for (int i = 0; i < NUM_LEDS; i++)
-    {
-      patternSettings.tempLeds[i] = patternSettings.leds[i];
-    }
-    */
-  }
-  else
+  if (globalLED.interfade != 0)
   {
     for (int i = 0; i < NUM_LEDS; i++)
     {
@@ -100,6 +90,10 @@ void smoothOperator()
 //make this an int and calculate variables based on time
 void smoothOperatorStart()
 {
+  //globalLED.interfadeMax == steps
+  //globalLED.interfadeSpeed == change each step 
+  //globalLED.interfadeMax * globalLED.interfadeSpeed <= 255
+
   globalLED.interfade = globalLED.interfadeMax;
 
   for (int i = 0; i < NUM_LEDS; i++)

@@ -670,6 +670,9 @@ void readNumberOfLEDs()
   //Set the # LEDs menu to what the value is
   globalMenu.menu[15] = EEPROM.read(50);
 
+  //Get the Color Order
+  globalLED.colorOrder = EEPROM.read(51);
+
   //Multiply by 5 to find NUM_LEDS
   NUM_LEDS = globalMenu.menu[15] * 5;
   
@@ -686,7 +689,7 @@ void readNumberOfLEDs()
   }
   else if (NUM_LEDS < 5)
   {
-    NUM_LEDS = 5;
+    NUM_LEDS = 101;
   }
 
   //Recalculate spacing
@@ -696,6 +699,7 @@ void readNumberOfLEDs()
 void saveNumberOfLEDs()
 {
   EEPROM.write(50, globalMenu.menu[15]);
+  EEPROM.write(51, globalLED.colorOrder);
   EEPROM.commit();
   ESP.restart();
 }

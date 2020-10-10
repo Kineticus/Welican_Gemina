@@ -64,8 +64,10 @@ FASTLED_USING_NAMESPACE
 #define DATA_PIN_A 12
 #define LED_TYPE WS2811
 #define COLOR_ORDER RGB
-#define NUM_LEDS 200
-#define LEDS_IN_STRIP 200
+#define MAX_LEDS 500
+int NUM_LEDS = 200;
+//int *numberLEDs = &NUM_LEDS; 
+//#define LEDS_IN_STRIP 200
 #define LEDS_FOR_SIMPLEX 6
 #define VISUALIZER_X 48
 #define VISUALIZER_Y 128
@@ -272,9 +274,9 @@ struct SimplexNoiseModel
   float yoffset;
   float yoffsetMax;
   float xoffset;
-  float ledArrayRed[LEDS_IN_STRIP + 1];
-  float ledArrayGreen[LEDS_IN_STRIP + 1];
-  float ledArrayBlue[LEDS_IN_STRIP + 1];
+  float ledArrayRed[MAX_LEDS + 1];
+  float ledArrayGreen[MAX_LEDS + 1];
+  float ledArrayBlue[MAX_LEDS + 1];
   float u;
   float v;
   float w;
@@ -285,7 +287,7 @@ struct SimplexNoiseModel
   int k;
 };
 SimplexNoiseModel simplexNoise = {
-    .nodeSpacing = (LEDS_IN_STRIP / LEDS_FOR_SIMPLEX),
+    .nodeSpacing = (MAX_LEDS / LEDS_FOR_SIMPLEX),
     .A = {0, 0, 0},
     .hTemp = .420,
     .timeInc = 0.0025,
@@ -338,10 +340,10 @@ struct PatternSettings
   uint8_t sat;  // Do Not Edit
   uint8_t satB; // End saturation at valueMax.
   float val;
-  CRGB tempPatternCollection[NUM_LEDS];
-  CRGB tempHalfLeds[NUM_LEDS / 2]; // half the total number of pixels
-  CRGB leds[NUM_LEDS];
-  CRGB tempLeds[NUM_LEDS];
+  CRGB tempPatternCollection[MAX_LEDS];
+  CRGB tempHalfLeds[MAX_LEDS / 2]; // half the total number of pixels
+  CRGB leds[MAX_LEDS];
+  CRGB tempLeds[MAX_LEDS];
 };
 PatternSettings patternSettings = {
     .pattern = {},
@@ -397,8 +399,8 @@ HSV2RGB globalHSV2RGB;
 
 struct MenuModel
 {
-  int menu[14];
-  int menuMax[14];
+  int menu[17];
+  int menuMax[17];
   int patternMax[6];
   int currentMenu;
   int currentMenuMultiplier;
@@ -413,8 +415,30 @@ struct MenuModel
 MenuModel globalMenu = {
     .menu = {},
     //Root Menu Items, Game Menu Items, Settings Menu Items
-    .menuMax = {3, 3, 3, 3, 3, 3, 50, 2, 3, 3, patternSettings.numberOfFavorites, 99999, 0, 128},
-    .patternMax = {13, 13, 23, 66, 81, patternSettings.numberOfFavorites},
+    .menuMax = {
+      3,      //Main
+      3,      //Game
+      3,      //Settings
+      3,      //LED Settings
+      1,      //ZIP Code
+      3,      //Favorites Menu
+      50,     //Max Favorites
+      2,      //Reset Favorites
+      3,      //Wifi Menu
+      3,      //?
+      patternSettings.numberOfFavorites, //Add Favorite
+      99999,  //Enter ZIP Code
+      0,      //WiFi Scan Results (dynamically set)
+      128,    // WiFi Password
+      3,      //WiFi Test
+      (MAX_LEDS / 5)},   //# LEDs
+    .patternMax = {
+      13, 
+      13, 
+      23, 
+      66, 
+      81, 
+      patternSettings.numberOfFavorites},
     .currentMenu = 0,
     .currentMenuMultiplier = 1,
     .verticalDividePosition = 64,
@@ -788,10 +812,6 @@ void setup()
   //Display library initialization
   u8g2.begin();
 
-  //FastLED Declation
-  FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(patternSettings.leds, NUM_LEDS);
-  FastLED.addLeds<LED_TYPE, DATA_PIN_A, COLOR_ORDER>(patternSettings.leds, NUM_LEDS);
-
   /* Load Save Settings
 
     Load variables from EEPROM
@@ -828,6 +848,15 @@ void setup()
   getZipCode();
 
   updateZipCodeString();
+
+
+  //Read # of LEDs to use
+  readNumberOfLEDs();
+
+  //FastLED Declation
+  FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(patternSettings.leds, NUM_LEDS);
+  FastLED.addLeds<LED_TYPE, DATA_PIN_A, COLOR_ORDER>(patternSettings.leds, NUM_LEDS);
+
 
   //Begin a task named 'fftComputeTask' to handle FFT on the other core
   //This task also takes care of reading the button inputs and computing encoder positions

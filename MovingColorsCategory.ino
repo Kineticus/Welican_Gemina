@@ -602,7 +602,7 @@ void FireFullStrip()
   // Fuction only operates on half the number of pixels (NUM_LEDS/2)
 
   // Array of temperature readings at each simulation cell
-  static byte heat[NUM_LEDS];
+  static byte heat[MAX_LEDS];
 
   // Step 1.  Cool down every cell a little
   for (int i = 0; i < NUM_LEDS; i++)
@@ -636,7 +636,7 @@ void FireHalfStrip()
   // Fuction only operates on half the number of pixels (NUM_LEDS/2)
 
   // Array of temperature readings at each simulation cell
-  static byte heat[NUM_LEDS / 2];
+  static byte heat[MAX_LEDS / 2];
 
   // Step 1.  Cool down every cell a little
   for (int i = 0; i < NUM_LEDS / 2; i++)

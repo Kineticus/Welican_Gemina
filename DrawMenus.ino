@@ -39,6 +39,7 @@ void drawMenuCommander()
 
   u8g2_horizontal_line(9);
 
+  //Draw Screen
   switch (globalMenu.currentMenu)
   {
   case 0: // Draw Image
@@ -58,13 +59,16 @@ void drawMenuCommander()
   case 2: // Draw Settings
   {
     drawMenuWords("Settings",
-                  "LED Config", "Favorites", "ZIP Code", "WIFI");
+                  "LED", "Favorites", "ZIP Code", "WIFI");
     drawMenuSelectionFrames();
   }
   break;
-  case 3: // LED Count Menu
+  case 3: // LED
   {
-    drawMenuTop("Settings > LED Count");
+    //drawMenuTop("Settings > LED Settings");
+    drawMenuWords("Settings > LED",
+                  "# LEDs", "Order", "Fade", "Speed");
+    drawMenuSelectionFrames();
   }
   break;
   case 4: // Zip Code Menu
@@ -315,9 +319,20 @@ void drawMenuCommander()
     }
   }
   break;
+  case 15:
+  {
+    if (globalMenu.menu[globalMenu.currentMenu] < 1) //gotta have at least 1 LED
+    {
+      globalMenu.menu[globalMenu.currentMenu] = 1;
+    }
+
+    drawNumberInput("Set # of LEDs",
+                    globalMenu.menu[globalMenu.currentMenu] * 5);
+  }
+  break;
   }
 
-  // Back Button
+  // Back Button Action
   if (knob2.click == 1)
   {
     switch (globalMenu.currentMenu)
@@ -330,6 +345,9 @@ void drawMenuCommander()
       break;
     case 2: //Settings Menu
       globalMenu.currentMenu = 0;
+      break;
+    case 3:
+      globalMenu.currentMenu = 2;
       break;
     case 4: //Zip Code Menu
       globalMenu.currentMenu = 2;
@@ -393,13 +411,20 @@ void drawMenuCommander()
     }
     break;
     case 14:
+    {
       globalMenu.menu[13] = 0;
       globalMenu.currentMenu = 12;
-      break;
+    }
+    break;
+    case 15:
+    {
+      globalMenu.currentMenu = 3;
+    }
+    break;
     }
   }
 
-  // Forward/Confirm Button
+  // Forward/Confirm Button Action
   if (knob1.click == 1)
   {
     switch (globalMenu.currentMenu)
@@ -440,7 +465,8 @@ void drawMenuCommander()
     {
       switch (globalMenu.menu[globalMenu.currentMenu])
       {
-      case 0: //LED Count
+      case 0: //LED Settings
+        globalMenu.currentMenu = 3;
         break;
       case 1: // Favorites Settings Menu
         globalMenu.currentMenu = 5;
@@ -450,6 +476,27 @@ void drawMenuCommander()
         break;
       case 3: // Wifi
         globalMenu.currentMenu = 8;
+        break;
+      }
+    }
+    break;
+    case 3: //LED click
+    {
+      switch (globalMenu.menu[globalMenu.currentMenu])
+      {
+      case 0: //# LED
+        //ESP gets a reboot if changed, so save current pattern 
+        globalTime.save == 2;
+        globalMenu.currentMenu = 15;
+        break;
+      case 1: //Order
+        globalMenu.currentMenu = 2;
+        break;
+      case 2: //Fade
+        globalMenu.currentMenu = 2;
+        break;
+      case 3: //Speed
+        globalMenu.currentMenu = 2;
         break;
       }
     }
@@ -629,6 +676,12 @@ void drawMenuCommander()
       globalMenu.menu[13] = 0;
     }
     break;
+    case 15: //
+    {
+      globalMenu.currentMenu = 3;
+      saveNumberOfLEDs();
+    }
+    break;
     }
   }
 }
@@ -637,17 +690,21 @@ void drawNumberInput(String menuName, int numberValue)
 {
   drawMenuTop(menuName);
 
-  if (numberValue < 10)
+  if (numberValue > 99)
   {
-    u8g2.setCursor(57, 36);
+    u8g2.setCursor(53, 36);
+  }
+  else if (numberValue < 10)
+  {
+    u8g2.setCursor(60, 36);
   }
   else
   {
-    u8g2.setCursor(54, 36);
+    u8g2.setCursor(57, 36);
   }
 
   u8g2.print(numberValue);
-  u8g2.drawRFrame(50, 24, 20, 16, 3);
+  u8g2.drawRFrame(50, 24, 25, 16, 3);
 }
 
 void drawMenuSelectionFrames()

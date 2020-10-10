@@ -665,6 +665,41 @@ void resetFavorites()
   EEPROM.commit();
 }
 
+void readNumberOfLEDs()
+{
+  //Set the # LEDs menu to what the value is
+  globalMenu.menu[15] = EEPROM.read(50);
+
+  //Multiply by 5 to find NUM_LEDS
+  NUM_LEDS = globalMenu.menu[15] * 5;
+  
+  //Finding weird issue when using over 100 where the last LED glitches? Doesn't seem to happen lower.
+  if (NUM_LEDS > 99)
+  {
+    NUM_LEDS += 1;
+  }
+
+  //Make sure we are within tested range
+  if (NUM_LEDS > 500)
+  {
+    NUM_LEDS = 500;
+  }
+  else if (NUM_LEDS < 5)
+  {
+    NUM_LEDS = 5;
+  }
+
+  //Recalculate spacing
+  simplexNoise.nodeSpacing = (NUM_LEDS / LEDS_FOR_SIMPLEX);
+}
+
+void saveNumberOfLEDs()
+{
+  EEPROM.write(50, globalMenu.menu[15]);
+  EEPROM.commit();
+  ESP.restart();
+}
+
 void updateTime()
 {
   if (WiFi.status() == WL_CONNECTED)

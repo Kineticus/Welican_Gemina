@@ -649,7 +649,7 @@ void resetFavorites()
 
 
   //JUST FAVORITES
-  for (int i = 0; i < 50; i++)
+  for (int i = 3; i < 50; i++)
   {
     //Set everything to deault Mode 0 Pattern 1;
     patternSettings.favoritePattern[i] = 1;
@@ -735,7 +735,7 @@ void updateTime()
   else if ((WiFi.status() == 4) && (globals.networkTries < 3))
   {
     //Try to connect a few times if not connected
-    EVERY_N_MILLISECONDS(750)
+    EVERY_N_MILLISECONDS(4000)
     {
       globals.networkTries++;
       WiFi.enableSTA(true);

@@ -330,11 +330,30 @@ void drawMenuCommander()
                     globalMenu.menu[globalMenu.currentMenu] * 5);
   }
   break;
-  case 16:
+  case 16: //RGB Order
   {
     drawMenuWords("Settings > LED > Order",
                   "RGB", "GRB", "BGR");
     drawMenuSelectionFrames();
+  }
+  break;
+  case 17: //Fade Time
+  {
+    if (globalMenu.menu[globalMenu.currentMenu] < 1) //gotta have at least 1
+    {
+      globalMenu.menu[globalMenu.currentMenu] = 1;
+    }
+
+    drawNumberInput("Crossfade Duration",
+                    globalMenu.menu[globalMenu.currentMenu]); 
+
+    u8g2.setCursor(0, 64);
+    u8g2.print("1 < SHORT--LONG > 50");                  
+  }
+  break;
+  case 18: //Speed?
+  {
+
   }
   break;
   }
@@ -433,6 +452,16 @@ void drawMenuCommander()
       globalMenu.currentMenu = 3;
     }
     break;
+    case 17:
+    {
+        globalMenu.currentMenu = 3;
+    }
+    break;
+    case 18:
+    {
+        globalMenu.currentMenu = 3;
+    }
+    break;
     }
   }
 
@@ -505,10 +534,10 @@ void drawMenuCommander()
         globalMenu.currentMenu = 16;
         break;
       case 2: //Fade
-        globalMenu.currentMenu = 2;
+        globalMenu.currentMenu = 17;
         break;
       case 3: //Speed
-        globalMenu.currentMenu = 2;
+        globalMenu.currentMenu = 18;
         break;
       }
     }
@@ -700,7 +729,21 @@ void drawMenuCommander()
         globalLED.colorOrder = globalMenu.menu[globalMenu.currentMenu];
         saveNumberOfLEDs();
       }
-      globalMenu.menu[globalMenu.currentMenu] = 3;
+      else
+      {
+        globalMenu.currentMenu = 3;
+      }
+    }
+    break;
+    case 17:
+    {
+      smoothOperatorSet(globalMenu.menu[globalMenu.currentMenu]);
+      globalMenu.currentMenu = 3;
+    }
+    break;
+    case 18:
+    {
+      globalMenu.currentMenu = 3;
     }
     break;
     }

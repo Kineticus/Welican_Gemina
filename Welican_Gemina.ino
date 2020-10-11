@@ -399,8 +399,8 @@ HSV2RGB globalHSV2RGB;
 
 struct MenuModel
 {
-  int menu[17];
-  int menuMax[17];
+  int menu[20];
+  int menuMax[20];
   int patternMax[6];
   int currentMenu;
   int currentMenuMultiplier;
@@ -432,7 +432,8 @@ MenuModel globalMenu = {
       128,    // WiFi Password
       3,      //WiFi Test
       (MAX_LEDS / 5),   //# LEDs
-      3       //LED Color mode
+      3,       //LED Color mode
+      50,     //LED SmoothOperator Fade Rate
       },
     .patternMax = {
       13, 
@@ -851,6 +852,8 @@ void setup()
 
   updateZipCodeString();
 
+  //Set Smooth Operator fade time
+  readSmoothOperator();
 
   //Read # of LEDs to use
   readNumberOfLEDs();

@@ -87,13 +87,56 @@ void smoothOperator()
   }
 }
 
-//make this an int and calculate variables based on time
-void smoothOperatorStart()
+void smoothOperatorSet(int fadeTime)
 {
   //globalLED.interfadeMax == steps
   //globalLED.interfadeSpeed == change each step 
   //globalLED.interfadeMax * globalLED.interfadeSpeed <= 255
 
+  //255 / fadeTime;
+
+  //Set # of Steps
+  globalLED.interfadeMax = fadeTime;
+
+  //Set distance of each step
+  globalLED.interfadeSpeed = (255 / fadeTime);
+
+  EEPROM.write(52, globalMenu.menu[17]);
+  EEPROM.commit();
+}
+
+void readSmoothOperator()
+{
+  //globalLED.interfadeMax == steps
+  //globalLED.interfadeSpeed == change each step 
+  //globalLED.interfadeMax * globalLED.interfadeSpeed <= 255
+
+  //255 / fadeTime;
+  globalMenu.menu[17] = EEPROM.read(52);
+
+  if (globalMenu.menu[17] < 1)
+  {
+    globalMenu.menu[17] = 18;
+  }
+
+  if (globalMenu.menu[17] > 50)
+  {
+    globalMenu.menu[17] = 50;
+  }
+
+  //Set # of Steps
+  globalLED.interfadeMax = globalMenu.menu[17];
+
+  //Set distance of each step
+  globalLED.interfadeSpeed = (255 / globalMenu.menu[17]);
+
+  //Start fading
+  globalLED.interfade = globalLED.interfadeMax;
+}
+
+//make this an int and calculate variables based on time
+void smoothOperatorStart()
+{
   globalLED.interfade = globalLED.interfadeMax;
 
   for (int i = 0; i < NUM_LEDS; i++)

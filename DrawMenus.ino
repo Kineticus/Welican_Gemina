@@ -197,10 +197,35 @@ void drawMenuCommander()
     {
       for (int i = 0; i < globals.networkScan; ++i)
       {
-        u8g2.setCursor(10, 19 + (9 * i));
-        u8g2.print(RSSItoPercent(WiFi.RSSI(i)));
-        u8g2.setCursor(25, 19 + (9 * i));
-        u8g2.print((WiFi.encryptionType(i) == WIFI_AUTH_OPEN) ? " " : "*");
+        //u8g2.setCursor(10, 19 + (9 * i));
+        //u8g2.print(RSSItoPercent(WiFi.RSSI(i)));
+        switch (RSSItoStrength(WiFi.RSSI(i)))
+        {
+        case 0:
+          u8g2.drawXBMP(10, 11 + (9 * i), WIFI_0_WIDTH, WIFI_0_HEIGHT, WIFI_0);
+          break;
+        case 1:
+          // u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+          u8g2.drawXBMP(10, 11 + (9 * i),  WIFI_1_WIDTH, WIFI_1_HEIGHT, WIFI_1);
+          break;
+        case 2:
+          u8g2.drawXBMP(10, 11 + (9 * i),  WIFI_2_WIDTH, WIFI_2_HEIGHT, WIFI_2);
+          break;
+        case 3:
+          u8g2.drawXBMP(10, 11 + (9 * i),  WIFI_3_WIDTH, WIFI_3_HEIGHT, WIFI_3);
+          break;
+        case 4:
+          u8g2.drawXBMP(10, 11 + (9 * i),  WIFI_4_WIDTH, WIFI_4_HEIGHT, WIFI_4);
+          break;
+        }
+
+
+        //u8g2.setCursor(25, 19 + (9 * i));
+        if (WiFi.encryptionType(i) != WIFI_AUTH_OPEN)
+        {
+          u8g2.drawXBMP(23, 11 + (9 * i), LOCK_WIDTH, LOCK_HEIGHT, LOCK);
+        }
+        //u8g2.print((WiFi.encryptionType(i) == WIFI_AUTH_OPEN) ? " " : "*");
         u8g2.setCursor(35, 19 + (9 * i));
         u8g2.print(WiFi.SSID(i));
       }

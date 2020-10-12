@@ -425,7 +425,7 @@ MenuModel globalMenu = {
       50,     //Max Favorites
       2,      //Reset Favorites
       3,      //Wifi Menu
-      3,      //?
+      3,      //Customize Menu
       patternSettings.numberOfFavorites, //Add Favorite
       99999,  //Enter ZIP Code
       0,      //WiFi Scan Results (dynamically set)
@@ -434,6 +434,8 @@ MenuModel globalMenu = {
       (MAX_LEDS / 5),   //# LEDs
       3,       //LED Color mode
       50,     //LED SmoothOperator Fade Rate
+      3,
+      2,      //Time
       },
     .patternMax = {
       13, 

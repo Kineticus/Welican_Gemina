@@ -135,7 +135,7 @@ void readSmoothOperator()
 }
 
 //make this an int and calculate variables based on time
-void smoothOperatorStart()
+void startSmoothOperator()
 {
   globalLED.interfade = globalLED.interfadeMax;
 

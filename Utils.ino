@@ -145,7 +145,7 @@ void updateEncoders()
         globalTime.save = 100;
 
         //And let the fade function know to start
-        smoothOperatorStart();
+        startSmoothOperator();
 
         //New random mode
         pickRandom();
@@ -227,7 +227,7 @@ void updateEncoders()
       knob1.temp += 4;
       patternSettings.pattern[globals.mode] += 1;
       pickRandom();
-      smoothOperatorStart();
+      startSmoothOperator();
     }
     while (globals.tempValue <= -4)
     {
@@ -235,7 +235,7 @@ void updateEncoders()
       knob1.temp -= 4;
       patternSettings.pattern[globals.mode] -= 1;
       pickRandom();
-      smoothOperatorStart();
+      startSmoothOperator();
     }
 
     //Constrain Mode - add switch to allow 3 options - constrain; rollover back to beginning/end; rollover to next/previous mode
@@ -414,7 +414,7 @@ void pickRandom()
   patternSettings.randomPattern = random(1, globalMenu.patternMax[globals.mode]);
   globals.randomInterval = random(30000, 240000);
   globals.randomTime = millis();
-  smoothOperatorStart(); 
+  startSmoothOperator();
 }
 
 void endGameMode()
@@ -497,15 +497,15 @@ int RSSItoStrength(int RSSI)
   if (RSSI > -50)
   {
     signalStrength = 4;
-  } 
+  }
   else if (RSSI > -75)
   {
     signalStrength = 3;
-  } 
+  }
   else if (RSSI > -100)
   {
     signalStrength = 2;
-  } 
+  }
   else
   {
     signalStrength = 1;
@@ -647,14 +647,12 @@ void resetFavorites()
     EEPROM.write(i, 0);
   }
 
-
   //JUST FAVORITES
   for (int i = 3; i < 50; i++)
   {
     //Set everything to deault Mode 0 Pattern 1;
     patternSettings.favoritePattern[i] = 1;
     patternSettings.favoriteMode[i] = 0;
-
 
     //Set everything to deault Mode 0 Pattern 1;
     EEPROM.write((100 + (i * 2)), 1);
@@ -675,7 +673,7 @@ void readNumberOfLEDs()
 
   //Multiply by 5 to find NUM_LEDS
   NUM_LEDS = globalMenu.menu[15] * 5;
-  
+
   //Finding weird issue when using over 100 where the last LED glitches? Doesn't seem to happen lower.
   if (NUM_LEDS > 99)
   {

@@ -87,10 +87,10 @@ void smoothOperator()
   }
 }
 
-void smoothOperatorSet(int fadeTime)
+void setSmoothOperator(int fadeTime)
 {
   //globalLED.interfadeMax == steps
-  //globalLED.interfadeSpeed == change each step 
+  //globalLED.interfadeSpeed == change each step
   //globalLED.interfadeMax * globalLED.interfadeSpeed <= 255
 
   //255 / fadeTime;
@@ -108,7 +108,7 @@ void smoothOperatorSet(int fadeTime)
 void readSmoothOperator()
 {
   //globalLED.interfadeMax == steps
-  //globalLED.interfadeSpeed == change each step 
+  //globalLED.interfadeSpeed == change each step
   //globalLED.interfadeMax * globalLED.interfadeSpeed <= 255
 
   //255 / fadeTime;

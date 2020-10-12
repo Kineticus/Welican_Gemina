@@ -517,6 +517,14 @@ static const unsigned char WELICAN_LOGO[] = {
     0x00,
 };
 
+
+#define LOCK_WIDTH 9
+#define LOCK_HEIGHT 8
+static const unsigned char LOCK[] = {
+  0x38, 0x00, 0x6C, 0x00, 0x44, 0x00, 0x44, 0x00, 0xFE, 0x00, 0xEE, 0x00, 
+  0xEE, 0x00, 0xFE, 0x00, };
+
+
 #define WIFI_0_WIDTH 9
 #define WIFI_0_HEIGHT 8
 static const unsigned char WIFI_0[] = {

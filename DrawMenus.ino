@@ -108,21 +108,21 @@ void drawMenuCommander()
   break;
   case 8: // WIFI Menu
   {
-    switch(globals.softAPEnable)
+    switch (globals.softAPEnable)
     {
-      case 0:
-      {
-        drawMenuWords("Settings > WiFi",
-                  "Scan", "Host", "Connect", "Disconn.");
-      }
-      break;
-      
-      case 1:
-      {
-        drawMenuWords("Settings > WiFi",
-                  "Scan", "Hosting!", "Connect", "Disconn.");
-      }
-      break;
+    case 0:
+    {
+      drawMenuWords("Settings > WiFi",
+                    "Scan", "Host", "Connect", "Disconn.");
+    }
+    break;
+
+    case 1:
+    {
+      drawMenuWords("Settings > WiFi",
+                    "Scan", "Hosting!", "Connect", "Disconn.");
+    }
+    break;
     }
     drawMenuWords("Settings > WiFi",
                   "Scan", "Host", "Connect", "Disconn.");
@@ -206,19 +206,18 @@ void drawMenuCommander()
           break;
         case 1:
           // u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
-          u8g2.drawXBMP(10, 11 + (9 * i),  WIFI_1_WIDTH, WIFI_1_HEIGHT, WIFI_1);
+          u8g2.drawXBMP(10, 11 + (9 * i), WIFI_1_WIDTH, WIFI_1_HEIGHT, WIFI_1);
           break;
         case 2:
-          u8g2.drawXBMP(10, 11 + (9 * i),  WIFI_2_WIDTH, WIFI_2_HEIGHT, WIFI_2);
+          u8g2.drawXBMP(10, 11 + (9 * i), WIFI_2_WIDTH, WIFI_2_HEIGHT, WIFI_2);
           break;
         case 3:
-          u8g2.drawXBMP(10, 11 + (9 * i),  WIFI_3_WIDTH, WIFI_3_HEIGHT, WIFI_3);
+          u8g2.drawXBMP(10, 11 + (9 * i), WIFI_3_WIDTH, WIFI_3_HEIGHT, WIFI_3);
           break;
         case 4:
-          u8g2.drawXBMP(10, 11 + (9 * i),  WIFI_4_WIDTH, WIFI_4_HEIGHT, WIFI_4);
+          u8g2.drawXBMP(10, 11 + (9 * i), WIFI_4_WIDTH, WIFI_4_HEIGHT, WIFI_4);
           break;
         }
-
 
         //u8g2.setCursor(25, 19 + (9 * i));
         if (WiFi.encryptionType(i) != WIFI_AUTH_OPEN)
@@ -370,15 +369,14 @@ void drawMenuCommander()
     }
 
     drawNumberInput("Crossfade Duration",
-                    globalMenu.menu[globalMenu.currentMenu]); 
+                    globalMenu.menu[globalMenu.currentMenu]);
 
     u8g2.setCursor(0, 64);
-    u8g2.print("1 < SHORT--LONG > 50");                  
+    u8g2.print("1 < SHORT--LONG > 50");
   }
   break;
   case 18: //Speed?
   {
-
   }
   break;
   }
@@ -479,12 +477,12 @@ void drawMenuCommander()
     break;
     case 17:
     {
-        globalMenu.currentMenu = 3;
+      globalMenu.currentMenu = 3;
     }
     break;
     case 18:
     {
-        globalMenu.currentMenu = 3;
+      globalMenu.currentMenu = 3;
     }
     break;
     }
@@ -551,7 +549,7 @@ void drawMenuCommander()
       switch (globalMenu.menu[globalMenu.currentMenu])
       {
       case 0: //# LED
-        //ESP gets a reboot if changed, so save current pattern 
+        //ESP gets a reboot if changed, so save current pattern
         globalTime.save == 2;
         globalMenu.currentMenu = 15;
         break;
@@ -762,7 +760,7 @@ void drawMenuCommander()
     break;
     case 17:
     {
-      smoothOperatorSet(globalMenu.menu[globalMenu.currentMenu]);
+      setSmoothOperator(globalMenu.menu[globalMenu.currentMenu]);
       globalMenu.currentMenu = 3;
     }
     break;

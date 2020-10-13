@@ -179,9 +179,18 @@ void updateEncoders()
       knob1.click = 0;
     }
   }
+  else if ((globals.tempValue == false) && (knob1.debounce > 0))
+  {
+    knob1.heldTime += 1;
+  }
+
   if ((globals.tempValue == true) && (knob1.debounce > 0)) //No button press and there is debounce to reduce?
   {
     knob1.debounce -= 1;
+  }
+  else if ((globals.tempValue == true) && (knob1.debounce == 0))
+  {
+    knob1.heldTime = 0;
   }
 
   //Read knob 2 digital pin, button pulls pin low
@@ -204,6 +213,10 @@ void updateEncoders()
   if ((globals.tempValue == true) && (knob2.debounce > 0))
   {
     knob2.debounce -= 1;
+  }
+  else if ((globals.tempValue == true) && (knob2.debounce == 0))
+  {
+    knob2.heldTime = 0;
   }
 
   if ((knob2.heldTime > 69) && (globals.mode != 5)) //Can't set a favorite of a favorite

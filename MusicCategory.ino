@@ -46,7 +46,25 @@ void music_category(int patternMode)
     case 13:
         musicZero();
         break;
+    case 14:
+        musicFourteen();
+        break;
     }
+}
+
+
+void musicFourteen()
+{
+    for (int i = NUM_LEDS - 1; i > 0; i--)
+    {
+        patternSettings.leds[i] = patternSettings.leds[i - 1];
+    }
+
+    patternSettings.leds[0].r = eqBands.bandValues[0] / (AMPLITUDE / 2); 
+    
+    patternSettings.leds[0].g = eqBands.bandValues[2] / (AMPLITUDE / 2);
+    patternSettings.leds[0].b = eqBands.bandValues[5] / (AMPLITUDE / 2);
+
 }
 
 void bpm()

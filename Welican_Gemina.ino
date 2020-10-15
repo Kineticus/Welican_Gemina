@@ -446,12 +446,12 @@ MenuModel globalMenu = {
       2       //Font
       },
     .patternMax = {
-      13, 
-      13, 
-      23, 
-      66, 
-      81, 
-      patternSettings.numberOfFavorites},
+      13,     //Basic Category
+      14,     //Music Category
+      23,     //Chill
+      66,     //Moving Colors
+      81,     //Legacy
+      patternSettings.numberOfFavorites}, //Favorites (dynamic)
     .currentMenu = 0,
     .currentMenuMultiplier = 1,
     .verticalDividePosition = 64,

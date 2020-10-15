@@ -393,6 +393,76 @@ void drawMenuCommander()
     drawMenuSelectionFrames();
   }
   break;
+  case 20: //Time Zone
+  {
+
+  }
+  break;
+
+  case 21: //Manual Time Entry
+  {
+
+  }
+  break;
+
+  case 22: //Manual Date Entry
+  {
+      
+  }
+  break;
+
+  case 23: //NTP Enable/Disable
+  {
+
+  }
+  break;
+
+  case 24: //Customize > Display
+  {
+    drawMenuWords("Customize > Display",
+                  "Timeout", "Display", "Font", "");
+    drawMenuSelectionFrames();
+  }
+  break;
+
+  case 25: //Customize > Timeout
+  {
+    drawMenuTop("Customize > Timeout");
+
+    u8g2.setCursor(20, 32);
+
+    if (globalMenu.menu[globalMenu.currentMenu] < 12)
+    {
+      if (globalMenu.menu[globalMenu.currentMenu] == 0)
+      {
+        u8g2.print("No Timeout");
+      }
+      else
+      {
+        u8g2.print(globalMenu.menu[globalMenu.currentMenu] * 5);
+        u8g2.print(" Seconds");
+      }
+    }
+    else
+    {
+      u8g2.print(globalMenu.menu[globalMenu.currentMenu] - 11);
+      u8g2.print(" Minutes");
+    }    
+  }
+  break;
+
+  case 26: //Customize > Display
+  {
+    
+  }
+  break;
+
+  case 27: //Customize > Font
+  {
+    
+  }
+  break;
+
   }
 
   // Back Button Action
@@ -505,6 +575,42 @@ void drawMenuCommander()
     case 19:
     {
         globalMenu.currentMenu = 2;
+    }
+    break;
+    case 20: //
+    {
+
+    }
+    case 21: //
+    {
+
+    }
+    case 22: //
+    {
+
+    }
+    case 23: //
+    {
+
+    }
+    case 24: //
+    {
+      globalMenu.currentMenu = 9;
+    }
+    break;
+    case 25: //
+    {
+      globalMenu.currentMenu = 24;
+    }
+    break;
+    case 26: //
+    {
+
+    }
+    break;
+    case 27: //
+    {
+
     }
     break;
     }
@@ -707,8 +813,8 @@ void drawMenuCommander()
       case 1: //
         globalMenu.currentMenu = 2;
         break;
-      case 2: // 
-        globalMenu.currentMenu = 2;
+      case 2: //Display
+        globalMenu.currentMenu = 24;
         break;
       case 3: //
         globalMenu.currentMenu = 2;
@@ -813,10 +919,74 @@ void drawMenuCommander()
       globalMenu.currentMenu = 3;
     }
     break;
+    case 20:
+    {
+      
+    }
+    break;
+
+    case 24:
+    {
+      switch (globalMenu.menu[globalMenu.currentMenu])
+      {
+      case 0: //Timeout
+      {
+        globalMenu.currentMenu = 25;
+      }
+      break;
+      case 1: //Display 
+      {
+        globalMenu.currentMenu = 26;
+      }
+      break;
+      case 2: //Font
+      {
+        globalMenu.currentMenu = 27;
+      }
+      break;
+      case 3: //Back
+      {
+        globalMenu.currentMenu = 9;
+      }
+      break;
+      }
+    }
+    break;
+
+    case 25:
+    {
+      globalTime.timeOut = timeOutConverter(globalMenu.menu[globalMenu.currentMenu]);
+
+      EEPROM.put(40, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.commit();
+      globalMenu.currentMenu = 24;    
+    }
+    break;
     }
   }
 }
 
+int timeOutConverter(int timeOut)
+{
+  if (timeOut < 12)
+  {
+    if (timeOut == 0)
+    {
+      //No Timeout
+      timeOut = 0;
+    }
+    else
+    {
+      timeOut = (timeOut * 5 * 1000);
+    }
+  }
+  else
+  {
+    timeOut = ((timeOut - 11) * 60000);
+  }
+
+  return timeOut;
+}
 void drawNumberInput(String menuName, int numberValue)
 {
   drawMenuTop(menuName);

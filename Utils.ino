@@ -854,9 +854,12 @@ void saveTimeCheck()
 
   if (globals.runMode == 0)
   {
-    if ((millis() - globalTime.touchTime) > globalTime.timeOut)
+    if (globalTime.timeOut != 0) //Make sure we want to enter screen saver mode
     {
-      globals.runMode = 3;
+      if ((millis() - globalTime.touchTime) > globalTime.timeOut)
+      {
+        globals.runMode = 3;
+      }
     }
   }
 }

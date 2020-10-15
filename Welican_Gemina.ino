@@ -399,8 +399,8 @@ HSV2RGB globalHSV2RGB;
 
 struct MenuModel
 {
-  int menu[20];
-  int menuMax[20];
+  int menu[30];
+  int menuMax[30];
   int patternMax[6];
   int currentMenu;
   int currentMenuMultiplier;
@@ -432,10 +432,18 @@ MenuModel globalMenu = {
       128,    // WiFi Password
       3,      //WiFi Test
       (MAX_LEDS / 5),   //# LEDs
-      3,       //LED Color mode
+      3,      //LED Color mode
       50,     //LED SmoothOperator Fade Rate
-      3,
-      2,      //Time
+      3,      //Speed?
+      3,      //Time Menu
+      2,      //Time Zone
+      3,      //Manual Time Entry
+      3,      //Manual Date Entry
+      1,      //NTP
+      3,      //Customize Display
+      71,     //Customize Timeout
+      3,      //Customize Display Type
+      2       //Font
       },
     .patternMax = {
       13, 
@@ -833,6 +841,11 @@ void setup()
 
   //fallios.scoreTop = EEPROM.read(20) + EEPROM.read(21) * 256;
   EEPROM.get(20, fallios.scoreTop);
+
+  //Screen Time out
+  EEPROM.get(40, globalMenu.menu[25]);
+  globalTime.timeOut = timeOutConverter(globalMenu.menu[25]);
+
 
   globals.mode = EEPROM.read(0);
   brightness.current = EEPROM.read(1);

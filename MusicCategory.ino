@@ -49,6 +49,9 @@ void music_category(int patternMode)
     case 14:
         musicFourteen();
         break;
+    case 15:
+        musicFifteen();
+        break;
     }
 }
 
@@ -62,13 +65,28 @@ void musicFourteen()
         patternSettings.leds[i] = patternSettings.leds[i - 1];
     }
 
-    patternSettings.leds[0].r = eqBands.bandValues[0] / (AMPLITUDE / 2); 
+    patternSettings.leds[1].r = eqBands.bandValues[0] / (AMPLITUDE / 2); 
     
     //patternSettings.leds[0].g = eqBands.bandValues[2] / (AMPLITUDE / 2);
     //patternSettings.leds[0].b = eqBands.bandValues[5] / (AMPLITUDE / 2);
 
     patternSettings.leds[0].g = 0;
     patternSettings.leds[0].b = 0;
+}
+
+
+void musicFifteen()
+{
+    globalStrings.functionName = "musicFourteen";
+
+    DualColorFlowBounce(.55, .21, .0001, .1, 6);
+
+    for (int i = NUM_LEDS; i > 0; i = i - 2)
+    {
+        patternSettings.leds[i].r = eqBands.bandValues[0] / (AMPLITUDE / 3);
+        patternSettings.leds[i].g = 0;
+        patternSettings.leds[i].b = 0;
+    }
 }
 
 void bpm()

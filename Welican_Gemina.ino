@@ -447,7 +447,7 @@ MenuModel globalMenu = {
       },
     .patternMax = {
       13,     //Basic Category
-      14,     //Music Category
+      15,     //Music Category
       23,     //Chill
       66,     //Moving Colors
       81,     //Legacy

@@ -349,15 +349,20 @@ void drawClock()
     u8g2.print(String(weather.currentTemperature));
     u8g2.setCursor(40, 30);
     u8g2.print(String(weather.currentTemperatureMin));
+    u8g2.setCursor(60, 30);
     u8g2.print(" - ");
-    u8g2.setCursor(50, 30);
+    u8g2.setCursor(70, 30);
     u8g2.print(String(weather.currentTemperatureMax));
 
+    String sunrise = "rise: ";
+    sunrise += String(weather.sunrise);
+    String sunset = "set: ";
+    sunset += String(weather.sunset);
+
     u8g2.setCursor(10, 40);
-    u8g2.print(String(weather.sunrise));
-    u8g2.print(" - ");
-    u8g2.setCursor(40, 40);
-    u8g2.print(String(weather.sunset));
+    u8g2.print(sunrise);
+    u8g2.setCursor(10, 60);
+    u8g2.print(sunset);
   }
   break;
   }

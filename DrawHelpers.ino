@@ -339,7 +339,6 @@ void drawClock()
   break;
   case 4: //Weather 1
   {
-    u8g2.setFont(u8g2_font_logisoso42_tn);
 
     u8g2.setCursor(10, 10);
     u8g2.print(weather.currentWeatherTitle);

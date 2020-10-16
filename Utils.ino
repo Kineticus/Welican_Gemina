@@ -101,7 +101,7 @@ void inputCompute(void *parameter)
 
     updateTime();
 
-    updateWeather();
+    updateWeather(false);
 
     //We are only serving DNS requests to Soft AP clients
     if (globals.softAPEnable == 1)
@@ -772,77 +772,91 @@ void updateTime()
   }
 }
 
-void updateWeather()
+void getWeather()
 {
-  if (globals.runMode == 3)
+  if (WiFi.status() == WL_CONNECTED)
+  {
+    weatherSettings.zipCode = globalMenu.menu[11];
+    String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + weatherSettings.zipCode + "," + weatherSettings.countryCode + "&units=imperial&APPID=" + globals.openWeatherMapApiKey;
+
+    weather.jsonBuffer = httpGETRequest(serverPath.c_str());
+    weather.weatherJson = JSON.parse(weather.jsonBuffer);
+
+    // JSON.typeof(jsonVar) can be used to get the type of the var
+    if (JSON.typeof(weather.weatherJson) == "undefined")
+    {
+      Serial.println("Parsing input failed!");
+      return;
+    }
+
+    Serial.println("JSON object = ");
+    Serial.println(weather.weatherJson);
+
+    weather.currentTemperature = weather.weatherJson["main"]["temp"];
+    weather.currentTemperatureMax = weather.weatherJson["main"]["temp_max"];
+    weather.currentTemperatureMin = weather.weatherJson["main"]["temp_min"];
+    weather.currentHumidity = weather.weatherJson["main"]["humidity"];
+    weather.currentWindSpeed = weather.weatherJson["wind"]["speed"];
+    weather.currentWeatherId = weather.weatherJson["weather"][0]["id"];
+    weather.currentWeatherTitle = weather.weatherJson["weather"][0]["main"];
+    weather.currentWeatherDescription = weather.weatherJson["weather"][0]["description"];
+    weather.sunrise = weather.weatherJson["sys"]["sunrise"];
+    weather.sunset = weather.weatherJson["sys"]["sunset"];
+
+    convertUnixToTime(timeConvert(weather.sunrise));
+    convertUnixToTime(timeConvert(weather.sunset));
+
+    Serial.print("Temperature: ");
+    Serial.println(weather.weatherJson["main"]["temp"]);
+
+    Serial.print("Temperature Max: ");
+    Serial.println(weather.weatherJson["main"]["temp_max"]);
+
+    Serial.print("Temperature Min: ");
+    Serial.println(weather.weatherJson["main"]["temp_min"]);
+
+    Serial.print("Humidity: ");
+    Serial.println(weather.weatherJson["main"]["humidity"]);
+
+    Serial.print("Wind Speed: ");
+    Serial.println(weather.weatherJson["wind"]["speed"]);
+
+    Serial.print("Sunrise: ");
+    Serial.println(weather.weatherJson["sys"]["sunrise"]);
+
+    Serial.print("Sunset: ");
+    Serial.println(weather.weatherJson["sys"]["sunset"]);
+
+    Serial.print("currentWeatherId: ");
+    Serial.println(weather.weatherJson["weather"][0]["id"]);
+
+    Serial.print("currentWeatherTitle: ");
+    Serial.println(weather.currentWeatherTitle);
+
+    Serial.print("currentWeatherDescription: ");
+    Serial.println(weather.currentWeatherDescription);
+  }
+  else
+  {
+    Serial.println("Weather - No Connection");
+  }
+}
+void updateWeather(bool force)
+{
+  if (force == true)
   {
     EVERY_N_MILLISECONDS(weatherSettings.weatherTimerDelay)
     {
-      if (WiFi.status() == WL_CONNECTED)
+      getWeather();
+    }
+  }
+  else
+  {
+    if (globals.runMode == 3)
+    {
+      EVERY_N_MILLISECONDS(weatherSettings.weatherTimerDelay)
       {
-        weatherSettings.zipCode = globalMenu.menu[11];
-        String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + weatherSettings.zipCode + "," + weatherSettings.countryCode + "&units=imperial&APPID=" + globals.openWeatherMapApiKey;
-
-        weather.jsonBuffer = httpGETRequest(serverPath.c_str());
-        weather.weatherJson = JSON.parse(weather.jsonBuffer);
-
-        // JSON.typeof(jsonVar) can be used to get the type of the var
-        if (JSON.typeof(weather.weatherJson) == "undefined")
-        {
-          Serial.println("Parsing input failed!");
-          return;
-        }
-
-        Serial.println("JSON object = ");
-        Serial.println(weather.weatherJson);
-
-        weather.currentTemperature = weather.weatherJson["main"]["temp"];
-        weather.currentTemperatureMax = weather.weatherJson["main"]["temp_max"];
-        weather.currentTemperatureMin = weather.weatherJson["main"]["temp_min"];
-        weather.currentHumidity = weather.weatherJson["main"]["humidity"];
-        weather.currentWindSpeed = weather.weatherJson["wind"]["speed"];
-        weather.currentWeatherId = weather.weatherJson["weather"][0]["id"];
-        weather.currentWeatherTitle = weather.weatherJson["weather"][0]["main"];
-        weather.currentWeatherDescription = weather.weatherJson["weather"][0]["description"];
-        weather.sunrise = weather.weatherJson["sys"]["sunrise"];
-        weather.sunset = weather.weatherJson["sys"]["sunset"];
-
-        convertUnixToTime(timeConvert(weather.sunrise));
-        convertUnixToTime(timeConvert(weather.sunset));
-
-        Serial.print("Temperature: ");
-        Serial.println(weather.weatherJson["main"]["temp"]);
-
-        Serial.print("Temperature Max: ");
-        Serial.println(weather.weatherJson["main"]["temp_max"]);
-
-        Serial.print("Temperature Min: ");
-        Serial.println(weather.weatherJson["main"]["temp_min"]);
-
-        Serial.print("Humidity: ");
-        Serial.println(weather.weatherJson["main"]["humidity"]);
-
-        Serial.print("Wind Speed: ");
-        Serial.println(weather.weatherJson["wind"]["speed"]);
-
-        Serial.print("Sunrise: ");
-        Serial.println(weather.weatherJson["sys"]["sunrise"]);
-
-        Serial.print("Sunset: ");
-        Serial.println(weather.weatherJson["sys"]["sunset"]);
-
-        Serial.print("currentWeatherId: ");
-        Serial.println(weather.weatherJson["weather"][0]["id"]);
-
-        Serial.print("currentWeatherTitle: ");
-        Serial.println(weather.currentWeatherTitle);
-
-        Serial.print("currentWeatherDescription: ");
-        Serial.println(weather.currentWeatherDescription);
-      }
-      else
-      {
-        Serial.println("Weather - No Connection");
+        getWeather();
       }
     }
   }

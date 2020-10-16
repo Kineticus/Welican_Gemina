@@ -873,6 +873,7 @@ void setup()
   readFavorites();
 
   getZipCode();
+  updateWeather(true);
 
   updateZipCodeString();
 

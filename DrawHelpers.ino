@@ -344,12 +344,20 @@ void drawClock()
     u8g2.print(weather.currentWeatherTitle);
     u8g2.setCursor(10, 20);
     u8g2.print(weather.currentWeatherDescription);
+
     u8g2.setCursor(10, 30);
-    u8g2.print(weather.currentTemperature);
+    u8g2.print(String(weather.currentTemperature));
+    u8g2.setCursor(40, 30);
+    u8g2.print(String(weather.currentTemperatureMin));
+    u8g2.print(" - ");
+    u8g2.setCursor(50, 30);
+    u8g2.print(String(weather.currentTemperatureMax));
+
     u8g2.setCursor(10, 40);
-    u8g2.print(weather.sunrise);
+    u8g2.print(String(weather.sunrise));
+    u8g2.print(" - ");
     u8g2.setCursor(40, 40);
-    u8g2.print(weather.sunset);
+    u8g2.print(String(weather.sunset));
   }
   break;
   }

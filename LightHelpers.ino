@@ -143,10 +143,6 @@ void startSmoothOperator()
   {
     patternSettings.tempLeds[i] = patternSettings.leds[i];
   }
-
-  globalTime.save = 100;
-
-  globalTime.touchTime = millis();
 }
 
 void fadeLightBy(int pixel, int brightnes)

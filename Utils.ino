@@ -142,7 +142,10 @@ void updateEncoders()
         globals.mode += 1;
 
         //Since we have changed the mode we should save it in a bit
-        globalTime.save = 100;
+        globalTime.save = 80;
+
+        //Reset touch timer
+        globalTime.touchTime = millis();
 
         //And let the fade function know to start
         startSmoothOperator();
@@ -199,6 +202,8 @@ void updateEncoders()
   {
     knob2.debounce = 3;
     knob2.click = 1;
+    //Reset touch timer
+    globalTime.touchTime = millis();
 
     if (globals.runMode == 3)
     {
@@ -241,6 +246,9 @@ void updateEncoders()
       patternSettings.pattern[globals.mode] += 1;
       pickRandom();
       startSmoothOperator();
+      //Reset touch timer
+      globalTime.touchTime = millis();
+      globalTime.save = 80;
     }
     while (globals.tempValue <= -4)
     {
@@ -249,6 +257,9 @@ void updateEncoders()
       patternSettings.pattern[globals.mode] -= 1;
       pickRandom();
       startSmoothOperator();
+      //Reset touch timer
+      globalTime.touchTime = millis();
+      globalTime.save = 80;
     }
 
     //Constrain Mode - add switch to allow 3 options - constrain; rollover back to beginning/end; rollover to next/previous mode
@@ -270,12 +281,14 @@ void updateEncoders()
       globals.tempValue -= 4;
       knob1.temp += 4;
       globalMenu.menu[globalMenu.currentMenu] += 1 * globalMenu.currentMenuMultiplier;
+      globalTime.save = 80;
     }
     while (globals.tempValue <= -4)
     {
       globals.tempValue += 4;
       knob1.temp -= 4;
       globalMenu.menu[globalMenu.currentMenu] -= 1 * globalMenu.currentMenuMultiplier;
+      globalTime.save = 80;
     }
 
     if (globalMenu.menu[globalMenu.currentMenu] > globalMenu.menuMax[globalMenu.currentMenu])
@@ -311,12 +324,16 @@ void updateEncoders()
       globals.tempValue -= 4;
       knob1.temp += 4;
       globals.runMode = -1;
+      //Reset touch timer
+      globalTime.touchTime = millis();
     }
     while (globals.tempValue <= -4)
     {
       globals.tempValue += 4;
       knob1.temp -= 4;
       globals.runMode = -1;
+      //Reset touch timer
+      globalTime.touchTime = millis();
     }
   }
   //check for out of sync condition (knob is reseting at value that is not divisible by 4)
@@ -344,7 +361,7 @@ void updateEncoders()
     if (globals.tempValue != 0)
     {
       brightness.debounce = millis() + 1420;
-      globalTime.save = 100;
+      globalTime.save = 80;
     }
 
     //Determine "acceleration" based on change amount. Large change = fast turn of knob
@@ -840,8 +857,6 @@ void saveTimeCheck()
 
   if (globalTime.save == 1)
   {
-    globalTime.touchTime = millis();
-
     EEPROM.write(0, globals.mode);
     EEPROM.write(1, brightness.current);
 

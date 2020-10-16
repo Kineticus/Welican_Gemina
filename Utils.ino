@@ -802,16 +802,16 @@ void getWeather()
     Serial.println("JSON object = ");
     Serial.println(weather.weatherJson);
 
-    weather.currentTemperature = weather.weatherJson["main"]["temp"];
-    weather.currentTemperatureMax = weather.weatherJson["main"]["temp_max"];
-    weather.currentTemperatureMin = weather.weatherJson["main"]["temp_min"];
-    weather.currentHumidity = weather.weatherJson["main"]["humidity"];
-    weather.currentWindSpeed = weather.weatherJson["wind"]["speed"];
-    weather.currentWeatherId = weather.weatherJson["weather"][0]["id"];
+    weather.currentTemperature = String(weather.weatherJson["main"]["temp"]);
+    weather.currentTemperatureMax = String(weather.weatherJson["main"]["temp_max"]);
+    weather.currentTemperatureMin = String(weather.weatherJson["main"]["temp_min"]);
+    weather.currentHumidity = String(weather.weatherJson["main"]["humidity"]);
+    weather.currentWindSpeed = String(weather.weatherJson["wind"]["speed"]);
+    weather.currentWeatherId = String(weather.weatherJson["weather"][0]["id"]);
     weather.currentWeatherTitle = weather.weatherJson["weather"][0]["main"];
     weather.currentWeatherDescription = weather.weatherJson["weather"][0]["description"];
-    weather.sunrise = weather.weatherJson["sys"]["sunrise"];
-    weather.sunset = weather.weatherJson["sys"]["sunset"];
+    weather.sunrise = String(weather.weatherJson["sys"]["sunrise"]);
+    weather.sunset = String(weather.weatherJson["sys"]["sunset"]);
 
     convertUnixToTime(timeConvert(weather.sunrise));
     convertUnixToTime(timeConvert(weather.sunset));

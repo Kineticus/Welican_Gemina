@@ -349,7 +349,7 @@ void drawClock()
     u8g2.print(String(weather.currentTemperature));
     u8g2.setCursor(40, 30);
     u8g2.print(String(weather.currentTemperatureMin));
-    u8g2.setCursor(60, 30);
+    u8g2.setCursor(50, 30);
     u8g2.print(" - ");
     u8g2.setCursor(70, 30);
     u8g2.print(String(weather.currentTemperatureMax));

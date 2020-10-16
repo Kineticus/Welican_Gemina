@@ -49,7 +49,7 @@ FASTLED_USING_NAMESPACE
 #define SAMPLING_FREQ 40000 // Hz, must be 40000 or less due to ADC conversion time. Determines maximum frequency that can be analysed by the FFT Fmax=sampleF/2.
 #define AMPLITUDE 3000      // Depending on your audio source level, you may need to alter this value. Can be used as a 'sensitivity' control.
 #define AUDIO_IN_PIN 35     // Signal in on this pin
-#define NUM_BANDS 8         // To change this, you will need to change the bunch of if statements describing the mapping from bins to bands
+#define NUM_BANDS 4         // To change this, you will need to change the bunch of if statements describing the mapping from bins to bands
 #define NOISE 500           // Used as a crude noise filter, values below this are ignored
 #define TOP 32
 #define FRAMES_PER_SECOND 120

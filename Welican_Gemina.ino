@@ -844,8 +844,16 @@ void setup()
 
   //Screen Time out
   EEPROM.get(40, globalMenu.menu[25]);
+
+  if (globalMenu.menu[25] > globalMenu.menuMax[25])
+  {
+    globalMenu.menu[25] = 0;
+  }
+  
   globalTime.timeOut = timeOutConverter(globalMenu.menu[25]);
 
+  //Time out display selection
+  EEPROM.get(45, globalMenu.menu[26]);
 
   globals.mode = EEPROM.read(0);
   brightness.current = EEPROM.read(1);

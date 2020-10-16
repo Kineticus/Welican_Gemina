@@ -31,15 +31,14 @@ void drawMenuWords(String menuName, String first, String second, String third, S
     u8g2.setCursor(69, globalMenu.secondLineHorizontal);
     u8g2.print(fourth);
   }
+  u8g2_horizontal_line(9);
 }
 
 void drawMenuCommander()
 {
   u8g2.setFont(u8g2_font_ncenB08_tr);
 
-  u8g2_horizontal_line(9);
-
-  //Draw Screen
+    //Draw Screen
   switch (globalMenu.currentMenu)
   {
   case 0: // Draw Image
@@ -453,7 +452,7 @@ void drawMenuCommander()
 
   case 26: //Customize > Display
   {
-    
+    drawClock();
   }
   break;
 
@@ -605,12 +604,12 @@ void drawMenuCommander()
     break;
     case 26: //
     {
-
+      globalMenu.currentMenu = 24;
     }
     break;
     case 27: //
     {
-
+      globalMenu.currentMenu = 24;
     }
     break;
     }
@@ -962,6 +961,14 @@ void drawMenuCommander()
       globalMenu.currentMenu = 24;    
     }
     break;
+
+    case 26:
+    {
+      EEPROM.put(45, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.commit();
+      globalMenu.currentMenu = 24;  
+    }
+    break;
     }
   }
 }
@@ -1047,6 +1054,7 @@ void drawMenuTop(String menuName)
 {
   u8g2.setCursor(0, 8);
   u8g2.print(menuName);
+  u8g2_horizontal_line(9);
 }
 
 void drawYesNoMenuFrame(String question)

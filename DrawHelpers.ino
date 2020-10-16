@@ -206,126 +206,139 @@ void drawClock()
 {
   u8g2.setDrawColor(1);
 
-  //7 Segment Style
-  /*  
-  u8g2.setFont(u8g2_font_7Segments_26x42_mn);
-  if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
+  switch(globalMenu.menu[26])
   {
-    u8g2.setCursor(20, 64);
-
-    if (globalTime.currentHour > 9)
+    case 0:
     {
-      u8g2.setCursor(-14, 64);
-    }
+      //7 Segment Style
+      u8g2.setFont(u8g2_font_7Segments_26x42_mn);
+      if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
+      {
+        u8g2.setCursor(20, 64);
 
-    u8g2.print(globalTime.currentHour);
-    
-    u8g2.setCursor(50, 64);
-    u8g2.print(":");
-    
-    u8g2.setCursor(68, 64);
-    if (globalTime.currentMinute < 10)
+        if (globalTime.currentHour > 9)
+        {
+          u8g2.setCursor(-14, 64);
+        }
+
+        u8g2.print(globalTime.currentHour);
+        
+        u8g2.setCursor(50, 64);
+        u8g2.print(":");
+        
+        u8g2.setCursor(68, 64);
+        if (globalTime.currentMinute < 10)
+        {
+          u8g2.print("0");
+        }
+        u8g2.print(globalTime.currentMinute);
+      } else
+      {
+        //u8g2.print("0:00");
+        //Decided to just show nothing if we don't have a time sync
+      }
+    }
+    break;
+
+    case 1:
     {
-      u8g2.print("0");
+      //Flip Card style
+      u8g2.setFont(u8g2_font_fub30_tn);
+      if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
+      {
+        u8g2.setCursor(30, 64);
+
+        if (globalTime.currentHour > 9)
+        {
+          u8g2.setCursor(0, 64);
+        }
+
+        u8g2.print(globalTime.currentHour);
+
+        u8g2.setCursor(50, 60);
+        u8g2.print(":");
+
+        u8g2.setCursor(68, 64);
+        if (globalTime.currentMinute < 10)
+        {
+          u8g2.print("0");
+        }
+        u8g2.print(globalTime.currentMinute);
+      }
+      else
+      {
+        //u8g2.print("0:00");
+        //Decided to just show nothing if we don't have a time sync
+      }
     }
-    u8g2.print(globalTime.currentMinute);
-  } else
-  {
-    //u8g2.print("0:00");
-    //Decided to just show nothing if we don't have a time sync
-  }
-  */
+    break;
 
-  //Flip Card style
-  /*
-  u8g2.setFont(u8g2_font_fub30_tn);
-  if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
-  {
-    u8g2.setCursor(30, 64);
-
-    if (globalTime.currentHour > 9)
+    case 2:
     {
-      u8g2.setCursor(0, 64);
+      //Old Time style
+      u8g2.setFont(u8g2_font_osb35_tn);
+      if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
+      {
+        u8g2.setCursor(30, 64);
+
+        if (globalTime.currentHour > 9)
+        {
+          u8g2.setCursor(0, 64);
+        }
+
+        u8g2.print(globalTime.currentHour);
+
+        u8g2.setCursor(56, 60);
+        u8g2.print(":");
+
+        u8g2.setCursor(68, 64);
+        if (globalTime.currentMinute < 10)
+        {
+          u8g2.print("0");
+        }
+        u8g2.print(globalTime.currentMinute);
+      }
+      else
+      {
+        //u8g2.print("0:00");
+        //Decided to just show nothing if we don't have a time sync
+      }
     }
+    break;
 
-    u8g2.print(globalTime.currentHour);
-
-    u8g2.setCursor(50, 60);
-    u8g2.print(":");
-
-    u8g2.setCursor(68, 64);
-    if (globalTime.currentMinute < 10)
+    case 3:
     {
-      u8g2.print("0");
+      //Modern Font
+      //u8g2.setFont(u8g2_font_logisoso38_tn);
+      u8g2.setFont(u8g2_font_logisoso42_tn);
+      if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
+      {
+        u8g2.setCursor(30, 60);
+
+        if (globalTime.currentHour > 9)
+        {
+          u8g2.setCursor(0, 60);
+        }
+
+        u8g2.print(globalTime.currentHour);
+
+        u8g2.setCursor(56, 56);
+        u8g2.print(":");
+
+        u8g2.setCursor(72, 60);
+        if (globalTime.currentMinute < 10)
+        {
+          u8g2.print("0");
+        }
+        u8g2.print(globalTime.currentMinute);
+      }
+      else
+      {
+        //u8g2.print("0:00");
+        //Decided to just show nothing if we don't have a time sync
+      }
     }
-    u8g2.print(globalTime.currentMinute);
-  }
-  else
-  {
-    //u8g2.print("0:00");
-    //Decided to just show nothing if we don't have a time sync
-  }
-  */
-
-  //Old Time style
-  /*
-  u8g2.setFont(u8g2_font_osb35_tn);
-  if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
-  {
-    u8g2.setCursor(30, 64);
-
-    if (globalTime.currentHour > 9)
-    {
-      u8g2.setCursor(0, 64);
-    }
-
-    u8g2.print(globalTime.currentHour);
-
-    u8g2.setCursor(56, 60);
-    u8g2.print(":");
-
-    u8g2.setCursor(68, 64);
-    if (globalTime.currentMinute < 10)
-    {
-      u8g2.print("0");
-    }
-    u8g2.print(globalTime.currentMinute);
-  }
-  else
-  {
-    //u8g2.print("0:00");
-    //Decided to just show nothing if we don't have a time sync
-  }
-  */
-
-  //Modern Font
-  //u8g2.setFont(u8g2_font_logisoso38_tn);
-  u8g2.setFont(u8g2_font_logisoso42_tn);
-  if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
-  {
-    u8g2.setCursor(30, 60);
-
-    if (globalTime.currentHour > 9)
-    {
-      u8g2.setCursor(0, 60);
-    }
-
-    u8g2.print(globalTime.currentHour);
-
-    u8g2.setCursor(56, 56);
-    u8g2.print(":");
-
-    u8g2.setCursor(72, 60);
-    if (globalTime.currentMinute < 10)
-    {
-      u8g2.print("0");
-    }
-    u8g2.print(globalTime.currentMinute);
-  }
-  else
-  {
-    //u8g2.print("0:00");
-    //Decided to just show nothing if we don't have a time sync
+    break;
   }
 }
 

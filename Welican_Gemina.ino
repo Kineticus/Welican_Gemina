@@ -442,7 +442,7 @@ MenuModel globalMenu = {
         1,                                 //NTP
         3,                                 //Customize Display
         71,                                //Customize Timeout
-        3,                                 //Customize Display Type
+        4,                                 //Customize Display Type
         2                                  //Font
     },
     .patternMax = {

@@ -160,9 +160,6 @@ void drawIPAddress()
     globals.ipAddress = WiFi.localIP().toString();
     u8g2.print(globals.ipAddress);
 
-    u8g2.setCursor(10, 50);
-    u8g2.print(weather.currentWeatherDescription);
-
     // switch(globalTime.currentDay)
     // {
     //   case 0:

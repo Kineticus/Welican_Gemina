@@ -798,7 +798,7 @@ void updateWeather()
 
         weather.currentTemperature = weather.weatherJson["main"]["temp"];
         weather.currentTemperatureMax = weather.weatherJson["main"]["temp_max"];
-        weather.currentTemperatureMax = weather.weatherJson["main"]["temp_min"];
+        weather.currentTemperatureMin = weather.weatherJson["main"]["temp_min"];
         weather.currentHumidity = weather.weatherJson["main"]["humidity"];
         weather.currentWindSpeed = weather.weatherJson["wind"]["speed"];
         weather.currentWeatherId = weather.weatherJson["weather"][0]["id"];

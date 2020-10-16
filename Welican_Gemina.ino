@@ -1041,9 +1041,9 @@ void loop()
   Serial.print(" ");
   Serial.print(eqBands.bandValues[2]);
   Serial.print(" ");
-  Serial.print(eqBands.bandValues[3]);
-  Serial.print(" ");
-  Serial.println(eqBands.bandValues[4]);
+  Serial.println(eqBands.bandValues[3]);
+  // Serial.print(" ");
+  // Serial.println(eqBands.bandValues[4]);
   //Serial.print(" ");
   /*
   EVERY_N_MILLISECONDS(60000)

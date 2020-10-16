@@ -38,22 +38,32 @@ void inputCompute(void *parameter)
       { // Add a crude noise filter
 
         //8 bands, 12kHz top band
-        if (i <= 3)
+        // if (i <= 3)
+        //   eqBands.tempBandValues[0] += (int)globals.vReal[i];
+        // if (i > 3 && i <= 6)
+        //   eqBands.tempBandValues[1] += (int)globals.vReal[i];
+        // if (i > 6 && i <= 13)
+        //   eqBands.tempBandValues[2] += (int)globals.vReal[i];
+        // if (i > 13 && i <= 27)
+        //   eqBands.tempBandValues[3] += (int)globals.vReal[i];
+        // if (i > 27 && i <= 55)
+        //   eqBands.tempBandValues[4] += (int)globals.vReal[i];
+        // if (i > 55 && i <= 112)
+        //   eqBands.tempBandValues[5] += (int)globals.vReal[i];
+        // if (i > 112 && i <= 229)
+        //   eqBands.tempBandValues[6] += (int)globals.vReal[i];
+        // if (i > 229)
+        //   eqBands.tempBandValues[7] += (int)globals.vReal[i];
+
+        //4 bands, 12kHz top band
+        if (i <= 13)
           eqBands.tempBandValues[0] += (int)globals.vReal[i];
-        if (i > 3 && i <= 6)
+        if (i > 13 && i <= 55)
           eqBands.tempBandValues[1] += (int)globals.vReal[i];
-        if (i > 6 && i <= 13)
-          eqBands.tempBandValues[2] += (int)globals.vReal[i];
-        if (i > 13 && i <= 27)
-          eqBands.tempBandValues[3] += (int)globals.vReal[i];
-        if (i > 27 && i <= 55)
-          eqBands.tempBandValues[4] += (int)globals.vReal[i];
         if (i > 55 && i <= 112)
-          eqBands.tempBandValues[5] += (int)globals.vReal[i];
-        if (i > 112 && i <= 229)
-          eqBands.tempBandValues[6] += (int)globals.vReal[i];
-        if (i > 229)
-          eqBands.tempBandValues[7] += (int)globals.vReal[i];
+          eqBands.tempBandValues[2] += (int)globals.vReal[i];
+        if (i > 112)
+          eqBands.tempBandValues[3] += (int)globals.vReal[i];
 
         /*16 bands, 12kHz top band 
         if (i<=2 )           eqBands.tempBandValues[0]  += (int)globals.vReal[i];

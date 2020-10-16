@@ -52,40 +52,21 @@ void music_category(int patternMode)
     case 15:
         musicFifteen();
         break;
-    }
-}
-
-
-void musicFourteen()
-{
-    globalStrings.functionName = "musicFourteen";
-
-    for (int i = NUM_LEDS - 1; i > 0; i--)
-    {
-        patternSettings.leds[i] = patternSettings.leds[i - 1];
-    }
-
-    patternSettings.leds[0].r = eqBands.bandValues[0] / (AMPLITUDE / 2); 
-    
-    //patternSettings.leds[0].g = eqBands.bandValues[2] / (AMPLITUDE / 2);
-    //patternSettings.leds[0].b = eqBands.bandValues[5] / (AMPLITUDE / 2);
-
-    patternSettings.leds[0].g = 0;
-    patternSettings.leds[0].b = 0;
-}
-
-
-void musicFifteen()
-{
-    globalStrings.functionName = "musicFourteen";
-
-    DualColorFlowBounce(.55, .21, .0001, .1, 6);
-
-    for (int i = NUM_LEDS; i > 0; i = i - 2)
-    {
-        patternSettings.leds[i].r = eqBands.bandValues[2] / (AMPLITUDE / 3);
-        patternSettings.leds[i].g = 0;
-        patternSettings.leds[i].b = 0;
+    case 16:
+        musicSixteen();
+        break;
+    case 17:
+        musicSeventeen();
+        break;
+    case 18:
+        musicEighteen();
+        break;
+    case 19:
+        musicNineteen();
+        break;
+    case 20:
+        musicTwenty();
+        break;
     }
 }
 
@@ -190,4 +171,85 @@ void musicTwelve()
 {
     globalStrings.functionName = "musicTwelve";
     bpmCustom(CloudColors_p);
+}
+void musicFourteen()
+{
+    globalStrings.functionName = "musicFourteen";
+
+    for (int i = NUM_LEDS - 1; i > 0; i--)
+    {
+        patternSettings.leds[i] = patternSettings.leds[i - 1];
+    }
+
+    patternSettings.leds[0].r = eqBands.bandValues[0] / (AMPLITUDE / 2);
+    patternSettings.leds[0].g = 0;
+    patternSettings.leds[0].b = 0;
+}
+void musicFifteen()
+{
+    globalStrings.functionName = "musicFifteen";
+
+    DualColorFlowBounce(.55, .21, .0001, .1, 6);
+
+    for (int i = NUM_LEDS; i > 0; i = i - 2)
+    {
+        patternSettings.leds[i].r = eqBands.bandValues[2] / (AMPLITUDE / 3);
+        patternSettings.leds[i].g = 0;
+        patternSettings.leds[i].b = 0;
+    }
+}
+void musicSixteen()
+{
+    globalStrings.functionName = "musicSixteen";
+
+    DualColorFlowBounce(.55, .21, .0001, .1, 6);
+
+    for (int i = NUM_LEDS; i > 0; i = i - 2)
+    {
+        setPixelInt(i, 0, eqBands.bandValues[2] / (AMPLITUDE / 3), 0);
+    }
+}
+void musicSeventeen()
+{
+    globalStrings.functionName = "musicSeventeen";
+
+    DualColorFlowBounce(.55, .21, .0001, .1, 6);
+
+    for (int i = NUM_LEDS; i > 0; i = i - 2)
+    {
+        setPixelInt(i, 0, 0, eqBands.bandValues[2] / (AMPLITUDE / 3));
+    }
+}
+void musicEighteen()
+{
+    globalStrings.functionName = "musicEighteen";
+
+    DualColorFlowBounce(.55, .21, .0001, .1, 6);
+
+    for (int i = NUM_LEDS; i > 0; i = i - 2)
+    {
+        setPixelInt(i, 0, eqBands.bandValues[3] / (AMPLITUDE / 3), eqBands.bandValues[2] / (AMPLITUDE / 3));
+    }
+}
+void musicNineteen()
+{
+    globalStrings.functionName = "musicNineteen";
+
+    DualColorFlowBounce(.55, .21, .0001, .1, 6);
+
+    for (int i = NUM_LEDS; i > 0; i = i - 2)
+    {
+        setPixelInt(i, eqBands.bandValues[3] / (AMPLITUDE / 3), 0, eqBands.bandValues[2] / (AMPLITUDE / 3));
+    }
+}
+void musicTwenty()
+{
+    globalStrings.functionName = "musicTwenty";
+
+    DualColorFlowBounce(.55, .21, .0001, .1, 6);
+
+    for (int i = NUM_LEDS; i > 0; i = i - 2)
+    {
+        setPixelInt(i, eqBands.bandValues[4] / (AMPLITUDE / 3), eqBands.bandValues[3] / (AMPLITUDE / 3), eqBands.bandValues[2] / (AMPLITUDE / 3));
+    }
 }

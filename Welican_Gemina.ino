@@ -416,42 +416,43 @@ MenuModel globalMenu = {
     .menu = {},
     //Root Menu Items, Game Menu Items, Settings Menu Items
     .menuMax = {
-      3,      //Main
-      3,      //Game
-      3,      //Settings
-      3,      //LED Settings
-      1,      //ZIP Code
-      3,      //Favorites Menu
-      50,     //Max Favorites
-      2,      //Reset Favorites
-      3,      //Wifi Menu
-      3,      //Customize Menu
-      patternSettings.numberOfFavorites, //Add Favorite
-      99999,  //Enter ZIP Code
-      0,      //WiFi Scan Results (dynamically set)
-      128,    // WiFi Password
-      3,      //WiFi Test
-      (MAX_LEDS / 5),   //# LEDs
-      3,      //LED Color mode
-      50,     //LED SmoothOperator Fade Rate
-      3,      //Speed?
-      3,      //Time Menu
-      2,      //Time Zone
-      3,      //Manual Time Entry
-      3,      //Manual Date Entry
-      1,      //NTP
-      3,      //Customize Display
-      71,     //Customize Timeout
-      3,      //Customize Display Type
-      2       //Font
-      },
+        3,                                 //Main
+        3,                                 //Game
+        3,                                 //Settings
+        3,                                 //LED Settings
+        1,                                 //ZIP Code
+        3,                                 //Favorites Menu
+        50,                                //Max Favorites
+        2,                                 //Reset Favorites
+        3,                                 //Wifi Menu
+        3,                                 //Customize Menu
+        patternSettings.numberOfFavorites, //Add Favorite
+        99999,                             //Enter ZIP Code
+        0,                                 //WiFi Scan Results (dynamically set)
+        128,                               // WiFi Password
+        3,                                 //WiFi Test
+        (MAX_LEDS / 5),                    //# LEDs
+        3,                                 //LED Color mode
+        50,                                //LED SmoothOperator Fade Rate
+        3,                                 //Speed?
+        3,                                 //Time Menu
+        2,                                 //Time Zone
+        3,                                 //Manual Time Entry
+        3,                                 //Manual Date Entry
+        1,                                 //NTP
+        3,                                 //Customize Display
+        71,                                //Customize Timeout
+        3,                                 //Customize Display Type
+        2                                  //Font
+    },
     .patternMax = {
-      13,     //Basic Category
-      15,     //Music Category
-      23,     //Chill
-      66,     //Moving Colors
-      81,     //Legacy
-      patternSettings.numberOfFavorites}, //Favorites (dynamic)
+        13,                               //Basic Category
+        20,                               //Music Category
+        23,                               //Chill
+        66,                               //Moving Colors
+        81,                               //Legacy
+        patternSettings.numberOfFavorites //Favorites (dynamic)
+    },
     .currentMenu = 0,
     .currentMenuMultiplier = 1,
     .verticalDividePosition = 64,
@@ -849,7 +850,7 @@ void setup()
   {
     globalMenu.menu[25] = 0;
   }
-  
+
   globalTime.timeOut = timeOutConverter(globalMenu.menu[25]);
 
   //Time out display selection
@@ -900,7 +901,6 @@ void setup()
     FastLED.addLeds<LED_TYPE, DATA_PIN, RGB>(patternSettings.leds, NUM_LEDS);
     FastLED.addLeds<LED_TYPE, DATA_PIN_A, RGB>(patternSettings.leds, NUM_LEDS);
   }
-  
 
   //Begin a task named 'fftComputeTask' to handle FFT on the other core
   //This task also takes care of reading the button inputs and computing encoder positions

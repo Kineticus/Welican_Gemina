@@ -25,6 +25,12 @@ void setPixel(int pixel, byte red, byte green, byte blue)
 
 #endif
 }
+void setPixelInt(int pixel, int r, int g, int b)
+{
+  patternSettings.leds[pixel].r = r;
+  patternSettings.leds[pixel].g = g;
+  patternSettings.leds[pixel].b = b;
+}
 void setPixel(int pixel, CRGB color)
 {
 

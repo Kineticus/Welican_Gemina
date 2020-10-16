@@ -677,7 +677,7 @@ struct OpenWeatherSettings
 OpenWeatherSettings weatherSettings = {
     .zipCode = "33701",
     .countryCode = "US",
-    .weatherTimerDelay = 10000};
+    .weatherTimerDelay = 120000};
 
 struct OpenWeatherObject
 {

@@ -70,12 +70,13 @@ void drawTop()
   u8g2.setCursor(12, 8);
   if ((patternSettings.pattern[globals.mode] == 0) || ((globals.mode == 5) && (patternSettings.favoritePattern[patternSettings.pattern[globals.mode]] == 0)))
   {
-    u8g2.print("RM"); 
-  } else
+    u8g2.print("RM");
+  }
+  else
   {
     u8g2.print(patternSettings.pattern[globals.mode]);
   }
-  
+
   u8g2.setCursor(32, 8);
   u8g2.print(globalStrings.functionNameOutString);
   //u8g2.drawXBMP(42,0,DONUT_WIDTH, DONUT_HEIGHT, DONUT);
@@ -86,9 +87,8 @@ void drawTop()
   if (globals.softAPEnable == 1)
   {
     u8g2.setCursor(112, 8);
-    u8g2.print("T");   
+    u8g2.print("T");
   }
-  
 
   /*
   WL_IDLE_STATUS	0
@@ -120,19 +120,19 @@ void drawTop()
     break;
   case 1:
     // u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
-    u8g2.drawXBMP(119, 0,  WIFI_1_WIDTH, WIFI_1_HEIGHT, WIFI_1);
+    u8g2.drawXBMP(119, 0, WIFI_1_WIDTH, WIFI_1_HEIGHT, WIFI_1);
     break;
   case 2:
-    u8g2.drawXBMP(119, 0,  WIFI_2_WIDTH, WIFI_2_HEIGHT, WIFI_2);
+    u8g2.drawXBMP(119, 0, WIFI_2_WIDTH, WIFI_2_HEIGHT, WIFI_2);
     break;
   case 3:
-    u8g2.drawXBMP(119, 0,  WIFI_3_WIDTH, WIFI_3_HEIGHT, WIFI_3);
+    u8g2.drawXBMP(119, 0, WIFI_3_WIDTH, WIFI_3_HEIGHT, WIFI_3);
     break;
   case 4:
-    u8g2.drawXBMP(119, 0,  WIFI_4_WIDTH, WIFI_4_HEIGHT, WIFI_4);
+    u8g2.drawXBMP(119, 0, WIFI_4_WIDTH, WIFI_4_HEIGHT, WIFI_4);
     break;
   }
-  
+
   //WiFi Strength % (99 is MAX, 1 is MIN)
   //RSSItoPercent(WiFi.RSSI());
 
@@ -206,139 +206,152 @@ void drawClock()
 {
   u8g2.setDrawColor(1);
 
-  switch(globalMenu.menu[26])
+  switch (globalMenu.menu[26])
   {
-    case 0:
+  case 0: //7 Segment Style
+  {
+
+    u8g2.setFont(u8g2_font_7Segments_26x42_mn);
+    if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
     {
-      //7 Segment Style
-      u8g2.setFont(u8g2_font_7Segments_26x42_mn);
-      if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
-      {
-        u8g2.setCursor(20, 64);
+      u8g2.setCursor(20, 64);
 
-        if (globalTime.currentHour > 9)
-        {
-          u8g2.setCursor(-14, 64);
-        }
-
-        u8g2.print(globalTime.currentHour);
-        
-        u8g2.setCursor(50, 64);
-        u8g2.print(":");
-        
-        u8g2.setCursor(68, 64);
-        if (globalTime.currentMinute < 10)
-        {
-          u8g2.print("0");
-        }
-        u8g2.print(globalTime.currentMinute);
-      } else
+      if (globalTime.currentHour > 9)
       {
-        //u8g2.print("0:00");
-        //Decided to just show nothing if we don't have a time sync
+        u8g2.setCursor(-14, 64);
       }
-    }
-    break;
 
-    case 1:
+      u8g2.print(globalTime.currentHour);
+
+      u8g2.setCursor(50, 64);
+      u8g2.print(":");
+
+      u8g2.setCursor(68, 64);
+      if (globalTime.currentMinute < 10)
+      {
+        u8g2.print("0");
+      }
+      u8g2.print(globalTime.currentMinute);
+    }
+    else
     {
-      //Flip Card style
-      u8g2.setFont(u8g2_font_fub30_tn);
-      if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
-      {
-        u8g2.setCursor(30, 64);
-
-        if (globalTime.currentHour > 9)
-        {
-          u8g2.setCursor(0, 64);
-        }
-
-        u8g2.print(globalTime.currentHour);
-
-        u8g2.setCursor(50, 60);
-        u8g2.print(":");
-
-        u8g2.setCursor(68, 64);
-        if (globalTime.currentMinute < 10)
-        {
-          u8g2.print("0");
-        }
-        u8g2.print(globalTime.currentMinute);
-      }
-      else
-      {
-        //u8g2.print("0:00");
-        //Decided to just show nothing if we don't have a time sync
-      }
+      //u8g2.print("0:00");
+      //Decided to just show nothing if we don't have a time sync
     }
-    break;
+  }
+  break;
+  case 1: //Flip Card style
+  {
 
-    case 2:
+    u8g2.setFont(u8g2_font_fub30_tn);
+    if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
     {
-      //Old Time style
-      u8g2.setFont(u8g2_font_osb35_tn);
-      if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
+      u8g2.setCursor(30, 64);
+
+      if (globalTime.currentHour > 9)
       {
-        u8g2.setCursor(30, 64);
-
-        if (globalTime.currentHour > 9)
-        {
-          u8g2.setCursor(0, 64);
-        }
-
-        u8g2.print(globalTime.currentHour);
-
-        u8g2.setCursor(56, 60);
-        u8g2.print(":");
-
-        u8g2.setCursor(68, 64);
-        if (globalTime.currentMinute < 10)
-        {
-          u8g2.print("0");
-        }
-        u8g2.print(globalTime.currentMinute);
+        u8g2.setCursor(0, 64);
       }
-      else
+
+      u8g2.print(globalTime.currentHour);
+
+      u8g2.setCursor(50, 60);
+      u8g2.print(":");
+
+      u8g2.setCursor(68, 64);
+      if (globalTime.currentMinute < 10)
       {
-        //u8g2.print("0:00");
-        //Decided to just show nothing if we don't have a time sync
+        u8g2.print("0");
       }
+      u8g2.print(globalTime.currentMinute);
     }
-    break;
-
-    case 3:
+    else
     {
-      //Modern Font
-      //u8g2.setFont(u8g2_font_logisoso38_tn);
-      u8g2.setFont(u8g2_font_logisoso42_tn);
-      if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
-      {
-        u8g2.setCursor(30, 60);
-
-        if (globalTime.currentHour > 9)
-        {
-          u8g2.setCursor(0, 60);
-        }
-
-        u8g2.print(globalTime.currentHour);
-
-        u8g2.setCursor(56, 56);
-        u8g2.print(":");
-
-        u8g2.setCursor(72, 60);
-        if (globalTime.currentMinute < 10)
-        {
-          u8g2.print("0");
-        }
-        u8g2.print(globalTime.currentMinute);
-      }
-      else
-      {
-        //u8g2.print("0:00");
-        //Decided to just show nothing if we don't have a time sync
-      }
+      //u8g2.print("0:00");
+      //Decided to just show nothing if we don't have a time sync
     }
-    break;
+  }
+  break;
+  case 2: //Old Time style
+  {
+
+    u8g2.setFont(u8g2_font_osb35_tn);
+    if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
+    {
+      u8g2.setCursor(30, 64);
+
+      if (globalTime.currentHour > 9)
+      {
+        u8g2.setCursor(0, 64);
+      }
+
+      u8g2.print(globalTime.currentHour);
+
+      u8g2.setCursor(56, 60);
+      u8g2.print(":");
+
+      u8g2.setCursor(68, 64);
+      if (globalTime.currentMinute < 10)
+      {
+        u8g2.print("0");
+      }
+      u8g2.print(globalTime.currentMinute);
+    }
+    else
+    {
+      //u8g2.print("0:00");
+      //Decided to just show nothing if we don't have a time sync
+    }
+  }
+  break;
+  case 3: //Modern Font
+  {
+
+    //u8g2.setFont(u8g2_font_logisoso38_tn);
+    u8g2.setFont(u8g2_font_logisoso42_tn);
+    if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
+    {
+      u8g2.setCursor(30, 60);
+
+      if (globalTime.currentHour > 9)
+      {
+        u8g2.setCursor(0, 60);
+      }
+
+      u8g2.print(globalTime.currentHour);
+
+      u8g2.setCursor(56, 56);
+      u8g2.print(":");
+
+      u8g2.setCursor(72, 60);
+      if (globalTime.currentMinute < 10)
+      {
+        u8g2.print("0");
+      }
+      u8g2.print(globalTime.currentMinute);
+    }
+    else
+    {
+      //u8g2.print("0:00");
+      //Decided to just show nothing if we don't have a time sync
+    }
+  }
+  break;
+  case 4: //Weather 1
+  {
+
+    u8g2.setCursor(10, 10);
+    u8g2.print(weather.currentWeatherTitle);
+    u8g2.setCursor(10, 20);
+    u8g2.print(weather.currentWeatherDescription);
+    u8g2.setCursor(10, 30);
+    u8g2.print(weather.currentTemperature);
+    u8g2.setCursor(10, 40);
+    u8g2.print(weather.sunrise);
+    u8g2.setCursor(40, 40);
+    u8g2.print(weather.sunset);
+  }
+  break;
   }
 }
 
@@ -371,7 +384,8 @@ void newFavoritesMenu()
   if (patternSettings.favoritePattern[globalMenu.menu[globalMenu.currentMenu]] == 0)
   {
     globalStrings.functionName = "Randomizer";
-  } else 
+  }
+  else
   {
     favorites_category(globalMenu.menu[globalMenu.currentMenu]);
   }

@@ -13,29 +13,29 @@ This repository contains:
 ## TODOs
 
 - WIFI Manager
-- Saving Favorites
-  - Favorites Menu (DONE)
-- Settings
-  - Set Led Count
-  - Show IP
+- ~~Saving Favorites~~
+  - ~~Favorites Menu~~
+- ~~Settings~~
+  - ~~Set Led Count~~
+  - ~~Show IP~~
   - Timeout (short, medium, long, extra long, never)
     - Show Weather/Clock
     - Turn off
-  - Clock Types
-  - Random Mode Speed (short, medium, long, extra long, never)
-  - Color Order (RGB, GRB, etc)
-  - Factory Reset (reset EPROM values to default, favorites, highscores)
-- Random Mode at beginning of categories
-- Fade between patterns (to prevent quick spins on pattern knob)
+  - ~~Clock Types~~
+  - ~~Random Mode Speed (short, medium, long, extra long, never)~~
+  - ~~Color Order (RGB, GRB, etc)~~
+  - ~~Factory Reset (reset EPROM values to default, favorites, highscores)~~
+- ~~Random Mode at beginning of categories~~
+- ~~Fade between patterns (to prevent quick spins on pattern knob)~~
 - Audio Input morphs Music Visualizer category lights
 - More visualizers (VZ)
   - Random VZ for each category (at the beginning of category)
   - Differnt types of random (at the end of category)
-- Weather status
-  - By Zipcode
+- ~~Weather status~~
+  - ~~By Zipcode~~
   - VZ based on weather
-- Get Time
-  - Show time in top menu
+- ~~Get Time~~
+  - ~~Show time in top menu~~
 
 
 ## Table of Contents

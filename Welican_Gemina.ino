@@ -677,7 +677,7 @@ struct OpenWeatherSettings
 OpenWeatherSettings weatherSettings = {
     .zipCode = "33701",
     .countryCode = "US",
-    .weatherTimerDelay = 70000};
+    .weatherTimerDelay = 2400000};
 
 struct OpenWeatherObject
 {
@@ -1035,6 +1035,17 @@ void loop()
 
   //Debug Serial Logging
 
+  Serial.print(eqBands.bandValues[0]);
+  Serial.print(" ");
+  Serial.print(eqBands.bandValues[1]);
+  Serial.print(" ");
+  Serial.print(eqBands.bandValues[2]);
+  Serial.print(" ");
+  Serial.print(eqBands.bandValues[3]);
+  Serial.print(" ");
+  Serial.println(eqBands.bandValues[4]);
+  //Serial.print(" ");
+  /*
   EVERY_N_MILLISECONDS(60000)
   {
     Serial.print("FPS: ");
@@ -1048,7 +1059,7 @@ void loop()
     Serial.print("MIN: ");
     Serial.println(((millis() / 1000) / 60));
   }
-
+  */
   // slowly cycle the "base color" through the rainbow
   EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; }
 }

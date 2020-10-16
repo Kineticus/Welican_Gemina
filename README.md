@@ -136,6 +136,7 @@ Standard Readme follows the [Contributor Covenant](http://contributor-covenant.o
   - [Experimental FastLED RGBSet](https://github.com/FastLED/FastLED/wiki/RGBSet-Reference)
   - [Refactoring out DELAY](https://forum.arduino.cc/index.php?topic=537644.0)
   - [UG82 Screen Library](https://github.com/olikraus/u8g2)
+  - [Strings for CPP](https://cpp4arduino.com/2018/11/21/eight-tips-to-use-the-string-class-efficiently.html)
 
 ## FastLED Examples
 

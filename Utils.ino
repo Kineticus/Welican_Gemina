@@ -473,7 +473,7 @@ void endGameMode()
   globals.runMode = -1;
 }
 
-void convertUnixToTime(time_t t)
+String convertUnixToTime(time_t t)
 {
   struct tm ts;
   char buf[80];
@@ -483,9 +483,11 @@ void convertUnixToTime(time_t t)
 
   // Format time, "ddd yyyy-mm-dd hh:mm:ss zzz"
   ts = *localtime(&t);
-  strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", &ts);
+  // strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", &ts);
+  strftime(buf, sizeof(buf), "%H:%M:%S %Z", &ts);
   Serial.println("time stuff --------------");
   Serial.println(buf);
+  return buf;
 }
 
 time_t timeConvert(String timeToConvert)
@@ -813,8 +815,8 @@ void getWeather()
     weather.sunrise = String((int)weather.weatherJson["sys"]["sunrise"]);
     weather.sunset = String((int)weather.weatherJson["sys"]["sunset"]);
 
-    convertUnixToTime(timeConvert(weather.sunrise));
-    convertUnixToTime(timeConvert(weather.sunset));
+    weather.sunrise = convertUnixToTime(timeConvert(weather.sunrise));
+    weather.sunset = convertUnixToTime(timeConvert(weather.sunset));
 
     Serial.print("Temperature: ");
     Serial.println(weather.weatherJson["main"]["temp"]);

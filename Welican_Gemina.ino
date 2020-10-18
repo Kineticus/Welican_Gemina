@@ -675,11 +675,16 @@ struct OpenWeatherSettings
   String zipCode;
   String countryCode;
   unsigned long weatherTimerDelay;
+  unsigned long weatherUpdateInitial;
+  unsigned long weatherUpdateInterval;
 };
 OpenWeatherSettings weatherSettings = {
     .zipCode = "33701",
     .countryCode = "US",
-    .weatherTimerDelay = 120000};
+    .weatherTimerDelay = 0,             //Set by system
+    .weatherUpdateInitial = 10000,      //10 seconds after boot
+    .weatherUpdateInterval = 1800000   //Every 30 minutes after that
+    };
 
 struct OpenWeatherObject
 {
@@ -875,7 +880,13 @@ void setup()
   readFavorites();
 
   getZipCode();
+
+  //Set first Weather check value
+  weatherSettings.weatherTimerDelay = weatherSettings.weatherUpdateInitial;
+
   updateWeather(true);
+
+  
 
   updateZipCodeString();
 
@@ -1037,6 +1048,7 @@ void loop()
 
   //Debug Serial Logging
 
+  /*
   Serial.print(eqBands.bandValues[0]);
   Serial.print(" ");
   Serial.print(eqBands.bandValues[1]);

@@ -857,18 +857,20 @@ void updateWeather(bool force)
 {
   if (force == true)
   {
-    EVERY_N_MILLISECONDS(weatherSettings.weatherTimerDelay)
+    if ((millis() - weatherSettings.weatherTimerDelay) < millis())
     {
       getWeather();
+      weatherSettings.weatherTimerDelay = weatherSettings.weatherUpdateInterval;
     }
   }
   else
   {
     if (globals.runMode == 3)
     {
-      EVERY_N_MILLISECONDS(weatherSettings.weatherTimerDelay)
+      if ((millis() - weatherSettings.weatherTimerDelay) < millis())
       {
         getWeather();
+        weatherSettings.weatherTimerDelay = weatherSettings.weatherUpdateInterval;     
       }
     }
   }

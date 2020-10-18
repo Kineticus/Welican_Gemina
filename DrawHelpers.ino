@@ -334,7 +334,7 @@ void drawClock()
     {
       u8g2.setCursor(30, 60);
 
-     if ((globalTime.currentHour > 9) && (globalTime.currentHour != 0))
+      if ((globalTime.currentHour > 9) && (globalTime.currentHour != 0))
       {
         u8g2.setCursor(0, 60);
       }
@@ -390,6 +390,51 @@ void drawClock()
     u8g2.setCursor(10, 40);
     u8g2.print(sunrise);
     u8g2.setCursor(10, 60);
+    u8g2.print(sunset);
+  }
+  case 5: //Weather 2
+  {
+    u8g2.setCursor(10, 10);
+    u8g2.print(weather.currentWeatherDescription);
+
+    u8g2.setCursor(10, 20);
+    u8g2.print(String(weather.currentTemperature));
+    u8g2.setCursor(40, 20);
+    u8g2.print(String(weather.currentTemperatureMin));
+    u8g2.setCursor(55, 20);
+    u8g2.print(" - ");
+    u8g2.setCursor(70, 20);
+    u8g2.print(String(weather.currentTemperatureMax));
+  }
+  case 6: //Weather 3
+  {
+    u8g2.setCursor(10, 10);
+    u8g2.print(weather.currentWeatherTitle);
+
+    u8g2.setCursor(10, 20);
+    u8g2.print(String(weather.currentTemperature));
+    u8g2.setCursor(40, 20);
+    u8g2.print(String(weather.currentTemperatureMin));
+    u8g2.setCursor(55, 20);
+    u8g2.print(" - ");
+    u8g2.setCursor(70, 20);
+    u8g2.print(String(weather.currentTemperatureMax));
+  }
+  case 7: //Weather 4
+  {
+    u8g2.setCursor(10, `0);
+    u8g2.print(weather.currentWeatherTitle);
+    u8g2.setCursor(10, 20);
+    u8g2.print(weather.currentWeatherDescription);
+
+    String sunrise = "rise: ";
+    sunrise += String(weather.sunrise);
+    String sunset = "set: ";
+    sunset += String(weather.sunset);
+
+    u8g2.setCursor(10, 30);
+    u8g2.print(sunrise);
+    u8g2.setCursor(10, 50);
     u8g2.print(sunset);
   }
   break;

@@ -446,7 +446,7 @@ MenuModel globalMenu = {
         1,                                 //NTP
         3,                                 //Customize Display
         71,                                //Customize Timeout
-        4,                                 //Customize Display Type
+        7,                                 //Customize Display Type
         2,                                 //Font
         2,                                 //UNUSED
         71,                                //Random Timeout
@@ -685,10 +685,10 @@ struct OpenWeatherSettings
 OpenWeatherSettings weatherSettings = {
     .zipCode = "33701",
     .countryCode = "US",
-    .weatherTimerDelay = 0,             //Set by system
-    .weatherUpdateInitial = 10000,      //10 seconds after boot
-    .weatherUpdateInterval = 1800000   //Every 30 minutes after that
-    };
+    .weatherTimerDelay = 0,          //Set by system
+    .weatherUpdateInitial = 10000,   //10 seconds after boot
+    .weatherUpdateInterval = 1800000 //Every 30 minutes after that
+};
 
 struct OpenWeatherObject
 {
@@ -900,8 +900,6 @@ void setup()
 
   updateWeather(true);
 
-  
-
   updateZipCodeString();
 
   //Set Smooth Operator fade time
@@ -1062,7 +1060,6 @@ void loop()
 
   //Debug Serial Logging
 
-  
   Serial.print(eqBands.bandValues[0]);
   Serial.print(" ");
   Serial.print(eqBands.bandValues[1]);

@@ -462,7 +462,19 @@ void drawMenuCommander()
   }
   break;
 
+  case 28: //UNUSED
+  {
+    
   }
+  break;
+
+  case 29: //Customize > Random
+  {
+    
+  }
+  break;
+
+  } //End of Display
 
   // Back Button Action
   if (knob2.click == 1)

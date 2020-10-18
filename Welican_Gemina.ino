@@ -443,7 +443,9 @@ MenuModel globalMenu = {
         3,                                 //Customize Display
         71,                                //Customize Timeout
         4,                                 //Customize Display Type
-        2                                  //Font
+        2,                                 //Font
+        2,                                 //UNUSED
+        2,                                 //Random Timeout
     },
     .patternMax = {
         13,                               //Basic Category

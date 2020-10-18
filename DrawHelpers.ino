@@ -216,12 +216,19 @@ void drawClock()
     {
       u8g2.setCursor(20, 64);
 
-      if (globalTime.currentHour > 9)
+      if ((globalTime.currentHour > 9) && (globalTime.currentHour != 0))
       {
         u8g2.setCursor(-14, 64);
       }
 
-      u8g2.print(globalTime.currentHour);
+      if (globalTime.currentHour == 0)
+      {
+        u8g2.print("12");
+      }
+      else
+      {
+        u8g2.print(globalTime.currentHour);
+      }
 
       u8g2.setCursor(50, 64);
       u8g2.print(":");
@@ -248,12 +255,19 @@ void drawClock()
     {
       u8g2.setCursor(30, 64);
 
-      if (globalTime.currentHour > 9)
+      if ((globalTime.currentHour > 9) && (globalTime.currentHour != 0))
       {
         u8g2.setCursor(0, 64);
       }
 
-      u8g2.print(globalTime.currentHour);
+      if (globalTime.currentHour == 0)
+      {
+        u8g2.print("12");
+      }
+      else
+      {
+        u8g2.print(globalTime.currentHour);
+      }
 
       u8g2.setCursor(50, 60);
       u8g2.print(":");
@@ -280,12 +294,19 @@ void drawClock()
     {
       u8g2.setCursor(30, 64);
 
-      if (globalTime.currentHour > 9)
+      if ((globalTime.currentHour > 9) && (globalTime.currentHour != 0))
       {
         u8g2.setCursor(0, 64);
       }
 
-      u8g2.print(globalTime.currentHour);
+      if (globalTime.currentHour == 0)
+      {
+        u8g2.print("12");
+      }
+      else
+      {
+        u8g2.print(globalTime.currentHour);
+      }
 
       u8g2.setCursor(56, 60);
       u8g2.print(":");
@@ -313,12 +334,19 @@ void drawClock()
     {
       u8g2.setCursor(30, 60);
 
-      if (globalTime.currentHour > 9)
+     if ((globalTime.currentHour > 9) && (globalTime.currentHour != 0))
       {
         u8g2.setCursor(0, 60);
       }
 
-      u8g2.print(globalTime.currentHour);
+      if (globalTime.currentHour == 0)
+      {
+        u8g2.print("12");
+      }
+      else
+      {
+        u8g2.print(globalTime.currentHour);
+      }
 
       u8g2.setCursor(56, 56);
       u8g2.print(":");

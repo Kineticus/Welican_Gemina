@@ -392,6 +392,7 @@ void drawClock()
     u8g2.setCursor(10, 60);
     u8g2.print(sunset);
   }
+  break;
   case 5: //Weather 2
   {
     u8g2.setCursor(10, 10);
@@ -406,6 +407,7 @@ void drawClock()
     u8g2.setCursor(70, 20);
     u8g2.print(String(weather.currentTemperatureMax));
   }
+  break;
   case 6: //Weather 3
   {
     u8g2.setCursor(10, 10);
@@ -420,6 +422,7 @@ void drawClock()
     u8g2.setCursor(70, 20);
     u8g2.print(String(weather.currentTemperatureMax));
   }
+  break;
   case 7: //Weather 4
   {
     u8g2.setCursor(10, `0);

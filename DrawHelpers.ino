@@ -425,7 +425,7 @@ void drawClock()
   break;
   case 7: //Weather 4
   {
-    u8g2.setCursor(10, `0);
+    u8g2.setCursor(10, s0);
     u8g2.print(weather.currentWeatherTitle);
     u8g2.setCursor(10, 20);
     u8g2.print(weather.currentWeatherDescription);

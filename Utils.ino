@@ -452,7 +452,7 @@ void setGameMode()
 void pickRandom()
 {
   patternSettings.randomPattern = random(1, globalMenu.patternMax[globals.mode]);
-  globals.randomInterval = random(30000, 240000);
+  globals.randomInterval = random(globals.randomMin, globals.randomMax);
   globals.randomTime = millis();
   startSmoothOperator();
 }

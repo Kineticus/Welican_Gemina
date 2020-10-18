@@ -470,7 +470,31 @@ void drawMenuCommander()
 
   case 29: //Customize > Random
   {
-    
+    drawMenuTop("Customize > Random");
+
+    u8g2.setCursor(20, 32);
+
+    if (globalMenu.menu[globalMenu.currentMenu] < 12)
+    {
+      if (globalMenu.menu[globalMenu.currentMenu] == 0)
+      {
+        u8g2.print("Never");
+      }
+      else
+      {
+        u8g2.print(globalMenu.menu[globalMenu.currentMenu] * 5);
+        u8g2.print(" - ");
+        u8g2.print(globalMenu.menu[globalMenu.currentMenu] * 10);
+        u8g2.print(" Seconds");
+      }
+    }
+    else
+    {
+      u8g2.print(globalMenu.menu[globalMenu.currentMenu] - 11);
+      u8g2.print(" - ");
+      u8g2.print((globalMenu.menu[globalMenu.currentMenu] - 11) * 2);
+      u8g2.print(" Minutes");
+    }   
   }
   break;
 
@@ -624,6 +648,13 @@ void drawMenuCommander()
       globalMenu.currentMenu = 24;
     }
     break;
+
+    case 29: //Random Time
+    {
+      globalMenu.currentMenu = 9; //Customize
+    }
+    break;
+
     }
   }
 
@@ -821,15 +852,21 @@ void drawMenuCommander()
         globalMenu.currentMenu = 5;
       }
       break;
-      case 1: //
+      case 1: //Weather
+      {
         globalMenu.currentMenu = 2;
-        break;
+      }
+      break;
       case 2: //Display
+      {
         globalMenu.currentMenu = 24;
-        break;
-      case 3: //
-        globalMenu.currentMenu = 2;
-        break;
+      }
+      break;
+      case 3: //Random Time
+      {
+        globalMenu.currentMenu = 29;
+      }
+      break;
       }
     }
     break;
@@ -981,6 +1018,16 @@ void drawMenuCommander()
       globalMenu.currentMenu = 24;  
     }
     break;
+
+    case 29: //Random Time
+    {
+      EEPROM.put(60, globalMenu.menu[29]);
+      EEPROM.commit();
+      globals.randomMin = timeOutConverter(globalMenu.menu[29]);
+      globals.randomMax = globals.randomMin * 2;
+      globalMenu.currentMenu = 9;
+    }
+    break;
     }
   }
 }
@@ -1006,6 +1053,7 @@ int timeOutConverter(int timeOut)
 
   return timeOut;
 }
+
 void drawNumberInput(String menuName, int numberValue)
 {
   drawMenuTop(menuName);

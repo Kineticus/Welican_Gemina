@@ -6,7 +6,7 @@ void favorites_category(int patternMode)
 
   if (patternSettings.displayPattern == 0)
   {
-    if ((millis() - globals.randomTime) > globals.randomInterval)
+    if (((millis() - globals.randomTime) > globals.randomInterval) && globals.randomMin != 0)
     {
       pickRandom();
     }

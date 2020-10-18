@@ -136,6 +136,8 @@ struct Globals
   int mode;
   int modeMax;
   int randomInterval;
+  int randomMin;
+  int randomMax;
   unsigned long randomTime;
   int randomMode;
   String ipAddress;
@@ -167,6 +169,8 @@ Globals globals = {
     .mode = 0,
     .modeMax = MAX_MODES,
     .randomInterval = 0,
+    .randomMin = 60000,
+    .randomMax = 240000,
     .randomTime = 0,
     .randomMode = 0,
     .ipAddress = "",
@@ -445,7 +449,7 @@ MenuModel globalMenu = {
         4,                                 //Customize Display Type
         2,                                 //Font
         2,                                 //UNUSED
-        2,                                 //Random Timeout
+        71,                                //Random Timeout
     },
     .patternMax = {
         13,                               //Basic Category
@@ -874,6 +878,16 @@ void setup()
     globals.mode = 0;
   }
 
+  //Random Times
+  EEPROM.get(60, globalMenu.menu[29]);
+  if (globalMenu.menu[29] > globalMenu.menuMax[29])
+  {
+    globalMenu.menu[29] = 12;
+  }
+
+  globals.randomMin = timeOutConverter(globalMenu.menu[29]);
+  globals.randomMax = globals.randomMin * 2;
+
   //Set master brightness control
   FastLED.setBrightness(brightness.current);
 
@@ -993,7 +1007,7 @@ void loop()
 
   if (patternSettings.displayPattern == 0)
   {
-    if ((millis() - globals.randomTime) > globals.randomInterval)
+    if (((millis() - globals.randomTime) > globals.randomInterval) && globals.randomMin != 0)
     {
       pickRandom();
     }
@@ -1048,7 +1062,7 @@ void loop()
 
   //Debug Serial Logging
 
-  /*
+  
   Serial.print(eqBands.bandValues[0]);
   Serial.print(" ");
   Serial.print(eqBands.bandValues[1]);

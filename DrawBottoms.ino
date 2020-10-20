@@ -42,95 +42,28 @@ void drawDiscSectionsEQ()
 
 void drawEQ()
 {
+  u8g2.setDrawColor(1);
   patternSettings.pos = 16;
   int min = 0;
   int max = 80;
 
-  globals.temp[0] = eqBands.bandValues[0] / AMPLITUDE;
-  globals.temp[0] -= 7;
-  if (globals.temp[0] < min)
+  for (int i = 0; i < NUM_BANDS; i++)
   {
-    globals.temp[0] = min;
-  }
-  if (globals.temp[0] > max)
-  {
-    globals.temp[0] = max;
-  }
-  u8g2.setDrawColor(1);
-  u8g2.drawBox(0, patternSettings.pos, globals.temp[0], 7);
-  globals.temp[2] = eqBands.peak[0] / AMPLITUDE;
-  u8g2.drawBox(globals.temp[2], patternSettings.pos, 1, 7);
+    globals.temp[i] = eqBands.bandValues[i] / AMPLITUDE;
+    globals.temp[i] -= 7;
+    if (globals.temp[i] < min)
+    {
+      globals.temp[i] = min;
+    }
+    if (globals.temp[i] > max)
+    {
+      globals.temp[i] = max;
+    }
 
-  globals.temp[1] = eqBands.bandValues[1] / AMPLITUDE;
-  globals.temp[1] -= 7;
-  if (globals.temp[1] < min)
-  {
-    globals.temp[1] = min;
+    u8g2.drawBox(0, patternSettings.pos + (8 * i), globals.temp[i], 7);
+    globals.temp[i] = eqBands.peak[i] / AMPLITUDE;
+    u8g2.drawBox(globals.temp[i], patternSettings.pos, 1, 7);
   }
-  if (globals.temp[1] > max)
-  {
-    globals.temp[1] = max;
-  }
-  u8g2.drawBox(0, patternSettings.pos + 8, globals.temp[1], 7);
-  globals.temp[2] = eqBands.peak[1] / AMPLITUDE;
-  u8g2.drawBox(globals.temp[2], patternSettings.pos + 8, 1, 7);
-
-  globals.temp[2] = eqBands.bandValues[3] / AMPLITUDE;
-  globals.temp[2] -= 7;
-  if (globals.temp[2] < min)
-  {
-    globals.temp[2] = min;
-  }
-  if (globals.temp[2] > max)
-  {
-    globals.temp[2] = max;
-  }
-  u8g2.drawBox(0, patternSettings.pos + 16, globals.temp[2], 7);
-  globals.temp[2] = eqBands.peak[3] / AMPLITUDE;
-  u8g2.drawBox(globals.temp[2], patternSettings.pos + 16, 1, 7);
-
-  globals.temp[2] = eqBands.bandValues[4] / AMPLITUDE;
-  globals.temp[2] -= 7;
-  if (globals.temp[2] < min)
-  {
-    globals.temp[2] = min;
-  }
-  if (globals.temp[2] > max)
-  {
-    globals.temp[2] = max;
-  }
-  u8g2.drawBox(0, patternSettings.pos + 24, globals.temp[2], 7);
-
-  globals.temp[2] = eqBands.peak[4] / AMPLITUDE;
-  u8g2.drawBox(globals.temp[2], patternSettings.pos + 24, 1, 7);
-
-  globals.temp[2] = eqBands.bandValues[5] / AMPLITUDE;
-  globals.temp[2] -= 7;
-  if (globals.temp[2] < min)
-  {
-    globals.temp[2] = min;
-  }
-  if (globals.temp[2] > max)
-  {
-    globals.temp[2] = max;
-  }
-  u8g2.drawBox(0, patternSettings.pos + 32, globals.temp[2], 7);
-  globals.temp[2] = eqBands.peak[5] / AMPLITUDE;
-  u8g2.drawBox(globals.temp[2], patternSettings.pos + 32, 1, 7);
-
-  globals.temp[2] = eqBands.bandValues[6] / AMPLITUDE;
-  globals.temp[2] -= 7;
-  if (globals.temp[2] < min)
-  {
-    globals.temp[2] = min;
-  }
-  if (globals.temp[2] > max)
-  {
-    globals.temp[2] = max;
-  }
-  u8g2.drawBox(0, patternSettings.pos + 40, globals.temp[2], 7);
-  globals.temp[2] = eqBands.peak[6] / AMPLITUDE;
-  u8g2.drawBox(globals.temp[2], patternSettings.pos + 40, 1, 7);
 }
 
 void drawCircleEQ()

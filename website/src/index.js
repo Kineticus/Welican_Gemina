@@ -5,11 +5,21 @@ var refreshTime = localStorage.getItem('refreshTime');
 
 console.log(human('Dude'));
 
+window.addEventListener('popstate', function (event) {
+  // Log the state data to the console
+  var currentUrl = event.currentTarget.location.href;
+  var currentPage = currentUrl.substring(currentUrl.indexOf("#"));
+  console.log(currentUrl);
+  console.log(currentPage);
+  localStorage.setItem('currentPage', currentPage);
+});
+
 document.addEventListener('DOMContentLoaded', () => {
 
-  if (refreshTime == undefined) {
+  if (refreshTime != undefined) {
     // Automatic reload page
-    setTimeout("location.href = '/'", 10000);
+    var currentPage = localStorage.getItem('currentPage');
+    setTimeout(`location.href = '/${currentPage}'`, refreshTime);
   }
 });
 

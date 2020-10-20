@@ -25,6 +25,11 @@ void createRoutes(AsyncWebServer *server)
       {
         brightness.current = p->value().toInt();
       }
+      if (p->name() == "favorite")
+      {
+        int patternMode = p->value().toInt();
+        favorites_category(patternMode);
+      }
     }
     request->send(SPIFFS, "/index.html", String(), false, websiteProcessor);
   });

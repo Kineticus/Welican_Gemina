@@ -58,136 +58,207 @@
         transform: rotate(360deg);
       }
     }
+
+    /* This hides all pages */
+    .page {
+      display: none;
+    }
+
+    /* This displays the first page */
+    .default {
+      display: block;
+    }
+
+    /* This displays the page corresponding to the one you clicked on */
+    :target {
+      display: block;
+    }
+
+    /* This hides the default page when another page is clicked */
+    :target~.default {
+      display: none;
+    }
   </style>
 </head>
 
 <body>
   <div id="main-body" class="" style="display: none;">
     <header>
-      <a href="#" class="logo">
+      <a href="#home" class="logo" target="_self">
         Welican
       </a>
-      <a href="#" class="button">Home</a>
       <a class="button" href="https://github.com/Kineticus/Welican_Gemina" target="_blank">
         Documentation
       </a>
       <a class="button" href="https://github.com/Kineticus/Welican_Gemina" target="_blank">
         Setup
       </a>
-      <a class="button" href="https://github.com/Kineticus/Welican_Gemina" target="_blank">
+      <a href="#settings" class="button" href="https://github.com/Kineticus/Welican_Gemina" target="_self">
         Settings
       </a>
+      <!-- <a href="#page3">Page 3</a>
+      <a href="#page4">Page 4</a> -->
     </header>
 
-    <div class="container responsive-margin">
-      <div class="row">
-        <div class="card small">
-          <div class="section double-padded">
-            <strong>Current Brightness: </strong>
-            </br>
-            %BRIGHTNESS%
-          </div>
+    <div id="home" class="page">
+      <!-- <div id="home" class="page default"> -->
+      <div class="container responsive-margin">
+        <div class="row">
+          <div class="card small">
+            <div class="section double-padded">
+              <strong>Current Brightness: </strong>
+              </br>
+              %BRIGHTNESS%
+            </div>
 
-          <div class="container">
-            <div class="row">
-              <div class="col-sm">
-                <a href="/?brightness=255" class="button" role="button">Full</a>
-              </div>
-              <div class="col-sm">
-                <a href="/?brightness=140" class="button" role="button">Bright</a>
-              </div>
-              <div class="col-sm">
-                <a href="/?brightness=69" class="button" role="button">Dim</a>
-              </div>
-              <div class="col-sm">
-                <a href="/?brightness=0" class="button" role="button">OFF</a>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <a href="/?brightness=255" class="button" role="button">Full</a>
+                </div>
+                <div class="col-sm">
+                  <a href="/?brightness=140" class="button" role="button">Bright</a>
+                </div>
+                <div class="col-sm">
+                  <a href="/?brightness=69" class="button" role="button">Dim</a>
+                </div>
+                <div class="col-sm">
+                  <a href="/?brightness=0" class="button" role="button">OFF</a>
+                </div>
               </div>
             </div>
           </div>
+
+          <div class="card small">
+            <div class="section dark double-padded">
+              <strong>Favorites</strong>
+              </br>
+              %FUNCTION_NAME%
+            </div>
+
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <a href="/?favorite=0" class="button" role="button">0</a>
+                </div>
+                <div class="col-sm">
+                  <a href="/?favorite=1" class="button" role="button">1</a>
+                </div>
+                <div class="col-sm">
+                  <a href="/?favorite=2" class="button" role="button">3</a>
+                </div>
+                <div class="col-sm">
+                  <a href="/?favorite=4" class="button" role="button">4</a>
+                </div>
+                <div class="col-sm">
+                  <a href="/?favorite=5" class="button" role="button">5</a>
+                </div>
+                <div class="col-sm">
+                  <a href="/?favorite=6" class="button" role="button">6</a>
+                </div>
+                <div class="col-sm">
+                  <a href="/?favorite=7" class="button" role="button">7</a>
+                </div>
+                <div class="col-sm">
+                  <a href="/?favorite=8" class="button" role="button">8</a>
+                </div>
+                <div class="col-sm">
+                  <a href="/?favorite=9" class="button" role="button">9</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card small">
+            <div class="section double-padded">
+              <strong>Thing 2: </strong>
+              </br>
+              %THING_TWO%
+            </div>
+
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <a href="/on" class="button" role="button">ON</a>
+                </div>
+                <div class="col-sm">
+                  <a href="/off" class="button" role="button">OFF</a>
+                </div>
+                <div class="col-sm">
+                  <a href="/on" class="button" role="button">ON</a>
+                </div>
+                <div class="col-sm">
+                  <a href="/off" class="button" role="button">OFF</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        <div class="card small">
-          <div class="section dark double-padded">
-            <strong>Thing 1: </strong>
-            </br>
-            %THING_ONE%
-          </div>
-
-          <div class="container">
-            <div class="row">
-              <div class="col-sm">
-                <a href="/on" class="button" role="button">ON</a>
+        <div class="row">
+          <div class="card fluid">
+            <div class="section double-padded">
+              <strong>Status</strong>
+            </div>
+            <div class="container">
+              <div class="column">
+                <strong class="">CATEGORY:</strong> %CATEGORY_NAME%
               </div>
-              <div class="col-sm">
-                <a href="/off" class="button" role="button">OFF</a>
-              </div>
-              <div class="col-sm">
-                <a href="/on" class="button" role="button">ON</a>
-              </div>
-              <div class="col-sm">
-                <a href="/off" class="button" role="button">OFF</a>
+              <div class="column">
+                <strong class="">FUNCTION:</strong> %FUNCTION_NAME%
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="card small">
-          <div class="section double-padded">
-            <strong>Thing 2: </strong>
-            </br>
-            %THING_TWO%
-          </div>
-
-          <div class="container">
-            <div class="row">
-              <div class="col-sm">
-                <a href="/on" class="button" role="button">ON</a>
-              </div>
-              <div class="col-sm">
-                <a href="/off" class="button" role="button">OFF</a>
-              </div>
-              <div class="col-sm">
-                <a href="/on" class="button" role="button">ON</a>
-              </div>
-              <div class="col-sm">
-                <a href="/off" class="button" role="button">OFF</a>
-              </div>
+          <div class="card fluid">
+            <div class="section double-padded">
+              <strong>Other</strong>
             </div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="row">
-        <div class="card fluid">
-          <div class="section double-padded">
-            <strong>Status</strong>
-          </div>
-          <div class="container">
-            <div class="column">
-              <strong class="">CATEGORY:</strong> %CATEGORY_NAME%
-            </div>
-            <div class="column">
-              <strong class="">FUNCTION:</strong> %FUNCTION_NAME%
-            </div>
-          </div>
-        </div>
-
-        <div class="card fluid">
-          <div class="section double-padded">
-            <strong>Other</strong>
-          </div>
-          <div class="container">
-            <div class="column">
-              <strong class="">THING 1:</strong> %CATEGORY_NAME%
-            </div>
-            <div class="column">
-              <strong class="">THING 2:</strong> %FUNCTION_NAME%
+            <div class="container">
+              <div class="column">
+                <strong class="">THING 1:</strong> %CATEGORY_NAME%
+              </div>
+              <div class="column">
+                <strong class="">THING 2:</strong> %FUNCTION_NAME%
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <div id="settings" class="page">
+      <div class="container responsive-margin">
+        <div class="row">
+          <div class="card small">
+            <div class="section double-padded">
+              <strong>Website Refresh Time: </strong>
+            </div>
+
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <button id="setting-never" class="inverse">Never</button>
+                </div>
+                <div class="col-sm">
+                  <button id="setting-10" class="inverse">10 secs</button>
+                </div>
+                <div class="col-sm">
+                  <button id="setting-30" class="inverse">30 secs</button>
+                </div>
+                <div class="col-sm">
+                  <button id="setting-1" class="inverse">1 min</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div id="page3" class="page">[some content]</div>
+    <div id="page4" class="page">[some content]</div> -->
 
     <footer class="sticky">
       <p>

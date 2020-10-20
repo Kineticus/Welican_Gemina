@@ -751,7 +751,7 @@ struct EQModel
 {
   volatile int bandValues[15];
   int averageSamples;
-  int bandAverages[3][50];
+  int bandAverages[4][50];
   int tempBandValues[15];
   volatile int peak[15]; // The length of these arrays must be >= NUM_BANDS
 };
@@ -1062,7 +1062,7 @@ void loop()
 
   devEnv.fps++; //For tracking frame rate/ debug logging
 
-  for (int i = 0; i < 4; i++)
+  for (int i = 0; i < NUM_BANDS; i++)
   {
     int temp1 = 0;
 

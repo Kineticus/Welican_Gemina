@@ -89,6 +89,13 @@ void inputCompute(void *parameter)
     for (int i = 0; i < NUM_BANDS; i++)
     {
       eqBands.bandValues[i] = eqBands.tempBandValues[i];
+
+      for (int ii = 9; ii > 0; ii--)
+      {
+        eqBands.bandAverages[i][ii] = eqBands.bandAverages[i][ii-1];
+      }
+
+        eqBands.bandAverages[i][0] = eqBands.tempBandValues[i];
     }
 
     //Look for Peaks
@@ -857,20 +864,33 @@ void updateWeather(bool force)
 {
   if (force == true)
   {
-    if ((millis() - weatherSettings.weatherTimerDelay) < millis())
+    if ((millis() - weatherSettings.weatherTimerDelay) > weatherSettings.weatherUpdateInterval)
     {
+      Serial.println("FORCED NORMAL WEATHER CHECK");
       getWeather();
-      weatherSettings.weatherTimerDelay = weatherSettings.weatherUpdateInterval;
+      weatherSettings.weatherTimerDelay = millis();
     }
   }
   else
   {
     if (globals.runMode == 3)
     {
-      if ((millis() - weatherSettings.weatherTimerDelay) < millis())
+      //Normal run check
+      if  ((millis() - weatherSettings.weatherTimerDelay) > weatherSettings.weatherUpdateInterval)
       {
+        Serial.println("NORMAL WEATHER CHECK");
         getWeather();
-        weatherSettings.weatherTimerDelay = weatherSettings.weatherUpdateInterval;     
+        weatherSettings.weatherTimerDelay = millis();
+      }
+
+      //Initial run check
+      if ((weatherSettings.weatherUpdateInitial != 0) && ((millis() - weatherSettings.weatherUpdateInitial) > 0))
+      {
+        Serial.println("INITIAL WEATHER CHECK");
+        getWeather();
+
+        //Disable further checks
+        weatherSettings.weatherUpdateInitial = 0;
       }
     }
   }

@@ -750,11 +750,15 @@ VisualizerTriangle t1 = {
 struct EQModel
 {
   volatile int bandValues[15];
+  int averageSamples;
+  int bandAverages[3][50];
   int tempBandValues[15];
   volatile int peak[15]; // The length of these arrays must be >= NUM_BANDS
 };
 EQModel eqBands = {
     .bandValues = {},
+    .averageSamples = 5,
+    .bandAverages = {},
     .tempBandValues = {},
     .peak = {}};
 
@@ -1058,15 +1062,31 @@ void loop()
 
   devEnv.fps++; //For tracking frame rate/ debug logging
 
-  //Debug Serial Logging
+  for (int i = 0; i < 4; i++)
+  {
+    int temp1 = 0;
 
-  Serial.print(eqBands.bandValues[0]);
-  Serial.print(" ");
-  Serial.print(eqBands.bandValues[1]);
-  Serial.print(" ");
-  Serial.print(eqBands.bandValues[2]);
-  Serial.print(" ");
-  Serial.println(eqBands.bandValues[3]);
+    for (int ii = 0; ii < eqBands.averageSamples; ii++)
+    {
+      temp1 += eqBands.bandAverages[i][ii];
+    }
+    temp1 = temp1 / eqBands.averageSamples;
+
+    //Debug Serial Logging
+    Serial.print("Value[");
+    Serial.print(i);
+    Serial.print("]:");
+    Serial.print(eqBands.bandValues[i]);
+    Serial.print(", ");
+    Serial.print("Average[");
+    Serial.print(i);
+    Serial.print("]:");
+    Serial.print(temp1);
+    Serial.print(", ");
+  }
+
+  Serial.println("");
+
   // Serial.print(" ");
   // Serial.println(eqBands.bandValues[4]);
   //Serial.print(" ");

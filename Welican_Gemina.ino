@@ -751,13 +751,13 @@ struct EQModel
 {
   volatile int bandValues[15];
   int averageSamples;
-  int bandAverages[4][50];
+  int bandAverages[NUM_BANDS][150];
   int tempBandValues[15];
   volatile int peak[15]; // The length of these arrays must be >= NUM_BANDS
 };
 EQModel eqBands = {
     .bandValues = {},
-    .averageSamples = 5,
+    .averageSamples = 100,
     .bandAverages = {},
     .tempBandValues = {},
     .peak = {}};

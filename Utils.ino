@@ -90,7 +90,7 @@ void inputCompute(void *parameter)
     {
       eqBands.bandValues[i] = eqBands.tempBandValues[i];
 
-      for (int ii = 9; ii > 0; ii--)
+      for (int ii = eqBands.averageSamples; ii > 0; ii--)
       {
         eqBands.bandAverages[i][ii] = eqBands.bandAverages[i][ii-1];
       }

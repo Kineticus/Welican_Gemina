@@ -7,8 +7,8 @@ slider.oninput = function () {
   output.innerHTML = this.value;
 }
 slider.onchange = debounce(function () {
-  console.log(this.value);
   window.history.pushState({}, document.title, `/?brightness=${this.value}`);
+  httpGet(`/?brightness=${this.value}`);
 }, 250);
 
 function debounce(func, wait, immediate) {
@@ -25,3 +25,11 @@ function debounce(func, wait, immediate) {
     if (callNow) func.apply(context, args);
   };
 };
+
+function httpGet(theUrl) {
+  var xmlHttp = new XMLHttpRequest();
+  console.log("GET", theUrl);
+  xmlHttp.open("GET", theUrl, false); // false for synchronous request
+  xmlHttp.send(null);
+  return xmlHttp.responseText;
+}

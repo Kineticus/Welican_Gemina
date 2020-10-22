@@ -28,7 +28,8 @@ void createRoutes(AsyncWebServer *server)
       if (p->name() == "favorite")
       {
         int patternMode = p->value().toInt();
-        favorites_category(patternMode);
+        patternSettings.pattern[globals.mode] = patternMode;
+        globals.mode = 5;
       }
     }
     request->send(SPIFFS, "/index.html", String(), false, websiteProcessor);

@@ -1,5 +1,6 @@
-import './styles/main.scss'
-import { human } from "../js/human";
+import './styles/main.scss';
+import '../js/slider';
+import { human } from '../js/human';
 
 var refreshTime = localStorage.getItem('refreshTime');
 
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (refreshTime != undefined) {
     // Automatic reload page
     var currentPage = localStorage.getItem('currentPage');
-    setTimeout(`location.href = '/${currentPage}'`, refreshTime);
+    // setTimeout(`location.href = '/${currentPage}'`, refreshTime);
   }
 });
 

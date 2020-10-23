@@ -15,14 +15,14 @@ window.addEventListener('popstate', function (event) {
   localStorage.setItem('currentPage', currentPage);
 });
 
-document.addEventListener('DOMContentLoaded', () => {
+// document.addEventListener('DOMContentLoaded', () => {
 
-  if (refreshTime != undefined) {
-    // Automatic reload page
-    var currentPage = localStorage.getItem('currentPage');
-    // setTimeout(`location.href = '/${currentPage}'`, refreshTime);
-  }
-});
+//   if (refreshTime != undefined) {
+//     // Automatic reload page
+//     var currentPage = localStorage.getItem('currentPage');
+//     // setTimeout(`location.href = '/${currentPage}'`, refreshTime);
+//   }
+// });
 
 function setRefreshTime(newTime) {
   refreshTime = newTime;

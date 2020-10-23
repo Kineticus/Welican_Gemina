@@ -88,7 +88,7 @@
         Welican
       </a>
       <a class="button" href="https://github.com/Kineticus/Welican_Gemina" target="_blank">
-        Documentation
+        Docs
       </a>
       <a class="button" href="https://github.com/Kineticus/Welican_Gemina" target="_blank">
         Setup
@@ -103,130 +103,88 @@
     <div id="home" class="page default">
       <!-- <div id="home" class="page default"> -->
       <div class="container responsive-margin">
-        <div class="row">
-          <div class="card small">
-            <div class="section double-padded">
-              <strong>Current Brightness: </strong>
-              </br>
-              %BRIGHTNESS%
-            </div>
-
-            <div class="container">
-              <div class="row">
-                <div id="brightness-value"></div>
-                <div class="slidecontainer">
-                  <input id="brightness-range" type="range" min="0" max="255" value="127" class="slider">
-                </div>
+        <div class="row cols-sm-12 cols-lg-10">
+          <div class="col-lg-offset-1 row">
+            <div class="card">
+              <div class="section double-padded">
+                <strong>Status</strong>
               </div>
-              <div class="row">
-                <div class="col-sm">
-                  <a href="/?brightness=255" class="button" role="button">Full</a>
+              <div class="container">
+                <div class="column">
+                  <strong class="">CATEGORY:</strong> %CATEGORY_NAME%
                 </div>
-                <div class="col-sm">
-                  <a href="/?brightness=140" class="button" role="button">Bright</a>
-                </div>
-                <div class="col-sm">
-                  <a href="/?brightness=69" class="button" role="button">Dim</a>
-                </div>
-                <div class="col-sm">
-                  <a href="/?brightness=0" class="button" role="button">OFF</a>
+                <div class="column">
+                  <strong class="">FUNCTION:</strong> %FUNCTION_NAME%
                 </div>
               </div>
             </div>
           </div>
-
-          <div class="card small">
-            <div class="section dark double-padded">
-              <strong>Favorites</strong>
-              </br>
-              %FUNCTION_NAME%
-            </div>
-
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  <a href="/?favorite=0" class="button" role="button">0</a>
-                </div>
-                <div class="col-sm">
-                  <a href="/?favorite=1" class="button" role="button">1</a>
-                </div>
-                <div class="col-sm">
-                  <a href="/?favorite=2" class="button" role="button">3</a>
-                </div>
-                <div class="col-sm">
-                  <a href="/?favorite=4" class="button" role="button">4</a>
-                </div>
-                <div class="col-sm">
-                  <a href="/?favorite=5" class="button" role="button">5</a>
-                </div>
-                <div class="col-sm">
-                  <a href="/?favorite=6" class="button" role="button">6</a>
-                </div>
-                <div class="col-sm">
-                  <a href="/?favorite=7" class="button" role="button">7</a>
-                </div>
-                <div class="col-sm">
-                  <a href="/?favorite=8" class="button" role="button">8</a>
-                </div>
-                <div class="col-sm">
-                  <a href="/?favorite=9" class="button" role="button">9</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card small">
-            <div class="section double-padded">
-              <strong>Thing 2: </strong>
-              </br>
-              %THING_TWO%
-            </div>
-
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  <a href="/on" class="button" role="button">ON</a>
-                </div>
-                <div class="col-sm">
-                  <a href="/off" class="button" role="button">OFF</a>
-                </div>
-                <div class="col-sm">
-                  <a href="/on" class="button" role="button">ON</a>
-                </div>
-                <div class="col-sm">
-                  <a href="/off" class="button" role="button">OFF</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
         </div>
 
-        <div class="row">
-          <div class="card fluid">
-            <div class="section double-padded">
-              <strong>Status</strong>
-            </div>
-            <div class="container">
-              <div class="column">
-                <strong class="">CATEGORY:</strong> %CATEGORY_NAME%
+        <div class="row cols-sm-12 cols-lg-10">
+          <div class="col-lg-offset-1 row">
+            <div class="card">
+              <div class="section double-padded">
+                <strong>Current Brightness: </strong>
+                </br>
+                %BRIGHTNESS%
               </div>
-              <div class="column">
-                <strong class="">FUNCTION:</strong> %FUNCTION_NAME%
-              </div>
-            </div>
-          </div>
 
-          <div class="card fluid">
-            <div class="section double-padded">
-              <strong>Other</strong>
-            </div>
-            <div class="container">
-              <div class="column">
-                <strong class="">THING 1:</strong> %CATEGORY_NAME%
+              <div class="container responsive-margin">
+                <div class="row">
+                  <div id="brightness-value"></div>
+                  <div class="slidecontainer">
+                    <input id="brightness-range" type="range" min="0" max="255" value="127" class="slider">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm">
+                    <a href="/?brightness=255" class="col-sm-4 button large" role="button">Full</a>
+                    <a href="/?brightness=140" class="col-sm-4 button large" role="button">Bright</a>
+                    <a href="/?brightness=69" class="col-sm-4 button large" role="button">Dim</a>
+                    <a href="/?brightness=0" class="col-sm-4 button large secondary" role="button">OFF</a>
+                  </div>
+                </div>
               </div>
-              <div class="column">
-                <strong class="">THING 2:</strong> %FUNCTION_NAME%
+            </div>
+
+            <div class="card">
+              <div class="section dark double-padded">
+                <strong>Favorites</strong>
+                </br>
+                %FUNCTION_NAME%
+              </div>
+
+              <div class="container responsive-margin">
+                <div class="row">
+                  <div class="col-sm">
+                    <a href="/?favorite=0" class="button large" role="button">0</a>
+                  </div>
+                  <div class="col-sm">
+                    <a href="/?favorite=1" class="button " role="button">1</a>
+                  </div>
+                  <div class="col-sm">
+                    <a href="/?favorite=2" class="button large" role="button">3</a>
+                  </div>
+                  <div class="col-sm">
+                    <a href="/?favorite=4" class="button large" role="button">4</a>
+                  </div>
+                  <div class="col-sm">
+                    <a href="/?favorite=5" class="button large" role="button">5</a>
+                  </div>
+                  <div class="col-sm">
+                    <a href="/?favorite=6" class="button large" role="button">6</a>
+                  </div>
+                  <div class="col-sm">
+                    <a href="/?favorite=7" class="button large" role="button">7</a>
+                  </div>
+                  <div class="col-sm">
+                    <a href="/?favorite=8" class="button large" role="button">8</a>
+                  </div>
+                  <div class="col-sm">
+                    <a href="/?favorite=9" class="button large" role="button">9</a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

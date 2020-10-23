@@ -8,6 +8,7 @@ slider.oninput = function () {
 }
 slider.onchange = debounce(function () {
   window.history.pushState({}, document.title, `/?brightness=${this.value}`);
+  localStorage.setItem('brightnessValue', this.value);
   httpGet(`/?brightness=${this.value}`);
 }, 250);
 

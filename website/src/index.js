@@ -15,14 +15,22 @@ window.addEventListener('popstate', function (event) {
   localStorage.setItem('currentPage', currentPage);
 });
 
-// document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
 
-//   if (refreshTime != undefined) {
-//     // Automatic reload page
-//     var currentPage = localStorage.getItem('currentPage');
-//     // setTimeout(`location.href = '/${currentPage}'`, refreshTime);
-//   }
-// });
+  var brightnessValue = localStorage.getItem('brightnessValue');
+  if (brightnessValue) {
+    var slider = document.getElementById("brightness-range");
+    var output = document.getElementById("brightness-value");
+    output.innerHTML = brightnessValue; // Display the default slider value
+    slider.value = brightnessValue; // Display the default slider value
+  }
+
+  // if (refreshTime != undefined) {
+  //   // Automatic reload page
+  //   var currentPage = localStorage.getItem('currentPage');
+  //   // setTimeout(`location.href = '/${currentPage}'`, refreshTime);
+  // }
+});
 
 function setRefreshTime(newTime) {
   refreshTime = newTime;

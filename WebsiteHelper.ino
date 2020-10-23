@@ -24,6 +24,7 @@ void createRoutes(AsyncWebServer *server)
       if (p->name() == "brightness")
       {
         brightness.current = p->value().toInt();
+        brightness.debounce = millis() + 1420;
       }
       if (p->name() == "favorite")
       {

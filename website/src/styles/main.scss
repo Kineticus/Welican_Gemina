@@ -22,6 +22,15 @@ header {
     justify-content: center;
   }
 }
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+  /* Styles */
+  footer {
+    display: none;
+  }
+}
+
 h1 {
   color: #0f3376;
   padding: 2vh;

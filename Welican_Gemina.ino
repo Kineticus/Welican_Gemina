@@ -118,7 +118,7 @@ TaskHandle_t inputComputeTask = NULL;
 U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
 //Works with 1.3", Causes small glitch on 2.4" 
-//U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
+//U8G2_SH110F6_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
 
 /*
@@ -843,9 +843,16 @@ void setup()
   WiFi.enableSTA(true);
 
   //WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  //WiFi.begin(globals.ssid, globals.password);
-  WiFi.begin(); //Will connect to last connected to AP, even after power loss
-  //WiFi.status();
+  
+  if (digitalRead(KNOB_1C) == 1)
+  {
+    WiFi.begin(); //Will connect to last connected to AP, even after power loss
+  }
+  else
+  {
+    globals.networkTries = 100;
+  }
+   //WiFi.status();
   //WiFi.localIP();
 
   startWebsite(&server);

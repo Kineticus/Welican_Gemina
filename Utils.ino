@@ -866,7 +866,7 @@ void getWeather()
 }
 void updateWeather(bool force)
 {
-  if (force == true)
+  if ((force == true) && (millis() > 10000))
   {
     if ((millis() - weatherSettings.weatherTimerDelay) > weatherSettings.weatherUpdateInterval)
     {

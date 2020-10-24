@@ -375,51 +375,55 @@ void updateEncoders()
 
   if ((globals.runMode == 0) || (globals.runMode == 3))
   {
-    if (globals.tempValue != 0)
+    //Only adjust brightness while knob is not held down
+    if(knob2.heldTime == 0)
     {
-      brightness.debounce = millis() + 1420;
-      globalTime.save = 80;
-    }
+      if (globals.tempValue != 0)
+      {
+        brightness.debounce = millis() + 1420;
+        globalTime.save = 80;
+      }
 
-    //Determine "acceleration" based on change amount. Large change = fast turn of knob
-    //There are 96 pulses per revolution
+      //Determine "acceleration" based on change amount. Large change = fast turn of knob
+      //There are 96 pulses per revolution
 
-    if (abs(globals.tempValue) > 10) // 100% acceleration
-    {
-      globals.tempValue = globals.tempValue * 7;
-    }
-    else if (abs(globals.tempValue) > 7) // 75%
-    {
-      globals.tempValue = globals.tempValue * 5;
-    }
-    else if (abs(globals.tempValue) > 4) // 50%
-    {
-      globals.tempValue = globals.tempValue * 3;
-    }
-    else if (abs(globals.tempValue) > 2) // 25%  acceleration
-    {
-      globals.tempValue = globals.tempValue * 2;
-    }
-    else //No acceleration applied
-    {
-      globals.tempValue = globals.tempValue;
-    }
+      if (abs(globals.tempValue) > 10) // 100% acceleration
+      {
+        globals.tempValue = globals.tempValue * 7;
+      }
+      else if (abs(globals.tempValue) > 7) // 75%
+      {
+        globals.tempValue = globals.tempValue * 5;
+      }
+      else if (abs(globals.tempValue) > 4) // 50%
+      {
+        globals.tempValue = globals.tempValue * 3;
+      }
+      else if (abs(globals.tempValue) > 2) // 25%  acceleration
+      {
+        globals.tempValue = globals.tempValue * 2;
+      }
+      else //No acceleration applied
+      {
+        globals.tempValue = globals.tempValue;
+      }
 
-    //Add adjusted value to brightness
-    brightness.current += globals.tempValue;
+      //Add adjusted value to brightness
+      brightness.current += globals.tempValue;
 
-    //Constrain (for some reason constrain function gave me fits)
-    if (brightness.current > 255)
-    {
-      brightness.current = 255;
-    }
-    if (brightness.current < 0)
-    {
-      brightness.current = 0;
-    }
+      //Constrain (for some reason constrain function gave me fits)
+      if (brightness.current > 255)
+      {
+        brightness.current = 255;
+      }
+      if (brightness.current < 0)
+      {
+        brightness.current = 0;
+      }
 
-    // set master brightness control
-    FastLED.setBrightness(brightness.current);
+      // set master brightness control
+      FastLED.setBrightness(brightness.current);
+    }
   }
   else if (globals.runMode == 2)
   {

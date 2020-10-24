@@ -115,10 +115,10 @@ TaskHandle_t inputComputeTask = NULL;
 //U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
 
 //2.42" OLED, causes small glitch on 1.3"
-//U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
+U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
 //Works with 1.3", Causes small glitch on 2.4" 
-U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
+//U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
 
 /*
@@ -313,7 +313,9 @@ SimplexNoiseModel simplexNoise = {
 struct PatternSettings
 {
   int pattern[6];
+  int patternAdjust[6];
   int favoritePattern[50]; //all are used under the hood
+  int favoritePatternAdjust[50];
   int favoriteMode[50];    //declare memory for all 50 favorites
   int numberOfFavorites;   //Max 50, loads all 50 at program load, dynamically assignable
   int tempPattern;
@@ -361,7 +363,9 @@ struct PatternSettings
 };
 PatternSettings patternSettings = {
     .pattern = {},
+    .patternAdjust = {},
     .favoritePattern = {},
+    .favoritePatternAdjust = {},
     .favoriteMode = {},
     .numberOfFavorites = 25,
     .tempPattern = 0,

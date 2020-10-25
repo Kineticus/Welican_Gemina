@@ -219,14 +219,15 @@ void updateEncoders()
   {
     knob2.debounce = 3;
     knob2.click = 1;
-    //Reset touch timer
     globalTime.touchTime = millis();
 
+    /*
     if (globals.runMode == 3)
     {
       globals.runMode = -1;
       knob2.click = 0;
     }
+    */
   }
   else if ((globals.tempValue == false) && (knob2.debounce > 0))
   {
@@ -241,6 +242,7 @@ void updateEncoders()
     knob2.heldTime = 0;
   }
 
+  /*
   if ((knob2.heldTime > 69) && (globals.mode != 5)) //Can't set a favorite of a favorite
   {
     //Save Favorite Menu
@@ -249,6 +251,7 @@ void updateEncoders()
     globalMenu.currentMenu = 10; //Select the 10th menu, New Favorite
     //globalMenu.menu[10] = 0;
   }
+  */
 
   //--PATTERN ENCODER--
 
@@ -375,55 +378,85 @@ void updateEncoders()
 
   if ((globals.runMode == 0) || (globals.runMode == 3))
   {
+    //Determine "acceleration" based on change amount. Large change = fast turn of knob
+    //There are 96 pulses per revolution
+
+    if (abs(globals.tempValue) > 10) // 100% acceleration
+    {
+      globals.tempValue = globals.tempValue * 7;
+    }
+    else if (abs(globals.tempValue) > 7) // 75%
+    {
+      globals.tempValue = globals.tempValue * 5;
+    }
+    else if (abs(globals.tempValue) > 4) // 50%
+    {
+      globals.tempValue = globals.tempValue * 3;
+    }
+    else if (abs(globals.tempValue) > 2) // 25%  acceleration
+    {
+      globals.tempValue = globals.tempValue * 2;
+    }
+    else //No acceleration applied
+    {
+      globals.tempValue = globals.tempValue;
+    }
+
     //Only adjust brightness while knob is not held down
     if(knob2.heldTime == 0)
     {
-      if (globals.tempValue != 0)
+      //Add adjusted value to brightness in a new integer
+      int tempInt = brightness.current + globals.tempValue;
+
+      //Constrain the integer to byte values
+      if (tempInt > 255)
       {
-        brightness.debounce = millis() + 1420;
-        globalTime.save = 80;
+        tempInt = 255;
+      }
+      if (tempInt < 0)
+      {
+        tempInt= 0;
       }
 
-      //Determine "acceleration" based on change amount. Large change = fast turn of knob
-      //There are 96 pulses per revolution
-
-      if (abs(globals.tempValue) > 10) // 100% acceleration
-      {
-        globals.tempValue = globals.tempValue * 7;
-      }
-      else if (abs(globals.tempValue) > 7) // 75%
-      {
-        globals.tempValue = globals.tempValue * 5;
-      }
-      else if (abs(globals.tempValue) > 4) // 50%
-      {
-        globals.tempValue = globals.tempValue * 3;
-      }
-      else if (abs(globals.tempValue) > 2) // 25%  acceleration
-      {
-        globals.tempValue = globals.tempValue * 2;
-      }
-      else //No acceleration applied
-      {
-        globals.tempValue = globals.tempValue;
-      }
-
-      //Add adjusted value to brightness
-      brightness.current += globals.tempValue;
-
-      //Constrain (for some reason constrain function gave me fits)
-      if (brightness.current > 255)
-      {
-        brightness.current = 255;
-      }
-      if (brightness.current < 0)
-      {
-        brightness.current = 0;
-      }
+      //set the current brightness to the constrained byte value
+      brightness.current = tempInt;
 
       // set master brightness control
       FastLED.setBrightness(brightness.current);
+
+      if (globals.tempValue != 0)
+      {
+        brightness.debounce = millis() + 1420;
+        globalTime.save = 50;
+        globalTime.touchTime = millis();
+      }
     }
+    else
+    {
+      //Add adjusted value to pattern adjust in a new integer
+      int tempInt = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]] + globals.tempValue;
+
+      //Constrain the integer to byte values
+      if (tempInt > 255)
+      {
+        tempInt = 255;
+      }
+      if (tempInt < 0)
+      {
+        tempInt= 0;
+      }
+
+      //set the current pattern adjust setting to the constrained byte value
+      patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]] = tempInt;
+      
+      if (globals.tempValue != 0)
+      {
+        brightness.debounce2 = millis() + 1420;
+        globalTime.save = 20;
+        globalTime.touchTime = millis();
+      }
+    }
+    
   }
   else if (globals.runMode == 2)
   {
@@ -695,7 +728,7 @@ void readFavorites()
 void resetFavorites()
 {
   //TESTING - Reset ALL MEMORY WITH THIS FUNCTION
-  for (int i = 0; i < 511; i++)
+  for (int i = 0; i < 1023; i++)
   {
     EEPROM.write(i, 0);
   }
@@ -916,6 +949,10 @@ void saveTimeCheck()
     {
       EEPROM.write(2 + i, patternSettings.pattern[i]);
     }
+
+    //Write the patternAdjust for the currently selected pattern
+    EEPROM.write((300 + (globals.mode * 100) + patternSettings.pattern[globals.mode]), patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
+
     EEPROM.commit(); //EEPROM commit should not be called while showStrip is running
   }
 
@@ -990,7 +1027,22 @@ void readPatternSettings()
     {
       patternSettings.pattern[i] = 0;
     }
+
+    for (int ii = 0; ii <= globalMenu.patternMax[i]; ii++)
+    {
+      patternSettings.patternAdjust[i][ii] = EEPROM.read(300 + (i * 100) + ii);
+      Serial.print(300 + (i * 100) + ii);
+      Serial.print(" - ");
+      Serial.println(patternSettings.patternAdjust[i][ii]);
+    }
   }
+
+
+  //Read the adjust value for each pattern
+  //
+  //globalMenu.patternMax[i]
+
+  //globals.modeMax
 }
 
 void seedThings()

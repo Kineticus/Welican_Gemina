@@ -313,7 +313,7 @@ SimplexNoiseModel simplexNoise = {
 struct PatternSettings
 {
   int pattern[6];
-  int patternAdjust[6];
+  byte patternAdjust[6][100];
   int favoritePattern[50]; //all are used under the hood
   int favoritePatternAdjust[50];
   int favoriteMode[50];    //declare memory for all 50 favorites
@@ -488,6 +488,7 @@ struct Brightness
   int current;
   int temp;
   unsigned long debounce;
+  unsigned long debounce2;
   bool useFade;
   int fadeAmount;         // Set the amount to fade -- ex. 5, 10, 15, 20, 25 etc even up to 255.
   uint8_t baseBrightness; // Brightness of LEDs when not pulsing. Set to 0 for off.
@@ -496,6 +497,7 @@ Brightness brightness = {
     .current = 0,
     .temp = 0,
     .debounce = 0,
+    .debounce2 = 0,
     .useFade = false,
     .fadeAmount = 5,
     .baseBrightness = 10};
@@ -870,7 +872,7 @@ void setup()
     EEPROM may have been used or not at default
 
   --------------------*/
-  EEPROM.begin(511);
+  EEPROM.begin(1024);
 
   //EEPROM.write(20, 0);
   //EEPROM.write(21, 0);
@@ -1083,6 +1085,7 @@ void loop()
 
   devEnv.fps++; //For tracking frame rate/ debug logging
 
+  /*
   for (int i = 0; i < NUM_BANDS; i++)
   {
     int temp1 = 0;
@@ -1105,9 +1108,10 @@ void loop()
     Serial.print(temp1);
     Serial.print(", ");
   }
-
   Serial.println("");
+  /*
 
+  
   // Serial.print(" ");
   // Serial.println(eqBands.bandValues[4]);
   //Serial.print(" ");

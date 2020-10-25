@@ -520,8 +520,9 @@ void showBrightnessDisplay()
   int frameW = 38;
   int frameH = 39;
 
-  if (brightness.debounce > millis())
+  if ((brightness.debounce > millis()) && (brightness.debounce > brightness.debounce2))
   {
+    u8g2.setFont(u8g2_font_profont12_mf);
     u8g2.setDrawColor(0);
     u8g2.drawBox(frameX, frameY - 1, frameW, frameH);
     u8g2.setDrawColor(1);
@@ -559,5 +560,17 @@ void showBrightnessDisplay()
     {
       u8g2.drawXBMP(frameX, frameY, brightness2_width, brightness2_height, brightness2);
     }
+  }
+
+
+  if ((brightness.debounce2 > millis()) && (brightness.debounce2 > brightness.debounce))
+  {
+    u8g2.setDrawColor(0);
+    u8g2.drawBox(frameX, frameY - 1, frameW, frameH);
+    u8g2.setDrawColor(1);
+    u8g2.drawRFrame(frameX, frameY - 1, frameW, frameH, 7);
+
+    u8g2.setCursor(55, 45);
+    u8g2.print(patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
   }
 }

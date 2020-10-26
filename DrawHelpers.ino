@@ -569,20 +569,33 @@ void showBrightnessDisplay()
     u8g2.setDrawColor(0);
     u8g2.drawBox(frameX, frameY - 1, frameW, frameH);
     u8g2.setDrawColor(1);
-    u8g2.drawRFrame(frameX, frameY - 1, frameW, frameH, 7);
 
     u8g2.setCursor(55, 45);
-    u8g2.print(patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
+    //u8g2.print(patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
     
+    //Constrain a 0-255 value to 1/2 of a circle
+    tA.point1 = 5.8 - float(patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]) * .021;
 
-    tA.point1 = 4.71 - float(patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]) * .0123;
-
-
+    //Calculate point on circle
     tA.x1 = tA.x + (tA.radius * sin(tA.point1)) + .5;
     tA.y1 = tA.y + (tA.radius * cos(tA.point1)) + .5;
 
+    //Draw a circle
+    u8g2.drawCircle(tA.x, tA.y, tA.radius, U8G2_DRAW_ALL);
 
+    //Notch it out
+    u8g2.setDrawColor(0);
+    u8g2.drawBox(tA.x - 17, tA.y + 12, 35, 5);
+    u8g2.setDrawColor(1);
+
+    //Draw a line
+    u8g2.drawLine(tA.x1, tA.y1, tA.x, tA.y);
+
+    //Frame it up
+    u8g2.drawRFrame(frameX, frameY - 1, frameW, frameH, 7);
+
+    /* Show a dot
     u8g2.drawDisc(tA.x1, tA.y1, 5, U8G2_DRAW_ALL);
-
+    */
   }
 }

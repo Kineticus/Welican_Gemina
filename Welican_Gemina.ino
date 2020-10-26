@@ -766,8 +766,8 @@ VisualizerTriangle t1 = {
 };
 
 VisualizerTriangle tA = {
-  .x = 64,
-  .y = 42,
+  .x = 62,
+  .y = 40,
   .radius = 13,
   .point1 = 0.0,
   .point2 = 2.1,

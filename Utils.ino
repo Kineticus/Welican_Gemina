@@ -215,34 +215,31 @@ void updateEncoders()
 
   //Read knob 2 digital pin, button pulls pin low
   globals.tempValue = digitalRead(KNOB_2C);
+
+  //If the button is pressed and no debounce
   if ((globals.tempValue == false) && (knob2.debounce == 0))
   {
     knob2.debounce = 3;
     knob2.click = 1;
     globalTime.touchTime = millis();
-
-    /*
-    if (globals.runMode == 3)
-    {
-      globals.runMode = -1;
-      knob2.click = 0;
-    }
-    */
   }
+  //If the button is pressed and debounce
   else if ((globals.tempValue == false) && (knob2.debounce > 0))
   {
     knob2.heldTime += 1;
   }
+  //If no button press and debounce
   if ((globals.tempValue == true) && (knob2.debounce > 0))
   {
     knob2.debounce -= 1;
   }
+  //If no button press and no debounce
   else if ((globals.tempValue == true) && (knob2.debounce == 0))
   {
     knob2.heldTime = 0;
   }
 
-  /*
+  /* This is the code to enable long hold of brightness to call the favorite menu
   if ((knob2.heldTime > 69) && (globals.mode != 5)) //Can't set a favorite of a favorite
   {
     //Save Favorite Menu
@@ -376,99 +373,101 @@ void updateEncoders()
   globals.tempValue = globals.encoder2.getCount() - knob2.temp; //Read current knob position vs. last time we checked
   knob2.temp = globals.encoder2.getCount();                     //Store this position to compare next time around
 
-  if ((globals.runMode == 0) || (globals.runMode == 3))
+  if (globals.tempValue != 0)
   {
-    //Determine "acceleration" based on change amount. Large change = fast turn of knob
-    //There are 96 pulses per revolution
+    if ((globals.runMode == 0) || (globals.runMode == 3))
+    {
+      //Determine "acceleration" based on change amount. Large change = fast turn of knob
+      //There are 96 pulses per revolution
 
-    if (abs(globals.tempValue) > 10) // 100% acceleration
-    {
-      globals.tempValue = globals.tempValue * 7;
-    }
-    else if (abs(globals.tempValue) > 7) // 75%
-    {
-      globals.tempValue = globals.tempValue * 5;
-    }
-    else if (abs(globals.tempValue) > 4) // 50%
-    {
-      globals.tempValue = globals.tempValue * 3;
-    }
-    else if (abs(globals.tempValue) > 2) // 25%  acceleration
-    {
-      globals.tempValue = globals.tempValue * 2;
-    }
-    else //No acceleration applied
-    {
-      globals.tempValue = globals.tempValue;
-    }
-
-    //Only adjust brightness while knob is not held down
-    if(knob2.heldTime == 0)
-    {
-      //Add adjusted value to brightness in a new integer
-      int tempInt = brightness.current + globals.tempValue;
-
-      //Constrain the integer to byte values
-      if (tempInt > 255)
+      if (abs(globals.tempValue) > 10) // 100% acceleration
       {
-        tempInt = 255;
+        globals.tempValue = globals.tempValue * 7;
       }
-      if (tempInt < 0)
+      else if (abs(globals.tempValue) > 7) // 75%
       {
-        tempInt= 0;
+        globals.tempValue = globals.tempValue * 5;
+      }
+      else if (abs(globals.tempValue) > 4) // 50%
+      {
+        globals.tempValue = globals.tempValue * 3;
+      }
+      else if (abs(globals.tempValue) > 2) // 25%  acceleration
+      {
+        globals.tempValue = globals.tempValue * 2;
+      }
+      else //No acceleration applied
+      {
+        globals.tempValue = globals.tempValue;
       }
 
-      //set the current brightness to the constrained byte value
-      brightness.current = tempInt;
-
-      // set master brightness control
-      FastLED.setBrightness(brightness.current);
-
-      if (globals.tempValue != 0)
+      //Only adjust brightness while knob is not held down
+      if(knob2.heldTime == 0)
       {
+        //Add adjusted value to brightness in a new integer
+        int tempInt = brightness.current + globals.tempValue;
+
+        //Constrain the integer to byte values
+        if (tempInt > 255)
+        {
+          tempInt = 255;
+        }
+        if (tempInt < 0)
+        {
+          tempInt= 0;
+        }
+
+        //set the current brightness to the constrained byte value
+        brightness.current = tempInt;
+
+        // set master brightness control
+        FastLED.setBrightness(brightness.current);
+
         brightness.debounce = millis() + 1420;
         globalTime.save = 50;
         globalTime.touchTime = millis();
       }
-    }
-    else
-    {
-      //Add adjusted value to pattern adjust in a new integer
-      int tempInt = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]] + globals.tempValue;
+      else
+      {
+        if (globals.tempValue > 1)
+        {
+          globals.tempValue = globals.tempValue * 2;
+        }
 
-      //Constrain the integer to byte values
-      if (tempInt > 255)
-      {
-        tempInt = 255;
-      }
-      if (tempInt < 0)
-      {
-        tempInt= 0;
-      }
+        //Add adjusted value to pattern adjust in a new integer
+        int tempInt = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]] + globals.tempValue;
 
-      //set the current pattern adjust setting to the constrained byte value
-      patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]] = tempInt;
-      
-      if (globals.tempValue != 0)
-      {
+        //Constrain the integer to byte values
+        if (tempInt > 255)
+        {
+          tempInt = 255;
+        }
+        if (tempInt < 0)
+        {
+          tempInt= 0;
+        }
+
+        //set the current pattern adjust setting to the constrained byte value
+        patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]] = tempInt;
+        
+        //show the pattern screen for a bit
         brightness.debounce2 = millis() + 1420;
         globalTime.save = 20;
         globalTime.touchTime = millis();
       }
     }
-    
-  }
-  else if (globals.runMode == 2)
-  {
-    while (globals.tempValue > 0)
-    { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
-      globals.tempValue -= 1;
-      player.Y += 1;
-    }
-    while (globals.tempValue < 0)
+    else if (globals.runMode == 2)
     {
-      globals.tempValue += 1;
-      player.Y -= 1;
+      while (globals.tempValue > 0)
+      { //Quadrature encoder sends 4 pulses for each physical detent. Anything less than that we ignore
+        globals.tempValue -= 1;
+        player.Y += 1;
+      }
+      while (globals.tempValue < 0)
+      {
+        globals.tempValue += 1;
+        player.Y -= 1;
+      }
     }
   }
 }

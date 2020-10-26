@@ -520,6 +520,7 @@ void showBrightnessDisplay()
   int frameW = 38;
   int frameH = 39;
 
+  //Draw Brightness Adjustment
   if ((brightness.debounce > millis()) && (brightness.debounce > brightness.debounce2))
   {
     u8g2.setFont(u8g2_font_profont12_mf);
@@ -562,7 +563,7 @@ void showBrightnessDisplay()
     }
   }
 
-
+  //Draw Pattern Adjustment 
   if ((brightness.debounce2 > millis()) && (brightness.debounce2 > brightness.debounce))
   {
     u8g2.setDrawColor(0);
@@ -572,5 +573,16 @@ void showBrightnessDisplay()
 
     u8g2.setCursor(55, 45);
     u8g2.print(patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
+    
+
+    tA.point1 = 4.71 - float(patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]) * .0123;
+
+
+    tA.x1 = tA.x + (tA.radius * sin(tA.point1)) + .5;
+    tA.y1 = tA.y + (tA.radius * cos(tA.point1)) + .5;
+
+
+    u8g2.drawDisc(tA.x1, tA.y1, 5, U8G2_DRAW_ALL);
+
   }
 }

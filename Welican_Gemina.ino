@@ -749,20 +749,36 @@ struct VisualizerTriangle
   int y2;
   int y3;
 };
-VisualizerTriangle t1 = {
-    .x = 64,
-    .y = 42,
-    .radius = 18,
-    .point1 = 0.0,
-    .point2 = 2.1,
-    .point3 = 4.2,
-    .x1 = 0,
-    .x2 = 0,
-    .x3 = 0,
-    .y1 = 0,
-    .y2 = 0,
-    .y3 = 0};
 
+VisualizerTriangle t1 = {
+  .x = 64,
+  .y = 42,
+  .radius = 18,
+  .point1 = 0.0,
+  .point2 = 2.1,
+  .point3 = 4.2,
+  .x1 = 0,
+  .x2 = 0,
+  .x3 = 0,
+  .y1 = 0,
+  .y2 = 0,
+  .y3 = 0
+};
+
+VisualizerTriangle tA = {
+  .x = 64,
+  .y = 42,
+  .radius = 13,
+  .point1 = 0.0,
+  .point2 = 2.1,
+  .point3 = 4.2,
+  .x1 = 0,
+  .x2 = 0,
+  .x3 = 0,
+  .y1 = 0,
+  .y2 = 0,
+  .y3 = 0
+};
 struct EQModel
 {
   volatile int bandValues[15];
@@ -1111,7 +1127,7 @@ void loop()
   Serial.println("");
   /*
 
-  
+
   // Serial.print(" ");
   // Serial.println(eqBands.bandValues[4]);
   //Serial.print(" ");

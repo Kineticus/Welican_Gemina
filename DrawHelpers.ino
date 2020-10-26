@@ -523,7 +523,6 @@ void showBrightnessDisplay()
   //Draw Brightness Adjustment
   if ((brightness.debounce > millis()) && (brightness.debounce > brightness.debounce2))
   {
-    u8g2.setFont(u8g2_font_profont12_mf);
     u8g2.setDrawColor(0);
     u8g2.drawBox(frameX, frameY - 1, frameW, frameH);
     u8g2.setDrawColor(1);
@@ -566,6 +565,7 @@ void showBrightnessDisplay()
   //Draw Pattern Adjustment 
   if ((brightness.debounce2 > millis()) && (brightness.debounce2 > brightness.debounce))
   {
+    u8g2.setFont(u8g2_font_profont12_mf);
     u8g2.setDrawColor(0);
     u8g2.drawBox(frameX, frameY - 1, frameW, frameH);
     u8g2.setDrawColor(1);

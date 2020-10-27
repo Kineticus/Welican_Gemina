@@ -570,8 +570,18 @@ void showBrightnessDisplay()
     u8g2.drawBox(frameX, frameY - 1, frameW, frameH);
     u8g2.setDrawColor(1);
 
-    u8g2.setCursor(55, 45);
-    //u8g2.print(patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
+    u8g2.setCursor(61, 31);
+
+    if (patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]] > 9)
+    {
+      u8g2.setCursor(58, 31);
+    }
+    if (patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]] > 99)
+    {
+      u8g2.setCursor(55, 31);
+    }
+    
+    u8g2.print(patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
     
     //Constrain a 0-255 value to 1/2 of a circle
     tA.point1 = 5.8 - float(patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]) * .021;

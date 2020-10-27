@@ -698,6 +698,8 @@ void writeFavorites()
 
   patternSettings.favoriteMode[globalMenu.menu[globalMenu.currentMenu]] = globals.mode;                             //update running variables
   patternSettings.favoritePattern[globalMenu.menu[globalMenu.currentMenu]] = patternSettings.pattern[globals.mode]; //first updated in readFavorites
+  patternSettings.favoritePatternAdjust[globalMenu.menu[globalMenu.currentMenu]] = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
+  globalTime.save = 3;
 }
 
 void readFavorites()

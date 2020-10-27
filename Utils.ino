@@ -694,12 +694,22 @@ void writeFavorites()
   EEPROM.write(100 + globalMenu.menu[globalMenu.currentMenu] * 2, patternSettings.pattern[globals.mode]); //the pattern we're on
   EEPROM.write(101 + (globalMenu.menu[globalMenu.currentMenu] * 2), globals.mode);                        //the mode we're on
 
+  //Write the patternAdjust for the currently selected pattern
+  EEPROM.write((300 + (5 * 100) + globalMenu.menu[globalMenu.currentMenu]), patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
+
+
   EEPROM.commit(); //write it to memory
 
+  //Copy over Pattern Adjust to that favorite slot
+  patternSettings.patternAdjust[5][globalMenu.menu[globalMenu.currentMenu]] = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
+
+  //Copy over Mode & pattern to that favorite slots
   patternSettings.favoriteMode[globalMenu.menu[globalMenu.currentMenu]] = globals.mode;                             //update running variables
   patternSettings.favoritePattern[globalMenu.menu[globalMenu.currentMenu]] = patternSettings.pattern[globals.mode]; //first updated in readFavorites
-  patternSettings.favoritePatternAdjust[globalMenu.menu[globalMenu.currentMenu]] = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
-  globalTime.save = 3;
+
+  //Copy over Pattern Adjust to that favorite slot
+  //patternSettings.favoritePatternAdjust[globalMenu.menu[globalMenu.currentMenu]] = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
+  //globalTime.save = 3;
 }
 
 void readFavorites()

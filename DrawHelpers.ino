@@ -45,24 +45,23 @@ void drawTop()
 
   switch (globals.mode)
   {
-  case 0:
-    u8g2.drawXBMP(0, 0, STAR_WIDTH, STAR_HEIGHT, WAVE);
+  case 0: // Basic Category
+    u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
     break;
-  case 1:
-    // u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+  case 1: // Music Category
     u8g2.drawXBMP(0, 0, MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
     break;
-  case 2:
+  case 2: // Chill Category
     u8g2.drawXBMP(0, 0, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);
     break;
-  case 3:
+  case 3: // Moving Colors
     u8g2.drawXBMP(0, 0, DONUT_WIDTH, DONUT_HEIGHT, DONUT);
     break;
-  case 4:
-    u8g2.drawXBMP(0, 0, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
+  case 4: // Legacy
+    u8g2.drawXBMP(0, 0, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);
     break;
-  case 5:
-    u8g2.drawXBMP(0, 0, HEART_WIDTH, HEART_HEIGHT, HEART);
+  case 5: // Favorites
+    u8g2.drawXBMP(0, 0, HEART_WIDTH, HEART_HEIGHT, STAR_SHAPE);
     break;
   }
 
@@ -562,7 +561,7 @@ void showBrightnessDisplay()
     }
   }
 
-  //Draw Pattern Adjustment 
+  //Draw Pattern Adjustment
   if ((brightness.debounce2 > millis()) && (brightness.debounce2 > brightness.debounce))
   {
     u8g2.setFont(u8g2_font_profont12_mf);
@@ -580,9 +579,9 @@ void showBrightnessDisplay()
     {
       u8g2.setCursor(55, 31);
     }
-    
+
     u8g2.print(patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
-    
+
     //Constrain a 0-255 value to 1/2 of a circle
     tA.point1 = 5.8 - float(patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]) * .021;
 

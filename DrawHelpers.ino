@@ -63,6 +63,9 @@ void drawTop()
   case 5: // Favorites
     u8g2.drawXBMP(0, 0, HEART_WIDTH, HEART_HEIGHT, STAR_SHAPE);
     break;
+  case 6: // Palette
+    u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+    break;
   }
 
   //u8g2.print(globals.mode);

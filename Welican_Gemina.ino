@@ -360,6 +360,7 @@ struct PatternSettings
   CRGB tempHalfLeds[MAX_LEDS / 2]; // half the total number of pixels
   CRGB leds[MAX_LEDS];
   CRGB tempLeds[MAX_LEDS];
+  byte colorIndex[MAX_LEDS];
 };
 PatternSettings patternSettings = {
     .pattern = {},
@@ -970,6 +971,11 @@ void setup()
     //RGB, most common for 12mm Pixel types
     FastLED.addLeds<LED_TYPE, DATA_PIN, RGB>(patternSettings.leds, NUM_LEDS);
     FastLED.addLeds<LED_TYPE, DATA_PIN_A, RGB>(patternSettings.leds, NUM_LEDS);
+  }
+
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    patternSettings.colorIndex[i] = random8();
   }
 
   //Begin a task named 'fftComputeTask' to handle FFT on the other core

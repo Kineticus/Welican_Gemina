@@ -122,9 +122,13 @@ void paletteFive()
         for (int i = 0; i < NUM_LEDS; i++)
         {
             patternSettings.leds[i] = ColorFromPalette(pal_Brian, patternSettings.colorIndex[i]);
-            patternSettings.colorIndex[i] += poop / 20;
-        }      
-    
+            patternSettings.colorIndex[i] += poop / 40;
+
+            int beat1 = beatsin16(poop / 30, 0, 255, (65536 / NUM_LEDS) * i, 0);
+            int beat2 = beatsin16(poop / 10, 0, 255, (65536 / NUM_LEDS) * i, 0);
+
+            patternSettings.leds[i].fadeToBlackBy((beat1 + beat2) / 2);
+        }        
     }
     else
     {

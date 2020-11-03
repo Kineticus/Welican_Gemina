@@ -1,3 +1,6 @@
+// https://cssgradient.io/
+// Copy CSS code to https://palette-library.vercel.app/
+
 DEFINE_GRADIENT_PALETTE(brian_test)
 {
     0, 6,128,121,

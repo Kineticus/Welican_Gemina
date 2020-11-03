@@ -880,6 +880,7 @@ void setup()
   seedThings();
 
   //Display library initialization
+  u8g2.setBusClock(1000000); //1 mHz i2c, default is 400 kHz
   u8g2.begin();
 
   /* Load Save Settings
@@ -1135,13 +1136,13 @@ void loop()
     Serial.print(", ");
   }
   Serial.println("");
-  /*
+  */
 
 
   // Serial.print(" ");
   // Serial.println(eqBands.bandValues[4]);
   //Serial.print(" ");
-  /*
+  
   EVERY_N_MILLISECONDS(60000)
   {
     Serial.print("FPS: ");
@@ -1155,7 +1156,7 @@ void loop()
     Serial.print("MIN: ");
     Serial.println(((millis() / 1000) / 60));
   }
-  */
+  
   // slowly cycle the "base color" through the rainbow
   EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; }
 }

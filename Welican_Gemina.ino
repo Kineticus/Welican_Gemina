@@ -41,7 +41,7 @@ FASTLED_USING_NAMESPACE
 #if defined(FASTLED_VERSION) && (FASTLED_VERSION < 3001000)
 #warning "Requires FastLED 3.1 or later; check github for latest code."
 #endif
-#define VERSION_INFO "Build 0.420 - 09/16/20"
+#define VERSION_INFO "Build 0.520 - 11/5/20"
 #define KNOB_1C 25 //Program
 #define KNOB_2C 4  //Brightness 14
 #define MAX_MODES 6
@@ -111,14 +111,14 @@ public:
 
 TaskHandle_t inputComputeTask = NULL;
 
-//1.3" OLED Only
-//U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
+//1.3" OLED, small glitch on 2.4"
+//U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
-//2.42" OLED, causes small glitch on 1.3"
+//2.4" OLED, small glitch on 1.3"
 U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
 //Works with 1.3", Causes small glitch on 2.4" 
-//U8G2_SH110F6_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
+//U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
 
 /*
@@ -879,10 +879,13 @@ void setup()
 
   seedThings();
 
+  //u8g2.setBusClock(1000000);
+  
   //Display library initialization
-  u8g2.setBusClock(1000000); //1 mHz i2c, default is 400 kHz
   u8g2.begin();
 
+  u8g2.setBusClock(1000000); //1 mHz i2c, default is 400 kHz
+  
   /* Load Save Settings
 
     Load variables from EEPROM
@@ -997,6 +1000,9 @@ void setup()
 // ----------------------------------------------------------------
 void loop()
 {
+  EVERY_N_MILLISECONDS(33) //Enforce Max Frame Rate
+  {
+
   globalStrings.functionName.toCharArray(globalStrings.functionNameOutString, 20);
   globalStrings.categoryName.toCharArray(globalStrings.categoryNameOutString, 20);
 
@@ -1159,4 +1165,5 @@ void loop()
   
   // slowly cycle the "base color" through the rainbow
   EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; }
+  }
 }

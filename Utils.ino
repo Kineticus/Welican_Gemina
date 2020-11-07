@@ -116,6 +116,8 @@ void inputCompute(void *parameter)
     //Update variables compared to current encoder location
     updateEncoders();
 
+    autoConnect();
+
     updateTime();
 
     updateWeather(false);
@@ -801,39 +803,53 @@ void saveNumberOfLEDs()
 
 void updateTime()
 {
-  if (WiFi.status() == WL_CONNECTED)
+  if (globalTime.currentHour == 100)
   {
-    if (globalTime.currentHour == 100)
+    if (WiFi.status() == WL_CONNECTED)
     {
       configTime(3600 * globals.timeZone, 0, globals.ntpServer, NULL, NULL);
 
       setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1);
-    }
 
-    getLocalTime(&timeinfo);                   //Update time struct with new data
-    globalTime.currentDay = timeinfo.tm_wday;  //Update day
-    globalTime.currentHour = timeinfo.tm_hour; //Update hour
-    //Are we in PM/ over 12 hours?
-
-    if (globalTime.currentHour > 12)
-    {
-      globalTime.currentHour -= 12;
-      globalTime.currentPM = 1;
+      updateTimeProcess();
     }
-    else
-    {
-      globalTime.currentPM = 0; //If not then it is morning time
-    }
-
-    globalTime.currentMinute = timeinfo.tm_min; //Update minutes
   }
-  else if ((WiFi.status() == 4) && (globals.networkTries < 3))
+  EVERY_N_MILLISECONDS(60000)
+  {
+    updateTimeProcess();
+  }
+}
+
+void updateTimeProcess()
+{
+  getLocalTime(&timeinfo);                   //Update time struct with new data
+  globalTime.currentDay = timeinfo.tm_wday;  //Update day
+  globalTime.currentHour = timeinfo.tm_hour; //Update hour
+  //Are we in PM/ over 12 hours?
+
+  if (globalTime.currentHour > 12)
+  {
+    globalTime.currentHour -= 12;
+    globalTime.currentPM = 1;
+  }
+  else
+  {
+    globalTime.currentPM = 0; //If not then it is morning time
+  }
+
+  globalTime.currentMinute = timeinfo.tm_min; //Update minutes
+}
+
+void autoConnect()
+{
+  if ((WiFi.status() == 4) && (globals.networkTries < 4))
   {
     //Try to connect a few times if not connected
-    EVERY_N_MILLISECONDS(4000)
+    EVERY_N_MILLISECONDS(10000)
     {
+      WiFi.disconnect();
       globals.networkTries++;
-      WiFi.enableSTA(true);
+      //WiFi.enableSTA(true);
       WiFi.begin();
     }
   }
@@ -1042,9 +1058,9 @@ void readPatternSettings()
     for (int ii = 0; ii <= globalMenu.patternMax[i]; ii++)
     {
       patternSettings.patternAdjust[i][ii] = EEPROM.read(300 + (i * 100) + ii);
-      Serial.print(300 + (i * 100) + ii);
-      Serial.print(" - ");
-      Serial.println(patternSettings.patternAdjust[i][ii]);
+      //Serial.print(300 + (i * 100) + ii);
+      //Serial.print(" - ");
+      //Serial.println(patternSettings.patternAdjust[i][ii]);
     }
   }
 

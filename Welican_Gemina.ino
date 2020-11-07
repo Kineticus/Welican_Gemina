@@ -31,6 +31,7 @@
 #include "time.h"
 #include "Secrets.h"
 #include <arduinoFFT.h>
+//#include <rom/rtc.h>
 
 FASTLED_USING_NAMESPACE
 
@@ -812,6 +813,11 @@ void setup()
   //For troubleshooting
   Serial.begin(115200);
 
+  Serial.println("Welican Gemina");
+  Serial.println(VERSION_INFO);
+
+  //Serial.println(rtc_get_reset_reason(0));
+
   //Board Status LED Setup
 
   // setting PWM properties
@@ -858,9 +864,9 @@ void setup()
     return;
   }
 
-  openSpiffFile("/magic.txt");
+  //openSpiffFile("/magic.txt");
 
-  WiFi.enableSTA(true);
+  //WiFi.enableSTA(true);
 
   //WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   
@@ -1149,21 +1155,22 @@ void loop()
   // Serial.println(eqBands.bandValues[4]);
   //Serial.print(" ");
   
-  EVERY_N_MILLISECONDS(60000)
+  EVERY_N_MILLISECONDS(10000)
   {
     Serial.print("FPS: ");
-    Serial.println(devEnv.fps / 60);
+    Serial.println(devEnv.fps / 10);
     devEnv.fps = 0;
     Serial.print("IPS: ");
-    Serial.println(devEnv.fftps / 60);
+    Serial.println(devEnv.fftps / 10);
     devEnv.fftps = 0;
-    Serial.print("ICT: ");
-    Serial.println(eTaskGetState(inputComputeTask));
+    //Serial.print("ICT: ");
+    //Serial.println(eTaskGetState(inputComputeTask));
     Serial.print("MIN: ");
     Serial.println(((millis() / 1000) / 60));
   }
   
   // slowly cycle the "base color" through the rainbow
   EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; }
+  //vTaskDelay(2);
   }
 }

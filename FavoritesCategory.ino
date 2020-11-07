@@ -31,5 +31,8 @@ void favorites_category(int patternMode)
   case 4:
     legacy_category(patternSettings.displayPattern);
     break;
+  case 6:
+    palette_category(patternSettings.displayPattern);
+    break;
   }
 }

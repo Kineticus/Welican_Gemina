@@ -739,7 +739,7 @@ void readFavorites()
 void resetFavorites()
 {
   //TESTING - Reset ALL MEMORY WITH THIS FUNCTION
-  for (int i = 0; i < 1023; i++)
+  for (int i = 0; i < 2048; i++)
   {
     EEPROM.write(i, 0);
   }

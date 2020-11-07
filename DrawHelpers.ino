@@ -443,6 +443,11 @@ void drawClock()
     u8g2.print(sunset);
   }
   break;
+  case 8: //Test
+  {
+    u8g2.drawXBMP(20, 20, FACE_SMIRK_0_WIDTH, FACE_SMIRK_0_HEIGHT, FACE_SMIRK_0);
+    u8g2.drawXBMP(60, 20, FACE_SMIRK_1_WIDTH, FACE_SMIRK_1_HEIGHT, FACE_SMIRK_1);
+  }
   }
 }
 

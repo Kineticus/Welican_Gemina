@@ -462,7 +462,7 @@ MenuModel globalMenu = {
         1,                                 //NTP
         3,                                 //Customize Display
         71,                                //Customize Timeout
-        7,                                 //Customize Display Type
+        10,                                 //Customize Display Type
         2,                                 //Font
         2,                                 //UNUSED
         71,                                //Random Timeout

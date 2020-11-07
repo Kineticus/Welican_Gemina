@@ -47,6 +47,51 @@ DEFINE_GRADIENT_PALETTE(scoutie_gp){
 
 CRGBPalette16 pal_GreenYellowBlue = scoutie_gp;
 
+// -------------------------------------------------------
+// HOLIDAYS
+// -------------------------------------------------------
+DEFINE_GRADIENT_PALETTE(christmas_1){
+    0, 255, 3, 1,
+    130, 255, 255, 255,
+    255, 0, 57, 1};
+CRGBPalette16 pal_christmas_1 = christmas_1;
+
+DEFINE_GRADIENT_PALETTE(christmas_2){
+    0, 255, 3, 1,
+    255, 0, 57, 1};
+CRGBPalette16 pal_christmas_2 = christmas_2;
+
+DEFINE_GRADIENT_PALETTE(rasta_flag){
+    0, 255, 0, 0,
+    125, 232, 255, 0,
+    255, 0, 93, 1};
+CRGBPalette16 pal_rasta_flag = rasta_flag;
+DEFINE_GRADIENT_PALETTE(hanukkah){
+    0, 1, 0, 255,
+    127, 255, 255, 255,
+    255, 1, 0, 255};
+CRGBPalette16 pal_hanukkah = hanukkah;
+
+DEFINE_GRADIENT_PALETTE(independence_day){
+    0, 255, 0, 0,
+    127, 255, 255, 255,
+    255, 1, 0, 255};
+CRGBPalette16 pal_independence_day = independence_day;
+
+DEFINE_GRADIENT_PALETTE(halloween_1){
+    0, 0, 0, 0,
+    255, 177, 57, 0};
+CRGBPalette16 pal_halloween_1 = halloween_1;
+
+DEFINE_GRADIENT_PALETTE(halloween_2){
+    0, 177, 57, 0,
+    130, 17, 0, 34,
+    255, 177, 57, 0};
+CRGBPalette16 pal_halloween_2 = halloween_2;
+
+// -------------------------------------------------------
+// FUNCTIONS
+// -------------------------------------------------------
 void palette_category(int patternMode)
 {
     globalStrings.categoryName = "Palettes";

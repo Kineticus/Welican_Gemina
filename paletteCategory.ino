@@ -1,14 +1,20 @@
 // https://cssgradient.io/
 // Copy CSS code to https://palette-library.vercel.app/
+// converted for FastLED with gammas (2.6, 2.2, 2.5)
 
-DEFINE_GRADIENT_PALETTE(brian_test)
-{
-    0, 6,128,121,
-    84, 1,1,133,
-    145, 2,64,19,
-    199, 1,42,154,
-    255, 6,128,121
-};
+DEFINE_GRADIENT_PALETTE(matt_test){
+    0, 1, 255, 228,
+    92, 11, 139, 6,
+    186, 152, 0, 128,
+    255, 0, 169, 255};
+CRGBPalette16 pal_Matt = matt_test;
+
+DEFINE_GRADIENT_PALETTE(brian_test){
+    0, 6, 128, 121,
+    84, 1, 1, 133,
+    145, 2, 64, 19,
+    199, 1, 42, 154,
+    255, 6, 128, 121};
 
 CRGBPalette16 pal_Brian = brian_test;
 
@@ -17,28 +23,27 @@ CRGBPalette16 pal_Brian = brian_test;
 // converted for FastLED with gammas (2.6, 2.2, 2.5)
 // Size: 28 bytes of program space.
 
-DEFINE_GRADIENT_PALETTE( Sunset_Real_gp ) {
-    0, 120,  0,  0,
-   22, 179, 22,  0,
-   51, 255,104,  0,
-   85, 167, 22, 18,
-  135, 100,  0,103,
-  198,  16,  0,130,
-  255,   0,  0,160};
+DEFINE_GRADIENT_PALETTE(Sunset_Real_gp){
+    0, 120, 0, 0,
+    22, 179, 22, 0,
+    51, 255, 104, 0,
+    85, 167, 22, 18,
+    135, 100, 0, 103,
+    198, 16, 0, 130,
+    255, 0, 0, 160};
 
 CRGBPalette16 pal_Outrun = Sunset_Real_gp;
-
 
 // Gradient palette "scoutie_gp", originally from
 // http://soliton.vm.bytemark.co.uk/pub/cpt-city/rc/tn/scoutie.png.index.html
 // converted for FastLED with gammas (2.6, 2.2, 2.5)
 // Size: 16 bytes of program space.
 
-DEFINE_GRADIENT_PALETTE( scoutie_gp ) {
-    0, 255,156,  0,
-  127,   0,195, 18,
-  216,   1,  0, 39,
-  255,   1,  0, 39};
+DEFINE_GRADIENT_PALETTE(scoutie_gp){
+    0, 255, 156, 0,
+    127, 0, 195, 18,
+    216, 1, 0, 39,
+    255, 1, 0, 39};
 
 CRGBPalette16 pal_GreenYellowBlue = scoutie_gp;
 
@@ -64,7 +69,6 @@ void palette_category(int patternMode)
         paletteFive();
         break;
     }
-
 }
 
 void paletteOne()
@@ -73,7 +77,6 @@ void paletteOne()
     byte poop = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
 
     fill_palette(patternSettings.leds, NUM_LEDS, 0, 255 / NUM_LEDS, pal_Brian, 255, LINEARBLEND);
-
 }
 
 void paletteTwo()
@@ -81,7 +84,7 @@ void paletteTwo()
     globalStrings.functionName = "PaletteTwo";
     byte poop = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
 
-    fill_solid(patternSettings.leds, NUM_LEDS, CHSV( poop, 255, 255) );
+    fill_solid(patternSettings.leds, NUM_LEDS, CHSV(poop, 255, 255));
 }
 
 void paletteThree()
@@ -131,7 +134,7 @@ void paletteFive()
             int beat2 = beatsin16(poop / 10, 0, 255, (65536 / NUM_LEDS) * i, 0);
 
             patternSettings.leds[i].fadeToBlackBy((beat1 + beat2) / 2);
-        }        
+        }
     }
     else
     {

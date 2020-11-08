@@ -66,6 +66,7 @@ DEFINE_GRADIENT_PALETTE(rasta_flag){
     125, 232, 255, 0,
     255, 0, 93, 1};
 CRGBPalette16 pal_rasta_flag = rasta_flag;
+
 DEFINE_GRADIENT_PALETTE(hanukkah){
     0, 1, 0, 255,
     127, 255, 255, 255,
@@ -112,6 +113,27 @@ void palette_category(int patternMode)
         break;
     case 5:
         paletteFive();
+        break;
+    case 6:
+        Christmas1();
+        break;
+    case 7:
+        Christmas2();
+        break;
+    case 8:
+        RastaFlag();
+        break;
+    case 9:
+        Hanukkah();
+        break;
+    case 10:
+        IndependenceDay();
+        break;
+    case 11:
+        Halloween1();
+        break;
+    case 12:
+        Halloween2();
         break;
     }
 }
@@ -184,5 +206,173 @@ void paletteFive()
     else
     {
         fill_palette(patternSettings.leds, NUM_LEDS, 0, 255 / NUM_LEDS, pal_Brian, 255, LINEARBLEND);
+    }
+}
+
+void Christmas1()
+{
+    globalStrings.functionName = "Christmas1";
+    byte poop = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
+
+    if (poop != 0)
+    {
+        for (int i = 0; i < NUM_LEDS; i++)
+        {
+            patternSettings.leds[i] = ColorFromPalette(pal_christmas_1, patternSettings.colorIndex[i]);
+            patternSettings.colorIndex[i] += poop / 40;
+
+            int beat1 = beatsin16(poop / 30, 0, 255, (65536 / NUM_LEDS) * i, 0);
+            int beat2 = beatsin16(poop / 10, 0, 255, (65536 / NUM_LEDS) * i, 0);
+
+            patternSettings.leds[i].fadeToBlackBy((beat1 + beat2) / 2);
+        }
+    }
+    else
+    {
+        fill_palette(patternSettings.leds, NUM_LEDS, 0, 255 / NUM_LEDS, pal_christmas_1, 255, LINEARBLEND);
+    }
+}
+
+void Christmas2()
+{
+    globalStrings.functionName = "Christmas2";
+    byte poop = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
+
+    if (poop != 0)
+    {
+        for (int i = 0; i < NUM_LEDS; i++)
+        {
+            patternSettings.leds[i] = ColorFromPalette(pal_christmas_2, patternSettings.colorIndex[i]);
+            patternSettings.colorIndex[i] += poop / 40;
+
+            int beat1 = beatsin16(poop / 30, 0, 255, (65536 / NUM_LEDS) * i, 0);
+            int beat2 = beatsin16(poop / 10, 0, 255, (65536 / NUM_LEDS) * i, 0);
+
+            patternSettings.leds[i].fadeToBlackBy((beat1 + beat2) / 2);
+        }
+    }
+    else
+    {
+        fill_palette(patternSettings.leds, NUM_LEDS, 0, 255 / NUM_LEDS, pal_christmas_2, 255, LINEARBLEND);
+    }
+}
+
+void RastaFlag()
+{
+    globalStrings.functionName = "RastaFlag";
+    byte poop = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
+
+    if (poop != 0)
+    {
+        for (int i = 0; i < NUM_LEDS; i++)
+        {
+            patternSettings.leds[i] = ColorFromPalette(pal_rasta_flag, patternSettings.colorIndex[i]);
+            patternSettings.colorIndex[i] += poop / 40;
+
+            int beat1 = beatsin16(poop / 30, 0, 255, (65536 / NUM_LEDS) * i, 0);
+            int beat2 = beatsin16(poop / 10, 0, 255, (65536 / NUM_LEDS) * i, 0);
+
+            patternSettings.leds[i].fadeToBlackBy((beat1 + beat2) / 2);
+        }
+    }
+    else
+    {
+        fill_palette(patternSettings.leds, NUM_LEDS, 0, 255 / NUM_LEDS, pal_rasta_flag, 255, LINEARBLEND);
+    }
+}
+
+void Hanukkah()
+{
+    globalStrings.functionName = "Hanukkah";
+    byte poop = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
+
+    if (poop != 0)
+    {
+        for (int i = 0; i < NUM_LEDS; i++)
+        {
+            patternSettings.leds[i] = ColorFromPalette(pal_hanukkah, patternSettings.colorIndex[i]);
+            patternSettings.colorIndex[i] += poop / 40;
+
+            int beat1 = beatsin16(poop / 30, 0, 255, (65536 / NUM_LEDS) * i, 0);
+            int beat2 = beatsin16(poop / 10, 0, 255, (65536 / NUM_LEDS) * i, 0);
+
+            patternSettings.leds[i].fadeToBlackBy((beat1 + beat2) / 2);
+        }
+    }
+    else
+    {
+        fill_palette(patternSettings.leds, NUM_LEDS, 0, 255 / NUM_LEDS, pal_hanukkah, 255, LINEARBLEND);
+    }
+}
+
+void IndependenceDay()
+{
+    globalStrings.functionName = "IndependenceDay";
+    byte poop = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
+
+    if (poop != 0)
+    {
+        for (int i = 0; i < NUM_LEDS; i++)
+        {
+            patternSettings.leds[i] = ColorFromPalette(pal_independence_day, patternSettings.colorIndex[i]);
+            patternSettings.colorIndex[i] += poop / 40;
+
+            int beat1 = beatsin16(poop / 30, 0, 255, (65536 / NUM_LEDS) * i, 0);
+            int beat2 = beatsin16(poop / 10, 0, 255, (65536 / NUM_LEDS) * i, 0);
+
+            patternSettings.leds[i].fadeToBlackBy((beat1 + beat2) / 2);
+        }
+    }
+    else
+    {
+        fill_palette(patternSettings.leds, NUM_LEDS, 0, 255 / NUM_LEDS, pal_independence_day, 255, LINEARBLEND);
+    }
+}
+
+void Halloween1()
+{
+    globalStrings.functionName = "Halloween1";
+    byte poop = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
+
+    if (poop != 0)
+    {
+        for (int i = 0; i < NUM_LEDS; i++)
+        {
+            patternSettings.leds[i] = ColorFromPalette(pal_halloween_1, patternSettings.colorIndex[i]);
+            patternSettings.colorIndex[i] += poop / 40;
+
+            int beat1 = beatsin16(poop / 30, 0, 255, (65536 / NUM_LEDS) * i, 0);
+            int beat2 = beatsin16(poop / 10, 0, 255, (65536 / NUM_LEDS) * i, 0);
+
+            patternSettings.leds[i].fadeToBlackBy((beat1 + beat2) / 2);
+        }
+    }
+    else
+    {
+        fill_palette(patternSettings.leds, NUM_LEDS, 0, 255 / NUM_LEDS, pal_halloween_1, 255, LINEARBLEND);
+    }
+}
+
+void Halloween2()
+{
+    globalStrings.functionName = "Halloween2";
+    byte poop = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
+
+    if (poop != 0)
+    {
+        for (int i = 0; i < NUM_LEDS; i++)
+        {
+            patternSettings.leds[i] = ColorFromPalette(pal_halloween_2, patternSettings.colorIndex[i]);
+            patternSettings.colorIndex[i] += poop / 40;
+
+            int beat1 = beatsin16(poop / 30, 0, 255, (65536 / NUM_LEDS) * i, 0);
+            int beat2 = beatsin16(poop / 10, 0, 255, (65536 / NUM_LEDS) * i, 0);
+
+            patternSettings.leds[i].fadeToBlackBy((beat1 + beat2) / 2);
+        }
+    }
+    else
+    {
+        fill_palette(patternSettings.leds, NUM_LEDS, 0, 255 / NUM_LEDS, pal_halloween_2, 255, LINEARBLEND);
     }
 }

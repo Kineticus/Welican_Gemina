@@ -23,7 +23,7 @@ void createRoutes(AsyncWebServer *server)
       Serial.println("------");
       if (p->name() == "brightness")
       {
-        brightness.current = p->value().toInt();
+        brightness.target = p->value().toInt();
         brightness.debounce = millis() + 1420;
       }
       if (p->name() == "favorite")

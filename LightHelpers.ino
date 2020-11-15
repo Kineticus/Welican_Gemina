@@ -91,6 +91,31 @@ void smoothOperator()
       globalLED.interfade = 0;
     }
   }
+
+  //Check for brightness change
+  if (brightness.target != brightness.current)
+  {
+    byte multiplier = 0;
+
+    if ((abs(brightness.current - brightness.target)) < brightness.rate)
+    {
+      multiplier = 1;
+    }
+    else
+    {
+      multiplier = brightness.rate;
+    }
+    
+    if (brightness.target > brightness.current)
+    {
+      brightness.current += multiplier;
+    }
+    else
+    {
+      brightness.current -= multiplier;
+    }
+    FastLED.setBrightness(brightness.current);
+  }
 }
 
 void setSmoothOperator(int fadeTime)

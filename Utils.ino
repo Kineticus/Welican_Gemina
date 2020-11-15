@@ -116,7 +116,7 @@ void inputCompute(void *parameter)
     //Update variables compared to current encoder location
     updateEncoders();
 
-    autoConnect();
+    //autoConnect();
 
     updateTime();
 
@@ -131,7 +131,7 @@ void inputCompute(void *parameter)
     devEnv.fftps++; //Debug, tracking loops per second
 
     //Serial.println(xPortGetFreeHeapSize()); //How much memory is left in the task heap? If out we get a panic with "Stack canary watchpoint triggered"
-    //vTaskDelay(50); //Give some time back to the scheduler. Normally this task never lets up. Use this to share resousrces better on assigned core.
+    vTaskDelay(1); //Give some time back to the scheduler. Normally this task never lets up. Use this to share resousrces better on assigned core.
   }
 }
 
@@ -407,7 +407,7 @@ void updateEncoders()
       if(knob2.heldTime == 0)
       {
         //Add adjusted value to brightness in a new integer
-        int tempInt = brightness.current + globals.tempValue;
+        int tempInt = brightness.target + globals.tempValue;
 
         //Constrain the integer to byte values
         if (tempInt > 255)
@@ -420,13 +420,15 @@ void updateEncoders()
         }
 
         //set the current brightness to the constrained byte value
-        brightness.current = tempInt;
+        brightness.target = tempInt;
 
-        // set master brightness control
-        FastLED.setBrightness(brightness.current);
-
+        //Show the brightness indicator
         brightness.debounce = millis() + 1420;
+
+        //Save the brightness setting 
         globalTime.save = 50;
+
+        //Update last human interaction timer
         globalTime.touchTime = millis();
       }
       else
@@ -816,7 +818,7 @@ void updateTime()
   }
   EVERY_N_MILLISECONDS(60000)
   {
-    updateTimeProcess();
+    updateTimeProcess(); //Performance issue culprit
   }
 }
 

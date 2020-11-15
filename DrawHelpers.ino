@@ -535,35 +535,35 @@ void showBrightnessDisplay()
     u8g2.setDrawColor(1);
     u8g2.drawRFrame(frameX, frameY - 1, frameW, frameH, 7);
 
-    if (brightness.current == 0)
+    if (brightness.target == 0)
     {
       u8g2.drawXBMP(frameX, frameY, brightness1_width, brightness1_height, brightness1);
     }
-    else if (brightness.current == 255)
+    else if (brightness.target == 255)
     {
       u8g2.drawXBMP(frameX, frameY, brightness8_width, brightness8_height, brightness8);
     }
-    else if (brightness.current > 200)
+    else if (brightness.target > 200)
     {
       u8g2.drawXBMP(frameX, frameY, brightness7_width, brightness7_height, brightness7);
     }
-    else if (brightness.current > 160)
+    else if (brightness.target > 160)
     {
       u8g2.drawXBMP(frameX, frameY, brightness6_width, brightness6_height, brightness6);
     }
-    else if (brightness.current > 120)
+    else if (brightness.target > 120)
     {
       u8g2.drawXBMP(frameX, frameY, brightness5_width, brightness5_height, brightness5);
     }
-    else if (brightness.current > 80)
+    else if (brightness.target > 80)
     {
       u8g2.drawXBMP(frameX, frameY, brightness4_width, brightness4_height, brightness4);
     }
-    else if (brightness.current > 40)
+    else if (brightness.target > 40)
     {
       u8g2.drawXBMP(frameX, frameY, brightness3_width, brightness3_height, brightness3);
     }
-    else if (brightness.current > 0)
+    else if (brightness.target > 0)
     {
       u8g2.drawXBMP(frameX, frameY, brightness2_width, brightness2_height, brightness2);
     }

@@ -115,12 +115,11 @@ TaskHandle_t inputComputeTask = NULL;
 //1.3" OLED, small glitch on 2.4"
 //U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
-//2.4" OLED, small glitch on 1.3"
+//2.4" OLED, ORIGINAL BOARDS, small glitch on 1.3"
 U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
-//Works with 1.3", Causes small glitch on 2.4" 
-//U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
-
+//2.4" OLED, MODERN BOARDS, small glitch on 1.3"
+//U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 19);
 
 /*
 For EST - UTC -5.00 : -5 * 60 * 60 : -18000
@@ -489,6 +488,8 @@ MenuModel globalMenu = {
 struct Brightness
 {
   int current;
+  int target;
+  int rate;
   int temp;
   unsigned long debounce;
   unsigned long debounce2;
@@ -498,6 +499,8 @@ struct Brightness
 };
 Brightness brightness = {
     .current = 0,
+    .target = 0,
+    .rate = 12,
     .temp = 0,
     .debounce = 0,
     .debounce2 = 0,
@@ -885,7 +888,11 @@ void setup()
 
   seedThings();
 
-  //u8g2.setBusClock(1000000);
+  u8g2.setBusClock(1000000);
+
+  //Few new boards using 2.4 OLED
+  pinMode(19, OUTPUT);
+  digitalWrite(19, HIGH);
   
   //Display library initialization
   u8g2.begin();
@@ -923,7 +930,8 @@ void setup()
   EEPROM.get(45, globalMenu.menu[26]);
 
   globals.mode = EEPROM.read(0);
-  brightness.current = EEPROM.read(1);
+  brightness.target = EEPROM.read(1);
+  brightness.current = brightness.target;
 
   readPatternSettings();
 
@@ -1006,7 +1014,7 @@ void setup()
 // ----------------------------------------------------------------
 void loop()
 {
-  EVERY_N_MILLISECONDS(33) //Enforce Max Frame Rate
+  EVERY_N_MILLISECONDS(33) //Enforce Max Frame Rate 33 = 30FPS
   {
 
   globalStrings.functionName.toCharArray(globalStrings.functionNameOutString, 20);
@@ -1171,6 +1179,9 @@ void loop()
   
   // slowly cycle the "base color" through the rainbow
   EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; }
-  //vTaskDelay(2);
+
+  autoConnect();
+  //vTaskDelay(1);
   }
+  //vTaskDelay(1);
 }

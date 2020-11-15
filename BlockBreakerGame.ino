@@ -47,11 +47,18 @@ void blockbreaker_game()
         player.X = SCREEN_WIDTH - blockBreaker.paddleWidth;
     }
 
+    //Draw the blocks
+    for (int i = 0; i < 40; i++)
+    {
+        if (blockBreaker.block[i].Health != 0)
+        {
+            u8g2.drawBox(blockBreaker.block[i].X, blockBreaker.block[i].Y, blockBreaker.blockWidth, blockBreaker.blockHeight);
+            //u8g2.drawBox(player.X, SCREEN_HEIGHT - blockBreaker.paddleHeight, blockBreaker.paddleWidth, 4);
+        }
+    }
+
     //Draw the paddle
     u8g2.drawBox(player.X, SCREEN_HEIGHT - blockBreaker.paddleHeight, blockBreaker.paddleWidth, 4);
-
-    //Draw the ball
-    u8g2.drawDisc(blockBreaker.ballX, blockBreaker.ballY, 2, U8G2_DRAW_ALL);
 
     //Are we running the game?
     if (blockBreaker.running == 1)
@@ -65,10 +72,85 @@ void blockbreaker_game()
         u8g2.setCursor(SCREEN_WIDTH / 7, (SCREEN_HEIGHT / 1.3));
         u8g2.print("! C L I C K !");
 
+        //Ball on paddle
+        blockBreaker.ballY = SCREEN_HEIGHT - (blockBreaker.paddleHeight + (blockBreaker.ballWidth / 2) + 1);
+        blockBreaker.ballX = player.X + (blockBreaker.paddleWidth /2);
+
         //A we waiting for a click to start?
         if ((knob1.click == 1) || (knob2.click == 1))
         {
             blockBreaker.running = 1;
+        }
+    }
+
+    //Draw the ball
+    u8g2.drawDisc(blockBreaker.ballX, blockBreaker.ballY, 2, U8G2_DRAW_ALL);
+
+    //Did we hit a block? Check every block
+    for (int i = 0; i < 40; i++)
+    {
+        //Is the block "alive"
+        if (blockBreaker.block[i].Health != 0)
+        {
+            //What direction are we going?
+            
+            //Going Right
+            if (blockBreaker.ballXvel >= 0)
+            {
+                if ((blockBreaker.ballY - (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].Y + blockBreaker.blockHeight))
+                {
+                    if (blockBreaker.ballX + (blockBreaker.ballWidth /2) == blockBreaker.block[i].X)
+                    {
+                        blockBreaker.ballXvel *= -1;
+                        blockBreaker.block[i].Health -= 1;
+                        blockBreaker.score++;
+                    }
+                }
+            }
+
+            
+            //Going Left
+            if (blockBreaker.ballXvel <= 0)
+            {
+                if ((blockBreaker.ballY + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].Y + blockBreaker.blockHeight))
+                {
+                    if (blockBreaker.ballX + (blockBreaker.ballWidth /2) == blockBreaker.block[i].X + blockBreaker.blockWidth)
+                    {
+                        blockBreaker.ballXvel *= -1;
+                        blockBreaker.block[i].Health -= 1;
+                        blockBreaker.score++;
+                    }
+                }
+            }
+            
+            //Going Down
+            if (blockBreaker.ballYvel >= 0)
+            {
+                if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX + (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth))
+                {
+                    if (blockBreaker.ballY + (blockBreaker.ballWidth / 2) == blockBreaker.block[i].Y)
+                    {
+                        blockBreaker.ballYvel *= -1;
+                        blockBreaker.block[i].Health -= 1;
+                        blockBreaker.score++;
+                    } 
+                }
+            }
+
+            //Going Up
+            if (blockBreaker.ballYvel <= 0)
+            {
+                if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX + (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth))
+                {
+                    if (blockBreaker.ballY - (blockBreaker.ballWidth / 2) == blockBreaker.block[i].Y  + blockBreaker.blockHeight)
+                    {
+                        blockBreaker.ballYvel *= -1;
+                        blockBreaker.block[i].Health -= 1;
+                        blockBreaker.score++;
+                    } 
+                }
+            }
+            
         }
     }
 
@@ -98,8 +180,7 @@ void blockbreaker_game()
         }
         else if (blockBreaker.ballYvel > 0)
         {
-            blockBreaker.ballYvel = -1; //Hit the paddle! Bounce the ball
-            blockBreaker.score++;
+            blockBreaker.ballYvel *= -1; //Hit the paddle! Bounce the ball
         }
     }
 
@@ -124,7 +205,7 @@ void blockbreaker_game()
     if ((blockBreaker.ballY - 10) > SCREEN_HEIGHT)
     {
         //Place the cursor and draw some game over message
-        u8g2.setCursor(4, SCREEN_HEIGHT / 3);
+        u8g2.setCursor(4, SCREEN_HEIGHT - 8);
         u8g2.print("G A M E  O V E R !!!");
 
         //Draw the score?
@@ -140,18 +221,32 @@ void blockbreaker_game()
     }
 }
 
+void blockbreaker_setBlocks()
+{
+    for (int i = 0; i < 4; i++)
+    {
+        for (int ii = 0; ii < 10; ii++)
+        {
+            blockBreaker.block[(i * 10) + ii].X = ii * (blockBreaker.blockWidth + 2) + 5;
+            blockBreaker.block[(i * 10) + ii].Y = i * (blockBreaker.blockHeight + 2) + 3;
+            blockBreaker.block[(i * 10) + ii].Health = 1;
+        }
+    }
+}
+
 void blockbreaker_reset()
 {
+    //Not running
+    blockBreaker.running = 0;
+
     //Current score is back to 0
     blockBreaker.score = 0;
 
     blockBreaker.message = 0;
     blockBreaker.messageTimer = 0;
 
-    blockBreaker.ballY = SCREEN_HEIGHT / 2;
-    blockBreaker.ballX = SCREEN_WIDTH / 2;
-    blockBreaker.ballXvel = -1;
-    blockBreaker.ballYvel = 1;
+    blockBreaker.ballXvel = 1;
+    blockBreaker.ballYvel = -1;
 
     //player. to the middle of the screen
     player.X = SCREEN_WIDTH / 2;
@@ -159,4 +254,7 @@ void blockbreaker_reset()
 
     //And at the bottom
     blockBreaker.paddleHeight = 2;
+
+    //Reset block layout
+    blockbreaker_setBlocks();
 }

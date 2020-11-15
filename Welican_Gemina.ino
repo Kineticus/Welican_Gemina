@@ -614,6 +614,13 @@ Fallios fallios = {
     .tunnelTracker = 100,
     .tunnelWildcard = 0};
 
+struct Block
+{
+  byte X;
+  byte Y;
+  byte Health;
+};
+
 struct BlockBreaker
 {
   int score;
@@ -626,8 +633,12 @@ struct BlockBreaker
   int paddleWidth;
   int message;
   int messageTimer;
-  int running;
+  byte running;
+  byte blockWidth;
+  byte blockHeight;
+  Block block[40];
 };
+
 BlockBreaker blockBreaker = {
     .score = 0,
     .ballX = 0,
@@ -639,7 +650,10 @@ BlockBreaker blockBreaker = {
     .paddleWidth = 16,
     .message = 0,
     .messageTimer = 0,
-    .running = 0};
+    .running = 0,
+    .blockWidth = 10,
+    .blockHeight = 5  
+  };
 
 struct MagicWords
 {

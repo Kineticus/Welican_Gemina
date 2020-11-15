@@ -97,7 +97,7 @@ void smoothOperator()
   {
     byte multiplier = 0;
 
-    if ((abs(brightness.current - brightness.target)) < brightness.rate)
+    if ((abs(brightness.current - brightness.target)) < (brightness.rate * 1.5))
     {
       multiplier = 1;
     }

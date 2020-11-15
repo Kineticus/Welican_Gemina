@@ -386,15 +386,15 @@ void updateEncoders()
       {
         globals.tempValue = globals.tempValue * 7;
       }
-      else if (abs(globals.tempValue) > 7) // 75%
+      else if (abs(globals.tempValue) > 8) // 75%
       {
         globals.tempValue = globals.tempValue * 5;
       }
-      else if (abs(globals.tempValue) > 4) // 50%
+      else if (abs(globals.tempValue) > 6) // 50%
       {
         globals.tempValue = globals.tempValue * 3;
       }
-      else if (abs(globals.tempValue) > 2) // 25%  acceleration
+      else if (abs(globals.tempValue) > 3) // 25%  acceleration
       {
         globals.tempValue = globals.tempValue * 2;
       }

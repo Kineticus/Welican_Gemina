@@ -624,10 +624,10 @@ struct Block
 struct BlockBreaker
 {
   int score;
-  int ballX;
-  int ballY;
-  int ballXvel;
-  int ballYvel;
+  float ballX;
+  float ballY;
+  float ballXvel;
+  float ballYvel;
   int ballWidth;
   int paddleHeight;
   int paddleWidth;

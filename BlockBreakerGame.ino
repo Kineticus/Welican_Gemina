@@ -84,7 +84,10 @@ void blockbreaker_game()
     }
 
     //Draw the ball
-    u8g2.drawDisc(blockBreaker.ballX, blockBreaker.ballY, 2, U8G2_DRAW_ALL);
+    u8g2.drawDisc(int(blockBreaker.ballX), int(blockBreaker.ballY), 2, U8G2_DRAW_ALL);
+
+
+    byte blockGone = 0;
 
     //Did we hit a block? Check every block
     for (int i = 0; i < 40; i++)
@@ -92,84 +95,105 @@ void blockbreaker_game()
         //Is the block "alive"
         if (blockBreaker.block[i].Health != 0)
         {
+            //There is a block here!
+            blockGone = 0;
+
             //What direction are we going?
-            
-            //Going Right
-            if (blockBreaker.ballXvel >= 0)
+            //Going Up
+            if ((blockBreaker.ballYvel <= 0) && (blockGone == 0))
             {
-                if ((blockBreaker.ballY - (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].Y + blockBreaker.blockHeight))
+                if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX + (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth))
                 {
-                    if (blockBreaker.ballX + (blockBreaker.ballWidth /2) == blockBreaker.block[i].X)
+                    if ((blockBreaker.ballY - (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY <= blockBreaker.block[i].Y + blockBreaker.blockHeight + (blockBreaker.ballWidth / 2)))
                     {
-                        blockBreaker.ballXvel *= -1;
-                        blockBreaker.block[i].Health -= 1;
+                        blockBreaker.ballYvel *= -1;
+                        if (blockBreaker.block[i].Health > 0)
+                        {
+                            blockBreaker.block[i].Health -= 1;
+                        }
+                        blockGone = 1;
                         blockBreaker.score++;
-                    }
+                        ledcWrite(STATUS_LED, 4095);
+                    } 
                 }
             }
 
-            
-            //Going Left
-            if (blockBreaker.ballXvel <= 0)
-            {
-                if ((blockBreaker.ballY + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].Y + blockBreaker.blockHeight))
-                {
-                    if (blockBreaker.ballX + (blockBreaker.ballWidth /2) == blockBreaker.block[i].X + blockBreaker.blockWidth)
-                    {
-                        blockBreaker.ballXvel *= -1;
-                        blockBreaker.block[i].Health -= 1;
-                        blockBreaker.score++;
-                    }
-                }
-            }
-            
             //Going Down
-            if (blockBreaker.ballYvel >= 0)
+            if ((blockBreaker.ballYvel >= 0) && (blockGone == 0))
             {
                 if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX + (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth))
                 {
                     if (blockBreaker.ballY + (blockBreaker.ballWidth / 2) == blockBreaker.block[i].Y)
                     {
                         blockBreaker.ballYvel *= -1;
-                        blockBreaker.block[i].Health -= 1;
+                        if (blockBreaker.block[i].Health > 0)
+                        {
+                            blockBreaker.block[i].Health -= 1;
+                        }
+                        blockGone = 1;
                         blockBreaker.score++;
+                        ledcWrite(STATUS_LED, 4095);
                     } 
                 }
             }
 
-            //Going Up
-            if (blockBreaker.ballYvel <= 0)
+            //Going Right
+            if ((blockBreaker.ballXvel > 0) && (blockGone == 0))
             {
-                if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX + (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth))
+                if ((blockBreaker.ballY - (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].Y + blockBreaker.blockHeight))
                 {
-                    if (blockBreaker.ballY - (blockBreaker.ballWidth / 2) == blockBreaker.block[i].Y  + blockBreaker.blockHeight)
+                    if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX <= blockBreaker.block[i].X + blockBreaker.blockWidth))
                     {
-                        blockBreaker.ballYvel *= -1;
-                        blockBreaker.block[i].Health -= 1;
+                        blockBreaker.ballXvel *= -1;
+                        if (blockBreaker.block[i].Health > 0)
+                        {
+                            blockBreaker.block[i].Health -= 1;
+                        }
+                        blockGone = 1;
                         blockBreaker.score++;
-                    } 
+                        ledcWrite(STATUS_LED, 4095);
+                    }
                 }
             }
+
             
+            //Going Left
+            if ((blockBreaker.ballXvel < 0) && (blockGone == 0))
+            {
+                if ((blockBreaker.ballY + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].Y + blockBreaker.blockHeight))
+                {
+                    if ((blockBreaker.ballX - (blockBreaker.ballWidth /2) <= blockBreaker.block[i].X + blockBreaker.blockWidth) && (blockBreaker.ballX >= blockBreaker.block[i].X))
+                    {
+                        blockBreaker.ballXvel *= -1;
+                        if (blockBreaker.block[i].Health > 0)
+                        {
+                            blockBreaker.block[i].Health -= 1;
+                        }
+                        blockGone = 1;
+                        blockBreaker.score++;
+                        ledcWrite(STATUS_LED, 4095);
+                    }
+                }
+            }     
         }
     }
 
     //Did we hit the wall left wall?
-    if (blockBreaker.ballX <= (blockBreaker.ballWidth / 2))
+    if ((blockBreaker.ballX <= (blockBreaker.ballWidth / 2)) && blockBreaker.ballXvel < 0)
     {
-        blockBreaker.ballXvel = 1;
+        blockBreaker.ballXvel *= -1;
     }
 
     //Did we hit the right wall?
-    if (blockBreaker.ballX >= (SCREEN_WIDTH - (blockBreaker.ballWidth / 2)))
+    if ((blockBreaker.ballX >= (SCREEN_WIDTH - (blockBreaker.ballWidth / 2))) && blockBreaker.ballXvel > 0)
     {
-        blockBreaker.ballXvel = -1;
+        blockBreaker.ballXvel *= -1;
     }
 
     //Did we hit the ceiling?
     if ((blockBreaker.ballY - (blockBreaker.ballWidth / 2)) <= 0)
     {
-        blockBreaker.ballYvel = 1;
+        blockBreaker.ballYvel *= -1;
     }
 
     //Did we hit the paddle height?
@@ -180,7 +204,47 @@ void blockbreaker_game()
         }
         else if (blockBreaker.ballYvel > 0)
         {
-            blockBreaker.ballYvel *= -1; //Hit the paddle! Bounce the ball
+            int paddleAngle = (player.X + (blockBreaker.paddleWidth / 2)) - blockBreaker.ballX;
+
+            
+            if (paddleAngle <=-5)
+            {
+                blockBreaker.ballXvel = 2;
+                blockBreaker.ballYvel = -.5;
+                
+            }
+            if (paddleAngle >=-4 && paddleAngle <=-3)
+            {
+                blockBreaker.ballXvel = 1;
+                blockBreaker.ballYvel = -1;
+            }
+            if (paddleAngle >=-2 && paddleAngle <=-1)
+            {
+                blockBreaker.ballXvel = .5;
+                blockBreaker.ballYvel = -1.5;
+            }
+             if (paddleAngle >=0 && paddleAngle <=0)
+            {
+                blockBreaker.ballXvel = 0;
+                blockBreaker.ballYvel = -1;
+            }
+            if (paddleAngle >=1 && paddleAngle <=2)
+            {
+                blockBreaker.ballXvel = -.5;
+                blockBreaker.ballYvel = -1.5;
+            }
+            if (paddleAngle >=3 && paddleAngle <=4)
+            {
+                blockBreaker.ballXvel = -1;
+                blockBreaker.ballYvel = -1;
+            }
+            if (paddleAngle >=5)
+            {
+                blockBreaker.ballXvel = -2;
+                blockBreaker.ballYvel = -.5;
+            }
+
+            
         }
     }
 

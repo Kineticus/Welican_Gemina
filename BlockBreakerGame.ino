@@ -102,10 +102,10 @@ void blockbreaker_game()
             //Going Up
             if ((blockBreaker.ballYvel <= 0) && (blockGone == 0))
             {
-                //Check Width (X) match
-                if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX + (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth))
+                //Check Width (X) match, Left Side && Right Side of block
+                if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth))
                 {
-                    //Check Height (Y) match
+                    //Check Height (Y) match, Bottom && Top
                     if ((blockBreaker.ballY - (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y + (blockBreaker.blockHeight /2)) && (blockBreaker.ballY <= blockBreaker.block[i].Y + blockBreaker.blockHeight + (blockBreaker.ballWidth / 2)))
                     {
                         //Bounce the ball
@@ -128,7 +128,7 @@ void blockbreaker_game()
             //Going Down
             if ((blockBreaker.ballYvel >= 0) && (blockGone == 0))
             {
-                if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX + (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth))
+                if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth))
                 {
                     if ((blockBreaker.ballY + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].Y + (blockBreaker.blockHeight /2)))
                     {

@@ -48,7 +48,7 @@ void blockbreaker_game()
     }
 
     //Draw the blocks
-    for (int i = 0; i < 40; i++)
+    for (int i = 0; i < 60; i++)
     {
         if (blockBreaker.block[i].Health != 0)
         {
@@ -74,7 +74,7 @@ void blockbreaker_game()
 
         //Ball on paddle
         blockBreaker.ballY = SCREEN_HEIGHT - (blockBreaker.paddleHeight + (blockBreaker.ballWidth / 2) + 1);
-        blockBreaker.ballX = player.X + (blockBreaker.paddleWidth /2);
+        blockBreaker.ballX = player.X + (blockBreaker.paddleWidth /2) + 5; //+5 is small left offset
 
         //A we waiting for a click to start?
         if ((knob1.click == 1) || (knob2.click == 1))
@@ -90,7 +90,7 @@ void blockbreaker_game()
     byte blockGone = 0;
 
     //Did we hit a block? Check every block
-    for (int i = 0; i < 40; i++)
+    for (int i = 0; i < 60; i++)
     {
         //Is the block "alive"
         if (blockBreaker.block[i].Health != 0)
@@ -102,16 +102,23 @@ void blockbreaker_game()
             //Going Up
             if ((blockBreaker.ballYvel <= 0) && (blockGone == 0))
             {
+                //Check Width (X) match
                 if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX + (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth))
                 {
-                    if ((blockBreaker.ballY - (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY <= blockBreaker.block[i].Y + blockBreaker.blockHeight + (blockBreaker.ballWidth / 2)))
+                    //Check Height (Y) match
+                    if ((blockBreaker.ballY - (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y + (blockBreaker.blockHeight /2)) && (blockBreaker.ballY <= blockBreaker.block[i].Y + blockBreaker.blockHeight + (blockBreaker.ballWidth / 2)))
                     {
+                        //Bounce the ball
                         blockBreaker.ballYvel *= -1;
                         if (blockBreaker.block[i].Health > 0)
                         {
                             blockBreaker.block[i].Health -= 1;
                         }
+
+                        //Skip to the end of block checking as this one is gone already
                         blockGone = 1;
+
+                        //Blink the Status LED and give the player a point
                         blockBreaker.score++;
                         ledcWrite(STATUS_LED, 4095);
                     } 
@@ -123,7 +130,7 @@ void blockbreaker_game()
             {
                 if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX + (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth))
                 {
-                    if (blockBreaker.ballY + (blockBreaker.ballWidth / 2) == blockBreaker.block[i].Y)
+                    if ((blockBreaker.ballY + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].Y + (blockBreaker.blockHeight /2)))
                     {
                         blockBreaker.ballYvel *= -1;
                         if (blockBreaker.block[i].Health > 0)
@@ -142,7 +149,7 @@ void blockbreaker_game()
             {
                 if ((blockBreaker.ballY - (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].Y + blockBreaker.blockHeight))
                 {
-                    if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX <= blockBreaker.block[i].X + blockBreaker.blockWidth))
+                    if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX <= blockBreaker.block[i].X + (blockBreaker.blockWidth / 2)))
                     {
                         blockBreaker.ballXvel *= -1;
                         if (blockBreaker.block[i].Health > 0)
@@ -162,7 +169,7 @@ void blockbreaker_game()
             {
                 if ((blockBreaker.ballY + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].Y + blockBreaker.blockHeight))
                 {
-                    if ((blockBreaker.ballX - (blockBreaker.ballWidth /2) <= blockBreaker.block[i].X + blockBreaker.blockWidth) && (blockBreaker.ballX >= blockBreaker.block[i].X))
+                    if ((blockBreaker.ballX - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth) && (blockBreaker.ballX >= blockBreaker.block[i].X - (blockBreaker.blockWidth / 2)))
                     {
                         blockBreaker.ballXvel *= -1;
                         if (blockBreaker.block[i].Health > 0)
@@ -287,7 +294,7 @@ void blockbreaker_game()
 
 void blockbreaker_setBlocks()
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 6; i++)
     {
         for (int ii = 0; ii < 10; ii++)
         {

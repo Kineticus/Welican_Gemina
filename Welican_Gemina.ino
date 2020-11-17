@@ -42,7 +42,7 @@ FASTLED_USING_NAMESPACE
 #if defined(FASTLED_VERSION) && (FASTLED_VERSION < 3001000)
 #warning "Requires FastLED 3.1 or later; check github for latest code."
 #endif
-#define VERSION_INFO "Build 0.520 - 11/5/20"
+#define VERSION_INFO "Build 0.530 - 11/16/20"
 #define KNOB_1C 25 //Program
 #define KNOB_2C 4  //Brightness 14
 #define MAX_MODES 6
@@ -623,6 +623,7 @@ struct Block
 
 struct BlockBreaker
 {
+  byte level;
   int score;
   float ballX;
   float ballY;
@@ -640,6 +641,7 @@ struct BlockBreaker
 };
 
 BlockBreaker blockBreaker = {
+    .level = 0,
     .score = 0,
     .ballX = 0,
     .ballY = 0,
@@ -985,24 +987,37 @@ void setup()
   //Read # of LEDs to use
   readNumberOfLEDs();
 
+  if (NUM_LEDS > 100)
+  {
+    Serial.print(NUM_LEDS - 1);
+  }
+  else
+  {
+    Serial.print(NUM_LEDS);
+  }
+  Serial.print(" LEDs - ");
+  
   //FastLED Declation
   if (globalLED.colorOrder == 1)
   {
     //GRB, most common for Strips / Reels
     FastLED.addLeds<LED_TYPE, DATA_PIN, GRB>(patternSettings.leds, NUM_LEDS);
     FastLED.addLeds<LED_TYPE, DATA_PIN_A, GRB>(patternSettings.leds, NUM_LEDS);
+    Serial.println("GRB");
   }
   else if (globalLED.colorOrder == 2)
   {
     //BGR, rare
     FastLED.addLeds<LED_TYPE, DATA_PIN, BGR>(patternSettings.leds, NUM_LEDS);
     FastLED.addLeds<LED_TYPE, DATA_PIN_A, BGR>(patternSettings.leds, NUM_LEDS);
+    Serial.println("BGR");
   }
   else
   {
     //RGB, most common for 12mm Pixel types
     FastLED.addLeds<LED_TYPE, DATA_PIN, RGB>(patternSettings.leds, NUM_LEDS);
     FastLED.addLeds<LED_TYPE, DATA_PIN_A, RGB>(patternSettings.leds, NUM_LEDS);
+    Serial.println("RGB");
   }
 
   for (int i = 0; i < NUM_LEDS; i++)

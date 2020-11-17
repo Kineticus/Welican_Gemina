@@ -70,7 +70,7 @@ void blockbreaker_game()
     else
     {
         u8g2.setCursor(SCREEN_WIDTH / 7, (SCREEN_HEIGHT / 1.3));
-        u8g2.print("! C L I C K !");
+        //u8g2.print("! C L I C K !");
 
         //Ball on paddle
         blockBreaker.ballY = SCREEN_HEIGHT - (blockBreaker.paddleHeight + (blockBreaker.ballWidth / 2) + 1);
@@ -88,11 +88,12 @@ void blockbreaker_game()
 
 
     byte blockGone = 0;
+    int blockCount = 0;
 
     //Did we hit a block? Check every block
     for (int i = 0; i < 60; i++)
     {
-        //Is the block "alive"
+        //Is the block "alive"?
         if (blockBreaker.block[i].Health != 0)
         {
             //There is a block here!
@@ -106,7 +107,7 @@ void blockbreaker_game()
                 if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth))
                 {
                     //Check Height (Y) match, Bottom && Top
-                    if ((blockBreaker.ballY - (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y + (blockBreaker.blockHeight /2)) && (blockBreaker.ballY <= blockBreaker.block[i].Y + blockBreaker.blockHeight + (blockBreaker.ballWidth / 2)))
+                    if ((blockBreaker.ballY - (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y + (blockBreaker.blockHeight / 2)) && (blockBreaker.ballY <= blockBreaker.block[i].Y + blockBreaker.blockHeight + (blockBreaker.ballWidth / 2)))
                     {
                         //Bounce the ball
                         blockBreaker.ballYvel *= -1;
@@ -130,7 +131,7 @@ void blockbreaker_game()
             {
                 if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth))
                 {
-                    if ((blockBreaker.ballY + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].Y + (blockBreaker.blockHeight /2)))
+                    if ((blockBreaker.ballY + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].Y + (blockBreaker.blockHeight / 2)))
                     {
                         blockBreaker.ballYvel *= -1;
                         if (blockBreaker.block[i].Health > 0)
@@ -181,8 +182,23 @@ void blockbreaker_game()
                         ledcWrite(STATUS_LED, 4095);
                     }
                 }
-            }     
+            }
+
+            //Add to Blocks Left count if it's not a wall
+            if (blockBreaker.block[i].Health != 255) 
+            {
+                blockCount += 1;     
+            }
         }
+    }
+
+    if (blockCount == 0)
+    {
+        u8g2.setCursor(4, SCREEN_HEIGHT - 8);
+        u8g2.print(" N E X T  L E V E L ");
+        u8g2.sendBuffer();
+        delay(5000);
+        endGameMode();
     }
 
     //Did we hit the wall left wall?
@@ -266,10 +282,9 @@ void blockbreaker_game()
         }
         else
         {
-            blockBreaker.ballYvel = -1; //Hit the paddle! Bounce the ball
+            blockBreaker.ballYvel *= -1; //Hit the paddle! Bounce the ball
             blockBreaker.message = 1;
             blockBreaker.messageTimer = 24;
-            blockBreaker.score++;
         }
     }
 

@@ -788,7 +788,7 @@ void readNumberOfLEDs()
   }
   else if (NUM_LEDS < 5)
   {
-    NUM_LEDS = 101;
+    NUM_LEDS = 5;
   }
 
   //Recalculate spacing

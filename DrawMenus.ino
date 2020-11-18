@@ -51,7 +51,7 @@ void drawMenuCommander()
   case 1: // Draw Games
   {
     drawMenuWords("Games",
-                  "Fallios", "Block Breaker", "Magic");
+                  "Fallios", "Block Breaker", "Magic", "Snake");
     drawMenuSelectionFrames();
   }
   break;
@@ -687,6 +687,7 @@ void drawMenuCommander()
       case 0:
       case 1:
       case 2:
+      case 3:
         globals.runMode = 2; // game mode
         setGameMode();
         break;

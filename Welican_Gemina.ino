@@ -614,6 +614,23 @@ Fallios fallios = {
     .tunnelTracker = 100,
     .tunnelWildcard = 0};
 
+struct Snake
+{
+  float X;
+  float Y;
+  float angle;
+  int Xa;
+  int Ya;
+};
+
+Snake snake = {
+  .X = 64.0,
+  .Y = 32.0,
+  .angle = 0.0,
+  .Xa = 0,
+  .Ya = 0
+};
+
 struct Block
 {
   byte X;
@@ -1073,6 +1090,9 @@ void loop()
       break;
     case 2:
       magic_game();
+      break;
+    case 3:
+      snake_game();
       break;
     }
     break;

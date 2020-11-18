@@ -493,6 +493,9 @@ void setGameMode()
   case 2:
     magic_reset();
     break;
+  case 3:
+    snake_reset();
+    break;
   }
 }
 

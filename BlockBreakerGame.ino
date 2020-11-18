@@ -48,12 +48,20 @@ void blockbreaker_game()
     }
 
     //Draw the blocks
-    for (int i = 0; i < 60; i++)
+    for (int i = 0; i < 70; i++)
     {
-        if (blockBreaker.block[i].Health != 0)
+        if (blockBreaker.block[i].Health == 0)
+        {
+            //Draw nothing in there is no health
+        }
+        else if (blockBreaker.block[i].Health < 254)
         {
             u8g2.drawBox(blockBreaker.block[i].X, blockBreaker.block[i].Y, blockBreaker.blockWidth, blockBreaker.blockHeight);
             //u8g2.drawBox(player.X, SCREEN_HEIGHT - blockBreaker.paddleHeight, blockBreaker.paddleWidth, 4);
+        }
+        else if (blockBreaker.block[i].Health == 255)
+        {
+            u8g2.drawFrame(blockBreaker.block[i].X, blockBreaker.block[i].Y, blockBreaker.blockWidth, blockBreaker.blockHeight);
         }
     }
 
@@ -84,14 +92,14 @@ void blockbreaker_game()
     }
 
     //Draw the ball
-    u8g2.drawDisc(int(blockBreaker.ballX), int(blockBreaker.ballY), 2, U8G2_DRAW_ALL);
+    u8g2.drawDisc(int(blockBreaker.ballX), int(blockBreaker.ballY), (blockBreaker.ballWidth / 2), U8G2_DRAW_ALL);
 
 
     byte blockGone = 0;
     int blockCount = 0;
 
     //Did we hit a block? Check every block
-    for (int i = 0; i < 60; i++)
+    for (int i = 0; i < 70; i++)
     {
         //Is the block "alive"?
         if (blockBreaker.block[i].Health != 0)
@@ -111,36 +119,21 @@ void blockbreaker_game()
                     {
                         //Bounce the ball
                         blockBreaker.ballYvel *= -1;
-                        if (blockBreaker.block[i].Health > 0)
-                        {
-                            blockBreaker.block[i].Health -= 1;
-                        }
-
+                        
                         //Skip to the end of block checking as this one is gone already
                         blockGone = 1;
 
-                        //Blink the Status LED and give the player a point
-                        blockBreaker.score++;
-                        ledcWrite(STATUS_LED, 4095);
-                    } 
-                }
-            }
-
-            //Going Down
-            if ((blockBreaker.ballYvel >= 0) && (blockGone == 0))
-            {
-                if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth))
-                {
-                    if ((blockBreaker.ballY + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].Y + (blockBreaker.blockHeight / 2)))
-                    {
-                        blockBreaker.ballYvel *= -1;
-                        if (blockBreaker.block[i].Health > 0)
+                        if (blockBreaker.block[i].Health != 255)
                         {
                             blockBreaker.block[i].Health -= 1;
                         }
-                        blockGone = 1;
-                        blockBreaker.score++;
-                        ledcWrite(STATUS_LED, 4095);
+
+                        //Blink the Status LED and give the player a point
+                        if (blockBreaker.block[i].Health == 0)
+                        {                          
+                            blockBreaker.score++;
+                            ledcWrite(STATUS_LED, 4095);
+                        }
                     } 
                 }
             }
@@ -153,18 +146,25 @@ void blockbreaker_game()
                     if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX <= blockBreaker.block[i].X + (blockBreaker.blockWidth / 2)))
                     {
                         blockBreaker.ballXvel *= -1;
-                        if (blockBreaker.block[i].Health > 0)
+                        
+                        //Skip to the end of block checking as this one is gone already
+                        blockGone = 1;
+
+                        if (blockBreaker.block[i].Health != 255)
                         {
                             blockBreaker.block[i].Health -= 1;
                         }
-                        blockGone = 1;
-                        blockBreaker.score++;
-                        ledcWrite(STATUS_LED, 4095);
+
+                        //Blink the Status LED and give the player a point
+                        if (blockBreaker.block[i].Health == 0)
+                        {                          
+                            blockBreaker.score++;
+                            ledcWrite(STATUS_LED, 4095);
+                        }
                     }
                 }
             }
 
-            
             //Going Left
             if ((blockBreaker.ballXvel < 0) && (blockGone == 0))
             {
@@ -173,14 +173,49 @@ void blockbreaker_game()
                     if ((blockBreaker.ballX - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth) && (blockBreaker.ballX >= blockBreaker.block[i].X - (blockBreaker.blockWidth / 2)))
                     {
                         blockBreaker.ballXvel *= -1;
-                        if (blockBreaker.block[i].Health > 0)
+                        
+                        //Skip to the end of block checking as this one is gone already
+                        blockGone = 1;
+
+                        if (blockBreaker.block[i].Health != 255)
                         {
                             blockBreaker.block[i].Health -= 1;
                         }
-                        blockGone = 1;
-                        blockBreaker.score++;
-                        ledcWrite(STATUS_LED, 4095);
+
+                        //Blink the Status LED and give the player a point
+                        if (blockBreaker.block[i].Health == 0)
+                        {                          
+                            blockBreaker.score++;
+                            ledcWrite(STATUS_LED, 4095);
+                        }
                     }
+                }
+            }
+
+            //Going Down
+            if ((blockBreaker.ballYvel >= 0) && (blockGone == 0))
+            {
+                if ((blockBreaker.ballX + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].X) && (blockBreaker.ballX - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].X + blockBreaker.blockWidth))
+                {
+                    if ((blockBreaker.ballY + (blockBreaker.ballWidth / 2) >= blockBreaker.block[i].Y) && (blockBreaker.ballY - (blockBreaker.ballWidth / 2) <= blockBreaker.block[i].Y + (blockBreaker.blockHeight / 3)))
+                    {
+                        blockBreaker.ballYvel *= -1;
+
+                        //Skip to the end of block checking as this one is gone already
+                        blockGone = 1;
+
+                        if (blockBreaker.block[i].Health != 255)
+                        {
+                            blockBreaker.block[i].Health -= 1;
+                        }
+
+                        //Blink the Status LED and give the player a point
+                        if (blockBreaker.block[i].Health == 0)
+                        {                          
+                            blockBreaker.score++;
+                            ledcWrite(STATUS_LED, 4095);
+                        }
+                    } 
                 }
             }
 
@@ -194,11 +229,21 @@ void blockbreaker_game()
 
     if (blockCount == 0)
     {
+        //Advance level
+        blockBreaker.level ++;
+
         u8g2.setCursor(4, SCREEN_HEIGHT - 8);
         u8g2.print(" N E X T  L E V E L ");
+        u8g2.setCursor(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        u8g2.print(blockBreaker.level);
         u8g2.sendBuffer();
         delay(5000);
-        endGameMode();
+
+        //Not running, give user a break
+        blockBreaker.running = 0;
+        
+        //Reset blocks with new level layout
+        blockbreaker_setBlocks(blockBreaker.level);
     }
 
     //Did we hit the wall left wall?
@@ -265,9 +310,7 @@ void blockbreaker_game()
             {
                 blockBreaker.ballXvel = -2;
                 blockBreaker.ballYvel = -.5;
-            }
-
-            
+            }          
         }
     }
 
@@ -307,16 +350,121 @@ void blockbreaker_game()
     }
 }
 
-void blockbreaker_setBlocks()
+void blockbreaker_setBlocks(byte level)
 {
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 70; i++)
     {
-        for (int ii = 0; ii < 10; ii++)
+        blockBreaker.block[i].Health = 0;
+    }
+
+    //Reset ball velocity
+    blockBreaker.ballXvel = 1;
+    blockBreaker.ballYvel = -1;
+
+    Serial.println("Block [i]: X, Y, Health");
+    switch (level)
+    {
+        case 0:
         {
-            blockBreaker.block[(i * 10) + ii].X = ii * (blockBreaker.blockWidth + 2) + 5;
-            blockBreaker.block[(i * 10) + ii].Y = i * (blockBreaker.blockHeight + 2) + 3;
-            blockBreaker.block[(i * 10) + ii].Health = 1;
+            Serial.println("**** LEVEL 1 ****");
+            blockBreaker.blockWidth = 20;
+            blockBreaker.blockHeight = 10;
+            blockBreaker.paddleWidth = 25;
+            blockBreaker.ballWidth = 6;
+            for (int i = 0; i < 3; i++)
+            {
+                //for (int ii = 0; ii < 10; ii++)
+                for (int ii = 0; ii < 5; ii++)
+                {
+                    byte iii = (i * 10) + ii;
+                    
+                    blockBreaker.block[iii].X = ii * (blockBreaker.blockWidth + 4) + 5;
+                    blockBreaker.block[iii].Y = i * (blockBreaker.blockHeight + 4) + 3;
+                    blockBreaker.block[iii].Health = 1;
+
+                    /*
+                    if (iii % 2)
+                    {
+                        blockBreaker.block[iii].Health = 255;
+                    }
+                    else
+                    {
+                        blockBreaker.block[iii].Health = 1;
+                    }
+                    */
+
+                    Serial.print("Block ");
+                    Serial.print(iii);
+                    Serial.print(": ");
+                    Serial.print(blockBreaker.block[iii].X);
+                    Serial.print(",");
+                    Serial.print(blockBreaker.block[iii].Y);
+                    Serial.print(",");
+                    Serial.println(blockBreaker.block[iii].Health);
+                }
+            }
         }
+        break;
+        case 1:
+        {
+            blockBreaker.blockWidth = 15;
+            blockBreaker.blockHeight = 8;
+            blockBreaker.paddleWidth = 16;
+            blockBreaker.ballWidth = 4;
+            for (int i = 0; i < 3; i++)
+            {
+                for (int ii = 0; ii < 7; ii++)
+                {
+                    blockBreaker.block[(i * 10) + ii].X = ii * (blockBreaker.blockWidth + 2) + 5;
+                    blockBreaker.block[(i * 10) + ii].Y = i * (blockBreaker.blockHeight + 2) + 3;
+                    blockBreaker.block[(i * 10) + ii].Health = 1;
+                }
+            }
+        }
+        break;
+        case 2:
+        {
+            blockBreaker.blockWidth = 10;
+            blockBreaker.blockHeight = 5;
+            blockBreaker.paddleWidth = 16;
+            blockBreaker.ballWidth = 4;
+            for (int i = 0; i < 3; i++)
+            {
+                for (int ii = 0; ii < 10; ii++)
+                {
+                    blockBreaker.block[(i * 10) + ii].X = ii * (blockBreaker.blockWidth + 2) + 5;
+                    blockBreaker.block[(i * 10) + ii].Y = i * (blockBreaker.blockHeight + 2) + 3;
+                    blockBreaker.block[(i * 10) + ii].Health = 1;
+                }
+            }
+        }
+        break;
+        case 3:
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                for (int ii = 0; ii < 10; ii++)
+                {
+                    blockBreaker.block[(i * 10) + ii].X = ii * (blockBreaker.blockWidth + 2) + 5;
+                    blockBreaker.block[(i * 10) + ii].Y = i * (blockBreaker.blockHeight + 2) + 3;
+                    blockBreaker.block[(i * 10) + ii].Health = 1;
+                }
+            }
+        }
+        break;
+        case 4:
+        {
+            for (int i = 0; i < 7; i++)
+            {
+                for (int ii = 0; ii < 10; ii++)
+                {
+                    blockBreaker.block[(i * 10) + ii].X = ii * (blockBreaker.blockWidth + 2) + 5;
+                    blockBreaker.block[(i * 10) + ii].Y = i * (blockBreaker.blockHeight + 2) + 3;
+                    blockBreaker.block[(i * 10) + ii].Health = 1;
+                }
+            }
+        }
+        break;
     }
 }
 
@@ -341,6 +489,9 @@ void blockbreaker_reset()
     //And at the bottom
     blockBreaker.paddleHeight = 2;
 
+    //Level back to 0
+    blockBreaker.level = 0;
+
     //Reset block layout
-    blockbreaker_setBlocks();
+    blockbreaker_setBlocks(blockBreaker.level);
 }

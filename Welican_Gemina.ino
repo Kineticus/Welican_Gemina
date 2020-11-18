@@ -637,7 +637,7 @@ struct BlockBreaker
   byte running;
   byte blockWidth;
   byte blockHeight;
-  Block block[60];
+  Block block[70];
 };
 
 BlockBreaker blockBreaker = {

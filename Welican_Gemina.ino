@@ -614,21 +614,40 @@ Fallios fallios = {
     .tunnelTracker = 100,
     .tunnelWildcard = 0};
 
+struct snakeSegment
+{
+  byte x;
+  byte y;
+};
+
 struct Snake
 {
   float X;
   float Y;
+  int num;
+  int score;
+  byte speed;
+  byte tick;
+  int oldX;
   float angle;
   int Xa;
   int Ya;
+  int sensitivity;
+  snakeSegment segment[1000];
 };
 
 Snake snake = {
   .X = 64.0,
   .Y = 32.0,
+  .num = 10, //Set in reset
+  .score = 0,
+  .speed = 5,
+  .tick = 0,
+  .oldX = 0,
   .angle = 0.0,
   .Xa = 0,
-  .Ya = 0
+  .Ya = 0,
+  .sensitivity = 4
 };
 
 struct Block

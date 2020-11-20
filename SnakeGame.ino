@@ -7,42 +7,145 @@ Brian Schimke, 2020
 
 void snake_game()
 {
-    //Add input from the other knob and clear it
-    player.X += player.Y;
-    player.Y = 0;
+    //Only increment game on Speed
 
-    //Make sure we're in range
-    if (player.X < 0)
+    snake.tick++;
+    
+    if (snake.tick >= snake.speed)
     {
-        player.X += 32;
+        //Reset ticks
+        snake.tick = 0;
+        
+        //Shift the snake
+        for (int i = 0; i < snake.num; i++)
+        {
+            snake.segment[i].x = snake.segment[i+1].x;
+            snake.segment[i].y = snake.segment[i+1].y;
+        }
+
+        //Add input from the other knob and clear it
+        player.X += player.Y;
+        player.Y = 0;
+
+        //Make sure we didn't goo to far, OPTIONAL
+        if ((player.X - snake.oldX) > snake.sensitivity)
+        {
+            player.X = snake.oldX + snake.sensitivity;
+        }
+        else if ((player.X - snake.oldX) < -snake.sensitivity)
+        {
+            player.X = snake.oldX - snake.sensitivity;
+        }
+
+        //Make sure we're in range
+        if (player.X < 0)
+        {
+            player.X += 32;
+        }
+        if (player.X > 31)
+        {
+            player.X -= 32;
+        }
+
+        //Cache old payer position  
+        snake.oldX = player.X;
+
+        if (player.X < 4)
+        {
+            snake.angle = 0;
+        }
+        else if (player.X < 8)
+        {
+            snake.angle = .8;
+        }
+        else if (player.X < 12)
+        {
+            snake.angle = 1.6;
+        }
+        else if (player.X < 16)
+        {
+            snake.angle = 2.4;
+        }
+        else if (player.X < 20)
+        {
+            snake.angle = 3.2;
+        }
+        else if (player.X < 24)
+        {
+            snake.angle = 4;
+        }
+        else if (player.X < 28)
+        {
+            snake.angle = 4.8;
+        }
+        else if (player.X < 32)
+        {
+            snake.angle = 5.6;
+        }
+
+        //Calculate 1 point on circle
+        snake.segment[snake.num].x += (1 * sin(-snake.angle)) + .5;
+        snake.segment[snake.num].y += (1 * cos(-snake.angle)) + .5;
     }
-    if (player.X > (31))
+
+    //Draw the snake
+    for (int i = 0; i <= snake.num; i++)
     {
-        player.X -= 32;
+        u8g2.drawPixel(snake.segment[i].x, snake.segment[i].y);
     }
 
-    snake.angle = player.X * - .196;
-
-    //Calculate 1 point on circle
-    snake.Xa = snake.X + (6 * sin(snake.angle)) + .5;
-    snake.Ya = snake.Y + (6 * cos(snake.angle)) + .5;
-
-    //Draw a line
-    u8g2.drawLine(snake.Xa, snake.Ya, snake.X, snake.Y);
-
-    //Calculate Vector Direction
-    snake.X += sin(snake.angle) / 5.0;
-    snake.Y += cos(snake.angle) / 5.0;
-
-    //Exit on click for testing purposes
-    if ((knob1.click == 1) || (knob2.click == 1))
+    //Top and Bottom check
+    if ((snake.segment[snake.num].y < 0) || (snake.segment[snake.num].y > 63))
     {
-        endGameMode();
+        snake_gameOver();
+    }
+    
+    //Left and Right check
+    if ((snake.segment[snake.num].x < 0) || (snake.segment[snake.num].x > 127))
+    {
+        snake_gameOver();
+    }
+
+    //Hitting yourself check
+    for (int i = 0; i < snake.num; i++)
+    {
+        if ((snake.segment[i].x == snake.segment[snake.num].x) && (snake.segment[i].y == snake.segment[snake.num].y))
+        {
+            snake_gameOver();
+        }
     }
 
 }
 
+void snake_gameOver()
+{
+    //Place the cursor and draw some game over message
+    u8g2.setCursor(4, SCREEN_HEIGHT - 8);
+    u8g2.print("G A M E  O V E R !!!");
+
+    //Draw the score?
+    u8g2.setCursor(35, (SCREEN_HEIGHT / 1.5));
+    u8g2.print("Score: ");
+    u8g2.setCursor(75, (SCREEN_HEIGHT / 1.5));
+    u8g2.print(snake.score);
+
+    //Send display out
+    u8g2.sendBuffer();
+    delay(5000);
+    endGameMode();
+}
+
 void snake_reset()
 {
+    snake.num = 30;
+    snake.score = 0;
+    player.X = 16;
+    snake.speed = 3;
 
+    for (int i = 0; i <= snake.num; i++)
+    {
+        snake.segment[i].x = 64 - i;
+        snake.segment[i].y = 32;
+    }
+    
 }

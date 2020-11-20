@@ -88,6 +88,12 @@ void snake_game()
         snake.segment[snake.num].y += (1 * cos(-snake.angle)) + .5;
     }
 
+    //Draw borders
+    u8g2.drawVLine(0, 0, SCREEN_HEIGHT);
+    u8g2.drawVLine(SCREEN_WIDTH, 0, SCREEN_HEIGHT);
+    u8g2.drawHLine(0, 0, SCREEN_WIDTH);
+    u8g2.drawHLine(0, SCREEN_HEIGHT, SCREEN_WIDTH + 1);
+
     //Draw the snake
     for (int i = 0; i <= snake.num; i++)
     {
@@ -95,13 +101,13 @@ void snake_game()
     }
 
     //Top and Bottom check
-    if ((snake.segment[snake.num].y < 0) || (snake.segment[snake.num].y > 63))
+    if ((snake.segment[snake.num].y <= 0) || (snake.segment[snake.num].y >= 63))
     {
         snake_gameOver();
     }
     
     //Left and Right check
-    if ((snake.segment[snake.num].x < 0) || (snake.segment[snake.num].x > 127))
+    if ((snake.segment[snake.num].x <= 0) || (snake.segment[snake.num].x >= 127))
     {
         snake_gameOver();
     }
@@ -137,14 +143,16 @@ void snake_gameOver()
 
 void snake_reset()
 {
-    snake.num = 30;
+    snake.num = 55;
     snake.score = 0;
-    player.X = 16;
+    player.X = 24;
+    player.Y = 0;
+    snake.oldX = 24;
     snake.speed = 3;
 
     for (int i = 0; i <= snake.num; i++)
     {
-        snake.segment[i].x = 64 - i;
+        snake.segment[i].x = 10 + i;
         snake.segment[i].y = 32;
     }
     

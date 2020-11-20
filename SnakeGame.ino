@@ -98,8 +98,6 @@ void snake_game()
         u8g2.drawPixel(snake.segment[snake.num].x + (1 * sin(-snake.angle)) + .5, snake.segment[snake.num].y + (1 * cos(-snake.angle)) + .5);
     }
     
-
-
     //Draw borders
     u8g2.drawVLine(0, 0, SCREEN_HEIGHT);
     u8g2.drawVLine(SCREEN_WIDTH, 0, SCREEN_HEIGHT);
@@ -112,10 +110,89 @@ void snake_game()
         u8g2.drawPixel(snake.segment[i].x, snake.segment[i].y);
     }
 
+    //Draw apples and check for bites
+    snake_manageOrchard();
+    
+
     //Run our collision checks
     if (snake_checkCollisions())
     {
         snake_gameOver();
+    }
+}
+
+void snake_manageOrchard()
+{
+    //Random chance to spawn apple
+    if (random(0, snake.appleRate) == 1)
+    {   
+        //Look through max apples
+        for (int i = 0; i < snake.maxApples; i++)
+        {
+            //Find one that is not active
+            if(snake.apple[i].active == false)
+            {
+                //enable it!
+                snake.apple[i].active = true;
+                snake.apple[i].x = random(3, SCREEN_WIDTH - 3);
+                snake.apple[i].y = random(3, SCREEN_HEIGHT - 3);
+                snake.apple[i].size = random(1, snake.maxAppleSize);
+
+                //Make sure it isn't on the snake. If so, try again
+                while (snake_checkBlock(snake.apple[i].x,snake.apple[i].y))
+                {
+                    snake.apple[i].x = random(3, SCREEN_WIDTH - 3);
+                    snake.apple[i].y = random(3, SCREEN_HEIGHT - 3);
+                }
+                
+                //Meet exit condition for loop
+                i = snake.maxApples;
+            }
+        }
+    }
+
+    //Look through all apples
+    for (int i = 0; i <= snake.maxApples; i++)
+    {
+        //Find ones that are active
+        if(snake.apple[i].active == true)
+        {
+            //Draw them
+            u8g2.drawDisc(snake.apple[i].x, snake.apple[i].y, snake.apple[i].size, U8G2_DRAW_ALL);
+
+            //See if they are being eaten, taking into account size
+            if ((snake.segment[snake.num].x >= snake.apple[i].x - snake.apple[i].size) && (snake.segment[snake.num].x <= snake.apple[i].x + snake.apple[i].size))
+            {
+                if ((snake.segment[snake.num].y >= snake.apple[i].y - snake.apple[i].size) && (snake.segment[snake.num].y <= snake.apple[i].y + snake.apple[i].size))  
+                {
+                    //Eat the apple
+                    snake.apple[i].active = false;
+
+                    //Calculate how much to grow
+                    int extraLength = snake.apple[i].size * snake.lengthMultiplier;
+
+                    if (extraLength > snake.num)
+                    {
+                        extraLength = snake.num - 1;
+                    }
+
+                    //Score = size
+                    snake.score += snake.apple[i].size * snake.scoreMultiplier;
+
+                    
+
+                    //Shift snake up
+                    for (int ii = snake.num; ii > 0; ii--)
+                    {
+                        snake.segment[ii + extraLength].x = snake.segment[ii].x;
+                        snake.segment[ii + extraLength].y = snake.segment[ii].y;
+                    }
+
+                    //Extra length = size
+                    snake.num += extraLength;
+                }
+            }
+        }
     }
 }
 
@@ -231,9 +308,13 @@ void snake_gameOver()
 
 void snake_reset()
 {
-    snake.num = 55;
-    snake.speed = 4;
+    snake.num = 10;
+    snake.speed = 3;
     snake.score = 0;
+    snake.scoreMultiplier = 8;
+    snake.lengthMultiplier = 8;
+    snake.maxApples = 3;
+    snake.appleRate = 300;
     
     //Set knobs to desired states
     player.X = 24;
@@ -247,4 +328,9 @@ void snake_reset()
         snake.segment[i].y = 32;
     }
     
+    //Clear apples
+    for (int i = 0; i <= 10; i++)
+    {
+        snake.apple[i].active = false;
+    }
 }

@@ -620,12 +620,22 @@ struct snakeSegment
   byte y;
 };
 
+struct snakeApple
+{
+  bool active;
+  byte x;
+  byte y;
+  byte size;
+};
+
 struct Snake
 {
   float X;
   float Y;
   int num;
   int score;
+  int scoreMultiplier;
+  int lengthMultiplier;
   byte speed;
   byte tick;
   int oldX;
@@ -633,7 +643,11 @@ struct Snake
   int Xa;
   int Ya;
   int sensitivity;
-  snakeSegment segment[1000];
+  int appleRate;
+  int maxApples;
+  int maxAppleSize;
+  snakeSegment segment[1200];
+  snakeApple apple[25];
 };
 
 Snake snake = {
@@ -641,13 +655,18 @@ Snake snake = {
   .Y = 32.0,
   .num = 10, //Set in reset
   .score = 0,
+  .scoreMultiplier = 1,
+  .lengthMultiplier = 1,
   .speed = 5,
   .tick = 0,
   .oldX = 0,
   .angle = 0.0,
   .Xa = 0,
   .Ya = 0,
-  .sensitivity = 4
+  .sensitivity = 4,
+  .appleRate = 100,
+  .maxApples = 10,
+  .maxAppleSize = 4,
 };
 
 struct Block

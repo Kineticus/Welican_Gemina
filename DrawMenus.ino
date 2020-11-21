@@ -12,22 +12,33 @@
 
 void drawMenu(int numberOfItems, int currentlySelected, ...)
 {
+  //Normal drawing color
   u8g2.setDrawColor(1);
+
+  //Create a new list with however many items we received
   va_list menuItems;
   va_start (menuItems, currentlySelected);
 
-  //Test output
-  for (int i = 0; i < numberOfItems; i++)        
+  //Take the first string and send it to the drawMenuTop function
+  drawMenuTop(String(va_arg (menuItems, char*)));
+
+  //Go through the remaining strings
+  for (int i = 1; i <= numberOfItems; i++)        
   {
     u8g2.setCursor(4, 10 + (10 * i));
-    u8g2.print(i+1);
+    u8g2.print(i);
     u8g2.print(" - ");
     u8g2.print(String(va_arg (menuItems, char*))); 
   }
+
+  //Close our list
   va_end (menuItems);
   
+  //Invert drawing color & draw the box
   u8g2.setDrawColor(2);
-  u8g2.drawBox(1, 1 + (10 * currentlySelected), 84, 10);
+  u8g2.drawBox(0, 11 + (10 * currentlySelected), 127, 10);
+
+  //Back to default draw color
   u8g2.setDrawColor(1);
 }
 
@@ -72,7 +83,7 @@ void drawMenuCommander()
   break;
   case 1: // Draw Games
   {
-   drawMenu(4, globalMenu.menu[globalMenu.currentMenu], "Fallios", "Blocker", "Magic8", "Snaker");
+   drawMenu(4, globalMenu.menu[globalMenu.currentMenu], "Games", "Fallios", "Block Breaker", "Magic 8 Ball", "Daddy Worm");
 
 
     //drawMenuWords("Games",

@@ -28,6 +28,7 @@ void createRoutes(AsyncWebServer *server)
       }
       if (p->name() == "favorite")
       {
+        startSmoothOperator();
         int patternMode = p->value().toInt();
         patternSettings.pattern[globals.mode] = patternMode;
         globals.mode = 5;

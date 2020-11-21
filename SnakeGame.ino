@@ -313,8 +313,8 @@ void snake_reset()
     snake.score = 0;
     snake.scoreMultiplier = 8;
     snake.lengthMultiplier = 8;
-    snake.maxApples = 3;
-    snake.appleRate = 300;
+    snake.maxApples = 2;
+    snake.appleRate = 100;
     
     //Set knobs to desired states
     player.X = 24;

@@ -10,6 +10,28 @@
  *        6 - Max Favs    7 - Reset Favs   8 - New Fav 
  * *****************************************************************/
 
+void drawMenu(int numberOfItems, int currentlySelected, ...)
+{
+  u8g2.setDrawColor(1);
+  va_list menuItems;
+  va_start (menuItems, currentlySelected);
+
+  //Test output
+  for (int i = 0; i < numberOfItems; i++)        
+  {
+    u8g2.setCursor(4, 10 + (10 * i));
+    u8g2.print(i+1);
+    u8g2.print(" - ");
+    u8g2.print(String(va_arg (menuItems, char*))); 
+  }
+  va_end (menuItems);
+  
+  u8g2.setDrawColor(2);
+  u8g2.drawBox(1, 1 + (10 * currentlySelected), 84, 10);
+  u8g2.setDrawColor(1);
+}
+
+
 void drawMenuWords(String menuName, String first, String second, String third, String fourth = "")
 {
   drawMenuTop(menuName);
@@ -50,9 +72,14 @@ void drawMenuCommander()
   break;
   case 1: // Draw Games
   {
-    drawMenuWords("Games",
-                  "Fallios", "Block Breaker", "Magic", "Snake");
-    drawMenuSelectionFrames();
+   drawMenu(4, globalMenu.menu[globalMenu.currentMenu], "Fallios", "Blocker", "Magic8", "Snaker");
+
+
+    //drawMenuWords("Games",
+    //              "Fallios", "Block Breaker", "Magic", "Snake");
+    //drawMenuSelectionFrames();
+
+
   }
   break;
   case 2: // Draw Settings

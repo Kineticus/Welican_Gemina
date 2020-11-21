@@ -56,37 +56,40 @@ void startWebsite(AsyncWebServer *server)
 
 String websiteProcessor(const String &var)
 {
+  //Multithread timing issue
+  delay(5);
+
   if (var == "BRIGHTNESS")
   {
-    if (brightness.current == 0)
+    if (brightness.target == 0)
     {
       return "Off";
     }
-    else if (brightness.current == 255)
+    else if (brightness.target == 255)
     {
       return "Max";
     }
-    else if (brightness.current > 200)
+    else if (brightness.target > 200)
     {
       return "Bright";
     }
-    else if (brightness.current > 160)
+    else if (brightness.target > 160)
     {
       return "Half";
     }
-    else if (brightness.current > 120)
+    else if (brightness.target > 120)
     {
       return "Third";
     }
-    else if (brightness.current > 80)
+    else if (brightness.target > 80)
     {
       return "Quarter";
     }
-    else if (brightness.current > 40)
+    else if (brightness.target > 40)
     {
       return "Dim";
     }
-    else if (brightness.current > 0)
+    else if (brightness.target > 0)
     {
       return "Moody";
     }

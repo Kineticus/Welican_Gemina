@@ -672,11 +672,11 @@ Snake snake = {
 struct Ball
 {
   bool active;
-  int x;
-  int y;
+  float x;
+  float y;
   uint8_t size;
-  int8_t velX;
-  int8_t velY;
+  float velX;
+  float velY;
 };
 
 struct Pong
@@ -701,10 +701,10 @@ Pong pong = {
   .score2 = 0,
   .scoreToWin = 10,
   .spacing = 4,
-  .paddleWidth1 = 15,
-  .paddleWidth2 = 15,
-  .paddleHeight1 = 5,
-  .paddleHeight2 = 5
+  .paddleWidth1 = 10,
+  .paddleWidth2 = 10,
+  .paddleHeight1 = 2,
+  .paddleHeight2 = 2
 };
 
 struct Block

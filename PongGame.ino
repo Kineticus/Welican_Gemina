@@ -223,8 +223,8 @@ void pong_gameOver()
 
 void pong_reset()
 {
-    player.X = 39; //
-    player.Y = 38; //
+    player.X = (SCREEN_HEIGHT / 2) + (pong.paddleWidth1 / 2) + 1; //
+    player.Y = (SCREEN_HEIGHT / 2) + (pong.paddleWidth2 / 2); //
     pong.score1 = 0;
     pong.score2 = 0;
     pong.speed = 0;

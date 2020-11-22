@@ -436,7 +436,7 @@ MenuModel globalMenu = {
     //Root Menu Items, Game Menu Items, Settings Menu Items
     .menuMax = {
         3,                                 //Main
-        3,                                 //Game
+        4,                                 //Game
         3,                                 //Settings
         3,                                 //LED Settings
         1,                                 //ZIP Code
@@ -667,6 +667,42 @@ Snake snake = {
   .appleRate = 100,
   .maxApples = 10,
   .maxAppleSize = 4,
+};
+
+struct Ball
+{
+  bool active;
+  int x;
+  int y;
+  uint8_t size;
+  int8_t velX;
+  int8_t velY;
+};
+
+struct Pong
+{
+  byte tick;
+  byte speed;
+  int score1;
+  int score2;
+  int spacing;
+  int paddleWidth1;
+  int paddleWidth2;
+  int paddleHeight1;
+  int paddleHeight2;
+  Ball ball[20];
+};
+
+Pong pong = {
+  .tick = 0,
+  .speed = 5,
+  .score1 = 0,
+  .score2 = 0,
+  .spacing = 4,
+  .paddleWidth1 = 15,
+  .paddleWidth2 = 15,
+  .paddleHeight1 = 5,
+  .paddleHeight2 = 5
 };
 
 struct Block
@@ -1132,6 +1168,9 @@ void loop()
     case 3:
       snake_game();
       break;
+    case 4:
+      pong_game();
+      break;
     }
     break;
   case 3: //Clock/Weather/Info modes
@@ -1250,7 +1289,7 @@ void loop()
   // Serial.println(eqBands.bandValues[4]);
   //Serial.print(" ");
   
-  EVERY_N_MILLISECONDS(10000)
+  EVERY_N_MILLISECONDS(100000)
   {
     Serial.print("FPS: ");
     Serial.println(devEnv.fps / 10);

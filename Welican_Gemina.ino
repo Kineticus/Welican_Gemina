@@ -685,6 +685,7 @@ struct Pong
   byte speed;
   int score1;
   int score2;
+  int scoreToWin;
   int spacing;
   int paddleWidth1;
   int paddleWidth2;
@@ -698,6 +699,7 @@ Pong pong = {
   .speed = 5,
   .score1 = 0,
   .score2 = 0,
+  .scoreToWin = 10,
   .spacing = 4,
   .paddleWidth1 = 15,
   .paddleWidth2 = 15,

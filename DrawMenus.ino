@@ -36,7 +36,7 @@ void drawMenu(int numberOfItems, int currentlySelected, ...)
   
   //Invert drawing color & draw the box
   u8g2.setDrawColor(2);
-  u8g2.drawBox(0, 11 + (10 * currentlySelected), 127, 10);
+  u8g2.drawBox(0, 11 + (10 * currentlySelected), 128, 10);
 
   //Back to default draw color
   u8g2.setDrawColor(1);
@@ -83,7 +83,8 @@ void drawMenuCommander()
   break;
   case 1: // Draw Games
   {
-   drawMenu(4, globalMenu.menu[globalMenu.currentMenu], "Games", "Fallios", "Block Breaker", "Magic 8 Ball", "Daddy Worm");
+    drawMenu(5, globalMenu.menu[globalMenu.currentMenu], "Games", 
+      "Fallios", "Block Breaker", "Magic 8 Ball", "Daddy Worm", "Pong");
 
 
     //drawMenuWords("Games",
@@ -726,10 +727,10 @@ void drawMenuCommander()
       case 1:
       case 2:
       case 3:
-        globals.runMode = 2; // game mode
+      case 4:
         setGameMode();
         break;
-      case 4:
+      case 5:
         globalMenu.currentMenu = 0; // back to main menu
         break;
       }

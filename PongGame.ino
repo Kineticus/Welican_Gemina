@@ -95,13 +95,26 @@ void pong_game()
                     if ((pong.ball[i].y + pong.ball[i].size >= SCREEN_HEIGHT - player.X) && (pong.ball[i].y - pong.ball[i].size < SCREEN_HEIGHT - player.X + pong.paddleWidth1)) 
                     {
                         pong.ball[i].velX *= -1;
-                        pong.ball[i].x = SCREEN_WIDTH - pong.paddleHeight1 - pong.ball[i].size; //+1
+                        //pong.ball[i].x = SCREEN_WIDTH - pong.paddleHeight1 - pong.ball[i].size; //+1
                         Serial.print("1o = ");
                         int offset = SCREEN_HEIGHT - player.X - pong.ball[i].y + (pong.paddleWidth1 / 2);
                         Serial.println(offset);
                         Serial.print("velvX, Y = ");
-                        pong.ball[i].velY = (offset * - 1) / 2;
-                        pong.ball[i].velX = abs((offset - (pong.paddleWidth1 / 2) + 1) / 2) * - 1;
+                        pong.ball[i].velY = offset * - 1;
+                        if (abs(offset) > 1)
+                        {
+                            pong.ball[i].velY = (offset / 2) * - 1;
+                        }
+                        //pong.ball[i].velX = abs((offset - (pong.paddleWidth1 / 2) + 1) / 2) * - 1;
+                        if ((pong.ball[i].velY > 1) || (pong.ball[i].velY < -1))
+                        {
+                            pong.ball[i].velX = offset / pong.ball[i].velY;
+                        }
+                        else
+                        {
+                            pong.ball[i].velX = -2;
+                        }
+                        
                         Serial.print(pong.ball[i].velX);
                         Serial.print(" ");
                         Serial.println(pong.ball[i].velY);
@@ -114,13 +127,26 @@ void pong_game()
                     if ((pong.ball[i].y - pong.ball[i].size < player.Y) && (pong.ball[i].y + pong.ball[i].size >= player.Y - pong.paddleWidth2)) 
                     {    
                         pong.ball[i].velX *= -1;
-                        pong.ball[i].x = pong.ball[i].size + pong.paddleHeight2; //-1
+                        //pong.ball[i].x = pong.ball[i].size + pong.paddleHeight2; //-1
                         Serial.print("2o = ");
                         int offset = pong.ball[i].y - player.Y + (pong.paddleWidth2 / 2);
                         Serial.println(offset); //- (pong.paddleWidth2 / 2));
                         Serial.print("velX, Y = ");
-                        pong.ball[i].velY = (offset) / 2;
-                        pong.ball[i].velX = abs(((offset) - (pong.paddleWidth1 / 2) + 1) / 2);
+                        pong.ball[i].velY = offset;
+                        if (abs(offset) > 1)
+                        {
+                            pong.ball[i].velY = offset / 2;
+                        }
+                        //pong.ball[i].velX = abs((offset - (pong.paddleWidth2 / 2) + 1) / 2); //suspect
+                        if ((pong.ball[i].velY > 1) || (pong.ball[i].velY < -1))
+                        {
+                            pong.ball[i].velX = offset / pong.ball[i].velY;
+                        }
+                        else
+                        {
+                            pong.ball[i].velX = 2;
+                        }
+                        
                         Serial.print(pong.ball[i].velX);
                         Serial.print(" ");
                         Serial.println(pong.ball[i].velY);
@@ -157,7 +183,27 @@ void pong_game()
 
     if (ballsLeft == 0)
     {
-        pong_gameOver();
+        //Check the score to see if anyone just won
+        if ((pong.score1 >= pong.scoreToWin) || (pong.score2 >= pong.scoreToWin))
+        {
+            pong_gameOver();
+        }
+        else  //they didn't, so spawn a new ball
+        {
+            pong.ball[0].active = true;
+            pong.ball[0].x = SCREEN_WIDTH / 2;
+            //pong.ball[0].y = SCREEN_HEIGHT / 2;
+            pong.ball[0].y = random(10, SCREEN_HEIGHT - 10);
+            pong.ball[0].size = 2;
+            pong.ball[0].velX = random(0, 2);
+
+            if (pong.ball[0].velX  == 0)
+            {
+                pong.ball[0].velX = -1;
+            }
+            //pong.ball[i].velY = random(0, 5);
+            pong.ball[0].velY = 0;
+        }
     }
 
 
@@ -177,8 +223,8 @@ void pong_gameOver()
 
 void pong_reset()
 {
-    player.X = 48;
-    player.Y = 48;
+    player.X = 39; //
+    player.Y = 38; //
     pong.score1 = 0;
     pong.score2 = 0;
     pong.speed = 0;

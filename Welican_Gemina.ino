@@ -683,6 +683,7 @@ struct Pong
 {
   byte tick;
   byte speed;
+  byte recent;
   int score1;
   int score2;
   int scoreToWin;
@@ -697,6 +698,7 @@ struct Pong
 Pong pong = {
   .tick = 0,
   .speed = 5,
+  .recent = false,
   .score1 = 0,
   .score2 = 0,
   .scoreToWin = 10,

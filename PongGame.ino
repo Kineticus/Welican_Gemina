@@ -7,6 +7,10 @@ Brian Schimke, 2020
 
 void pong_game()
 {   
+    //Detect click
+
+
+
     //Increment tick counter
     pong.tick++;
 
@@ -158,6 +162,7 @@ void pong_game()
                 {
                     pong.ball[i].active = false;
                     pong.score2++;
+                    pong.recent = 2;
                 }
 
 
@@ -165,6 +170,7 @@ void pong_game()
                 {
                     pong.ball[i].active = false;
                     pong.score1++;
+                    pong.recent = 1;
                 }
             }
         }
@@ -181,6 +187,7 @@ void pong_game()
         }
     }
 
+    //Are no balls left active?
     if (ballsLeft == 0)
     {
         //Check the score to see if anyone just won
@@ -195,12 +202,16 @@ void pong_game()
             //pong.ball[0].y = SCREEN_HEIGHT / 2;
             pong.ball[0].y = random(10, SCREEN_HEIGHT - 10);
             pong.ball[0].size = 2;
-            pong.ball[0].velX = random(0, 2);
-
-            if (pong.ball[0].velX  == 0)
+            if (pong.recent == 1)
             {
                 pong.ball[0].velX = -1;
             }
+            else
+            {
+                pong.ball[0].velX = 1;
+            }
+           
+            //pong.ball[0].velX = random(0, 2);
             //pong.ball[i].velY = random(0, 5);
             pong.ball[0].velY = 0;
         }
@@ -229,6 +240,7 @@ void pong_reset()
     pong.score2 = 0;
     pong.speed = 0;
     pong.tick = 0;
+    pong.recent = 0;
 
     for(int i = 0; i < 20; i++)
     {

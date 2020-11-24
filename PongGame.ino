@@ -98,6 +98,7 @@ void pong_game()
                     //Check Y
                     if ((pong.ball[i].y + pong.ball[i].size >= SCREEN_HEIGHT - player.X) && (pong.ball[i].y - pong.ball[i].size < SCREEN_HEIGHT - player.X + pong.paddleWidth1)) 
                     {
+                        pong.bounceCount++;
                         pong.ball[i].velX *= -1;
                         //pong.ball[i].x = SCREEN_WIDTH - pong.paddleHeight1 - pong.ball[i].size; //+1
                         Serial.print("1o = ");
@@ -130,6 +131,7 @@ void pong_game()
                     //Check Y
                     if ((pong.ball[i].y - pong.ball[i].size < player.Y) && (pong.ball[i].y + pong.ball[i].size >= player.Y - pong.paddleWidth2)) 
                     {    
+                        pong.bounceCount++;
                         pong.ball[i].velX *= -1;
                         //pong.ball[i].x = pong.ball[i].size + pong.paddleHeight2; //-1
                         Serial.print("2o = ");
@@ -175,6 +177,13 @@ void pong_game()
             }
         }
 
+        //Add a ball in if things are getting boring...      
+        if (pong.bounceCount >= pong.bounceMax)
+        {
+            pong_spawnBall();
+            pong.bounceCount = 0;
+        }
+
         pong.tick = 0;
     }
 
@@ -197,27 +206,38 @@ void pong_game()
         }
         else  //they didn't, so spawn a new ball
         {
-            pong.ball[0].active = true;
-            pong.ball[0].x = SCREEN_WIDTH / 2;
-            //pong.ball[0].y = SCREEN_HEIGHT / 2;
-            pong.ball[0].y = random(10, SCREEN_HEIGHT - 10);
-            pong.ball[0].size = 2;
+            pong_spawnBall();           
+        }
+    }
+}
+
+void pong_spawnBall()
+{
+    for(int i = 0; i < 20; i++)
+    {
+        if (pong.ball[i].active == true)
+        {
+            pong.ball[i].active = true;
+            pong.ball[i].x = SCREEN_WIDTH / 2;
+            //pong.ball[i].y = SCREEN_HEIGHT / 2;
+            pong.ball[i].y = random(10, SCREEN_HEIGHT - 10);
+            pong.ball[i].size = 2;
+
+            //Send the ball in the direction of the person who scored last
             if (pong.recent == 1)
             {
-                pong.ball[0].velX = -1;
+                pong.ball[i].velX = -1;
             }
             else
             {
-                pong.ball[0].velX = 1;
+                pong.ball[i].velX = 1;
             }
-           
-            //pong.ball[0].velX = random(0, 2);
+            
+            //pong.ball[i].velX = random(0, 2);
             //pong.ball[i].velY = random(0, 5);
-            pong.ball[0].velY = 0;
+            pong.ball[i].velY = 0;
         }
     }
-
-
 }
 
 void pong_gameOver()
@@ -241,6 +261,8 @@ void pong_reset()
     pong.speed = 0;
     pong.tick = 0;
     pong.recent = 0;
+    pong.bounceCount = 0;
+    pong.bounceMax = 10;
 
     for(int i = 0; i < 20; i++)
     {

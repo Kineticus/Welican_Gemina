@@ -171,6 +171,7 @@ void snake_manageOrchard()
                     //Calculate how much to grow
                     int extraLength = snake.apple[i].size * snake.lengthMultiplier;
 
+                    //Can't grow more than the current snake length at once
                     if (extraLength > snake.num)
                     {
                         extraLength = snake.num - 1;
@@ -178,8 +179,6 @@ void snake_manageOrchard()
 
                     //Score = size
                     snake.score += snake.apple[i].size * snake.scoreMultiplier;
-
-                    
 
                     //Shift snake up
                     for (int ii = snake.num; ii > 0; ii--)

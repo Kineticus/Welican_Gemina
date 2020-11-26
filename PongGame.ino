@@ -215,7 +215,7 @@ void pong_spawnBall()
 {
     for(int i = 0; i < 20; i++)
     {
-        if (pong.ball[i].active == true)
+        if (pong.ball[i].active == false)
         {
             pong.ball[i].active = true;
             pong.ball[i].x = SCREEN_WIDTH / 2;
@@ -236,6 +236,9 @@ void pong_spawnBall()
             //pong.ball[i].velX = random(0, 2);
             //pong.ball[i].velY = random(0, 5);
             pong.ball[i].velY = 0;
+
+            //Exit loop
+            i = 100; 
         }
     }
 }

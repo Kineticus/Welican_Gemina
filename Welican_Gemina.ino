@@ -630,10 +630,10 @@ struct snakeApple
 
 struct Snake
 {
-  float X;
-  float Y;
   int num;
+  int num2;
   int score;
+  int score2;
   int scoreMultiplier;
   int lengthMultiplier;
   byte speed;
@@ -647,14 +647,15 @@ struct Snake
   int maxApples;
   int maxAppleSize;
   snakeSegment segment[1200];
+  snakeSegment segment2[1200];
   snakeApple apple[25];
 };
 
 Snake snake = {
-  .X = 64.0,
-  .Y = 32.0,
   .num = 10, //Set in reset
+  .num2 = 10,
   .score = 0,
+  .score2 = 0,
   .scoreMultiplier = 1,
   .lengthMultiplier = 1,
   .speed = 5,
@@ -1250,7 +1251,7 @@ void loop()
   saveTimeCheck();
 
   //Output data to LED strip
-  showStrip();
+  FastLED.show();
 
   if (brightness.useFade == true)
   {

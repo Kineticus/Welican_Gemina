@@ -110,7 +110,11 @@ void snake_game()
         u8g2.drawPixel(snake.segment[i].x, snake.segment[i].y);
     }
 
-    //Draw apples and check for bites
+    
+    //Check for apple bites, player 1
+    snake_checkBites1();
+
+    //Draw apples and manage spawning of new ones
     snake_manageOrchard();
     
 
@@ -118,6 +122,50 @@ void snake_game()
     if (snake_checkCollisions())
     {
         snake_gameOver();
+    }
+}
+
+
+void snake_checkBites1()
+{
+    //Look through all apples
+    for (int i = 0; i <= snake.maxApples; i++)
+    {
+        //Find ones that are active
+        if(snake.apple[i].active == true)
+        {
+            //See if they are being eaten, taking into account size
+            if ((snake.segment[snake.num].x >= snake.apple[i].x - snake.apple[i].size) && (snake.segment[snake.num].x <= snake.apple[i].x + snake.apple[i].size))
+            {
+                if ((snake.segment[snake.num].y >= snake.apple[i].y - snake.apple[i].size) && (snake.segment[snake.num].y <= snake.apple[i].y + snake.apple[i].size))  
+                {
+                    //Eat the apple
+                    snake.apple[i].active = false;
+
+                    //Calculate how much to grow
+                    int extraLength = snake.apple[i].size * snake.lengthMultiplier;
+
+                    //Can't grow more than the current snake length at once
+                    if (extraLength > snake.num)
+                    {
+                        extraLength = snake.num - 1;
+                    }
+
+                    //Score = size
+                    snake.score += snake.apple[i].size * snake.scoreMultiplier;
+
+                    //Shift snake up
+                    for (int ii = snake.num; ii > 0; ii--)
+                    {
+                        snake.segment[ii + extraLength].x = snake.segment[ii].x;
+                        snake.segment[ii + extraLength].y = snake.segment[ii].y;
+                    }
+
+                    //Extra length = size
+                    snake.num += extraLength;
+                }
+            }
+        }
     }
 }
 
@@ -159,38 +207,6 @@ void snake_manageOrchard()
         {
             //Draw them
             u8g2.drawDisc(snake.apple[i].x, snake.apple[i].y, snake.apple[i].size, U8G2_DRAW_ALL);
-
-            //See if they are being eaten, taking into account size
-            if ((snake.segment[snake.num].x >= snake.apple[i].x - snake.apple[i].size) && (snake.segment[snake.num].x <= snake.apple[i].x + snake.apple[i].size))
-            {
-                if ((snake.segment[snake.num].y >= snake.apple[i].y - snake.apple[i].size) && (snake.segment[snake.num].y <= snake.apple[i].y + snake.apple[i].size))  
-                {
-                    //Eat the apple
-                    snake.apple[i].active = false;
-
-                    //Calculate how much to grow
-                    int extraLength = snake.apple[i].size * snake.lengthMultiplier;
-
-                    //Can't grow more than the current snake length at once
-                    if (extraLength > snake.num)
-                    {
-                        extraLength = snake.num - 1;
-                    }
-
-                    //Score = size
-                    snake.score += snake.apple[i].size * snake.scoreMultiplier;
-
-                    //Shift snake up
-                    for (int ii = snake.num; ii > 0; ii--)
-                    {
-                        snake.segment[ii + extraLength].x = snake.segment[ii].x;
-                        snake.segment[ii + extraLength].y = snake.segment[ii].y;
-                    }
-
-                    //Extra length = size
-                    snake.num += extraLength;
-                }
-            }
         }
     }
 }

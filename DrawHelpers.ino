@@ -483,7 +483,20 @@ void newFavoritesMenu()
   }
   else
   {
+    //Backup current RGB Settings
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      patternSettings.tempLeds[i] = patternSettings.leds[i];
+    }
+
+    //Run existing favorite category to get string name
     favorites_category(globalMenu.menu[globalMenu.currentMenu]);
+
+    //Restore RGB settings
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      patternSettings.leds[i] = patternSettings.tempLeds[i];
+    }
   }
 
   //Convert the strings

@@ -499,6 +499,9 @@ void setGameMode()
   case 4:
     pong_reset();
     break;
+  case 5:
+    snake_reset();
+    break;
   }
 }
 

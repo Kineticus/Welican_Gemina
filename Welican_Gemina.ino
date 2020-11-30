@@ -436,7 +436,7 @@ MenuModel globalMenu = {
     //Root Menu Items, Game Menu Items, Settings Menu Items
     .menuMax = {
         3,                                 //Main
-        4,                                 //Game
+        5,                                 //Game
         3,                                 //Settings
         3,                                 //LED Settings
         1,                                 //ZIP Code
@@ -639,7 +639,9 @@ struct Snake
   byte speed;
   byte tick;
   int oldX;
+  int oldY;
   float angle;
+  float angle2;
   int Xa;
   int Ya;
   int sensitivity;
@@ -661,7 +663,9 @@ Snake snake = {
   .speed = 5,
   .tick = 0,
   .oldX = 0,
+  .oldY = 0,
   .angle = 0.0,
+  .angle2 = 0.0,
   .Xa = 0,
   .Ya = 0,
   .sensitivity = 4,
@@ -1179,6 +1183,9 @@ void loop()
       break;
     case 4:
       pong_game();
+      break;
+    case 5:
+      snake2_game();
       break;
     }
     break;

@@ -83,8 +83,8 @@ void drawMenuCommander()
   break;
   case 1: // Draw Games
   {
-    drawMenu(5, globalMenu.menu[globalMenu.currentMenu], "Games", 
-      "Fallios", "Block Breaker", "Magic 8 Ball", "Daddy Worm", "Pong");
+    drawMenu(6, globalMenu.menu[globalMenu.currentMenu], "Games", 
+      "Fallios", "Block Breaker", "Magic 8 Ball", "Daddy Worm", "Pong", "2P - Daddy Worm");
 
 
     //drawMenuWords("Games",
@@ -728,10 +728,11 @@ void drawMenuCommander()
       case 2:
       case 3:
       case 4:
+      case 5:
         setGameMode();
         break;
-      case 5:
-        globalMenu.currentMenu = 0; // back to main menu
+      //case 6:
+        //globalMenu.currentMenu = 0; // back to main menu
         break;
       }
     }

@@ -207,6 +207,18 @@ void showLogo(int millisTime)
 void drawClock()
 {
   u8g2.setDrawColor(1);
+  globalTime.currentHour = 0;
+  globalTime.currentMinute = 20;
+
+  
+  //Draw borders for testing if desired
+  if (1 == 0)
+  {
+    u8g2.drawVLine(0, 0, SCREEN_HEIGHT);
+    u8g2.drawVLine(SCREEN_WIDTH, 0, SCREEN_HEIGHT);
+    u8g2.drawHLine(0, 0, SCREEN_WIDTH);
+    u8g2.drawHLine(0, SCREEN_HEIGHT, SCREEN_WIDTH + 1);
+  }
 
   switch (globalMenu.menu[26])
   {
@@ -218,7 +230,7 @@ void drawClock()
     {
       u8g2.setCursor(20, 64);
 
-      if ((globalTime.currentHour > 9) && (globalTime.currentHour != 0))
+      if ((globalTime.currentHour > 9) || (globalTime.currentHour == 0))
       {
         u8g2.setCursor(-14, 64);
       }
@@ -257,7 +269,7 @@ void drawClock()
     {
       u8g2.setCursor(30, 64);
 
-      if ((globalTime.currentHour > 9) && (globalTime.currentHour != 0))
+      if ((globalTime.currentHour > 9) || (globalTime.currentHour == 0))
       {
         u8g2.setCursor(0, 64);
       }
@@ -291,26 +303,30 @@ void drawClock()
   case 2: //Old Time style
   {
 
-    u8g2.setFont(u8g2_font_osb35_tn);
+    //u8g2.setFont(u8g2_font_osb35_tn);
+    u8g2.setFont(u8g2_font_osb41_tn);
+  
     if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
     {
-      u8g2.setCursor(30, 64);
+      u8g2.setCursor(20, 64);
 
-      if ((globalTime.currentHour > 9) && (globalTime.currentHour != 0))
+      if ((globalTime.currentHour > 9) || (globalTime.currentHour == 0))
       {
-        u8g2.setCursor(0, 64);
+        u8g2.setCursor(-5, 64);
       }
 
       if (globalTime.currentHour == 0)
       {
-        u8g2.print("12");
+        u8g2.print("1");
+        u8g2.setCursor(20, 64);
+        u8g2.print("2");
       }
       else
       {
         u8g2.print(globalTime.currentHour);
       }
 
-      u8g2.setCursor(56, 60);
+      u8g2.setCursor(54, 60);
       u8g2.print(":");
 
       u8g2.setCursor(68, 64);
@@ -336,7 +352,7 @@ void drawClock()
     {
       u8g2.setCursor(30, 60);
 
-      if ((globalTime.currentHour > 9) && (globalTime.currentHour != 0))
+      if ((globalTime.currentHour > 9) || (globalTime.currentHour == 0))
       {
         u8g2.setCursor(0, 60);
       }

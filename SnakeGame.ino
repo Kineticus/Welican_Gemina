@@ -174,74 +174,9 @@ void snake2_game()
     snake.oldX = player.X;
     snake.oldY = player.Y;
 
-    //Currently binning the angle into 8 groups. Hope to use actual angle eventually
-    if (player.X < 4)
-    {
-        snake.angle = 0;
-    }
-    else if (player.X < 8)
-    {
-        snake.angle = .8;
-    }
-    else if (player.X < 12)
-    {
-        snake.angle = 1.6;
-    }
-    else if (player.X < 16)
-    {
-        snake.angle = 2.4;
-    }
-    else if (player.X < 20)
-    {
-        snake.angle = 3.2;
-    }
-    else if (player.X < 24)
-    {
-        snake.angle = 4;
-    }
-    else if (player.X < 28)
-    {
-        snake.angle = 4.8;
-    }
-    else if (player.X < 32)
-    {
-        snake.angle = 5.6;
-    }
-
-
-    //And for P2
-    if (player.Y < 4)
-    {
-        snake.angle2 = 0;
-    }
-    else if (player.Y < 8)
-    {
-        snake.angle2 = .8;
-    }
-    else if (player.Y < 12)
-    {
-        snake.angle2 = 1.6;
-    }
-    else if (player.Y < 16)
-    {
-        snake.angle2 = 2.4;
-    }
-    else if (player.Y < 20)
-    {
-        snake.angle2 = 3.2;
-    }
-    else if (player.Y < 24)
-    {
-        snake.angle2 = 4;
-    }
-    else if (player.Y < 28)
-    {
-        snake.angle2 = 4.8;
-    }
-    else if (player.Y < 32)
-    {
-        snake.angle2 = 5.6;
-    }
+    //Convert integer knob value to floating radian
+    snake.angle = snake_adjustAngle(player.X);
+    snake.angle2 = snake_adjustAngle(player.Y);
 
     //bool snake_hitSomething = false;
 
@@ -315,6 +250,57 @@ void snake2_game()
     {
         snake_gameOver();
     }
+
+    if (snake_checkCollisions2into1())
+    {
+        snake_gameOver();
+    }
+
+    if (snake_checkCollisions1into2())
+    {
+        snake_gameOver();
+    }
+}
+
+float snake_adjustAngle(int snakeAngle)
+{
+    float newAngle = 0;
+
+    //Currently binning the angle into 8 groups. Hope to use actual angle eventually
+    if (snakeAngle < 4)
+    {
+        newAngle = 0;
+    }
+    else if (snakeAngle < 8)
+    {
+        newAngle = .8;
+    }
+    else if (snakeAngle < 12)
+    {
+        newAngle = 1.6;
+    }
+    else if (snakeAngle < 16)
+    {
+        newAngle = 2.4;
+    }
+    else if (snakeAngle < 20)
+    {
+        newAngle = 3.2;
+    }
+    else if (snakeAngle < 24)
+    {
+        newAngle = 4;
+    }
+    else if (snakeAngle < 28)
+    {
+        newAngle = 4.8;
+    }
+    else if (snakeAngle < 32)
+    {
+        newAngle = 5.6;
+    }
+
+    return newAngle;
 }
 
 void snake_checkBites2()
@@ -326,9 +312,9 @@ void snake_checkBites2()
         if(snake.apple[i].active == true)
         {
             //See if they are being eaten, taking into account size
-            if ((snake.segment2[snake.num].x >= snake.apple[i].x - snake.apple[i].size) && (snake.segment2[snake.num].x <= snake.apple[i].x + snake.apple[i].size))
+            if ((snake.segment2[snake.num2].x >= snake.apple[i].x - snake.apple[i].size) && (snake.segment2[snake.num2].x <= snake.apple[i].x + snake.apple[i].size))
             {
-                if ((snake.segment2[snake.num].y >= snake.apple[i].y - snake.apple[i].size) && (snake.segment2[snake.num].y <= snake.apple[i].y + snake.apple[i].size))  
+                if ((snake.segment2[snake.num2].y >= snake.apple[i].y - snake.apple[i].size) && (snake.segment2[snake.num2].y <= snake.apple[i].y + snake.apple[i].size))  
                 {
                     //Eat the apple
                     snake.apple[i].active = false;
@@ -515,6 +501,141 @@ bool snake_checkCollisions1()
             if (snake_checkBlock(snake.segment[snake.num].x, snake.segment[snake.num].y - 1))
             {
                hitSomething = true;
+            }
+        }
+    }
+
+    return hitSomething; 
+}
+
+bool snake_checkCollisions1into2()
+{   
+    bool hitSomething = false;
+
+    //Snake 1 eating 2
+    if (snake_checkBlock2(snake.segment[snake.num].x, snake.segment[snake.num].y))
+    {
+        hitSomething = true;
+    }
+
+    //Check for diagonal pass DR
+    if ((snake.segment[snake.num].x == snake.segment[snake.num - 1].x + 1) && (snake.segment[snake.num].y == snake.segment[snake.num - 1].y + 1))
+    {
+        //Check for first matching block
+        if (snake_checkBlock2(snake.segment[snake.num].x - 1, snake.segment[snake.num].y))
+        {
+            if (snake_checkBlock2(snake.segment[snake.num].x, snake.segment[snake.num].y - 1))
+            {
+                hitSomething = true;
+            }
+        }
+    }
+
+    //Check for diagonal pass UL
+    if ((snake.segment[snake.num].x == snake.segment[snake.num - 1].x - 1) && (snake.segment[snake.num].y == snake.segment[snake.num - 1].y - 1))
+    {
+        //Check for first matching block
+        if (snake_checkBlock2(snake.segment[snake.num].x + 1, snake.segment[snake.num].y))
+        {
+            if (snake_checkBlock2(snake.segment[snake.num].x, snake.segment[snake.num].y + 1))
+            {
+                hitSomething = true;
+            }
+        }
+    }
+
+    //Check for diagonal pass UR
+    if ((snake.segment[snake.num].x == snake.segment[snake.num - 1].x - 1) && (snake.segment[snake.num].y == snake.segment[snake.num - 1].y + 1))
+    {
+        //Check for first matching block
+        if (snake_checkBlock2(snake.segment[snake.num].x - 1, snake.segment[snake.num].y))
+        {
+            if (snake_checkBlock2(snake.segment[snake.num].x, snake.segment[snake.num].y + 1))
+            {
+               hitSomething = true;
+            }
+        }
+    }
+
+    //Check for diagonal pass DL
+    if ((snake.segment[snake.num].x == snake.segment[snake.num - 1].x + 1) && (snake.segment[snake.num].y == snake.segment[snake.num - 1].y - 1))
+    {
+        //Check for first matching block
+        if (snake_checkBlock2(snake.segment[snake.num].x + 1, snake.segment[snake.num].y))
+        {
+            if (snake_checkBlock2(snake.segment[snake.num].x, snake.segment[snake.num].y - 1))
+            {
+               hitSomething = true;
+            }
+        }
+    }
+
+    return hitSomething; 
+}
+
+bool snake_checkCollisions2into1()
+{   
+    bool hitSomething = false;
+
+    //Snake 2 eating 1
+    if (snake_checkBlock(snake.segment2[snake.num2].x, snake.segment2[snake.num2].y))
+    {
+        //Serial.println("2 into 1 - Eating");
+        hitSomething = true;
+    }
+
+    //Check for diagonal pass DR
+    if ((snake.segment2[snake.num2].x == snake.segment2[snake.num2 - 1].x + 1) && (snake.segment2[snake.num2].y == snake.segment2[snake.num2 - 1].y + 1))
+    {
+        //Check for first matching block
+        if (snake_checkBlock(snake.segment2[snake.num2].x - 1, snake.segment2[snake.num2].y))
+        {
+            if (snake_checkBlock(snake.segment2[snake.num2].x, snake.segment2[snake.num2].y - 1))
+            {
+                //Serial.println("2 into 1 - DR");
+                hitSomething = true;
+            }
+        }
+    }
+
+    //Check for diagonal pass UL
+    if ((snake.segment2[snake.num2].x == snake.segment2[snake.num2 - 1].x - 1) && (snake.segment2[snake.num2].y == snake.segment2[snake.num2 - 1].y - 1))
+    {
+        //Check for first matching block
+        if (snake_checkBlock(snake.segment2[snake.num2].x + 1, snake.segment2[snake.num2].y))
+        {
+            if (snake_checkBlock(snake.segment2[snake.num2].x, snake.segment2[snake.num2].y + 1))
+            {
+                //Serial.println("2 into 1 - UL");
+                hitSomething = true;
+            }
+        }
+    }
+
+    //Check for diagonal pass UR
+    if ((snake.segment2[snake.num2].x == snake.segment2[snake.num2 - 1].x - 1) && (snake.segment2[snake.num2].y == snake.segment2[snake.num2 - 1].y + 1))
+    {
+        //Check for first matching block
+        if (snake_checkBlock(snake.segment2[snake.num2].x - 1, snake.segment2[snake.num2].y))
+        {
+            if (snake_checkBlock(snake.segment2[snake.num2].x, snake.segment2[snake.num2].y + 1))
+            {
+                //Serial.println("2 into 1 - UR");
+                hitSomething = true;
+            }
+        }
+    }
+
+    //Check for diagonal pass DL
+    if ((snake.segment2[snake.num2].x == snake.segment2[snake.num2 - 1].x + 1) && (snake.segment2[snake.num2].y == snake.segment2[snake.num2 - 1].y - 1))
+    {
+        //Check for first matching block
+        if (snake_checkBlock(snake.segment2[snake.num2].x + 1, snake.segment2[snake.num2].y))
+        {
+            if (snake_checkBlock(snake.segment2[snake.num2].x, snake.segment2[snake.num2].y - 1))
+            {
+                //Serial.println("2 into 1 - DL");
+                hitSomething = true;
             }
         }
     }

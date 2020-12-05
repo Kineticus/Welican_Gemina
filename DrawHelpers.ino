@@ -207,9 +207,6 @@ void showLogo(int millisTime)
 void drawClock()
 {
   u8g2.setDrawColor(1);
-  globalTime.currentHour = 0;
-  globalTime.currentMinute = 20;
-
   
   //Draw borders for testing if desired
   if (1 == 0)
@@ -224,6 +221,14 @@ void drawClock()
   {
   case 0: //7 Segment Style
   {
+    u8g2.setFont(u8g2_font_profont12_mf);
+    u8g2.setCursor(5, 10);
+    u8g2.print(weather.currentTemperature);
+    u8g2.print("\xb0 ");
+    u8g2.print(weather.currentWeatherTitle);
+    //u8g2.print("  ");
+    //u8g2.print(weather.currentHumidity);
+    //u8g2.print("%H");
 
     u8g2.setFont(u8g2_font_7Segments_26x42_mn);
     if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
@@ -304,21 +309,21 @@ void drawClock()
   {
 
     //u8g2.setFont(u8g2_font_osb35_tn);
-    u8g2.setFont(u8g2_font_osb41_tn);
+    u8g2.setFont(u8g2_font_osr41_tn);
   
     if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
     {
-      u8g2.setCursor(20, 64);
+      u8g2.setCursor(20, 62);
 
       if ((globalTime.currentHour > 9) || (globalTime.currentHour == 0))
       {
-        u8g2.setCursor(-5, 64);
+        u8g2.setCursor(-5, 62);
       }
 
       if (globalTime.currentHour == 0)
       {
         u8g2.print("1");
-        u8g2.setCursor(20, 64);
+        u8g2.setCursor(18, 62);
         u8g2.print("2");
       }
       else
@@ -326,10 +331,10 @@ void drawClock()
         u8g2.print(globalTime.currentHour);
       }
 
-      u8g2.setCursor(54, 60);
+      u8g2.setCursor(50, 58);
       u8g2.print(":");
 
-      u8g2.setCursor(68, 64);
+      u8g2.setCursor(64, 62);
       if (globalTime.currentMinute < 10)
       {
         u8g2.print("0");
@@ -345,16 +350,50 @@ void drawClock()
   break;
   case 3: //Modern Font
   {
+    char buf[80];
+    strftime(buf, sizeof(buf), "%A, %b. %e", &timeinfo);
 
-    //u8g2.setFont(u8g2_font_logisoso38_tn);
+    u8g2.setFont(u8g2_font_profont12_mf);
+    u8g2.setCursor(5, 10);
+    u8g2.print(buf);
+
+    String ordinal = "th";
+
+    switch(globalTime.currentDate)
+    {
+      case 1:
+        ordinal = "st";
+        break;
+      case 2:
+        ordinal = "nd";
+        break;
+      case 3:
+        ordinal = "rd";
+        break;
+      case 21:
+        ordinal = "st";
+        break;
+      case 22:
+        ordinal = "nd";
+        break;
+      case 23:
+        ordinal = "rd";
+        break;
+      case 31:
+        ordinal = "st";
+        break;
+    }
+
+    u8g2.print(ordinal);
+
     u8g2.setFont(u8g2_font_logisoso42_tn);
     if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
     {
-      u8g2.setCursor(30, 60);
+      u8g2.setCursor(30, 64);
 
       if ((globalTime.currentHour > 9) || (globalTime.currentHour == 0))
       {
-        u8g2.setCursor(0, 60);
+        u8g2.setCursor(0, 64);
       }
 
       if (globalTime.currentHour == 0)
@@ -366,10 +405,10 @@ void drawClock()
         u8g2.print(globalTime.currentHour);
       }
 
-      u8g2.setCursor(56, 56);
+      u8g2.setCursor(56, 60);
       u8g2.print(":");
 
-      u8g2.setCursor(72, 60);
+      u8g2.setCursor(72, 64);
       if (globalTime.currentMinute < 10)
       {
         u8g2.print("0");
@@ -385,7 +424,7 @@ void drawClock()
   break;
   case 4: //Weather 1
   {
-
+    u8g2.setFont(u8g2_font_profont12_mf);
     u8g2.setCursor(10, 10);
     u8g2.print(weather.currentWeatherTitle);
     u8g2.setCursor(10, 20);

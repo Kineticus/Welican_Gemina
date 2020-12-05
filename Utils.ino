@@ -828,15 +828,20 @@ void updateTime()
   }
   EVERY_N_MILLISECONDS(60000)
   {
-    updateTimeProcess(); //Performance issue culprit
+    //Only update time when in screen saver mode, causes input lags
+    if (globals.runMode == 3)
+    {
+      updateTimeProcess(); //Performance issue culprit
+    }
   }
 }
 
 void updateTimeProcess()
 {
   getLocalTime(&timeinfo);                   //Update time struct with new data
-  globalTime.currentDay = timeinfo.tm_wday;  //Update day
+  globalTime.currentDay = timeinfo.tm_wday;  //Update day (0 = Sunday, 6 = Saturday)
   globalTime.currentHour = timeinfo.tm_hour; //Update hour
+  globalTime.currentDate = timeinfo.tm_mday; //Update day of the Month
   //Are we in PM/ over 12 hours?
 
   if (globalTime.currentHour > 12)
@@ -873,6 +878,8 @@ void getWeather()
   {
     weatherSettings.zipCode = globalMenu.menu[11];
     String serverPath = "http://api.openweathermap.org/data/2.5/weather?zip=" + weatherSettings.zipCode + "," + weatherSettings.countryCode + "&units=imperial&APPID=" + globals.openWeatherMapApiKey;
+
+    //Daily Forcasts: https://api.openweathermap.org/data/2.5/onecall?lat=27.79&lon=-82.68&units=imperial&exclude=current,minutely,hourly,alerts&appid=8f40cb693f2032badf06d4e432e1dfa6
 
     weather.jsonBuffer = httpGETRequest(serverPath.c_str());
     weather.weatherJson = JSON.parse(weather.jsonBuffer);

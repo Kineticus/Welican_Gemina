@@ -154,7 +154,8 @@ void drawBottom()
   switch (tempMode)
   {
   case 0:
-    movingTriangles();
+    //movingTriangles();
+    lavaLamp(5, 128, 0, 0, millis() / 50);
     break;
   case 1:
     drawCircleEQ();
@@ -166,7 +167,7 @@ void drawBottom()
     break;
   case 3:
     drawIPAddress();
-    lavaLamp(10, 128, 0, 0, millis() / 50);
+    //lavaLampFast(20, 128, 0, 0, millis() / 33);
     break;
   case 4:
     starBounce();

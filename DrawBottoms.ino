@@ -282,3 +282,23 @@ void lavaLamp(int Scale, byte Threshold, int OffsetX, int OffsetY, int OffsetZ)
     }
   }
 }
+
+void lavaLampFast(int Scale, byte Threshold, int OffsetX, int OffsetY, int OffsetZ)
+{
+  u8g2.setDrawColor(2);
+
+  for (int y = 0; y <= SCREEN_HEIGHT; y+=2)
+  {
+    for (int x = 0; x <= SCREEN_WIDTH; x+=2)
+    {
+      //uint8_t 	inoise8 (uint16_t x, uint16_t y, uint16_t z)
+      if (inoise8((x * Scale) + OffsetX, (y * Scale) + OffsetY, OffsetZ) > Threshold)
+      {
+        u8g2.drawPixel(x, y);
+        u8g2.drawPixel(x + 1, y);
+        u8g2.drawPixel(x + 1, y + 1);
+        u8g2.drawPixel(x, y + 1);
+      }
+    }
+  }
+}

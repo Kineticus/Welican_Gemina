@@ -813,6 +813,38 @@ void saveNumberOfLEDs()
   ESP.restart();
 }
 
+String dateOrdinal()
+{
+  String ordinal = "th";
+
+  switch(globalTime.currentDate)
+  {
+    case 1:
+      ordinal = "st";
+      break;
+    case 2:
+      ordinal = "nd";
+      break;
+    case 3:
+      ordinal = "rd";
+      break;
+    case 21:
+      ordinal = "st";
+      break;
+    case 22:
+      ordinal = "nd";
+      break;
+    case 23:
+      ordinal = "rd";
+      break;
+    case 31:
+      ordinal = "st";
+      break;
+  }
+
+  return ordinal;
+}
+
 void updateTime()
 {
   if (globalTime.currentHour == 100)
@@ -970,7 +1002,7 @@ void updateWeather(bool force)
       }
 
       //Initial run check
-      if ((weatherSettings.weatherUpdateInitial != 0) && ((millis() - weatherSettings.weatherUpdateInitial) > 0))
+      if ((weatherSettings.weatherUpdateInitial != 0) && ((millis() - weatherSettings.weatherUpdateInitial) > 0) && (WiFi.status() == WL_CONNECTED))
       {
         Serial.println("INITIAL WEATHER CHECK");
         getWeather();

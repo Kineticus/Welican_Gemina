@@ -175,7 +175,7 @@ void drawBottom()
     //Will show favorite category
     break;
   case 6:
-    lavaLamp(5, 0, millis() / 15, 0);
+    lavaLamp(5, 0, millis() / 50, 0);
     break;
 
   }
@@ -226,66 +226,33 @@ void drawClock()
   {
   case 0: //7 Segment Style
   {
-    u8g2.setFont(u8g2_font_profont12_mf);
-    u8g2.setCursor(5, 10);
-    u8g2.print(weather.currentTemperature);
-    u8g2.print("\xb0 ");
-    //u8g2.print(weather.currentWeatherTitle);
-    //u8g2.print("  ");
-    //u8g2.print(weather.currentHumidity);
-    //u8g2.print("%H");
-
-    u8g2.setCursor(64, 10);
-    char buf[20];
-    strftime(buf, sizeof(buf), "%a %b %e", &timeinfo);
-    u8g2.print(buf);
-
+    dateTemp1();
     timeSegment();
   }
   break;
   case 1: //Flip Card style
   {
-
+    dateTemp1();
     timeFlip();
   }
   break;
   case 2: //Old Time style
   {
+    dateTemp1();
     timeOlde();
   }
   break;
   case 3: //Modern Font
   {
-    char buf[80];
-    strftime(buf, sizeof(buf), "%A, %b. %e", &timeinfo);
-
-    u8g2.setFont(u8g2_font_profont12_mf);
-    u8g2.setCursor(5, 10);
-    u8g2.print(buf);
-
-    
-    u8g2.print(dateOrdinal());
-
+    dateTemp1();
     timeModern();
   }
   break;
   case 4: //Modern Font 2
   {
-    char buf[80];
-    strftime(buf, sizeof(buf), "%a %b %e", &timeinfo);
-
-    u8g2.setFont(u8g2_font_profont12_mf);
-    u8g2.setCursor(0, 10);
-    u8g2.print(weather.currentTemperature);
-    u8g2.print("\xb0 ");
-
-    u8g2.setCursor(50, 10);
-    u8g2.print(buf);
-    
-    u8g2.print(dateOrdinal());
-
+    dateTemp1();
     timeModern();
-    lavaLamp(5, 0, millis() / 15, 0);
+    lavaLamp(5, 0, millis() / 50, 0);
   }
   break;
   case 5: //Weather 1
@@ -372,6 +339,38 @@ void drawClock()
   }
 }
 
+void dateTemp1()
+{
+  u8g2.setFont(u8g2_font_profont12_mf);
+
+  //Print Date
+  //Sun Dec  6th
+  u8g2.setCursor(50, 10);
+  char buf[80];
+  strftime(buf, sizeof(buf), "%a %b %e", &timeinfo);
+  u8g2.print(buf);
+  u8g2.print(dateOrdinal());
+
+  //Temperature in Upper Left
+  u8g2.setCursor(0, 10);
+  u8g2.print(weather.currentTemperature);
+  u8g2.print("\xb0 "); //Degree symbol
+
+}
+
+void dateTemp2()
+{
+  u8g2.setFont(u8g2_font_profont12_mf);
+
+  //Print Date 
+  //Sunday December  6th
+  char buf[80];
+  strftime(buf, sizeof(buf), "%A, %b. %e", &timeinfo);
+  u8g2.setCursor(5, 10);
+  u8g2.print(buf);
+  u8g2.print(dateOrdinal());
+}
+
 void timeSegment()
 {
   u8g2.setFont(u8g2_font_7Segments_26x42_mn);
@@ -409,6 +408,7 @@ void timeSegment()
     //Decided to just show nothing if we don't have a time sync
   }
 }
+
 void timeFlip()
 {
   u8g2.setFont(u8g2_font_fub30_tn);
@@ -491,17 +491,17 @@ void timeOlde()
 
   if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
   {
-    u8g2.setCursor(20, 59);
+    u8g2.setCursor(20, 64);
 
     if ((globalTime.currentHour > 9) || (globalTime.currentHour == 0))
     {
-      u8g2.setCursor(-5, 59);
+      u8g2.setCursor(-5, 64);
     }
 
     if ((globalTime.currentHour == 0) || (globalTime.currentHour == 12))
     {
       u8g2.print("1");
-      u8g2.setCursor(21, 59);
+      u8g2.setCursor(21, 64);
       u8g2.print("2");
     }
     else
@@ -512,7 +512,7 @@ void timeOlde()
     u8g2.setCursor(51, 57);
     u8g2.print(":");
 
-    u8g2.setCursor(64, 59);
+    u8g2.setCursor(64, 64);
     if (globalTime.currentMinute < 10)
     {
       u8g2.print("0");

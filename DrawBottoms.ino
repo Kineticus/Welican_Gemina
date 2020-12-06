@@ -281,5 +281,4 @@ void lavaLamp(int Scale, int OffsetX, int OffsetY, int OffsetZ)
       }
     }
   }
-
 }

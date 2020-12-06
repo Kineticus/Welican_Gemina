@@ -166,16 +166,16 @@ void drawBottom()
     break;
   case 3:
     drawIPAddress();
+    lavaLamp(10, 128, 0, 0, millis() / 50);
     break;
   case 4:
     starBounce();
     break;
   case 5:
-    //dvdBounce();
     //Will show favorite category
     break;
   case 6:
-    lavaLamp(5, 0, millis() / 50, 0);
+    lavaLamp(5, 128, 0, millis() / 50, 0);
     break;
 
   }
@@ -252,7 +252,7 @@ void drawClock()
   {
     dateTemp1();
     timeModern();
-    lavaLamp(5, 0, millis() / 50, 0);
+    lavaLamp(5, 128, 0, millis() / 50, 0);
   }
   break;
   case 5: //Weather 1

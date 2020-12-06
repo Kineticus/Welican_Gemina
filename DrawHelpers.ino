@@ -175,7 +175,7 @@ void drawBottom()
     //Will show favorite category
     break;
   case 6:
-    lavaLamp();
+    lavaLamp(5, 0, millis() / 15, 0);
     break;
 
   }
@@ -285,6 +285,7 @@ void drawClock()
     u8g2.print(dateOrdinal());
 
     timeModern();
+    lavaLamp(5, 0, millis() / 15, 0);
   }
   break;
   case 5: //Weather 1

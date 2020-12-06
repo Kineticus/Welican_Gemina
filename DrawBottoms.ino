@@ -266,20 +266,16 @@ void starBounce()
   objectBounce(&bounceModel10, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
 }
 
-void lavaLamp()
+void lavaLamp(int Scale, int OffsetX, int OffsetY, int OffsetZ)
 {
-  int scale = 10;
+  u8g2.setDrawColor(2);
 
-  int offset = millis() / 10;
-
-  u8g2.setDrawColor(1);
-
-  for (int y = 0; y < SCREEN_HEIGHT; y++)
+  for (int y = 0; y <= SCREEN_HEIGHT; y++)
   {
-    for (int x = 0; x < SCREEN_WIDTH; x++)
+    for (int x = 0; x <= SCREEN_WIDTH; x++)
     {
       //uint8_t 	inoise8 (uint16_t x, uint16_t y, uint16_t z)
-      if (inoise8((x * scale), (y * scale) + offset) > 128)
+      if (inoise8((x * Scale) + OffsetX, (y * Scale) + OffsetY, OffsetZ) > 128)
       {
         u8g2.drawPixel(x, y);
       }

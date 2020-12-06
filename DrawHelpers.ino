@@ -171,8 +171,13 @@ void drawBottom()
     starBounce();
     break;
   case 5:
-    dvdBounce();
+    //dvdBounce();
+    //Will show favorite category
     break;
+  case 6:
+    lavaLamp();
+    break;
+
   }
 }
 
@@ -485,17 +490,17 @@ void timeOlde()
 
   if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
   {
-    u8g2.setCursor(20, 62);
+    u8g2.setCursor(20, 59);
 
     if ((globalTime.currentHour > 9) || (globalTime.currentHour == 0))
     {
-      u8g2.setCursor(-5, 62);
+      u8g2.setCursor(-5, 59);
     }
 
-    if (globalTime.currentHour == 0)
+    if ((globalTime.currentHour == 0) || (globalTime.currentHour == 12))
     {
       u8g2.print("1");
-      u8g2.setCursor(18, 62);
+      u8g2.setCursor(21, 59);
       u8g2.print("2");
     }
     else
@@ -503,10 +508,10 @@ void timeOlde()
       u8g2.print(globalTime.currentHour);
     }
 
-    u8g2.setCursor(55, 57);
+    u8g2.setCursor(51, 57);
     u8g2.print(":");
 
-    u8g2.setCursor(64, 62);
+    u8g2.setCursor(64, 59);
     if (globalTime.currentMinute < 10)
     {
       u8g2.print("0");

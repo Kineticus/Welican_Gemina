@@ -243,9 +243,8 @@ void drawClock()
     timeOlde();
   }
   break;
-  case 3: //Modern Font
+  case 3: //Modern Font 
   {
-    dateTemp1();
     timeModern();
   }
   break;
@@ -253,10 +252,34 @@ void drawClock()
   {
     dateTemp1();
     timeModern();
+  }
+  case 5: //Modern Font 2
+  {
+    dateTemp1();
+    timeModern();
     lavaLamp(5, 128, 0, millis() / 50, 0);
   }
   break;
-  case 5: //Weather 1
+  case 6:
+  {
+    dateTemp5();
+    lavaLamp(5, 128, 0, millis() / 50, 0);
+  }
+  break;
+  case 7:
+  { 
+    dateTemp4();
+    u8g2.setBitmapMode(true /* transparent*/);
+    u8g2.drawXBMP(32, 0, WELICAN_LOGO_WIDTH, WELICAN_LOGO_HEIGHT, WELICAN_LOGO);
+    lavaLamp(5, 128, 0, millis() / 50, 0);
+  }
+  break;
+  case 8:
+  {
+    lavaLamp(5, 128, 0, millis() / 50, millis() / 250);
+  }
+  break;
+  case 10: //Weather 1
   {
     u8g2.setFont(u8g2_font_profont12_mf);
     u8g2.setCursor(10, 10);
@@ -284,7 +307,7 @@ void drawClock()
     u8g2.print(sunset);
   }
   break;
-  case 6: //Weather 2
+  case 11: //Weather 2
   {
     u8g2.setCursor(10, 10);
     u8g2.print(weather.currentWeatherDescription);
@@ -299,7 +322,7 @@ void drawClock()
     u8g2.print(String(weather.currentTemperatureMax));
   }
   break;
-  case 7: //Weather 3
+  case 12: //Weather 3
   {
     u8g2.setCursor(10, 10);
     u8g2.print(weather.currentWeatherTitle);
@@ -314,7 +337,7 @@ void drawClock()
     u8g2.print(String(weather.currentTemperatureMax));
   }
   break;
-  case 8: //Weather 4
+  case 13: //Weather 4
   {
     u8g2.setCursor(10, 0);
     u8g2.print(weather.currentWeatherTitle);
@@ -332,7 +355,7 @@ void drawClock()
     u8g2.print(sunset);
   }
   break;
-  case 9: //Test
+  case 14: //Test
   {
     u8g2.drawXBMP(20, 20, FACE_SMIRK_0_WIDTH, FACE_SMIRK_0_HEIGHT, FACE_SMIRK_0);
     u8g2.drawXBMP(60, 20, FACE_SMIRK_1_WIDTH, FACE_SMIRK_1_HEIGHT, FACE_SMIRK_1);
@@ -353,7 +376,7 @@ void dateTemp1()
   u8g2.print(dateOrdinal());
 
   //Temperature in Upper Left
-  u8g2.setCursor(0, 10);
+  u8g2.setCursor(2, 10);
   u8g2.print(weather.currentTemperature);
   u8g2.print("\xb0 "); //Degree symbol
 
@@ -371,6 +394,58 @@ void dateTemp2()
   u8g2.print(buf);
   u8g2.print(dateOrdinal());
 }
+
+void dateTemp3()
+{
+  u8g2.setFont(u8g2_font_profont12_mf);
+
+  //Print Date
+  //12/06/20
+  char buf[80];
+  strftime(buf, sizeof(buf), "%D", &timeinfo);
+  u8g2.setCursor(80, 10);
+  u8g2.print(buf);
+
+  //Temperature in Upper Left
+  u8g2.setCursor(2, 10);
+  u8g2.print(weather.currentTemperature);
+  u8g2.print("\xb0 "); //Degree symbol
+}
+
+void dateTemp4()
+{
+  u8g2.setFont(u8g2_font_profont12_mf);
+
+  //Print Date
+  //Sun  6
+  char buf[80];
+  strftime(buf, sizeof(buf), "%a %e", &timeinfo);
+  u8g2.setCursor(90, 10);
+  u8g2.print(buf);
+
+  //Temperature in Upper Left
+  u8g2.setCursor(2, 10);
+  u8g2.print(weather.currentTemperature);
+  u8g2.print("\xb0 "); //Degree symbol
+}
+
+void dateTemp5()
+{
+  u8g2.setFont(u8g2_font_profont12_mf);
+
+  //Print Time
+  //4:20
+  char buf[80];
+  strftime(buf, sizeof(buf), "%I:%M", &timeinfo);
+  u8g2.setCursor(90, 10);
+  u8g2.print(buf);
+
+  //Temperature in Upper Left
+  u8g2.setCursor(2, 10);
+  u8g2.print(weather.currentTemperature);
+  u8g2.print("\xb0 "); //Degree symbol
+}
+
 
 void timeSegment()
 {
@@ -510,7 +585,7 @@ void timeOlde()
       u8g2.print(globalTime.currentHour);
     }
 
-    u8g2.setCursor(51, 57);
+    u8g2.setCursor(51, 60);
     u8g2.print(":");
 
     u8g2.setCursor(64, 64);

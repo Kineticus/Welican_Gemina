@@ -888,14 +888,14 @@ struct OpenWeatherDayObject
   String rain;
   String uvi;
 };
-OpenWeatherDayObject currentDay;
-OpenWeatherDayObject day1;
-OpenWeatherDayObject day2;
-OpenWeatherDayObject day3;
-OpenWeatherDayObject day4;
-OpenWeatherDayObject day5;
-OpenWeatherDayObject day6;
-OpenWeatherDayObject day7;
+OpenWeatherDayObject weatherCurrentDay;
+OpenWeatherDayObject weatherDay1;
+OpenWeatherDayObject weatherDay2;
+OpenWeatherDayObject weatherDay3;
+OpenWeatherDayObject weatherDay4;
+OpenWeatherDayObject weatherDay5;
+OpenWeatherDayObject weatherDay6;
+OpenWeatherDayObject weatherDay7;
 
 struct Knob
 {

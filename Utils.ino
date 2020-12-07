@@ -1005,7 +1005,7 @@ void getCurrentWeather()
 
     weatherSettings.latitude = String((int)weather.weatherJson["coord"]["lat"]);
     weatherSettings.longitude = String((int)weather.weatherJson["coord"]["lon"]);
-    globals.timeZoneOffset = String((int)weather.weatherJson["timezone_offset"]);
+    globals.timeZoneOffset = weather.weatherJson["timezone_offset"];
 
     weather.sunrise = convertUnixToTime((int)weather.weatherJson["current"]["sunrise"]);
     weather.sunset = convertUnixToTime((int)weather.weatherJson["current"]["sunset"]);
@@ -1019,6 +1019,8 @@ void getCurrentWeather()
     weather.currentWindDegree = String((int)weather.weatherJson["current"]["wind_deg"]);
 
     weather.currentWeatherId = String((int)weather.weatherJson["weather"][0]["id"]);
+    weather.currentWeatherTitle = weather.weatherJson["weather"][0]["main"];
+    weather.currentWeatherDescription = weather.weatherJson["weather"][0]["description"];
 
     Serial.print("Temperature: ");
     Serial.println(weather.weatherJson["current"]["temp"]);
@@ -1037,6 +1039,12 @@ void getCurrentWeather()
 
     Serial.print("currentCloudiness: ");
     Serial.println(weather.currentCloudiness);
+
+    Serial.print("currentWeatherTitle: ");
+    Serial.println(weather.currentWeatherTitle);
+
+    Serial.print("currentWeatherDescription: ");
+    Serial.println(weather.currentWeatherDescription);
   }
   else
   {
@@ -1194,8 +1202,8 @@ void populateWeatherForDay(int dayNumber, JSONVar weatherJson, OpenWeatherDayObj
   dayObject.windDegree = String((int)weatherJson["daily"][dayNumber]["wind_deg"]);
 
   dayObject.weatherId = String((int)weatherJson["daily"][dayNumber]["weather"][0]["id"]);
-  dayObject.weatherMain = String((int)weatherJson["daily"][dayNumber]["weather"][0]["main"]);
-  dayObject.weatherDescription = String((int)weatherJson["daily"][dayNumber]["weather"][0]["description"]);
+  dayObject.weatherMain = weatherJson["daily"][dayNumber]["weather"][0]["main"];
+  dayObject.weatherDescription = weatherJson["daily"][dayNumber]["weather"][0]["description"];
 
   dayObject.cloudiness = String((int)weatherJson["daily"][dayNumber]["clouds"]);
   dayObject.pop = String((int)weatherJson["daily"][dayNumber]["pop"]);

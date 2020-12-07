@@ -119,7 +119,7 @@ TaskHandle_t inputComputeTask = NULL;
 //U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
 //2.4" OLED, MODERN BOARDS, small glitch on 1.3"
-U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 19);
+U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/19);
 
 /*
 For EST - UTC -5.00 : -5 * 60 * 60 : -18000
@@ -138,6 +138,7 @@ struct Globals
 {
   int temp[3];
   int timeZone;
+  String timeZoneOffset;
   int tempValue;
   int currentSpeed;
   unsigned long newTime;
@@ -171,6 +172,7 @@ struct Globals
 Globals globals = {
     .temp = {},
     .timeZone = -5,
+    .timeZoneOffset = "-18000",
     .tempValue = 0,
     .currentSpeed = 10,
     .newTime = 0,
@@ -316,8 +318,8 @@ struct PatternSettings
   byte patternAdjust[MAX_MODES + 1][100];
   int favoritePattern[50]; //all are used under the hood
   int favoritePatternAdjust[50];
-  int favoriteMode[50];    //declare memory for all 50 favorites
-  int numberOfFavorites;   //Max 50, loads all 50 at program load, dynamically assignable
+  int favoriteMode[50];  //declare memory for all 50 favorites
+  int numberOfFavorites; //Max 50, loads all 50 at program load, dynamically assignable
   int tempPattern;
   int currentPattern;
   int displayPattern;
@@ -461,19 +463,19 @@ MenuModel globalMenu = {
         1,                                 //NTP
         3,                                 //Customize Display
         71,                                //Customize Timeout
-        10,                                 //Customize Display Type
+        10,                                //Customize Display Type
         2,                                 //Font
         2,                                 //UNUSED
         71,                                //Random Timeout
     },
     .patternMax = {
-        13,                               //Basic Category
-        20,                               //Music Category
-        23,                               //Chill
-        66,                               //Moving Colors
-        81,                               //Legacy
-        patternSettings.numberOfFavorites,//Favorites (dynamic)
-        10,                               //Palette Mode
+        13,                                //Basic Category
+        20,                                //Music Category
+        23,                                //Chill
+        66,                                //Moving Colors
+        81,                                //Legacy
+        patternSettings.numberOfFavorites, //Favorites (dynamic)
+        10,                                //Palette Mode
     },
     .currentMenu = 0,
     .currentMenuMultiplier = 1,
@@ -654,24 +656,24 @@ struct Snake
 };
 
 Snake snake = {
-  .num = 10, //Set in reset
-  .num2 = 10,
-  .score = 0,
-  .score2 = 0,
-  .scoreMultiplier = 1,
-  .lengthMultiplier = 1,
-  .speed = 5,
-  .tick = 0,
-  .oldX = 0,
-  .oldY = 0,
-  .angle = 0.0,
-  .angle2 = 0.0,
-  .Xa = 0,
-  .Ya = 0,
-  .sensitivity = 4,
-  .appleRate = 100,
-  .maxApples = 10,
-  .maxAppleSize = 4,
+    .num = 10, //Set in reset
+    .num2 = 10,
+    .score = 0,
+    .score2 = 0,
+    .scoreMultiplier = 1,
+    .lengthMultiplier = 1,
+    .speed = 5,
+    .tick = 0,
+    .oldX = 0,
+    .oldY = 0,
+    .angle = 0.0,
+    .angle2 = 0.0,
+    .Xa = 0,
+    .Ya = 0,
+    .sensitivity = 4,
+    .appleRate = 100,
+    .maxApples = 10,
+    .maxAppleSize = 4,
 };
 
 struct Ball
@@ -703,20 +705,19 @@ struct Pong
 };
 
 Pong pong = {
-  .tick = 0,
-  .speed = 5,
-  .recent = 0,
-  .bounceCount = 0,
-  .bounceMax = 0,
-  .score1 = 0,
-  .score2 = 0,
-  .scoreToWin = 10,
-  .spacing = 4,
-  .paddleWidth1 = 10,
-  .paddleWidth2 = 10,
-  .paddleHeight1 = 2,
-  .paddleHeight2 = 2
-};
+    .tick = 0,
+    .speed = 5,
+    .recent = 0,
+    .bounceCount = 0,
+    .bounceMax = 0,
+    .score1 = 0,
+    .score2 = 0,
+    .scoreToWin = 10,
+    .spacing = 4,
+    .paddleWidth1 = 10,
+    .paddleWidth2 = 10,
+    .paddleHeight1 = 2,
+    .paddleHeight2 = 2};
 
 struct Block
 {
@@ -758,8 +759,7 @@ BlockBreaker blockBreaker = {
     .messageTimer = 0,
     .running = 0,
     .blockWidth = 10,
-    .blockHeight = 5  
-  };
+    .blockHeight = 5};
 
 struct MagicWords
 {
@@ -820,6 +820,8 @@ struct OpenWeatherSettings
 {
   String zipCode;
   String countryCode;
+  String latitude;
+  String longitude;
   unsigned long weatherTimerDelay;
   unsigned long weatherUpdateInitial;
   unsigned long weatherUpdateInterval;
@@ -827,6 +829,8 @@ struct OpenWeatherSettings
 OpenWeatherSettings weatherSettings = {
     .zipCode = "33701",
     .countryCode = "US",
+    .latitude = "33.441792",
+    .longitude = "94.037689",
     .weatherTimerDelay = 0,          //Set by system
     .weatherUpdateInitial = 10000,   //10 seconds after boot
     .weatherUpdateInterval = 1800000 //Every 30 minutes after that
@@ -841,13 +845,54 @@ struct OpenWeatherObject
   String currentTemperature;
   String currentTemperatureMax;
   String currentTemperatureMin;
+  String currentFeelsLike;
+  String currentCloudiness;
+  String currentVisibility;
   String currentHumidity;
   String currentWindSpeed;
+  String currentWindDegree;
+  String currentUvi;
   String sunrise;
   String sunset;
   String jsonBuffer;
 };
 OpenWeatherObject weather;
+
+struct OpenWeatherDayObject
+{
+  String sunrise;
+  String sunset;
+  String tempDay;
+  String tempMin;
+  String tempMax;
+  String tempNight;
+  String tempEve;
+  String tempMorn;
+  String feelsLikeDay;
+  String feelsLikeNight;
+  String feelsLikeEve;
+  String feelsLikeMorn;
+  String pressure;
+  String humidity;
+  String dewPoint;
+  String windSpeed;
+  String windDegree;
+  String weatherId;
+  String weatherMain;
+  String weatherDescription;
+  String cloudiness;
+  String pop;
+  String rain;
+  String uvi;
+};
+OpenWeatherDayObject currentDay;
+OpenWeatherDayObject day1;
+OpenWeatherDayObject day2;
+OpenWeatherDayObject day3;
+OpenWeatherDayObject day4;
+OpenWeatherDayObject day5;
+OpenWeatherDayObject day6;
+OpenWeatherDayObject day7;
 
 struct Knob
 {
@@ -877,34 +922,32 @@ struct VisualizerTriangle
 };
 
 VisualizerTriangle t1 = {
-  .x = 64,
-  .y = 42,
-  .radius = 18,
-  .point1 = 0.0,
-  .point2 = 2.1,
-  .point3 = 4.2,
-  .x1 = 0,
-  .x2 = 0,
-  .x3 = 0,
-  .y1 = 0,
-  .y2 = 0,
-  .y3 = 0
-};
+    .x = 64,
+    .y = 42,
+    .radius = 18,
+    .point1 = 0.0,
+    .point2 = 2.1,
+    .point3 = 4.2,
+    .x1 = 0,
+    .x2 = 0,
+    .x3 = 0,
+    .y1 = 0,
+    .y2 = 0,
+    .y3 = 0};
 
 VisualizerTriangle tA = {
-  .x = 62,
-  .y = 46,
-  .radius = 13,
-  .point1 = 0.0,
-  .point2 = 2.1,
-  .point3 = 4.2,
-  .x1 = 0,
-  .x2 = 0,
-  .x3 = 0,
-  .y1 = 0,
-  .y2 = 0,
-  .y3 = 0
-};
+    .x = 62,
+    .y = 46,
+    .radius = 13,
+    .point1 = 0.0,
+    .point2 = 2.1,
+    .point3 = 4.2,
+    .x1 = 0,
+    .x2 = 0,
+    .x3 = 0,
+    .y1 = 0,
+    .y2 = 0,
+    .y3 = 0};
 struct EQModel
 {
   volatile int bandValues[15];
@@ -992,7 +1035,7 @@ void setup()
   //WiFi.enableSTA(true);
 
   //WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  
+
   if (digitalRead(KNOB_1C) == 1)
   {
     WiFi.begin(); //Will connect to last connected to AP, even after power loss
@@ -1001,7 +1044,7 @@ void setup()
   {
     globals.networkTries = 100;
   }
-   //WiFi.status();
+  //WiFi.status();
   //WiFi.localIP();
 
   startWebsite(&server);
@@ -1013,12 +1056,12 @@ void setup()
   //Few new boards using 2.4 OLED
   pinMode(19, OUTPUT);
   digitalWrite(19, HIGH);
-  
+
   //Display library initialization
   u8g2.begin();
 
   u8g2.setBusClock(1000000); //1 mHz i2c, default is 400 kHz
-  
+
   /* Load Save Settings
 
     Load variables from EEPROM
@@ -1081,8 +1124,6 @@ void setup()
   //Set first Weather check value
   weatherSettings.weatherTimerDelay = weatherSettings.weatherUpdateInitial;
 
-  updateWeather(true);
-
   updateZipCodeString();
 
   //Set Smooth Operator fade time
@@ -1100,7 +1141,7 @@ void setup()
     Serial.print(NUM_LEDS);
   }
   Serial.print(" LEDs - ");
-  
+
   //FastLED Declation
   if (globalLED.colorOrder == 1)
   {
@@ -1150,131 +1191,131 @@ void loop()
   EVERY_N_MILLISECONDS(33) //Enforce Max Frame Rate 33 = 30FPS
   {
 
-  globalStrings.functionName.toCharArray(globalStrings.functionNameOutString, 20);
-  globalStrings.categoryName.toCharArray(globalStrings.categoryNameOutString, 20);
+    globalStrings.functionName.toCharArray(globalStrings.functionNameOutString, 20);
+    globalStrings.categoryName.toCharArray(globalStrings.categoryNameOutString, 20);
 
-  //Clear the display buffer so we can draw new stuff
-  u8g2.clearBuffer();
+    //Clear the display buffer so we can draw new stuff
+    u8g2.clearBuffer();
 
-  switch (globals.runMode)
-  {
-  case 0: //Main run mode
-    drawBottom();
-    drawTop();
-    showBrightnessDisplay();
-    break;
-  case 1: //Menu mode
-    drawMenuCommander();
-    break;
-  case 2: //Game mode
-    switch (globalMenu.menu[1])
+    switch (globals.runMode)
+    {
+    case 0: //Main run mode
+      drawBottom();
+      drawTop();
+      showBrightnessDisplay();
+      break;
+    case 1: //Menu mode
+      drawMenuCommander();
+      break;
+    case 2: //Game mode
+      switch (globalMenu.menu[1])
+      {
+      case 0:
+        fallios_game();
+        break;
+      case 1:
+        blockbreaker_game();
+        break;
+      case 2:
+        magic_game();
+        break;
+      case 3:
+        snake_game();
+        break;
+      case 4:
+        pong_game();
+        break;
+      case 5:
+        snake2_game();
+        break;
+      }
+      break;
+    case 3: //Clock/Weather/Info modes
+      drawClock();
+      showBrightnessDisplay();
+      break;
+    case -1:                           //Reset
+      globalTime.touchTime = millis(); //Last touch time back to default
+      globals.runMode = 0;             //Back to normal
+      break;
+    }
+
+    //Show logo instead for first X millis
+    showLogo(2500);
+
+    //Clear active button clicks
+    knob1.click = 0;
+    knob2.click = 0;
+
+    //Write buffer to display
+    u8g2.sendBuffer();
+
+    startBreathing();
+
+    //Write current breath value to status LED
+    ledcWrite(STATUS_LED, patternSettings.breath);
+
+    patternSettings.displayPattern = patternSettings.pattern[globals.mode];
+
+    if (patternSettings.displayPattern == 0)
+    {
+      if (((millis() - globals.randomTime) > globals.randomInterval) && globals.randomMin != 0)
+      {
+        pickRandom();
+      }
+
+      patternSettings.displayPattern = patternSettings.randomPattern;
+    }
+
+    switch (globals.mode)
     {
     case 0:
-      fallios_game();
+      basic_category(patternSettings.displayPattern);
       break;
     case 1:
-      blockbreaker_game();
+      music_category(patternSettings.displayPattern);
       break;
     case 2:
-      magic_game();
+      chill_category(patternSettings.displayPattern);
       break;
     case 3:
-      snake_game();
+      moving_colors_category(patternSettings.displayPattern);
       break;
     case 4:
-      pong_game();
+      legacy_category(patternSettings.displayPattern);
       break;
     case 5:
-      snake2_game();
+      favorites_category(patternSettings.displayPattern);
+      break;
+    case 6:
+      palette_category(patternSettings.displayPattern);
       break;
     }
-    break;
-  case 3: //Clock/Weather/Info modes
-    drawClock();
-    showBrightnessDisplay();
-    break;
-  case -1:                           //Reset
-    globalTime.touchTime = millis(); //Last touch time back to default
-    globals.runMode = 0;             //Back to normal
-    break;
-  }
 
-  //Show logo instead for first X millis
-  showLogo(2500);
+    //Detect mode changes and apply interfading
+    smoothOperator();
 
-  //Clear active button clicks
-  knob1.click = 0;
-  knob2.click = 0;
+    //Check to see if there are recent knob changes to store in memory
+    saveTimeCheck();
 
-  //Write buffer to display
-  u8g2.sendBuffer();
+    //Output data to LED strip
+    FastLED.show();
 
-  startBreathing();
-
-  //Write current breath value to status LED
-  ledcWrite(STATUS_LED, patternSettings.breath);
-
-  patternSettings.displayPattern = patternSettings.pattern[globals.mode];
-
-  if (patternSettings.displayPattern == 0)
-  {
-    if (((millis() - globals.randomTime) > globals.randomInterval) && globals.randomMin != 0)
+    if (brightness.useFade == true)
     {
-      pickRandom();
+      brightness.current = brightness.current + brightness.fadeAmount;
+      // reverse the direction of the fading at the ends of the fade:
+      if (brightness.current == 0 || brightness.current == 255)
+      {
+        brightness.fadeAmount = -brightness.fadeAmount;
+      }
+
+      //delay(9); // This delay sets speed of the fade. I usually do from 5-75 but you can always go higher.
     }
 
-    patternSettings.displayPattern = patternSettings.randomPattern;
-  }
+    devEnv.fps++; //For tracking frame rate/ debug logging
 
-  switch (globals.mode)
-  {
-  case 0:
-    basic_category(patternSettings.displayPattern);
-    break;
-  case 1:
-    music_category(patternSettings.displayPattern);
-    break;
-  case 2:
-    chill_category(patternSettings.displayPattern);
-    break;
-  case 3:
-    moving_colors_category(patternSettings.displayPattern);
-    break;
-  case 4:
-    legacy_category(patternSettings.displayPattern);
-    break;
-  case 5:
-    favorites_category(patternSettings.displayPattern);
-    break;
-  case 6:
-    palette_category(patternSettings.displayPattern);
-    break;  
-  }
-
-  //Detect mode changes and apply interfading
-  smoothOperator();
-
-  //Check to see if there are recent knob changes to store in memory
-  saveTimeCheck();
-
-  //Output data to LED strip
-  FastLED.show();
-
-  if (brightness.useFade == true)
-  {
-    brightness.current = brightness.current + brightness.fadeAmount;
-    // reverse the direction of the fading at the ends of the fade:
-    if (brightness.current == 0 || brightness.current == 255)
-    {
-      brightness.fadeAmount = -brightness.fadeAmount;
-    }
-
-    //delay(9); // This delay sets speed of the fade. I usually do from 5-75 but you can always go higher.
-  }
-
-  devEnv.fps++; //For tracking frame rate/ debug logging
-
-  /*
+    /*
   for (int i = 0; i < NUM_BANDS; i++)
   {
     int temp1 = 0;
@@ -1300,30 +1341,29 @@ void loop()
   Serial.println("");
   */
 
+    // Serial.print(" ");
+    // Serial.println(eqBands.bandValues[4]);
+    //Serial.print(" ");
 
-  // Serial.print(" ");
-  // Serial.println(eqBands.bandValues[4]);
-  //Serial.print(" ");
-  
-  EVERY_N_MILLISECONDS(100000)
-  {
-    Serial.print("FPS: ");
-    Serial.println(devEnv.fps / 10);
-    devEnv.fps = 0;
-    Serial.print("IPS: ");
-    Serial.println(devEnv.fftps / 10);
-    devEnv.fftps = 0;
-    //Serial.print("ICT: ");
-    //Serial.println(eTaskGetState(inputComputeTask));
-    Serial.print("MIN: ");
-    Serial.println(((millis() / 1000) / 60));
-  }
-  
-  // slowly cycle the "base color" through the rainbow
-  EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; }
+    EVERY_N_MILLISECONDS(100000)
+    {
+      Serial.print("FPS: ");
+      Serial.println(devEnv.fps / 10);
+      devEnv.fps = 0;
+      Serial.print("IPS: ");
+      Serial.println(devEnv.fftps / 10);
+      devEnv.fftps = 0;
+      //Serial.print("ICT: ");
+      //Serial.println(eTaskGetState(inputComputeTask));
+      Serial.print("MIN: ");
+      Serial.println(((millis() / 1000) / 60));
+    }
 
-  autoConnect();
-  //vTaskDelay(1);
+    // slowly cycle the "base color" through the rainbow
+    EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; }
+
+    autoConnect();
+    //vTaskDelay(1);
   }
   //vTaskDelay(1);
 }

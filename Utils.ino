@@ -92,10 +92,10 @@ void inputCompute(void *parameter)
 
       for (int ii = eqBands.averageSamples; ii > 0; ii--)
       {
-        eqBands.bandAverages[i][ii] = eqBands.bandAverages[i][ii-1];
+        eqBands.bandAverages[i][ii] = eqBands.bandAverages[i][ii - 1];
       }
 
-        eqBands.bandAverages[i][0] = eqBands.tempBandValues[i];
+      eqBands.bandAverages[i][0] = eqBands.tempBandValues[i];
     }
 
     //Look for Peaks
@@ -404,7 +404,7 @@ void updateEncoders()
       }
 
       //Only adjust brightness while knob is not held down
-      if(knob2.heldTime == 0)
+      if (knob2.heldTime == 0)
       {
         //Add adjusted value to brightness in a new integer
         int tempInt = brightness.target + globals.tempValue;
@@ -416,7 +416,7 @@ void updateEncoders()
         }
         if (tempInt < 0)
         {
-          tempInt= 0;
+          tempInt = 0;
         }
 
         //set the current brightness to the constrained byte value
@@ -425,7 +425,7 @@ void updateEncoders()
         //Show the brightness indicator
         brightness.debounce = millis() + 1420;
 
-        //Save the brightness setting 
+        //Save the brightness setting
         globalTime.save = 50;
 
         //Update last human interaction timer
@@ -448,12 +448,12 @@ void updateEncoders()
         }
         if (tempInt < 0)
         {
-          tempInt= 0;
+          tempInt = 0;
         }
 
         //set the current pattern adjust setting to the constrained byte value
         patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]] = tempInt;
-        
+
         //show the pattern screen for a bit
         brightness.debounce2 = millis() + 1420;
         globalTime.save = 20;
@@ -711,7 +711,6 @@ void writeFavorites()
   //Write the patternAdjust for the currently selected pattern
   EEPROM.write((300 + (5 * 100) + globalMenu.menu[globalMenu.currentMenu]), patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
 
-
   EEPROM.commit(); //write it to memory
 
   //Copy over Pattern Adjust to that favorite slot
@@ -817,29 +816,29 @@ String dateOrdinal()
 {
   String ordinal = "th";
 
-  switch(globalTime.currentDate)
+  switch (globalTime.currentDate)
   {
-    case 1:
-      ordinal = "st";
-      break;
-    case 2:
-      ordinal = "nd";
-      break;
-    case 3:
-      ordinal = "rd";
-      break;
-    case 21:
-      ordinal = "st";
-      break;
-    case 22:
-      ordinal = "nd";
-      break;
-    case 23:
-      ordinal = "rd";
-      break;
-    case 31:
-      ordinal = "st";
-      break;
+  case 1:
+    ordinal = "st";
+    break;
+  case 2:
+    ordinal = "nd";
+    break;
+  case 3:
+    ordinal = "rd";
+    break;
+  case 21:
+    ordinal = "st";
+    break;
+  case 22:
+    ordinal = "nd";
+    break;
+  case 23:
+    ordinal = "rd";
+    break;
+  case 31:
+    ordinal = "st";
+    break;
   }
 
   return ordinal;
@@ -926,6 +925,8 @@ void getWeather()
     Serial.println("JSON object = ");
     Serial.println(weather.weatherJson);
 
+    weatherSettings.latitude = String((double)weather.weatherJson["coord"]["lat"]);
+    weatherSettings.longitude = String((double)weather.weatherJson["coord"]["lon"]);
     weather.currentTemperature = String((int)weather.weatherJson["main"]["temp"]);
     weather.currentTemperatureMax = String((int)weather.weatherJson["main"]["temp_max"]);
     weather.currentTemperatureMin = String((int)weather.weatherJson["main"]["temp_min"]);
@@ -934,14 +935,9 @@ void getWeather()
     weather.currentWeatherId = String((int)weather.weatherJson["weather"][0]["id"]);
     weather.currentWeatherTitle = weather.weatherJson["weather"][0]["main"];
     weather.currentWeatherDescription = weather.weatherJson["weather"][0]["description"];
-    //weather.sunrise = (int)weather.weatherJson["sys"]["sunrise"]; // + (3600 * globals.timeZone);
-    //weather.sunset = (int)weather.weatherJson["sys"]["sunset"]; // + (3600 * globals.timeZone);
 
     weather.sunrise = convertUnixToTime((int)weather.weatherJson["sys"]["sunrise"]);
     weather.sunset = convertUnixToTime((int)weather.weatherJson["sys"]["sunset"]);
-
-    //weather.sunrise = convertUnixToTime(timeConvert(weather.sunrise));
-    //weather.sunset = convertUnixToTime(timeConvert(weather.sunset));
 
     Serial.print("Temperature: ");
     Serial.println(weather.weatherJson["main"]["temp"]);
@@ -978,6 +974,158 @@ void getWeather()
     Serial.println("Weather - No Connection");
   }
 }
+
+void getCurrentWeather()
+{
+  if (WiFi.status() == WL_CONNECTED)
+  {
+    Serial.println("GETTING CURRENT WEATHER");
+
+    String excludeList = "alerts,daily,hourly,minutely"; // current
+    weatherSettings.zipCode = globalMenu.menu[11];
+    String serverPath = "https://api.openweathermap.org/data/2.5/onecall?lat=" + String(weatherSettings.latitude) + "&lon=" + String(weatherSettings.longitude) + "&exclude=" + excludeList + " &APPID=" + globals.openWeatherMapApiKey;
+
+    weather.jsonBuffer = httpGETRequest(serverPath.c_str());
+    weather.weatherJson = JSON.parse(weather.jsonBuffer);
+
+    // JSON.typeof(jsonVar) can be used to get the type of the var
+    if (JSON.typeof(weather.weatherJson) == "undefined")
+    {
+      Serial.println("Parsing input failed!");
+      return;
+    }
+
+    Serial.println("JSON object = ");
+    Serial.println(weather.weatherJson);
+
+    weatherSettings.latitude = String((int)weather.weatherJson["coord"]["lat"]);
+    weatherSettings.longitude = String((int)weather.weatherJson["coord"]["lon"]);
+    globals.timeZoneOffset = String((int)weather.weatherJson["timezone_offset"]);
+
+    weather.sunrise = convertUnixToTime((int)weather.weatherJson["current"]["sunrise"]);
+    weather.sunset = convertUnixToTime((int)weather.weatherJson["current"]["sunset"]);
+    weather.currentTemperature = String((int)weather.weatherJson["current"]["temp"]);
+    weather.currentFeelsLike = String((int)weather.weatherJson["current"]["feels_like"]);
+    weather.currentHumidity = String((int)weather.weatherJson["current"]["humidity"]);
+    weather.currentUvi = String((int)weather.weatherJson["current"]["uvi"]);
+    weather.currentCloudiness = String((int)weather.weatherJson["current"]["clouds"]);
+    weather.currentVisibility = String((int)weather.weatherJson["current"]["visibility"]);
+    weather.currentWindSpeed = String((int)weather.weatherJson["current"]["wind_speed"]);
+    weather.currentWindDegree = String((int)weather.weatherJson["current"]["wind_deg"]);
+
+    weather.currentWeatherId = String((int)weather.weatherJson["weather"][0]["id"]);
+
+    Serial.print("Temperature: ");
+    Serial.println(weather.weatherJson["current"]["temp"]);
+
+    Serial.print("Humidity: ");
+    Serial.println(weather.weatherJson["current"]["humidity"]);
+
+    Serial.print("Wind Speed: ");
+    Serial.println(weather.weatherJson["current"]["wind_speed"]);
+
+    Serial.print("currentWeatherId: ");
+    Serial.println(weather.weatherJson["weather"][0]["id"]);
+
+    Serial.print("currentUvi: ");
+    Serial.println(weather.currentUvi);
+
+    Serial.print("currentCloudiness: ");
+    Serial.println(weather.currentCloudiness);
+  }
+  else
+  {
+    Serial.println("Weather - No Connection");
+  }
+}
+
+void getDailyWeather()
+{
+  if (WiFi.status() == WL_CONNECTED)
+  {
+    Serial.println("GETTING 7 DAY WEATHER");
+
+    String excludeList = "alerts,hourly,minutely,current"; // daily
+    weatherSettings.zipCode = globalMenu.menu[11];
+    String serverPath = "https://api.openweathermap.org/data/2.5/onecall?lat=" + String(weatherSettings.latitude) + "&lon=" + String(weatherSettings.longitude) + "&exclude=" + excludeList + "&APPID=" + globals.openWeatherMapApiKey;
+
+    Serial.println("7 DAY - 1");
+    Serial.println(serverPath);
+
+    weather.jsonBuffer = httpGETRequest(serverPath.c_str());
+    weather.weatherJson = JSON.parse(weather.jsonBuffer);
+
+    Serial.println("7 DAY - 2");
+
+    // JSON.typeof(jsonVar) can be used to get the type of the var
+    if (JSON.typeof(weather.weatherJson) == "undefined")
+    {
+      Serial.println("Parsing input failed!");
+      return;
+    }
+
+    Serial.println("JSON object = ");
+    Serial.println(weather.weatherJson);
+
+    weatherSettings.latitude = String((int)weather.weatherJson["coord"]["lat"]);
+    weatherSettings.longitude = String((int)weather.weatherJson["coord"]["lon"]);
+    globals.timeZoneOffset = String((int)weather.weatherJson["timezone_offset"]);
+
+    currentDay.sunrise = convertUnixToTime((int)weather.weatherJson["daily"]["sunrise"]);
+    currentDay.sunset = convertUnixToTime((int)weather.weatherJson["daily"]["sunset"]);
+    currentDay.tempDay = String((int)weather.weatherJson["daily"]["temp"]["day"]);
+    currentDay.tempMin = String((int)weather.weatherJson["daily"]["temp"]["min"]);
+    currentDay.tempMax = String((int)weather.weatherJson["daily"]["temp"]["max"]);
+    currentDay.tempNight = String((int)weather.weatherJson["daily"]["temp"]["night"]);
+    currentDay.tempEve = String((int)weather.weatherJson["daily"]["temp"]["eve"]);
+    currentDay.tempMorn = String((int)weather.weatherJson["daily"]["temp"]["morn"]);
+
+    currentDay.feelsLikeDay = String((int)weather.weatherJson["daily"]["feels_like"]["day"]);
+    currentDay.feelsLikeNight = String((int)weather.weatherJson["daily"]["feels_like"]["night"]);
+    currentDay.feelsLikeEve = String((int)weather.weatherJson["daily"]["feels_like"]["eve"]);
+    currentDay.feelsLikeMorn = String((int)weather.weatherJson["daily"]["feels_like"]["morn"]);
+
+    currentDay.pressure = String((int)weather.weatherJson["daily"]["pressure"]);
+    currentDay.humidity = String((int)weather.weatherJson["daily"]["humidity"]);
+    currentDay.dewPoint = String((int)weather.weatherJson["daily"]["dew_point"]);
+    currentDay.windSpeed = String((int)weather.weatherJson["daily"]["wind_speed"]);
+    currentDay.windDegree = String((int)weather.weatherJson["daily"]["wind_deg"]);
+
+    currentDay.weatherId = String((int)weather.weatherJson["weather"][0]["id"]);
+    currentDay.weatherMain = String((int)weather.weatherJson["weather"][0]["main"]);
+    currentDay.weatherDescription = String((int)weather.weatherJson["weather"][0]["description"]);
+
+    currentDay.cloudiness = String((int)weather.weatherJson["daily"]["clouds"]);
+    currentDay.pop = String((int)weather.weatherJson["daily"]["pop"]);
+    currentDay.rain = String((int)weather.weatherJson["daily"]["rain"]);
+    currentDay.uvi = String((int)weather.weatherJson["daily"]["uvi"]);
+
+    Serial.println("7 DAY - 3");
+
+    Serial.print("tempDay: ");
+    Serial.println(currentDay.tempDay);
+
+    Serial.print("Humidity: ");
+    Serial.println(currentDay.humidity);
+
+    Serial.print("Wind Speed: ");
+    Serial.println(currentDay.windSpeed);
+
+    Serial.print("currentWeatherId: ");
+    Serial.println(currentDay.weatherId);
+
+    Serial.print("currentUvi: ");
+    Serial.println(currentDay.uvi);
+
+    Serial.print("currentCloudiness: ");
+    Serial.println(currentDay.cloudiness);
+  }
+  else
+  {
+    Serial.println("Weather - No Connection");
+  }
+}
+
 void updateWeather(bool force)
 {
   if ((force == true) && (millis() > 10000))
@@ -993,22 +1141,32 @@ void updateWeather(bool force)
   {
     if (globals.runMode == 3)
     {
-      //Normal run check
-      if  ((millis() - weatherSettings.weatherTimerDelay) > weatherSettings.weatherUpdateInterval)
+      // Normal run check
+      if ((millis() - weatherSettings.weatherTimerDelay) > weatherSettings.weatherUpdateInterval)
       {
         Serial.println("NORMAL WEATHER CHECK");
         getWeather();
         weatherSettings.weatherTimerDelay = millis();
       }
 
-      //Initial run check
+      // Initial run check
       if ((weatherSettings.weatherUpdateInitial != 0) && ((millis() - weatherSettings.weatherUpdateInitial) > 0) && (WiFi.status() == WL_CONNECTED))
       {
         Serial.println("INITIAL WEATHER CHECK");
         getWeather();
 
-        //Disable further checks
+        // Disable further checks
         weatherSettings.weatherUpdateInitial = 0;
+      }
+
+      // Have initial weather data
+      // call OpenWeatherApi "OneCall" for more data
+      // if ((weatherSettings.weatherUpdateInitial == 0 && (WiFi.status() == WL_CONNECTED)) && (millis() - weatherSettings.weatherTimerDelay) > weatherSettings.weatherUpdateInterval)
+      if (weatherSettings.weatherUpdateInitial == 0 && (WiFi.status() == WL_CONNECTED))
+      {
+        getDailyWeather();
+        // getCurrentWeather();
+        // weatherSettings.weatherTimerDelay = millis();
       }
     }
   }
@@ -1117,7 +1275,6 @@ void readPatternSettings()
       //Serial.println(patternSettings.patternAdjust[i][ii]);
     }
   }
-
 
   //Read the adjust value for each pattern
   //

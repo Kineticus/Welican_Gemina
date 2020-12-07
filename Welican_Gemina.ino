@@ -139,6 +139,7 @@ struct Globals
   int temp[3];
   int timeZone;
   String timeZoneOffset;
+  String timeZoneName;
   int tempValue;
   int currentSpeed;
   unsigned long newTime;
@@ -173,6 +174,7 @@ Globals globals = {
     .temp = {},
     .timeZone = -5,
     .timeZoneOffset = "-18000",
+    .timeZoneName = "",
     .tempValue = 0,
     .currentSpeed = 10,
     .newTime = 0,
@@ -825,16 +827,17 @@ struct OpenWeatherSettings
   unsigned long weatherTimerDelay;
   unsigned long weatherUpdateInitial;
   unsigned long weatherUpdateInterval;
+  bool gotDailyWeather;
 };
 OpenWeatherSettings weatherSettings = {
     .zipCode = "33701",
     .countryCode = "US",
     .latitude = "33.441792",
     .longitude = "94.037689",
-    .weatherTimerDelay = 0,          //Set by system
-    .weatherUpdateInitial = 10000,   //10 seconds after boot
-    .weatherUpdateInterval = 1800000 //Every 30 minutes after that
-};
+    .weatherTimerDelay = 0,           //Set by system
+    .weatherUpdateInitial = 10000,    //10 seconds after boot
+    .weatherUpdateInterval = 1800000, //Every 30 minutes after that
+    .gotDailyWeather = false};
 
 struct OpenWeatherObject
 {
@@ -1176,7 +1179,7 @@ void setup()
   xTaskCreatePinnedToCore(
       inputCompute,         /* Function to implement the task */
       "Input Compute Task", /* Name of the task */
-      5000,                 /* Stack size in words */
+      15000,                /* Stack size in words */
       NULL,                 /* Task input parameter */
       0,                    /* Priority of the task, lower is lower */
       &inputComputeTask,    /* Task handle. */

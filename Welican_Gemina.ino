@@ -461,7 +461,7 @@ MenuModel globalMenu = {
         1,                                 //NTP
         3,                                 //Customize Display
         71,                                //Customize Timeout
-        10,                                 //Customize Display Type
+        15,                                 //Customize Display Type
         2,                                 //Font
         2,                                 //UNUSED
         71,                                //Random Timeout
@@ -1305,7 +1305,7 @@ void loop()
   // Serial.println(eqBands.bandValues[4]);
   //Serial.print(" ");
   
-  EVERY_N_MILLISECONDS(100000)
+  EVERY_N_MILLISECONDS(10000)
   {
     Serial.print("FPS: ");
     Serial.println(devEnv.fps / 10);

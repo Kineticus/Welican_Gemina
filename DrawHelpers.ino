@@ -277,7 +277,7 @@ void drawClock()
   break;
   case 8:
   {
-    lavaLamp(5, 128, 0, millis() / 50, millis() / 250);
+    lavaLamp(5, 128, 0, 0, millis() / 50);
   }
   break;
   case 10: //Weather 1
@@ -442,7 +442,7 @@ void dateTemp5()
   u8g2.print(buf);
 
   //Temperature in Upper Left
-  u8g2.setCursor(2, 10);
+  u8g2.setCursor(4, 10);
   u8g2.print(weather.currentTemperature);
   u8g2.print("\xb0 "); //Degree symbol
 }

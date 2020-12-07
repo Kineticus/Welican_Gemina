@@ -894,7 +894,7 @@ void autoConnect()
   if ((WiFi.status() == 4) && (globals.networkTries < 4))
   {
     //Try to connect a few times if not connected
-    EVERY_N_MILLISECONDS(10000)
+    EVERY_N_MILLISECONDS(5000)
     {
       WiFi.disconnect();
       globals.networkTries++;

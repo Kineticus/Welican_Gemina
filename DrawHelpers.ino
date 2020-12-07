@@ -253,6 +253,7 @@ void drawClock()
     dateTemp1();
     timeModern();
   }
+  break;
   case 5: //Modern Font 2
   {
     dateTemp1();
@@ -268,7 +269,7 @@ void drawClock()
   break;
   case 7:
   { 
-    dateTemp4();
+    dateTemp5();
     u8g2.setBitmapMode(true /* transparent*/);
     u8g2.drawXBMP(32, 0, WELICAN_LOGO_WIDTH, WELICAN_LOGO_HEIGHT, WELICAN_LOGO);
     lavaLamp(5, 128, 0, millis() / 50, 0);
@@ -434,10 +435,10 @@ void dateTemp5()
   u8g2.setFont(u8g2_font_profont12_mf);
 
   //Print Time
-  //4:20
+  //04:20
   char buf[80];
   strftime(buf, sizeof(buf), "%I:%M", &timeinfo);
-  u8g2.setCursor(90, 10);
+  u8g2.setCursor(95, 10);
   u8g2.print(buf);
 
   //Temperature in Upper Left
@@ -528,11 +529,11 @@ void timeModern()
   u8g2.setFont(u8g2_font_logisoso42_tn);
   if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
   {
-    u8g2.setCursor(30, 64);
+    u8g2.setCursor(30, 62);
 
     if ((globalTime.currentHour > 9) || (globalTime.currentHour == 0))
     {
-      u8g2.setCursor(0, 64);
+      u8g2.setCursor(0, 62);
     }
 
     if (globalTime.currentHour == 0)
@@ -544,10 +545,10 @@ void timeModern()
       u8g2.print(globalTime.currentHour);
     }
 
-    u8g2.setCursor(56, 60);
+    u8g2.setCursor(56, 58);
     u8g2.print(":");
 
-    u8g2.setCursor(72, 64);
+    u8g2.setCursor(72, 62);
     if (globalTime.currentMinute < 10)
     {
       u8g2.print("0");
@@ -585,7 +586,7 @@ void timeOlde()
       u8g2.print(globalTime.currentHour);
     }
 
-    u8g2.setCursor(51, 60);
+    u8g2.setCursor(55, 60);
     u8g2.print(":");
 
     u8g2.setCursor(64, 64);

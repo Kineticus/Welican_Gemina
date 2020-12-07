@@ -1348,7 +1348,6 @@ void loop()
     // Serial.println(eqBands.bandValues[4]);
     //Serial.print(" ");
 
-<<<<<<< HEAD
   // Serial.print(" ");
   // Serial.println(eqBands.bandValues[4]);
   //Serial.print(" ");
@@ -1369,21 +1368,6 @@ void loop()
   
   // slowly cycle the "base color" through the rainbow
   EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; }
-=======
-    EVERY_N_MILLISECONDS(100000)
-    {
-      Serial.print("FPS: ");
-      Serial.println(devEnv.fps / 10);
-      devEnv.fps = 0;
-      Serial.print("IPS: ");
-      Serial.println(devEnv.fftps / 10);
-      devEnv.fftps = 0;
-      //Serial.print("ICT: ");
-      //Serial.println(eTaskGetState(inputComputeTask));
-      Serial.print("MIN: ");
-      Serial.println(((millis() / 1000) / 60));
-    }
->>>>>>> 9d21a60f364c21fbcb4a91f960a15491e035d07b
 
     // slowly cycle the "base color" through the rainbow
     EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; }

@@ -1222,6 +1222,12 @@ void populateWeatherForDay(int dayNumber, JSONVar weatherJson, OpenWeatherDayObj
   Serial.print("currentWeatherId: ");
   Serial.println(dayObject.weatherId);
 
+  Serial.print("currentWeatherMain: ");
+  Serial.println(dayObject.weatherMain);
+
+  Serial.print("currentWeatherDescription: ");
+  Serial.println(dayObject.weatherDescription);
+
   Serial.print("currentUvi: ");
   Serial.println(dayObject.uvi);
 

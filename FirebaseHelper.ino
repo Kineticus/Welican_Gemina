@@ -8,10 +8,10 @@ void createFirebaseUser()
   userJson.set("wifiName", globals.ssid);
   userJson.set("timezone", globals.timeZone);
   userJson.set("zipcode", weatherSettings.zipCode);
-  userJson.set("games/snake/highscore", 0);
-  userJson.set("games/fallios/highscore", 0);
-  userJson.set("games/brick-breaker/highscore", 0);
-  userJson.set("games/pong/highscore", 0);
+  // userJson.set("games/snake/highscore", 0);
+  // userJson.set("games/fallios/highscore", 0);
+  // userJson.set("games/brick-breaker/highscore", 0);
+  // userJson.set("games/pong/highscore", 0);
   
   Serial.println("<<<<<<<<<<<<<<< --------FB---createFirebaseUser----- >>>>>>>>>>>>>>>>");
   
@@ -32,6 +32,24 @@ void createFirebaseUser()
 }
 
 void updateUserData(String item, String value) 
+{
+  FirebaseJson updateData;
+  updateData.set(item, value);
+
+  Serial.println("<<<<<<<<<<<<<<< --------FB---updateUserData----- >>>>>>>>>>>>>>>>");
+  
+  if (Firebase.updateNode(firebaseData, "users/" + globalUser.id, updateData)) {
+    Serial.println(firebaseData.dataPath());
+    Serial.println(firebaseData.pushName());
+    Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
+  } else {
+    Serial.println(firebaseData.errorReason());
+  }
+  
+  Serial.println("<<<<<<<<<<<<<<< --------FB---updateUserData----- >>>>>>>>>>>>>>>>");
+}
+
+void updateUserData(String item, int value) 
 {
   FirebaseJson updateData;
   updateData.set(item, value);

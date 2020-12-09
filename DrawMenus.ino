@@ -22,21 +22,91 @@ void drawMenu(int numberOfItems, int currentlySelected, ...)
   //Take the first string and send it to the drawMenuTop function
   drawMenuTop(String(va_arg (menuItems, char*)));
 
-  //Go through the remaining strings
-  for (int i = 1; i <= numberOfItems; i++)        
+  //Spacers for top
+  if (currentlySelected == 0)
   {
-    u8g2.setCursor(4, 10 + (10 * i));
-    u8g2.print(i);
-    u8g2.print(" - ");
-    u8g2.print(String(va_arg (menuItems, char*))); 
+    u8g2.setCursor(4, 20);
+    u8g2.print("- - - - - - -");
+    u8g2.setCursor(4, 30);
+    u8g2.print("- - - - - - -");
+    for (int i = 1; i <= numberOfItems; i++)        
+    {
+      u8g2.setCursor(4, 30 + (10 * i));
+      //u8g2.print(i);
+      //u8g2.print(" - ");
+      u8g2.print(String(va_arg (menuItems, char*))); 
+
+      //Stop if we have gone off the screen
+      if (i > 4)
+      {
+        i = 100;
+      }
+    }
+  }
+
+  if (currentlySelected == 1)
+  {
+    u8g2.setCursor(4, 20);
+    u8g2.print("- - - - - - -");
+    for (int i = 1; i <= numberOfItems; i++)        
+    {
+      u8g2.setCursor(4, 20 + (10 * i));
+      //u8g2.print(i);
+      //u8g2.print(" - ");
+      u8g2.print(String(va_arg (menuItems, char*))); 
+
+      //Stop if we have gone off the screen
+      if (i > 4)
+      {
+        i = 100;
+      }
+    }
+  }
+
+  if (currentlySelected > 1)
+  {
+    //Cycle through offscreen items
+    for (int i = 0; i <= currentlySelected - 3; i++)
+    {
+      String bogus = String(va_arg (menuItems, char*));
+    }
+
+    for (int i = 0; i <= numberOfItems - currentlySelected + 1; i++)        
+    {
+      u8g2.setCursor(4, 20 + (10 * i));
+      //u8g2.print(i);
+      //u8g2.print(" - ");
+      u8g2.print(String(va_arg (menuItems, char*))); 
+
+      //Stop if we have gone off the screen
+      if (i >= 4)
+      {
+        i = 100;
+      }
+    }
+  }
+
+  //Spacers for bottom
+  if (numberOfItems - currentlySelected == 2)
+  {
+    u8g2.setCursor(4, 60);
+    u8g2.print("- - - - - - -");
+  }
+
+  if (numberOfItems - currentlySelected == 1)
+  {
+    u8g2.setCursor(4, 50);
+    u8g2.print("- - - - - - -");
+    u8g2.setCursor(4, 60);
+    u8g2.print("- - - - - - -");
   }
 
   //Close our list
   va_end (menuItems);
   
-  //Invert drawing color & draw the box
+  //Invert drawing color & draw the middle box
   u8g2.setDrawColor(2);
-  u8g2.drawBox(0, 11 + (10 * currentlySelected), 128, 10);
+  u8g2.drawBox(0, 31, 128, 10);
 
   //Back to default draw color
   u8g2.setDrawColor(1);

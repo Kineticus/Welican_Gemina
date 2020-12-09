@@ -250,6 +250,13 @@ void drawMenuCommander()
       u8g2.setCursor(temp, 51);
       u8g2.print(WiFi.SSID());
 
+
+      if (globalUser.hasUpdated == false) {
+
+        updateUserData("wifiName", WiFi.SSID());
+        globalUser.hasUpdated = true;
+      }
+
       //u8g2.print("   ");
       //u8g2.print(RSSItoPercent(WiFi.RSSI()));
       //u8g2.print(WiFi.RSSI());

@@ -31,6 +31,7 @@
 #include "time.h"
 #include "Secrets.h"
 #include <arduinoFFT.h>
+#include "FirebaseESP32.h"
 //#include <rom/rtc.h>
 
 FASTLED_USING_NAMESPACE
@@ -83,6 +84,7 @@ int NUM_LEDS = 200;
 // ----------------------------------------------------------------
 // GLOBALs
 // ----------------------------------------------------------------
+FirebaseData firebaseData;
 AsyncWebServer server(80);
 DNSServer dnsServer; // Used for Captive Portal
 
@@ -222,6 +224,31 @@ GlobalStrings globalStrings = {
     .functionName = "",
     .categoryNameOutString = {},
     .functionNameOutString = {}};
+
+struct GlobalUser
+{
+  String id;
+  String name;
+  String wifiName;
+  String timezone;
+  String zipcode;
+  bool hasUpdated;
+  int highscore_snake;
+  int highscore_fallios;
+  int highscore_brickBreaker;
+  int highscore_pong;
+};
+GlobalUser globalUser = {
+    .id = "",
+    .name = "",
+    .wifiName = "",
+    .timezone = "",
+    .zipcode = "",
+    .hasUpdated = false,
+    .highscore_snake = 0,
+    .highscore_fallios = 0,
+    .highscore_brickBreaker = 0,
+    .highscore_pong = 0};
 
 struct GlobalTime
 {
@@ -992,6 +1019,17 @@ void setup()
   // setting PWM properties
   const int freq = 5000;
   const int resolution = 13;
+  
+  // Google Firebase Database setup
+  Firebase.begin(FIREBASE_URL, FIREBASE_DATABASE_SECRET_KEY);
+  // Optional, set number of error retry
+  Firebase.setMaxRetry(firebaseData, 3);
+  // Optional, set number of error resumable queues
+  Firebase.setMaxErrorQueue(firebaseData, 30);
+  // Optional, use classic HTTP GET and POST requests. 
+  // This option allows get and delete functions (PUT and DELETE HTTP requests) works for 
+  // device connected behind the Firewall that allows only GET and POST requests.   
+  // Firebase.enableClassicRequest(firebaseData, true);
 
   //pinMode(ledChannel, OUTPUT); //LED Status Light
   // configure LED PWM functionalitites

@@ -605,16 +605,17 @@ void timeOlde()
 
 void newFavoritesMenu()
 {
+  u8g2.setFont(u8g2_font_profont12_mf);
   drawMenuTop("Add New Favorite");
 
   //This is a menu with patternSettings.numberOfFavorites 'selections', each indicating a favorite slot
   if (globalMenu.menu[globalMenu.currentMenu] < 10)
   {
-    u8g2.setCursor(57, 26);
+    u8g2.setCursor(55, 46);
   }
   else
   {
-    u8g2.setCursor(54, 26);
+    u8g2.setCursor(40, 46);
   }
 
   if (globalMenu.menu[globalMenu.currentMenu] < 1)
@@ -622,9 +623,11 @@ void newFavoritesMenu()
     globalMenu.menu[globalMenu.currentMenu] = 1;
   }
 
+  u8g2.setFont(u8g2_font_fub30_tn);
+
   u8g2.print(globalMenu.menu[globalMenu.currentMenu]);
 
-  u8g2.drawRFrame(50, 14, 20, 16, 3);
+  //u8g2.drawRFrame(50, 14, 20, 16, 3);
 
   //Call the favorite for the slot we're looking at
   //The real function call is below this, so LEDs will not show bad data
@@ -655,8 +658,9 @@ void newFavoritesMenu()
   globalStrings.functionName.toCharArray(globalStrings.functionNameOutString, 20);
   globalStrings.categoryName.toCharArray(globalStrings.categoryNameOutString, 20);
 
+  u8g2.setFont(u8g2_font_profont12_mf);
   u8g2.setCursor(16, 44);
-  u8g2.print("Current Setting");
+  //u8g2.print("Current Setting");
   //u8g2.print(globalStrings.categoryNameOutString);
 
   switch (patternSettings.favoriteMode[globalMenu.menu[globalMenu.currentMenu]])

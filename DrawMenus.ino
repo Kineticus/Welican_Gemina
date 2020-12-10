@@ -149,10 +149,21 @@ void drawMenuCommander()
     //drawMenuWords("Welican Gemina",
     //              "Games", "Settings", "Customize", "Exit");
     
-    drawMenuWords("Welican Gemina",
-                    "Games", "Favorite", "Display", "Settings");
+    
 
     drawMenuSelectionFrames();
+
+    if (globals.mode == 5)
+    {
+      drawMenuWords("Welican Gemina",
+                    "Games", "- - - - - -", "Display", "Settings");
+    }
+    else
+    {
+      drawMenuWords("Welican Gemina",
+                    "Games", "Favorite", "Display", "Settings");
+    }
+    
 
     drawIPAddress();
   }
@@ -179,7 +190,7 @@ void drawMenuCommander()
     //drawMenuWords("Settings > LED",
     //              "# LEDs", "Order", "Fade", "Speed");
     drawMenu(4, globalMenu.menu[globalMenu.currentMenu], "Settings > LED",
-      "Number of LEDs", "Color Order", "Interfade Amount", "Power Limit");
+      "Number of LEDs", "Color Order", "Crossfade Amount", "Power Limit");
 
     //drawMenuSelectionFrames();
   }
@@ -481,6 +492,7 @@ void drawMenuCommander()
     drawNumberInput("Crossfade Duration",
                     globalMenu.menu[globalMenu.currentMenu]);
 
+    u8g2.setFont(u8g2_font_profont12_mf);
     u8g2.setCursor(0, 64);
     u8g2.print("1 < SHORT--LONG > 50");
   }
@@ -775,7 +787,10 @@ void drawMenuCommander()
         globalMenu.currentMenu = 1; // games
         break;
       case 1:
-        globalMenu.currentMenu = 10; // Add Favorite
+        if (globals.mode != 5) //Only if not already a favorite
+        {
+          globalMenu.currentMenu = 10; // Add Favorite
+        }
         break;
       case 2:
         globalMenu.currentMenu = 24;  //Display
@@ -1169,23 +1184,30 @@ int timeOutConverter(int timeOut)
 
 void drawNumberInput(String menuName, int numberValue)
 {
+  u8g2.setFont(u8g2_font_profont12_mf);
   drawMenuTop(menuName);
 
   if (numberValue > 99)
   {
-    u8g2.setCursor(53, 36);
+    u8g2.setCursor(25, 50);
   }
-  else if (numberValue < 10)
+  else if (numberValue > 9)
   {
-    u8g2.setCursor(60, 36);
+    u8g2.setCursor(40, 50);
   }
   else
   {
-    u8g2.setCursor(57, 36);
+    u8g2.setCursor(55, 50);
   }
 
+  if (globalMenu.menu[globalMenu.currentMenu] < 1)
+  {
+    globalMenu.menu[globalMenu.currentMenu] = 1;
+  }
+
+  u8g2.setFont(u8g2_font_fub30_tn);
+
   u8g2.print(numberValue);
-  u8g2.drawRFrame(50, 24, 25, 16, 3);
 }
 
 void drawMenuSelectionFrames()

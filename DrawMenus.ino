@@ -37,7 +37,7 @@ void drawMenu(int numberOfItems, int currentlySelected, ...)
       u8g2.print(String(va_arg (menuItems, char*))); 
 
       //Stop if we have gone off the screen
-      if (i > 4)
+      if (i > 2)
       {
         i = 100;
       }
@@ -56,7 +56,7 @@ void drawMenu(int numberOfItems, int currentlySelected, ...)
       u8g2.print(String(va_arg (menuItems, char*))); 
 
       //Stop if we have gone off the screen
-      if (i > 4)
+      if (i > 3)
       {
         i = 100;
       }
@@ -146,37 +146,42 @@ void drawMenuCommander()
   {
   case 0: // Draw Image
   {
+    //drawMenuWords("Welican Gemina",
+    //              "Games", "Settings", "Customize", "Exit");
+    
     drawMenuWords("Welican Gemina",
-                  "Games", "Settings", "Customize", "Exit");
+                    "Games", "Favorite", "Display", "Settings");
+
     drawMenuSelectionFrames();
+
+    drawIPAddress();
   }
   break;
   case 1: // Draw Games
   {
     drawMenu(6, globalMenu.menu[globalMenu.currentMenu], "Games", 
       "Fallios", "Block Breaker", "Magic 8 Ball", "Daddy Worm", "Pong", "2P - Daddy Worm");
-
-
-    //drawMenuWords("Games",
-    //              "Fallios", "Block Breaker", "Magic", "Snake");
-    //drawMenuSelectionFrames();
-
-
   }
   break;
   case 2: // Draw Settings
   {
-    drawMenuWords("Settings",
-                  "LEDs", "Time", "ZIP Code", "WiFi");
-    drawMenuSelectionFrames();
+    //drawMenuWords("Settings",
+    //              "LEDs", "Time", "ZIP Code", "WiFi");
+
+    drawMenu(7, globalMenu.menu[globalMenu.currentMenu], "Settings",
+      "LED Configuration", "Timezone", "ZIP Code", "WiFi","Favorite Slots","Randomizer Time","System Information");
+    //drawMenuSelectionFrames();
   }
   break;
   case 3: // LED
   {
     //drawMenuTop("Settings > LED Settings");
-    drawMenuWords("Settings > LED",
-                  "# LEDs", "Order", "Fade", "Speed");
-    drawMenuSelectionFrames();
+    //drawMenuWords("Settings > LED",
+    //              "# LEDs", "Order", "Fade", "Speed");
+    drawMenu(4, globalMenu.menu[globalMenu.currentMenu], "Settings > LED",
+      "Number of LEDs", "Color Order", "Interfade Amount", "Power Limit");
+
+    //drawMenuSelectionFrames();
   }
   break;
   case 4: // Zip Code Menu
@@ -236,10 +241,10 @@ void drawMenuCommander()
                   "Scan", "Host", "Connect", "Disconn.");
 
     u8g2.setCursor(10, 64);
+    drawIPAddress();
     if (WiFi.status() == WL_CONNECTED)
-    {
+    {     
       int temp = WiFi.SSID().length();
-
       temp = 64 - (temp * 2);
 
       if (temp < 0)
@@ -262,23 +267,6 @@ void drawMenuCommander()
       //u8g2.print(WiFi.RSSI());
       //u8g2.print("%");
 
-      globals.ipAddress = WiFi.localIP().toString();
-      temp = globals.ipAddress.length();
-
-      temp = 58 - (temp * 2);
-
-      if (temp < 0)
-      {
-        temp = 0;
-      }
-
-      u8g2.setCursor(temp, 64);
-      u8g2.print(globals.ipAddress);
-    }
-    else
-    {
-      u8g2.setCursor(25, 60);
-      u8g2.print("Not Connected");
     }
     drawMenuSelectionFrames();
   }
@@ -640,7 +628,7 @@ void drawMenuCommander()
       globalMenu.currentMenu = 9;
       break;
     case 6: //Favorites Set Max
-      globalMenu.currentMenu = 5;
+      globalMenu.currentMenu = 2;
       break;
     case 8: //WiFi Menu
       globalMenu.currentMenu = 2;
@@ -649,7 +637,7 @@ void drawMenuCommander()
       globalMenu.currentMenu = 0;
       break;
     case 10: //Add New Favorite
-      globals.runMode = -1;
+      globalMenu.currentMenu = 0;
       break;
     case 11:
     {
@@ -746,7 +734,7 @@ void drawMenuCommander()
     }
     case 24: //
     {
-      globalMenu.currentMenu = 9;
+      globalMenu.currentMenu = 0;
     }
     break;
     case 25: //
@@ -767,7 +755,7 @@ void drawMenuCommander()
 
     case 29: //Random Time
     {
-      globalMenu.currentMenu = 9; //Customize
+      globalMenu.currentMenu = 2;
     }
     break;
 
@@ -787,13 +775,13 @@ void drawMenuCommander()
         globalMenu.currentMenu = 1; // games
         break;
       case 1:
-        globalMenu.currentMenu = 2; // settings
+        globalMenu.currentMenu = 10; // Add Favorite
         break;
       case 2:
-        globalMenu.currentMenu = 9;  //Customize
+        globalMenu.currentMenu = 24;  //Display
         break;
       case 3:
-        globals.runMode = -1; // exit
+        globalMenu.currentMenu = 2; // Settings
         break;
     }
     break;
@@ -829,6 +817,13 @@ void drawMenuCommander()
         break;
       case 3: // Wifi
         globalMenu.currentMenu = 8;
+        break;
+      case 4:
+        globalMenu.currentMenu = 6;
+        globalMenu.menu[6] = patternSettings.numberOfFavorites;
+        break;
+      case 5:
+        globalMenu.currentMenu = 29;
         break;
       }
     }

@@ -83,47 +83,26 @@ void drawCircleEQ()
 
 void drawIPAddress()
 {
-  u8g2.setFont(u8g2_font_ncenB08_tr);
-  u8g2.setCursor(20, 30);
-
+  //u8g2.setFont(u8g2_font_ncenB08_tr);
+ 
   if (WiFi.status() == WL_CONNECTED)
   {
-    //Convert WiFi.localIP() from 4 bytes to 1 nice pretty string
-    globals.ipAddress = String() + WiFi.localIP()[0] + "." + WiFi.localIP()[1] + "." + WiFi.localIP()[2] + "." + WiFi.localIP()[3];
     globals.ipAddress = WiFi.localIP().toString();
+    int temp = globals.ipAddress.length();
+
+    temp = 58 - (temp * 2);
+
+    if (temp < 0)
+    {
+      temp = 0;
+    }
+
+    u8g2.setCursor(temp, 64);
     u8g2.print(globals.ipAddress);
-
-    u8g2.setCursor(64, 50);
-    //u8g2.print("Connected");
-
-    if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
-    {
-      //Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
-      u8g2.print(globalTime.currentHour);
-      u8g2.print(":");
-      if (globalTime.currentMinute < 10)
-      {
-        u8g2.print("0");
-      }
-      u8g2.print(globalTime.currentMinute);
-    }
-    else //If time is not set yet have some fun
-    {
-      u8g2.print("4:20");
-      globalTime.currentPM = 1;
-    }
-
-    if (globalTime.currentPM == 1)
-    {
-      u8g2.print(" p");
-    }
-    else
-    {
-      u8g2.print(" a");
-    }
   }
   else
   {
+    u8g2.setCursor(25, 60);
     u8g2.print("Not Connected");
   }
 }

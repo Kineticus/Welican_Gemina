@@ -210,7 +210,7 @@ void showLogo(int millisTime)
   }
 }
 
-void drawClock()
+void drawClock(int Selection)
 {
   u8g2.setDrawColor(1);
   
@@ -223,7 +223,9 @@ void drawClock()
     u8g2.drawHLine(0, SCREEN_HEIGHT, SCREEN_WIDTH + 1);
   }
 
-  switch (globalMenu.menu[26])
+
+
+  switch (Selection)
   {
   case 0: //7 Segment Style
   {

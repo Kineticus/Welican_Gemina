@@ -206,16 +206,13 @@ void drawMenuCommander()
     u8g2.print(weatherSettings.zipCode);
   }
   break;
-  case 5: // Favorites Menu
-  {
-    drawMenuWords("Customize > Favorites",
-                  "Add New", "Set Max", "Reset", "Back");
-    drawMenuSelectionFrames();
-  }
-  break;
-  case 6:
+  case 5:
   {
 
+  }
+  break;
+  case 6: //Max Favorites
+  {
     drawNumberInput("Set Max Favorites",
                     globalMenu.menu[globalMenu.currentMenu]);
 
@@ -282,11 +279,9 @@ void drawMenuCommander()
     drawMenuSelectionFrames();
   }
   break;
-  case 9: //Customize
+  case 9:
   {
-    drawMenuWords("Customize",
-                  "Favorites", "Weather", "Display", "Random");
-    drawMenuSelectionFrames();
+
   }
   break;
   case 10: // Add New Favorites Menu
@@ -534,15 +529,15 @@ void drawMenuCommander()
 
   case 24: //Customize > Display
   {
-    drawMenuWords("Customize > Display",
-                  "Timeout", "Display", "Font", "");
+    drawMenuWords("Display",
+                  "Timeout", "Display 1", "Display 2", "Display 3");
     drawMenuSelectionFrames();
   }
   break;
 
   case 25: //Customize > Timeout
   {
-    drawMenuTop("Customize > Timeout");
+    drawMenuTop("Display > Timeout");
 
     u8g2.setCursor(20, 32);
 
@@ -566,27 +561,27 @@ void drawMenuCommander()
   }
   break;
 
-  case 26: //Customize > Display
+  case 26: //Display 1 Selection
   {
-    drawClock();
+    drawClock(globalMenu.menu[26]);
   }
   break;
 
-  case 27: //Customize > Font
+  case 27: //Display 2 Selection
   {
-    
+    drawClock(globalMenu.menu[27]);
   }
   break;
 
-  case 28: //UNUSED
+  case 28: //Display 3 Selection
   {
-    
+    drawClock(globalMenu.menu[28]);
   }
   break;
 
   case 29: //Customize > Random
   {
-    drawMenuTop("Customize > Random");
+    drawMenuTop("Settings > Randomizer");
 
     u8g2.setCursor(20, 32);
 
@@ -613,6 +608,29 @@ void drawMenuCommander()
     }   
   }
   break;
+
+  case 30: //Display 1 Time
+  {
+    drawNumberInput("Display 1 Duration", globalMenu.menu[globalMenu.currentMenu]);
+    u8g2.setFont(u8g2_font_profont12_mf);
+    u8g2.setCursor(64, 50);
+    u8g2.print("Seconds");
+  }
+  break;
+
+  case 31: //Display 2 Time
+  {
+    drawNumberInput("Display 2 Duration", globalMenu.menu[globalMenu.currentMenu]);
+  }
+  break;
+
+  case 32: //Display 3 Time
+  {
+    drawNumberInput("Display 3 Duration", globalMenu.menu[globalMenu.currentMenu]);
+  }
+  break;
+
+
 
   } //End of Display
 

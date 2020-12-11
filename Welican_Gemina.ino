@@ -450,7 +450,7 @@ HSV2RGB globalHSV2RGB;
 struct MenuModel
 {
   int menu[30];
-  int menuMax[30];
+  int menuMax[33];
   int patternMax[MAX_MODES + 1];
   int currentMenu;
   int currentMenuMultiplier;
@@ -492,10 +492,13 @@ MenuModel globalMenu = {
         1,                                 //NTP
         3,                                 //Customize Display
         71,                                //Customize Timeout
-        15,                                 //Customize Display Type
-        2,                                 //Font
-        2,                                 //UNUSED
+        15,                                //Display 1
+        15,                                //Display 2
+        15,                                //Display 3
         71,                                //Random Timeout
+        60,                                //Display 1 Duration
+        60,                                //Display 2 Duration
+        60,                                //Display 3 Duration
     },
     .patternMax = {
         13,                                //Basic Category
@@ -1272,7 +1275,7 @@ void loop()
       }
       break;
     case 3: //Clock/Weather/Info modes
-      drawClock();
+      drawClock(globalMenu.menu[26]);
       showBrightnessDisplay();
       break;
     case -1:                           //Reset

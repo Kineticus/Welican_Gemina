@@ -227,32 +227,26 @@ void drawClock(int Selection)
 
   switch (Selection)
   {
-  case 0: //7 Segment Style
+  case 1: //7 Segment Style
   {
     dateTemp1();
     timeSegment();
   }
   break;
-  case 1: //Flip Card style
+  case 2: //Flip Card style
   {
     dateTemp1();
     timeFlip();
   }
   break;
-  case 2: //Old Time style
+  case 3: //Old Time style
   {
     dateTemp1();
     timeOlde();
   }
   break;
-  case 3: //Modern Font 
+  case 4: //Modern Font 
   {
-    timeModern();
-  }
-  break;
-  case 4: //Modern Font 2
-  {
-    dateTemp1();
     timeModern();
   }
   break;
@@ -260,16 +254,22 @@ void drawClock(int Selection)
   {
     dateTemp1();
     timeModern();
+  }
+  break;
+  case 6: //Modern Font 2
+  {
+    dateTemp1();
+    timeModern();
     lavaLamp(5, 128, 0, millis() / 50, 0);
   }
   break;
-  case 6:
+  case 7:
   {
     dateTemp5();
     lavaLamp(5, 128, 0, millis() / 50, 0);
   }
   break;
-  case 7:
+  case 8:
   { 
     dateTemp5();
     u8g2.setBitmapMode(true /* transparent*/);
@@ -277,7 +277,7 @@ void drawClock(int Selection)
     lavaLamp(5, 128, 0, millis() / 50, 0);
   }
   break;
-  case 8:
+  case 9:
   {
     lavaLamp(5, 128, 0, 0, millis() / 50);
   }

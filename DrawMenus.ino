@@ -529,9 +529,9 @@ void drawMenuCommander()
 
   case 24: //Customize > Display
   {
-    drawMenuWords("Display",
-                  "Timeout", "Display 1", "Display 2", "Display 3");
-    drawMenuSelectionFrames();
+    drawMenu(7, globalMenu.menu[globalMenu.currentMenu], "Display",
+            "Timeout", "Display 1", "Display 2", "Display 3", "Display 1 Duration", "Display 2 Duration", "Display 3 Duration");
+    //drawMenuSelectionFrames();
   }
   break;
 
@@ -585,6 +585,8 @@ void drawMenuCommander()
 
     u8g2.setCursor(20, 32);
 
+    //u8g2.print(timeOutString(globalMenu.menu[globalMenu.currentMenu]));
+
     if (globalMenu.menu[globalMenu.currentMenu] < 12)
     {
       if (globalMenu.menu[globalMenu.currentMenu] == 0)
@@ -613,7 +615,7 @@ void drawMenuCommander()
   {
     drawNumberInput("Display 1 Duration", globalMenu.menu[globalMenu.currentMenu]);
     u8g2.setFont(u8g2_font_profont12_mf);
-    u8g2.setCursor(64, 50);
+    u8g2.setCursor(45, 64);
     u8g2.print("Seconds");
   }
   break;
@@ -621,12 +623,18 @@ void drawMenuCommander()
   case 31: //Display 2 Time
   {
     drawNumberInput("Display 2 Duration", globalMenu.menu[globalMenu.currentMenu]);
+    u8g2.setFont(u8g2_font_profont12_mf);
+    u8g2.setCursor(45, 64);
+    u8g2.print("Seconds");
   }
   break;
 
   case 32: //Display 3 Time
   {
     drawNumberInput("Display 3 Duration", globalMenu.menu[globalMenu.currentMenu]);
+    u8g2.setFont(u8g2_font_profont12_mf);
+    u8g2.setCursor(45, 64);
+    u8g2.print("Seconds");
   }
   break;
 
@@ -774,11 +782,20 @@ void drawMenuCommander()
     break;
     case 26: //
     {
+      EEPROM.get(45, globalMenu.menu[globalMenu.currentMenu]);
       globalMenu.currentMenu = 24;
     }
     break;
     case 27: //
     {
+      EEPROM.get(49, globalMenu.menu[globalMenu.currentMenu]);
+      globalMenu.currentMenu = 24;
+    }
+    break;
+
+    case 28: //
+    {
+      EEPROM.get(53, globalMenu.menu[globalMenu.currentMenu]);
       globalMenu.currentMenu = 24;
     }
     break;
@@ -789,6 +806,24 @@ void drawMenuCommander()
     }
     break;
 
+    case 30:
+    {
+      EEPROM.get(57, globalMenu.menu[globalMenu.currentMenu]);
+      globalMenu.currentMenu = 24;
+    }
+    break;
+    case 31:
+    {
+      EEPROM.get(61, globalMenu.menu[globalMenu.currentMenu]);
+      globalMenu.currentMenu = 24;
+    }
+    break;
+    case 32:
+    {
+      EEPROM.get(65, globalMenu.menu[globalMenu.currentMenu]);
+      globalMenu.currentMenu = 24;
+    }
+    break;
     }
   }
 
@@ -914,12 +949,13 @@ void drawMenuCommander()
     break;
     case 6: // Set Max Favorites Click
     {
+      ledcWrite(STATUS_LED, 4095);
       patternSettings.numberOfFavorites = globalMenu.menu[globalMenu.currentMenu];
       globalMenu.patternMax[5] = patternSettings.numberOfFavorites;
       globalMenu.menuMax[10] = patternSettings.numberOfFavorites;
       EEPROM.write(99, patternSettings.numberOfFavorites);
       EEPROM.commit();
-      globalMenu.currentMenu = 5;
+      globalMenu.currentMenu = 2;
     }
     break;
     case 7: // Reset Favorites Click
@@ -1040,6 +1076,7 @@ void drawMenuCommander()
         globalMenu.currentMenuMultiplier = 1;
         break;
       case 1:
+        ledcWrite(STATUS_LED, 4095);
         weatherSettings.zipCode = globalMenu.menu[11]; //Update ZIP Code
         globalMenu.currentMenuMultiplier = 1;
         globalMenu.currentMenu = 2; //Go back to main
@@ -1128,19 +1165,34 @@ void drawMenuCommander()
         globalMenu.currentMenu = 25;
       }
       break;
-      case 1: //Display 
+      case 1: //Display 1
       {
         globalMenu.currentMenu = 26;
       }
       break;
-      case 2: //Font
+      case 2: //Display 2
       {
         globalMenu.currentMenu = 27;
       }
       break;
-      case 3: //Back
+      case 3: //Display 3
       {
-        globalMenu.currentMenu = 9;
+        globalMenu.currentMenu = 28;
+      }
+      break;
+      case 4: //Display 1 Duration
+      {
+        globalMenu.currentMenu = 30;
+      }
+      break;
+      case 5: //Display 2 Duration
+      {
+        globalMenu.currentMenu = 31;
+      }
+      break;
+      case 6: //Display 3 Duration
+      {
+        globalMenu.currentMenu = 32;
       }
       break;
       }
@@ -1149,6 +1201,7 @@ void drawMenuCommander()
 
     case 25:
     {
+      ledcWrite(STATUS_LED, 4095);
       globalTime.timeOut = timeOutConverter(globalMenu.menu[globalMenu.currentMenu]);
 
       EEPROM.put(40, globalMenu.menu[globalMenu.currentMenu]);
@@ -1159,7 +1212,26 @@ void drawMenuCommander()
 
     case 26:
     {
+      ledcWrite(STATUS_LED, 4095);
       EEPROM.put(45, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.commit();
+      globalMenu.currentMenu = 24;  
+    }
+    break;
+
+    case 27:
+    {
+      ledcWrite(STATUS_LED, 4095);
+      EEPROM.put(49, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.commit();
+      globalMenu.currentMenu = 24;  
+    }
+    break;
+
+    case 28:
+    {
+      ledcWrite(STATUS_LED, 4095);
+      EEPROM.put(53, globalMenu.menu[globalMenu.currentMenu]);
       EEPROM.commit();
       globalMenu.currentMenu = 24;  
     }
@@ -1167,11 +1239,38 @@ void drawMenuCommander()
 
     case 29: //Random Time
     {
+      ledcWrite(STATUS_LED, 4095);
       EEPROM.put(60, globalMenu.menu[29]);
       EEPROM.commit();
       globals.randomMin = timeOutConverter(globalMenu.menu[29]);
       globals.randomMax = globals.randomMin * 2;
-      globalMenu.currentMenu = 9;
+      globalMenu.currentMenu = 2;
+    }
+    break;
+
+    case 30:
+    {
+      ledcWrite(STATUS_LED, 4095);
+      EEPROM.put(57, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.commit();
+      globalMenu.currentMenu = 24;
+    }
+    break;
+
+    case 31:
+    {
+      ledcWrite(STATUS_LED, 4095);
+      EEPROM.put(61, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.commit();
+      globalMenu.currentMenu = 24;
+    }
+    break;
+    case 32:
+    {
+      ledcWrite(STATUS_LED, 4095);
+      EEPROM.put(65, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.commit();
+      globalMenu.currentMenu = 24;
     }
     break;
     }
@@ -1220,7 +1319,7 @@ void drawNumberInput(String menuName, int numberValue)
 
   if (globalMenu.menu[globalMenu.currentMenu] < 1)
   {
-    globalMenu.menu[globalMenu.currentMenu] = 1;
+    //globalMenu.menu[globalMenu.currentMenu] = 1;
   }
 
   u8g2.setFont(u8g2_font_fub30_tn);
@@ -1268,6 +1367,29 @@ void drawMenuTop(String menuName)
   u8g2.setCursor(0, 8);
   u8g2.print(menuName);
   u8g2_horizontal_line(9);
+}
+
+String timeOutString(int timeValue)
+{
+  String tempString;
+
+  if (timeValue < 12)
+    {
+      if (timeValue == 0)
+      {
+        tempString = "No Timeout";
+      }
+      else
+      {
+        tempString = String(timeValue * 5) + " Seconds";
+      }
+    }
+    else
+    {
+      tempString = String(timeValue - 11) + " Minutes";
+    }    
+
+    return tempString;
 }
 
 void drawYesNoMenuFrame(String question)

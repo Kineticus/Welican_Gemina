@@ -1403,3 +1403,88 @@ void openSpiffFile(String fileLocation)
 
   file.close();
 }
+
+void displayTimer()
+{
+  if (globalTime.currentDisplayTime < millis())
+  {
+    globalTime.timeDisplay1 = globalMenu.menu[30] * 1000;
+    globalTime.timeDisplay2 = globalMenu.menu[31] * 1000;
+    globalTime.timeDisplay3 = globalMenu.menu[32] * 1000;
+    
+
+    globalTime.currentDisplay ++;
+
+    if (globalTime.currentDisplay > 3)
+    {
+      globalTime.currentDisplay = 1;
+    }
+
+    //Check to see if Display 1 is set to no display time
+    if ((globalTime.currentDisplay == 1) && (globalTime.timeDisplay1 == 0))
+    {
+      globalTime.currentDisplay ++; //go to next one
+    }
+    
+    //Check to see if Display 2 is set to no display time
+    if ((globalTime.currentDisplay == 2) && (globalTime.timeDisplay2 == 0))
+    {
+      globalTime.currentDisplay ++; //go to next one
+    }
+
+    //Check to see if Display 3 is set to no display time
+    if ((globalTime.currentDisplay == 3) && (globalTime.timeDisplay3 == 0))
+    {
+      globalTime.currentDisplay = 1; 
+
+      if ((globalTime.currentDisplay == 1) && (globalTime.timeDisplay1 == 0))
+      {
+        globalTime.currentDisplay ++; //go to next one
+      }
+
+      if ((globalTime.currentDisplay == 2) && (globalTime.timeDisplay2 == 0))
+      {
+      globalTime.currentDisplay ++; //go to next one
+      }
+    }
+
+    //Check to see if all displays are set to display time of 0
+    if ((globalTime.timeDisplay1 + globalTime.timeDisplay2 + globalTime.timeDisplay3) == 0)
+    {
+      globalTime.currentDisplay = 0; //This will show a blank screen
+    }
+
+
+    globalTime.currentDisplayTime = millis();
+
+    switch (globalTime.currentDisplay)
+    {
+      case 1:
+        globalTime.currentDisplayTime += globalTime.timeDisplay1;
+        break;
+      case 2:
+        globalTime.currentDisplayTime += globalTime.timeDisplay2;
+        break;
+      case 3:
+        globalTime.currentDisplayTime += globalTime.timeDisplay3;
+        break;
+    } 
+  }
+
+  //Draw the display
+  switch(globalTime.currentDisplay)
+  {
+    case 0:
+      drawClock(0); //Blank display
+      break;
+    case 1:
+      drawClock(globalMenu.menu[26]); //Display 1
+      break;
+    case 2:
+      drawClock(globalMenu.menu[27]); //Display 2
+      break;
+    case 3:
+      drawClock(globalMenu.menu[28]); //Display 3
+      break;
+  }
+}

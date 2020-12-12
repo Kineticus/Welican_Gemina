@@ -263,6 +263,11 @@ struct GlobalTime
   const unsigned long period;
   int save;
   int timeOut;
+  int currentDisplay;
+  unsigned long currentDisplayTime;
+  int timeDisplay1;
+  int timeDisplay2;
+  int timeDisplay3;
   unsigned long touchTime;
 };
 GlobalTime globalTime = {
@@ -277,6 +282,11 @@ GlobalTime globalTime = {
     .period = 1000,
     .save = 0,
     .timeOut = 30000,
+    .currentDisplay = 0,
+    .currentDisplayTime = 0,
+    .timeDisplay1 = 0,
+    .timeDisplay2 = 0,
+    .timeDisplay3 = 0,
     .touchTime = 0};
 
 struct GlobalUtils
@@ -449,7 +459,7 @@ HSV2RGB globalHSV2RGB;
 
 struct MenuModel
 {
-  int menu[30];
+  int menu[33];
   int menuMax[33];
   int patternMax[MAX_MODES + 1];
   int currentMenu;
@@ -490,7 +500,7 @@ MenuModel globalMenu = {
         3,                                 //Manual Time Entry
         3,                                 //Manual Date Entry
         1,                                 //NTP
-        3,                                 //Customize Display
+        6,                                 //Customize Display
         71,                                //Customize Timeout
         15,                                //Display 1
         15,                                //Display 2
@@ -1133,8 +1143,34 @@ void setup()
 
   globalTime.timeOut = timeOutConverter(globalMenu.menu[25]);
 
-  //Time out display selection
+  //Display 1
   EEPROM.get(45, globalMenu.menu[26]);
+
+  //Display 2
+  EEPROM.get(49, globalMenu.menu[27]);
+
+  //Display 3
+  EEPROM.get(53, globalMenu.menu[28]);
+  
+  //Display 1 Duration
+  EEPROM.get(57, globalMenu.menu[30]);
+  if (globalMenu.menu[30] > globalMenu.menuMax[30])
+  {
+    globalMenu.menu[30] = 0;
+  }
+  //Display 2 Duration
+  EEPROM.get(61, globalMenu.menu[31]);
+  if (globalMenu.menu[31] > globalMenu.menuMax[31])
+  {
+    globalMenu.menu[31] = 0;
+  }
+
+  //Display 3 Duration
+  EEPROM.get(65, globalMenu.menu[32]);
+  if (globalMenu.menu[32] > globalMenu.menuMax[32])
+  {
+    globalMenu.menu[32] = 0;
+  }
 
   globals.mode = EEPROM.read(0);
   brightness.target = EEPROM.read(1);
@@ -1149,7 +1185,7 @@ void setup()
   }
 
   //Random Times
-  EEPROM.get(60, globalMenu.menu[29]);
+  EEPROM.get(90, globalMenu.menu[29]);
   if (globalMenu.menu[29] > globalMenu.menuMax[29])
   {
     globalMenu.menu[29] = 12;
@@ -1275,7 +1311,7 @@ void loop()
       }
       break;
     case 3: //Clock/Weather/Info modes
-      drawClock(globalMenu.menu[26]);
+      displayTimer();      
       showBrightnessDisplay();
       break;
     case -1:                           //Reset

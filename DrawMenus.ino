@@ -529,8 +529,8 @@ void drawMenuCommander()
 
   case 24: //Customize > Display
   {
-    drawMenu(7, globalMenu.menu[globalMenu.currentMenu], "Display",
-            "Timeout", "Display 1", "Display 2", "Display 3", "Display 1 Duration", "Display 2 Duration", "Display 3 Duration");
+    drawMenu(8, globalMenu.menu[globalMenu.currentMenu], "Display",
+            "Timeout", "Brightness", "Display 1",  "Display 1 Duration", "Display 2", "Display 2 Duration", "Display 3", "Display 3 Duration");
     //drawMenuSelectionFrames();
   }
   break;
@@ -638,7 +638,21 @@ void drawMenuCommander()
   }
   break;
 
-
+  case 33: //Brightness
+  {
+    u8g2.drawBox(104, 0, 10, 64);
+    u8g2.drawBox(116, 0, 2, 64);
+    u8g2.drawBox(120, 0, 1, 64);
+    u8g2.drawBox(122, 0, 1, 64);
+    
+    u8g2.drawBox(0, 52, 128, 5);
+    u8g2.drawBox(0, 59, 128, 2);
+    u8g2.drawBox(0, 62, 128, 1);
+    u8g2.drawBox(0, 64, 128, 1);
+    drawNumberInput("Brightness", globalMenu.menu[globalMenu.currentMenu]);
+    u8g2.setContrast(globalMenu.menu[33] * 25.5);
+  }
+  break;
 
   } //End of Display
 
@@ -821,6 +835,18 @@ void drawMenuCommander()
     case 32:
     {
       EEPROM.get(65, globalMenu.menu[globalMenu.currentMenu]);
+      globalMenu.currentMenu = 24;
+    }
+    break;
+
+    case 33:
+    {
+      EEPROM.get(69, globalMenu.menu[globalMenu.currentMenu]);
+      if (globalMenu.menu[33] > globalMenu.menuMax[33])
+      {
+        globalMenu.menu[33] = 10;
+      }
+      u8g2.setContrast(globalMenu.menu[33] * 25.5);
       globalMenu.currentMenu = 24;
     }
     break;
@@ -1165,24 +1191,24 @@ void drawMenuCommander()
         globalMenu.currentMenu = 25;
       }
       break;
-      case 1: //Display 1
+      case 1: //Brightness
+      {
+        globalMenu.currentMenu = 33;
+      }
+      break;
+      case 2: //Display 1
       {
         globalMenu.currentMenu = 26;
       }
       break;
-      case 2: //Display 2
-      {
-        globalMenu.currentMenu = 27;
-      }
-      break;
-      case 3: //Display 3
-      {
-        globalMenu.currentMenu = 28;
-      }
-      break;
-      case 4: //Display 1 Duration
+      case 3: //Display 1 Duration
       {
         globalMenu.currentMenu = 30;
+      }
+      break;
+      case 4: //Display 2
+      {
+        globalMenu.currentMenu = 27;
       }
       break;
       case 5: //Display 2 Duration
@@ -1190,7 +1216,12 @@ void drawMenuCommander()
         globalMenu.currentMenu = 31;
       }
       break;
-      case 6: //Display 3 Duration
+      case 6: //Display 3
+      {
+        globalMenu.currentMenu = 28;
+      }
+      break;
+      case 7: //Display 3 Duration
       {
         globalMenu.currentMenu = 32;
       }
@@ -1269,6 +1300,14 @@ void drawMenuCommander()
     {
       ledcWrite(STATUS_LED, 4095);
       EEPROM.put(65, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.commit();
+      globalMenu.currentMenu = 24;
+    }
+    break;
+    case 33:
+    {
+      ledcWrite(STATUS_LED, 4095);
+      EEPROM.put(69, globalMenu.menu[globalMenu.currentMenu]);
       EEPROM.commit();
       globalMenu.currentMenu = 24;
     }

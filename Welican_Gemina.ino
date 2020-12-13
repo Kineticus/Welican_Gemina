@@ -459,8 +459,8 @@ HSV2RGB globalHSV2RGB;
 
 struct MenuModel
 {
-  int menu[33];
-  int menuMax[33];
+  int menu[35];
+  int menuMax[35];
   int patternMax[MAX_MODES + 1];
   int currentMenu;
   int currentMenuMultiplier;
@@ -500,7 +500,7 @@ MenuModel globalMenu = {
         3,                                 //Manual Time Entry
         3,                                 //Manual Date Entry
         1,                                 //NTP
-        6,                                 //Customize Display
+        7,                                 //Customize Display
         71,                                //Customize Timeout
         15,                                //Display 1
         15,                                //Display 2
@@ -509,6 +509,7 @@ MenuModel globalMenu = {
         60,                                //Display 1 Duration
         60,                                //Display 2 Duration
         60,                                //Display 3 Duration
+        10,                                //Display Brightness
     },
     .patternMax = {
         13,                                //Basic Category
@@ -1173,6 +1174,14 @@ void setup()
   {
     globalMenu.menu[32] = 0;
   }
+
+  EEPROM.get(69, globalMenu.menu[33]);
+  if (globalMenu.menu[33] > globalMenu.menuMax[33])
+  {
+    globalMenu.menu[33] = 10;
+  }
+
+  u8g2.setContrast(globalMenu.menu[33] * 25.5);
 
   globals.mode = EEPROM.read(0);
   brightness.target = EEPROM.read(1);

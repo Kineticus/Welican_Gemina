@@ -1039,11 +1039,11 @@ void setup()
   // Optional, set number of error retry
   Firebase.setMaxRetry(firebaseData, 3);
   // Optional, set number of error resumable queues
-  Firebase.setMaxErrorQueue(firebaseData, 30);
+  Firebase.setMaxErrorQueue(firebaseData, 20);
   // Optional, use classic HTTP GET and POST requests. 
   // This option allows get and delete functions (PUT and DELETE HTTP requests) works for 
   // device connected behind the Firewall that allows only GET and POST requests.   
-  // Firebase.enableClassicRequest(firebaseData, true);
+  Firebase.enableClassicRequest(firebaseData, true);
 
   //pinMode(ledChannel, OUTPUT); //LED Status Light
   // configure LED PWM functionalitites
@@ -1259,6 +1259,12 @@ void setup()
   for (int i = 0; i < NUM_LEDS; i++)
   {
     patternSettings.colorIndex[i] = random8();
+  }
+
+  if (globalUser.id == "" && (WiFi.status() == WL_CONNECTED))
+  {
+    // Create Firebase User
+    createFirebaseUser();
   }
 
   //Begin a task named 'fftComputeTask' to handle FFT on the other core

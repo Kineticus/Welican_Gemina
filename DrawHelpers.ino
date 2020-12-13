@@ -607,7 +607,7 @@ void timeOlde()
 
 void newFavoritesMenu()
 {
-  u8g2.setFont(u8g2_font_profont12_mf);
+  //u8g2.setFont(u8g2_font_profont12_mf);
   drawMenuTop("Add New Favorite");
 
   //This is a menu with patternSettings.numberOfFavorites 'selections', each indicating a favorite slot

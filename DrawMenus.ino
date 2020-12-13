@@ -180,7 +180,7 @@ void drawMenuCommander()
     //              "LEDs", "Time", "ZIP Code", "WiFi");
 
     drawMenu(7, globalMenu.menu[globalMenu.currentMenu], "Settings",
-      "LED Configuration", "Timezone", "ZIP Code", "WiFi","Favorite Slots","Randomizer Time","System Information");
+      "LED Configuration", "Timezone", "ZIP Code", "WiFi","Max Favorites","Randomizer Time","System Information");
     //drawMenuSelectionFrames();
   }
   break;
@@ -213,7 +213,7 @@ void drawMenuCommander()
   break;
   case 6: //Max Favorites
   {
-    drawNumberInput("Set Max Favorites",
+    drawNumberInput("Settings > Max Favorites",
                     globalMenu.menu[globalMenu.currentMenu]);
 
     if (globalMenu.menu[globalMenu.currentMenu] < 1) //gotta have at least 1 favorite
@@ -640,16 +640,15 @@ void drawMenuCommander()
 
   case 33: //Brightness
   {
-    u8g2.drawBox(104, 0, 10, 64);
-    u8g2.drawBox(116, 0, 2, 64);
-    u8g2.drawBox(120, 0, 1, 64);
-    u8g2.drawBox(122, 0, 1, 64);
+    u8g2.drawBox(107, 0, 10, 64);
+    u8g2.drawBox(119, 0, 2, 64);
+    u8g2.drawBox(123, 0, 1, 64);
+    u8g2.drawBox(125, 0, 1, 64);
     
-    u8g2.drawBox(0, 52, 128, 5);
-    u8g2.drawBox(0, 59, 128, 2);
-    u8g2.drawBox(0, 62, 128, 1);
-    u8g2.drawBox(0, 64, 128, 1);
-    drawNumberInput("Brightness", globalMenu.menu[globalMenu.currentMenu]);
+    u8g2.drawBox(9, 52, 128, 5);
+    u8g2.drawBox(9, 59, 128, 2);
+    u8g2.drawBox(9, 62, 128, 1);
+    drawNumberInput("Display > Brightness", globalMenu.menu[globalMenu.currentMenu]);
     u8g2.setContrast(globalMenu.menu[33] * 25.5);
   }
   break;
@@ -1340,7 +1339,7 @@ int timeOutConverter(int timeOut)
 
 void drawNumberInput(String menuName, int numberValue)
 {
-  u8g2.setFont(u8g2_font_profont12_mf);
+  //u8g2.setFont(u8g2_font_profont12_mf);
   drawMenuTop(menuName);
 
   if (numberValue > 99)

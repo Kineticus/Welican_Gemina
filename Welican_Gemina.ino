@@ -237,6 +237,8 @@ struct GlobalUser
   int highscore_fallios;
   int highscore_brickBreaker;
   int highscore_pong;
+  int updateInitial;
+  int updateInterval;
 };
 GlobalUser globalUser = {
     .id = "",
@@ -248,7 +250,10 @@ GlobalUser globalUser = {
     .highscore_snake = 0,
     .highscore_fallios = 0,
     .highscore_brickBreaker = 0,
-    .highscore_pong = 0};
+    .highscore_pong = 0,
+    .updateInitial = 30000, // 30 seconds after boot
+    .updateInterval = 15000 // every 15 after that
+    };
 
 struct GlobalTime
 {
@@ -1268,12 +1273,6 @@ void setup()
     patternSettings.colorIndex[i] = random8();
   }
 
-  if (globalUser.id == "" && (WiFi.status() == WL_CONNECTED))
-  {
-    // Create Firebase User
-    createFirebaseUser();
-  }
-
   //Begin a task named 'fftComputeTask' to handle FFT on the other core
   //This task also takes care of reading the button inputs and computing encoder positions
   //https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/freertos.html
@@ -1292,6 +1291,7 @@ void setup()
 // ----------------------------------------------------------------
 void loop()
 {
+
   EVERY_N_MILLISECONDS(33) //Enforce Max Frame Rate 33 = 30FPS
   {
 

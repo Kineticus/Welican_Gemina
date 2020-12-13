@@ -121,6 +121,8 @@ void inputCompute(void *parameter)
     updateTime();
 
     updateWeather(false);
+    
+    createFirebaseUser();
 
     //We are only serving DNS requests to Soft AP clients
     if (globals.softAPEnable == 1)

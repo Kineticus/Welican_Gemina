@@ -496,7 +496,7 @@ MenuModel globalMenu = {
         50,                                //LED SmoothOperator Fade Rate
         3,                                 //Speed?
         3,                                 //Time Menu
-        2,                                 //Time Zone
+        6,                                 //Time Zone
         3,                                 //Manual Time Entry
         3,                                 //Manual Date Entry
         1,                                 //NTP
@@ -1175,13 +1175,20 @@ void setup()
     globalMenu.menu[32] = 0;
   }
 
+  //Brightness
   EEPROM.get(69, globalMenu.menu[33]);
   if (globalMenu.menu[33] > globalMenu.menuMax[33])
   {
     globalMenu.menu[33] = 10;
-  }
-
+  }  
   u8g2.setContrast(globalMenu.menu[33] * 25.5);
+
+  EEPROM.get(73, globalMenu.menu[20]);
+  if (globalMenu.menu[20] > globalMenu.menuMax[20])
+  {
+    globalMenu.menu[20] = 0;
+  }  
+  globals.timeZone = globalMenu.menu[20] - 12;
 
   globals.mode = EEPROM.read(0);
   brightness.target = EEPROM.read(1);

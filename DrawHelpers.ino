@@ -741,7 +741,7 @@ void showBrightnessDisplay()
   }
 
   //Draw Pattern Adjustment
-  if ((brightness.debounce2 > millis()) && (brightness.debounce2 > brightness.debounce))
+  if ((knob2.heldTime > 0) || ((brightness.debounce2 > millis()) && (brightness.debounce2 > brightness.debounce)))
   {
     u8g2.setFont(u8g2_font_profont12_mf);
     u8g2.setDrawColor(0);
@@ -773,7 +773,7 @@ void showBrightnessDisplay()
 
     //Notch it out
     u8g2.setDrawColor(0);
-    u8g2.drawBox(tA.x - 17, tA.y + 12, 35, 5);
+    u8g2.drawBox(tA.x - 17, tA.y + 12, 35, 2);
     u8g2.setDrawColor(1);
 
     //Draw a line

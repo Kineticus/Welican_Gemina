@@ -1105,7 +1105,7 @@ void setup()
 
   seedThings();
 
-  u8g2.setBusClock(1000000);
+  //u8g2.setBusClock(1000000);
 
   //Few new boards using 2.4 OLED
   pinMode(19, OUTPUT);
@@ -1114,7 +1114,9 @@ void setup()
   //Display library initialization
   u8g2.begin();
 
-  u8g2.setBusClock(1000000); //1 mHz i2c, default is 400 kHz
+  u8g2.setBusClock(800000); //800 kHz i2c, default is 400 kHz
+
+  u8g2.setFont(u8g2_font_ncenB08_tr); //Need to select a font or prints will cause panic
 
   /* Load Save Settings
 

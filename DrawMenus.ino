@@ -505,7 +505,8 @@ void drawMenuCommander()
   break;
   case 20: //Time Zone
   {
-
+    drawMenu(7, globalMenu.menu[globalMenu.currentMenu], "Settings > Timezone", 
+      "Eastern", "Central", "Mountain", "Mountain (No DST)", "Pacific", "Alaska", "Hawaii"); 
   }
   break;
 
@@ -769,7 +770,8 @@ void drawMenuCommander()
     break;
     case 20: //
     {
-
+      EEPROM.get(73, globalMenu.menu[20]);
+      globalMenu.currentMenu = 2;
     }
     case 21: //
     {
@@ -903,7 +905,7 @@ void drawMenuCommander()
         globalMenu.currentMenu = 3;
         break;
       case 1: //Time menu
-        globalMenu.currentMenu = 19;
+        globalMenu.currentMenu = 20;
         break;
       case 2: // ZIP Code
         globalMenu.currentMenu = 4;
@@ -1177,7 +1179,12 @@ void drawMenuCommander()
     break;
     case 20:
     {
-      
+      ledcWrite(STATUS_LED, 4095);
+      EEPROM.put(73, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.commit();
+      setTimezone(globalMenu.menu[20]);
+      updateTimeProcess();
+      globalMenu.currentMenu = 2;
     }
     break;
 

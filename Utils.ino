@@ -850,15 +850,56 @@ String dateOrdinal()
   return ordinal;
 }
 
+void setTimezone(int inputTimezone)
+{
+  /*
+  Hawaii Time     HAW10
+  Alaska Time	    AKST9AKDT,M3.2.0,M11.1.0
+  Pacific Time    PST8PDT,M3.2.0,M11.1.0
+  Mountain Time	  MST7MDT,M3.2.0,M11.1.0
+  Mountain Time (Arizona, no DST)
+  MST7
+  Central Time	  CST6CDT,M3.2.0,M11.1.0
+  Eastern Time	  EST5EDT,M3.2.0,M11.1.0
+  */
+
+  switch(inputTimezone)
+  {
+    case 0:
+      setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1);
+      break;
+    case 1:
+      setenv("TZ", "CST6CDT,M3.2.0,M11.1.0", 1);
+      break;
+    case 2:
+      setenv("TZ", "MST7MDT,M3.2.0,M11.1.0", 1);
+      break;
+    case 3:
+      setenv("TZ", "MST7", 1);
+      break;
+    case 4:
+      setenv("TZ", "PST8PDT,M3.2.0,M11.1.0", 1);
+      break;
+    case 5:
+      setenv("TZ", "AKST9AKDT,M3.2.0,M11.1.0", 1);
+      break;
+    case 6:
+      setenv("TZ", "HAW10", 1);
+      break;
+  }
+
+}
+
 void updateTime()
 {
   if (globalTime.currentHour == 100)
   {
     if (WiFi.status() == WL_CONNECTED)
     {
-      configTime(3600 * globals.timeZone, 0, globals.ntpServer, NULL, NULL);
+      //configTime(3600 * globals.timeZone, 0, globals.ntpServer, NULL, NULL);
+      configTime(0, 0, globals.ntpServer, NULL, NULL);
 
-      setenv("TZ", "EST5EDT,M3.2.0,M11.1.0", 1);
+      setTimezone(globalMenu.menu[20]);
 
       updateTimeProcess();
     }

@@ -7,6 +7,9 @@ void createFirebaseUser()
       && ((millis() - globalUser.updateInitial) > 0) 
       && (WiFi.status() == WL_CONNECTED))
   {
+    globalUser.updateInitial = 0;
+    globalUser.timerDelay = millis();
+
     String path = "users/" + String(WiFi.macAddress());
     Serial.println("<<<<<<<<<<<<<<< --------FB---createFirebaseUser----- >>>>>>>>>>>>>>>>");
 

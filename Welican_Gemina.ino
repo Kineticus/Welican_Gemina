@@ -237,6 +237,7 @@ struct GlobalUser
   int highscore_fallios;
   int highscore_brickBreaker;
   int highscore_pong;
+  int timerDelay;
   int updateInitial;
   int updateInterval;
 };
@@ -251,6 +252,7 @@ GlobalUser globalUser = {
     .highscore_fallios = 0,
     .highscore_brickBreaker = 0,
     .highscore_pong = 0,
+    .timerDelay = 0,
     .updateInitial = 30000, // 30 seconds after boot
     .updateInterval = 15000 // every 15 after that
     };
@@ -1226,6 +1228,7 @@ void setup()
 
   //Set first Weather check value
   weatherSettings.weatherTimerDelay = weatherSettings.weatherUpdateInitial;
+  globalUser.timerDelay = globalUser.updateInitial;
 
   updateZipCodeString();
 

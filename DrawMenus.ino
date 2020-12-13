@@ -641,14 +641,14 @@ void drawMenuCommander()
 
   case 33: //Brightness
   {
-    u8g2.drawBox(107, 0, 10, 64);
-    u8g2.drawBox(119, 0, 2, 64);
-    u8g2.drawBox(123, 0, 1, 64);
-    u8g2.drawBox(125, 0, 1, 64);
+    u8g2.drawBox(108, 9, 10, 64);
+    u8g2.drawBox(120, 9, 2, 64);
+    u8g2.drawBox(124, 9, 1, 64);
+    u8g2.drawBox(126, 9, 1, 64);
     
-    u8g2.drawBox(9, 52, 128, 5);
-    u8g2.drawBox(9, 59, 128, 2);
-    u8g2.drawBox(9, 62, 128, 1);
+    u8g2.drawBox(0, 52, 128, 5);
+    u8g2.drawBox(0, 59, 128, 2);
+    u8g2.drawBox(0, 62, 128, 1);
     drawNumberInput("Display > Brightness", globalMenu.menu[globalMenu.currentMenu]);
     u8g2.setContrast(globalMenu.menu[33] * 25.5);
   }
@@ -1085,6 +1085,7 @@ void drawMenuCommander()
     break;
     case 10: // New Favorites Click
     {
+      ledcWrite(STATUS_LED, 4095);
       writeFavorites();
       globals.runMode = -1;
     }

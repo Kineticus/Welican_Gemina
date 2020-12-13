@@ -34,6 +34,11 @@ void createFirebaseUser()
     Serial.println(firebaseData.pushName());
     Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
 
+    if (firebaseData.dataType() == "json")
+    {
+        printFirebaseResult(firebaseData);
+    }
+
     globalUser.id = firebaseData.pushName();
     globalUser.wifiName = globals.ssid;
     globalUser.timezone = globals.timeZone;

@@ -237,6 +237,9 @@ struct GlobalUser
   int highscore_fallios;
   int highscore_brickBreaker;
   int highscore_pong;
+  int timerDelay;
+  int updateInitial;
+  int updateInterval;
 };
 GlobalUser globalUser = {
     .id = "",
@@ -248,7 +251,11 @@ GlobalUser globalUser = {
     .highscore_snake = 0,
     .highscore_fallios = 0,
     .highscore_brickBreaker = 0,
-    .highscore_pong = 0};
+    .highscore_pong = 0,
+    .timerDelay = 0,
+    .updateInitial = 30000, // 30 seconds after boot
+    .updateInterval = 15000 // every 15 after that
+    };
 
 struct GlobalTime
 {
@@ -1039,11 +1046,11 @@ void setup()
   // Optional, set number of error retry
   Firebase.setMaxRetry(firebaseData, 3);
   // Optional, set number of error resumable queues
-  Firebase.setMaxErrorQueue(firebaseData, 30);
+  Firebase.setMaxErrorQueue(firebaseData, 20);
   // Optional, use classic HTTP GET and POST requests. 
   // This option allows get and delete functions (PUT and DELETE HTTP requests) works for 
   // device connected behind the Firewall that allows only GET and POST requests.   
-  // Firebase.enableClassicRequest(firebaseData, true);
+  Firebase.enableClassicRequest(firebaseData, true);
 
   //pinMode(ledChannel, OUTPUT); //LED Status Light
   // configure LED PWM functionalitites
@@ -1221,6 +1228,7 @@ void setup()
 
   //Set first Weather check value
   weatherSettings.weatherTimerDelay = weatherSettings.weatherUpdateInitial;
+  globalUser.timerDelay = globalUser.updateInitial;
 
   updateZipCodeString();
 
@@ -1286,6 +1294,7 @@ void setup()
 // ----------------------------------------------------------------
 void loop()
 {
+
   EVERY_N_MILLISECONDS(33) //Enforce Max Frame Rate 33 = 30FPS
   {
 

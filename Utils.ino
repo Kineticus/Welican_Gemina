@@ -121,12 +121,8 @@ void inputCompute(void *parameter)
     updateTime();
 
     updateWeather(false);
-
-    if (globalUser.id == "" && (WiFi.status() == WL_CONNECTED))
-    {
-      // Create Firebase User
-      createFirebaseUser();
-    }
+    
+    createFirebaseUser();
 
     //We are only serving DNS requests to Soft AP clients
     if (globals.softAPEnable == 1)

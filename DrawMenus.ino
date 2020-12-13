@@ -773,18 +773,22 @@ void drawMenuCommander()
       EEPROM.get(73, globalMenu.menu[20]);
       globalMenu.currentMenu = 2;
     }
+    break;
     case 21: //
     {
 
     }
+    break;
     case 22: //
     {
 
     }
+    break;
     case 23: //
     {
 
     }
+    break;
     case 24: //
     {
       globalMenu.currentMenu = 0;

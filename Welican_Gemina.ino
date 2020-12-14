@@ -46,7 +46,7 @@ FASTLED_USING_NAMESPACE
 #define VERSION_INFO "Build 0.530 - 11/16/20"
 #define KNOB_1C 25 //Program
 #define KNOB_2C 4  //Brightness 14
-#define MAX_MODES 6
+#define MAX_MODES 8
 #define SAMPLES 512         // Must be a power of 2. FAST 256 (40fps), NORMAL 512 (20fps), ACCURATE 1024 (10fps)
 #define SAMPLING_FREQ 40000 // Hz, must be 40000 or less due to ADC conversion time. Determines maximum frequency that can be analysed by the FFT Fmax=sampleF/2.
 #define AMPLITUDE 3000      // Depending on your audio source level, you may need to alter this value. Can be used as a 'sensitivity' control.
@@ -517,13 +517,15 @@ MenuModel globalMenu = {
         10,                                //Display Brightness
     },
     .patternMax = {
-        13,                                //Basic Category
-        20,                                //Music Category
-        23,                                //Chill
-        66,                                //Moving Colors
-        81,                                //Legacy
         patternSettings.numberOfFavorites, //Favorites (dynamic)
-        10,                                //Palette Mode
+        13,                                //Basic Category
+        6,                                 //Decor Category
+        66,                                //Party Category
+        81,                                //Advanced Category
+        18,                                //Complex Category
+        6,                                 //Special Category
+        20,                                //Weather Reactive Category
+        20,                                //Sound Reactive Category
     },
     .currentMenu = 0,
     .currentMenuMultiplier = 1,
@@ -1223,6 +1225,7 @@ void setup()
   {
     globals.mode = 0;
   }
+    globals.mode = 0;
 
   //Random Times
   EEPROM.get(90, globalMenu.menu[29]);
@@ -1391,27 +1394,33 @@ void loop()
 
     switch (globals.mode)
     {
-    case 0:
-      basic_category(patternSettings.displayPattern);
-      break;
-    case 1:
-      music_category(patternSettings.displayPattern);
-      break;
-    case 2:
-      chill_category(patternSettings.displayPattern);
-      break;
-    case 3:
-      moving_colors_category(patternSettings.displayPattern);
-      break;
-    case 4:
-      legacy_category(patternSettings.displayPattern);
-      break;
-    case 5:
-      favorites_category(patternSettings.displayPattern);
-      break;
-    case 6:
-      palette_category(patternSettings.displayPattern);
-      break;
+      case 0: // FAVORITES
+        favorites_category(patternSettings.displayPattern);
+        break;
+      case 1: // BASIC
+        basic_category(patternSettings.displayPattern);
+        break;
+      case 2: // DECOR
+        palette_category(patternSettings.displayPattern);
+        break;
+      case 3: // PARTY
+        moving_colors_category(patternSettings.displayPattern);
+        break;
+      case 4: // ADVANCED
+        chill_category(patternSettings.displayPattern);
+        break;
+      case 5: // COMPLEX
+        palette_category(patternSettings.displayPattern);
+        break;
+      case 6: // SPECIAL
+        special_category(patternSettings.displayPattern);
+        break;
+      case 7: // WEATHER REACTIVE
+        weatherReactive_category(patternSettings.displayPattern);
+        break;
+      case 8: // SOUND REACTIVE
+        soundReactive_category(patternSettings.displayPattern);
+        break;
     }
 
     //Detect mode changes and apply interfading

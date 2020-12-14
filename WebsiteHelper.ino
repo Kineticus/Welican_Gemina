@@ -31,7 +31,7 @@ void createRoutes(AsyncWebServer *server)
         startSmoothOperator();
         int patternMode = p->value().toInt();
         patternSettings.pattern[globals.mode] = patternMode;
-        globals.mode = 5;
+        globals.mode = 0;
       }
     }
     request->send(SPIFFS, "/index.html", String(), false, websiteProcessor);

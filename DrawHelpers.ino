@@ -45,30 +45,35 @@ void drawTop()
 
   switch (globals.mode)
   {
-  case 0: // Basic Category
-    u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
-    break;
-  case 1: // Music Category
-    u8g2.drawXBMP(0, 0, MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
-    break;
-  case 2: // Chill Category
-    u8g2.drawXBMP(0, 0, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);
-    break;
-  case 3: // Moving Colors
-    u8g2.drawXBMP(0, 0, DONUT_WIDTH, DONUT_HEIGHT, DONUT);
-    break;
-  case 4: // Legacy
-    u8g2.drawXBMP(0, 0, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);
-    break;
-  case 5: // Favorites
-    u8g2.drawXBMP(0, 0, HEART_WIDTH, HEART_HEIGHT, STAR_SHAPE);
-    break;
-  case 6: // Palette
-    u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
-    break;
+    case 0: // FAVORITES
+      u8g2.drawXBMP(0, 0, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
+      break;
+    case 1: // BASIC
+      u8g2.drawXBMP(0, 0, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);    
+      break;
+    case 2: // DECOR
+      u8g2.drawXBMP(0, 0, DVD_WIDTH, DVD_HEIGHT, DVD);
+      break;
+    case 3: // PARTY
+      u8g2.drawXBMP(0, 0, DONUT_WIDTH, DONUT_HEIGHT, DONUT);
+      break;
+    case 4: // ADVANCED
+      u8g2.drawXBMP(0, 0, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);    
+      break;
+    case 5: // COMPLEX
+      u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+      break;
+    case 6: // SPECIAL
+      u8g2.drawXBMP(0, 0, HEART_WIDTH, HEART_HEIGHT, STAR_SHAPE);
+      break;
+    case 7: // WEATHER REACTIVE
+      u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+      break;
+    case 8: // SOUND REACTIVE
+      u8g2.drawXBMP(0, 0, MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
+      break;
   }
 
-  //u8g2.print(globals.mode);
   u8g2.setCursor(12, 8);
   if ((patternSettings.pattern[globals.mode] == 0) || ((globals.mode == 5) && (patternSettings.favoritePattern[patternSettings.pattern[globals.mode]] == 0)))
   {

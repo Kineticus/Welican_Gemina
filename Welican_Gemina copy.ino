@@ -46,7 +46,7 @@ FASTLED_USING_NAMESPACE
 #define VERSION_INFO "Build 0.530 - 11/16/20"
 #define KNOB_1C 25 //Program
 #define KNOB_2C 4  //Brightness 14
-#define MAX_MODES 9
+#define MAX_MODES 8
 #define SAMPLES 512         // Must be a power of 2. FAST 256 (40fps), NORMAL 512 (20fps), ACCURATE 1024 (10fps)
 #define SAMPLING_FREQ 40000 // Hz, must be 40000 or less due to ADC conversion time. Determines maximum frequency that can be analysed by the FFT Fmax=sampleF/2.
 #define AMPLITUDE 3000      // Depending on your audio source level, you may need to alter this value. Can be used as a 'sensitivity' control.
@@ -1374,32 +1374,26 @@ void loop()
 
     switch (globals.mode)
     {
-    case 0: // FAVORITES
-      favorites_category(patternSettings.displayPattern);
-      break;
-    case 1: // BASIC
+    case 0:
       basic_category(patternSettings.displayPattern);
       break;
-    case 2: // DECOR
+    case 1:
+      music_category(patternSettings.displayPattern);
+      break;
+    case 2:
       chill_category(patternSettings.displayPattern);
       break;
-    case 3: // PARTY
+    case 3:
       moving_colors_category(patternSettings.displayPattern);
       break;
-    case 4: // ADVANCED
+    case 4:
       legacy_category(patternSettings.displayPattern);
       break;
-    case 5: // COMPLEX
-      basic_category(patternSettings.displayPattern);
+    case 5:
+      favorites_category(patternSettings.displayPattern);
       break;
-    case 6: // SPECIAL
-      special_category(patternSettings.displayPattern);
-      break;
-    case 7: // WEATHER REACTIVE
-      weatherReactive_category(patternSettings.displayPattern);
-      break;
-    case 8: // SOUND REACTIVE
-      soundReactive_category(patternSettings.displayPattern);
+    case 6:
+      palette_category(patternSettings.displayPattern);
       break;
     }
 

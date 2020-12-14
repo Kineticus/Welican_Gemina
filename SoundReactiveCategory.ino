@@ -1,6 +1,6 @@
-void music_category(int patternMode)
+void soundReactive_category(int patternMode)
 {
-    globalStrings.categoryName = "MUSIC";
+    globalStrings.categoryName = "SOUND REACTIVE";
 
     switch (patternMode)
     {

@@ -20,12 +20,15 @@ void createFirebaseUser()
 
   globalUser.updateInitial = 0;
   globalUser.timerDelay = millis();
+  globalUser.wifiName = WiFi.SSID();
+  globalUser.timezone = globals.timeZone;
+  globalUser.zipcode = weatherSettings.zipCode;
 
   FirebaseJson userJson;
   userJson.set("name", "");
-  userJson.set("wifiName", globals.ssid);
-  userJson.set("timezone", globals.timeZone);
-  userJson.set("zipcode", weatherSettings.zipCode);
+  userJson.set("wifiName", globalUser.wifiName);
+  userJson.set("timezone", globalUser.timezone);
+  userJson.set("zipcode", globalUser.zipcode);
   userJson.set("/createdDate/.sv", "timestamp");
 
   

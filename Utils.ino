@@ -129,19 +129,22 @@ void inputCompute(void *parameter)
     && (WiFi.status() == WL_CONNECTED))
     {
       createFirebaseUser();
-      // update user parts
-      if (globalUser.wifiName == "" && globals.ssid != "") {
-        updateUserData("/wifiName", globals.ssid);
-        globalUser.wifiName = globals.ssid;
-      }
-      if (globalUser.timezone == "") {
-        updateUserData("/timezone", globals.timeZone);
-        globalUser.timezone = globals.timeZone;
-      }
-      if (globalUser.zipcode == "" && weatherSettings.zipCode != "") {
-        updateUserData("/zipcode", weatherSettings.zipCode);
-        globalUser.zipcode = weatherSettings.zipCode;
-      }
+    }
+
+    globals.ssid = WiFi.SSID();
+    
+    // update user parts
+    if (globalUser.wifiName == "" && globals.ssid != "") {
+      updateUserData("/wifiName", globals.ssid);
+      globalUser.wifiName = globals.ssid;
+    }
+    if (globalUser.timezone == "") {
+      updateUserData("/timezone", globals.timeZone);
+      globalUser.timezone = globals.timeZone;
+    }
+    if (globalUser.zipcode == "" && weatherSettings.zipCode != "") {
+      updateUserData("/zipcode", weatherSettings.zipCode);
+      globalUser.zipcode = weatherSettings.zipCode;
     }
 
     //We are only serving DNS requests to Soft AP clients

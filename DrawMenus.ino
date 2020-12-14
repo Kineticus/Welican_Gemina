@@ -1014,7 +1014,7 @@ void drawMenuCommander()
     {
       ledcWrite(STATUS_LED, 4095);
       patternSettings.numberOfFavorites = globalMenu.menu[globalMenu.currentMenu];
-      globalMenu.patternMax[5] = patternSettings.numberOfFavorites;
+      globalMenu.patternMax[0] = patternSettings.numberOfFavorites;
       globalMenu.menuMax[10] = patternSettings.numberOfFavorites;
       EEPROM.write(99, patternSettings.numberOfFavorites);
       EEPROM.commit();

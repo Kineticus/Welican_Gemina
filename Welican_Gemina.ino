@@ -229,6 +229,7 @@ GlobalStrings globalStrings = {
 
 struct GlobalUser
 {
+  bool exists;
   String id;
   String name;
   String wifiName;
@@ -243,6 +244,7 @@ struct GlobalUser
   int updateInterval;
 };
 GlobalUser globalUser = {
+    .exists = false,
     .id = "",
     .name = "",
     .wifiName = "",

@@ -3,11 +3,16 @@ FirebaseJson json2;
 
 void createFirebaseUser()
 {
+  if (globalUser.exists == true) {
+    return;
+  }
+  
   String path = "users/" + String(WiFi.macAddress());
   Serial.println("<<<<<<<<<<<<<<< --------FB--- createFirebaseUser ----- >>>>>>>>>>>>>>>>");
 
   if (Firebase.pathExist(firebaseData, path)) {
     Serial.println("USER ALREADY EXISTS");
+    globalUser.exists = true;
     printFirebaseResult(firebaseData);
     Serial.println("==================== --------FB--- createFirebaseUser ----- ====================");
     return;

@@ -16,23 +16,29 @@ void favorites_category(int patternMode)
 
   switch (patternSettings.favoriteMode[patternMode])
   {
-  case 0:
-    basic_category(patternSettings.displayPattern);
-    break;
-  case 1:
-    soundReactive_category(patternSettings.displayPattern);
-    break;
-  case 2:
-    chill_category(patternSettings.displayPattern);
-    break;
-  case 3:
-    moving_colors_category(patternSettings.displayPattern);
-    break;
-  case 4:
-    chill_category(patternSettings.displayPattern);
-    break;
-  case 6:
-    decor_category(patternSettings.displayPattern);
-    break;
+    case 1: // BASIC
+      basic_category(patternSettings.displayPattern);
+      break;
+    case 2: // DECOR
+      decor_category(patternSettings.displayPattern);
+      break;
+    case 3: // PARTY
+      moving_colors_category(patternSettings.displayPattern);
+      break;
+    case 4: // ADVANCED
+      chill_category(patternSettings.displayPattern);
+      break;
+    case 5: // COMPLEX
+      decor_category(patternSettings.displayPattern);
+      break;
+    case 6: // SPECIAL
+      special_category(patternSettings.displayPattern);
+      break;
+    case 7: // WEATHER REACTIVE
+      weatherReactive_category(patternSettings.displayPattern);
+      break;
+    case 8: // SOUND REACTIVE
+      soundReactive_category(patternSettings.displayPattern);
+      break;
   }
 }

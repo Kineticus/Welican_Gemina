@@ -694,25 +694,30 @@ void newFavoritesMenu()
 
   switch (patternSettings.favoriteMode[globalMenu.menu[globalMenu.currentMenu]])
   {
-  case 0:
-    u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_HEIGHT, WAVE);
-    break;
-  case 1:
-    // u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
-    u8g2.drawXBMP(2, 53, MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
-    break;
-  case 2:
-    u8g2.drawXBMP(2, 53, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);
-    break;
-  case 3:
-    u8g2.drawXBMP(2, 53, DONUT_WIDTH, DONUT_HEIGHT, DONUT);
-    break;
-  case 4:
-    u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
-    break;
-  case 5:
-    u8g2.drawXBMP(2, 53, HEART_WIDTH, HEART_HEIGHT, HEART);
-    break;
+    case 1: // BASIC
+      u8g2.drawXBMP(2, 53, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);    
+      break;
+    case 2: // DECOR
+      u8g2.drawXBMP(2, 53, DVD_WIDTH, DVD_HEIGHT, DVD);
+      break;
+    case 3: // PARTY
+      u8g2.drawXBMP(2, 53, DONUT_WIDTH, DONUT_HEIGHT, DONUT);
+      break;
+    case 4: // ADVANCED
+      u8g2.drawXBMP(2, 53, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);    
+      break;
+    case 5: // COMPLEX
+      u8g2.drawXBMP(2, 53, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+      break;
+    case 6: // SPECIAL
+      u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_WIDTH, STAR_SHAPE);
+      break;
+    case 7: // WEATHER REACTIVE
+      u8g2.drawXBMP(2, 53, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+      break;
+    case 8: // SOUND REACTIVE
+      u8g2.drawXBMP(2, 53, MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
+      break;
   }
   u8g2.setCursor(12, 60);
   u8g2.print(globalStrings.functionNameOutString);

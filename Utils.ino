@@ -754,7 +754,7 @@ void readFavorites()
   {
     patternSettings.numberOfFavorites = 25;
   }
-  globalMenu.patternMax[5] = patternSettings.numberOfFavorites;
+  globalMenu.patternMax[0] = patternSettings.numberOfFavorites;
   globalMenu.menuMax[10] = patternSettings.numberOfFavorites;
 }
 

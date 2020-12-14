@@ -85,15 +85,15 @@ void drawTop()
   }
 
   if (globals.topNameIndex % 2) {
-    u8g2.setFont(u8g2_font_7Segments_26x42_mn);
-    u8g2.setCursor(26, 8);
+    u8g2.setFont(u8g2_font_ncenB08_tr);
+    u8g2.setCursor(28, 8);
     u8g2.print(globalStrings.categoryNameOutString);
   } else {
-    u8g2.setFont(u8g2_font_tinytim_tr);
-    u8g2.setCursor(60, 8);
+    u8g2.setFont(u8g2_font_blipfest_07_tr);
+    u8g2.setCursor(69, 8);
     u8g2.print(globalStrings.functionNameOutString);
   }
-  EVERY_N_SECONDS(3)
+  EVERY_N_MILLISECONDS(500)
   {
    globals.topNameIndex++;
   }

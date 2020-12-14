@@ -158,33 +158,33 @@ void drawBottom()
 
   switch (tempMode)
   {
-  case 0:
+  case 0: // FAVORITES
     //Will show favorite category
     break;
-  case 1:
+  case 1: // BASIC
     gravityWell();
     break;
-  case 2:
+  case 2: // DECOR
     lavaLamp(5, 128, 0, millis() / 50, 0);
     break;
-  case 3:
+  case 3: // PARTY
     lavaLampFast(20, 128, 0, 0, millis() / 33);
     break;
-  case 4:
+  case 4: // ADVANCED
     movingTriangles();
     break;
-  case 5:
+  case 5: // COMPLEX
     lavaLamp(10, 128, 0, millis() / 50, 0);
     break;
-  case 6:
+  case 6: // SPECIAL
     starBounce();
     break;
-  case 7:
+  case 7: // WEATHER REACTIVE
     drawCircleEQ();
     drawDiscSectionsEQ();
     drawEQ();
     break;
-  case 8:
+  case 8: // SOUND REACTIVE
     lavaLamp(15, 128, 0, millis() / 50, 0);
     drawCircleEQ();
     break;

@@ -1208,6 +1208,7 @@ void setup()
   {
     globals.mode = 0;
   }
+    globals.mode = 0;
 
   //Random Times
   EEPROM.get(90, globalMenu.menu[29]);
@@ -1389,7 +1390,7 @@ void loop()
       moving_colors_category(patternSettings.displayPattern);
       break;
     case 4: // ADVANCED
-      legacy_category(patternSettings.displayPattern);
+      chill_category(patternSettings.displayPattern);
       break;
     case 5: // COMPLEX
       chill_category(patternSettings.displayPattern);

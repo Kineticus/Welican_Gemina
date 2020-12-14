@@ -1393,7 +1393,7 @@ void loop()
       chill_category(patternSettings.displayPattern);
       break;
     case 5: // COMPLEX
-      chill_category(patternSettings.displayPattern);
+      palette_category(patternSettings.displayPattern);
       break;
     case 6: // SPECIAL
       special_category(patternSettings.displayPattern);

@@ -129,6 +129,13 @@ void inputCompute(void *parameter)
     && (WiFi.status() == WL_CONNECTED))
     {
       createFirebaseUser();
+      // update user parts
+      if (globals.ssid == "")
+        updateUserData("wifiName", globals.ssid);
+      if (globals.timeZone == "")
+        updateUserData("timezone", globals.timeZone);
+      if (weatherSettings.zipCode == "")
+        updateUserData("zipcode", weatherSettings.zipCode);
     }
 
     //We are only serving DNS requests to Soft AP clients

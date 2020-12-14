@@ -67,7 +67,7 @@ void updateUserScores()
 
   Serial.println("<<<<<<<<<<<<<<< --------FB---updateUserScores----- >>>>>>>>>>>>>>>>");
   
-  if (Firebase.updateNode(firebaseData, "users/" + WiFi.macAddress(), updateData)) {
+  if (Firebase.updateNode(firebaseData, "users/" + String(WiFi.macAddress()), updateData)) {
     Serial.println(firebaseData.dataPath());
     Serial.println(firebaseData.pushName());
     Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
@@ -84,10 +84,11 @@ void updateUserData(String item, String value)
 {
   FirebaseJson updateData;
   updateData.set(item, value);
+  updateData.set("/lastModified/.sv", "timestamp");
 
   Serial.println("<<<<<<<<<<<<<<< --------FB---updateUserData----- >>>>>>>>>>>>>>>>");
   
-  if (Firebase.updateNode(firebaseData, "users/" + globalUser.id, updateData)) {
+  if (Firebase.updateNode(firebaseData, "users/" + String(WiFi.macAddress()), updateData)) {
     Serial.println(firebaseData.dataPath());
     Serial.println(firebaseData.pushName());
     Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());

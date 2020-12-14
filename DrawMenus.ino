@@ -503,35 +503,51 @@ void drawMenuCommander()
   }
   break;
 
-  case 21: //Manual Time Entry
+  case 21: //Manual Time Entry Hour
   {
+      drawMenuTop("Settings > Time");
       u8g2.setFont(u8g2_font_fub30_tn);
-      u8g2.setCursor(0, 64);
+      if (globalMenu.menu[globalMenu.currentMenu] == 0)
+      {
+        globalMenu.menu[globalMenu.currentMenu] = 1;
+      }
+      u8g2.setCursor(30, 58);
+      if (globalMenu.menu[21] > 9)
+      {
+        u8g2.setCursor(0, 58);
+      }
       u8g2.print(globalMenu.menu[21]);
-      u8g2.setCursor(50, 60);
+      u8g2.setCursor(50, 54);
       u8g2.print(":");
-      u8g2.setCursor(68, 64);
+      u8g2.setCursor(68, 58);
       if (globalMenu.menu[22] < 10)
       {
         u8g2.print("0");
       }
       u8g2.print(globalMenu.menu[22]);
+      u8g2.drawBox(5, 62, 45, 3);
   }
   break;
 
-  case 22: //Manual Date Entry
+  case 22: //Manual Date Entry Minute
   {
+      drawMenuTop("Settings > Time");
       u8g2.setFont(u8g2_font_fub30_tn);
-      u8g2.setCursor(0, 64);
+      u8g2.setCursor(30, 58);
+      if (globalMenu.menu[21] > 9)
+      {
+        u8g2.setCursor(0, 58);
+      }
       u8g2.print(globalMenu.menu[21]);
-      u8g2.setCursor(50, 60);
+      u8g2.setCursor(50, 54);
       u8g2.print(":");
-      u8g2.setCursor(68, 64);
+      u8g2.setCursor(68, 58);
       if (globalMenu.menu[22] < 10)
       {
         u8g2.print("0");
       }
       u8g2.print(globalMenu.menu[22]);
+      u8g2.drawBox(68, 62, 50, 3);
   }
   break;
 
@@ -1064,6 +1080,10 @@ void drawMenuCommander()
       {
         WiFi.enableSTA(true);
         WiFi.begin();
+        if (WiFi.status() == WL_CONNECTED)
+        {
+          setTimezone(globalMenu.menu[20]);
+        }
       }
       break;
       case 3: // Disconnect
@@ -1220,13 +1240,15 @@ void drawMenuCommander()
       ledcWrite(STATUS_LED, 4095);
       // set current day/time
       struct timeval tv;
-      tv.tv_sec =  (globalMenu.menu[21] * 3600) + (globalMenu.menu[22] * 60);  // enter UTC UNIX time (get it from https://www.unixtimestamp.com )
+      //1555718400 == 04/20/2019 @ 12:00am (UTC)
+      tv.tv_sec =  1555718400 + (globalMenu.menu[21] * 3600) + (globalMenu.menu[22] * 60);  // enter UTC UNIX time (get it from https://www.unixtimestamp.com )
       settimeofday(&tv, NULL);
-
-      setenv("TZ", "UTC", 1); // https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html
+      setenv("TZ", "WET+0", 1); // https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html
       tzset();
+      updateTimeProcess();
       globalMenu.currentMenu = 2;
     }
+    break;
 
     case 24:
     {

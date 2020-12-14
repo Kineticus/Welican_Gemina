@@ -502,8 +502,8 @@ MenuModel globalMenu = {
         3,                                 //Speed?
         3,                                 //Time Menu
         6,                                 //Time Zone
-        3,                                 //Manual Time Entry
-        3,                                 //Manual Date Entry
+        12,                                //Manual Time Entry Hour
+        59,                                //Manual Time Entry Minute
         1,                                 //NTP
         7,                                 //Customize Display
         71,                                //Customize Timeout
@@ -1104,7 +1104,24 @@ void setup()
   }
   else
   {
-    globals.networkTries = 100;
+    for (int i = 0; i < 3; i ++)
+    {
+      ledcWrite(STATUS_LED, 4095);
+      delay(1000);
+      ledcWrite(STATUS_LED, 0);
+      delay(1000);
+    }
+    if (digitalRead(KNOB_1C) == 0)
+    {
+      WiFi.begin("test","test");
+      for (int i = 0; i < 3; i ++)
+      {
+        ledcWrite(STATUS_LED, 4095);
+        delay(100);
+        ledcWrite(STATUS_LED, 0);
+        delay(100);
+      }
+    }
   }
   //WiFi.status();
   //WiFi.localIP();

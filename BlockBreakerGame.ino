@@ -341,7 +341,7 @@ void blockbreaker_game()
         u8g2.setCursor(35, (SCREEN_HEIGHT / 1.5));
         u8g2.print(": ");
         u8g2.setCursor(75, (SCREEN_HEIGHT / 1.5));
-        u8g2.print(blockBreaker.);
+        u8g2.print(blockBreaker.score);
 
         //Send display out
         u8g2.sendBuffer();

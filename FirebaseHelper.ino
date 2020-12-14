@@ -7,15 +7,15 @@ void createFirebaseUser()
   globalUser.timerDelay = millis();
 
   String path = "users/" + String(WiFi.macAddress());
-  Serial.println("<<<<<<<<<<<<<<< --------FB---createFirebaseUser----- >>>>>>>>>>>>>>>>");
+  Serial.println("<<<<<<<<<<<<<<< --------FB--- createFirebaseUser ----- >>>>>>>>>>>>>>>>");
 
-  if (Firebase.getJSON(firebaseData, path)) {
-    if (firebaseData.dataType() != ""){
-      Serial.println("USER ALREADY EXISTS");
-      printFirebaseResult(firebaseData);
-    }
-    return;
-  }
+  // if (Firebase.getJSON(firebaseData, path)) {
+  //   if (firebaseData.dataType() != NULL){
+  //     Serial.println("USER ALREADY EXISTS");
+  //     printFirebaseResult(firebaseData);
+  //   }
+  //   return;
+  // }
 
   printFirebaseError();
 
@@ -24,33 +24,38 @@ void createFirebaseUser()
   userJson.set("wifiName", globals.ssid);
   userJson.set("timezone", globals.timeZone);
   userJson.set("zipcode", weatherSettings.zipCode);
+  userJson.set("/createdDate/.sv", "timestamp");
   // userJson.set("games/snake/highscore", 0);
   // userJson.set("games/fallios/highscore", 0);
   // userJson.set("games/brick-breaker/highscore", 0);
   // userJson.set("games/pong/highscore", 0);
   
-  
-  if (Firebase.set(firebaseData, path, userJson)) {
-    Serial.println("????????????????? --------FB---USER CREATED .set() ----- ?????????????????");
-    Serial.println(firebaseData.dataPath());
-    Serial.println(firebaseData.pushName());
-    Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
+  if (Firebase.get(firebaseData, path)) {
+    if (Firebase.set(firebaseData, path, userJson)) {
+      Serial.println("????????????????? --------FB--- USER CREATED .set() ----- ?????????????????");
+      Serial.println(firebaseData.dataPath());
+      Serial.println(firebaseData.pushName());
+      Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
 
-    printFirebaseResult(firebaseData);
-    printFirebaseError();
+      printFirebaseResult(firebaseData);
+      printFirebaseError();
 
-    globalUser.id = firebaseData.pushName();
-    globalUser.wifiName = globals.ssid;
-    globalUser.timezone = globals.timeZone;
-    globalUser.zipcode = weatherSettings.zipCode;
+      globalUser.id = firebaseData.pushName();
+      globalUser.wifiName = globals.ssid;
+      globalUser.timezone = globals.timeZone;
+      globalUser.zipcode = weatherSettings.zipCode;
 
-    globalUser.updateInitial = 0;
+      globalUser.updateInitial = 0;
 
+    } else {
+      Serial.println(firebaseData.errorReason());
+    }
   } else {
-    Serial.println(firebaseData.errorReason());
+      Serial.println(firebaseData.errorReason());
   }
 
-  Serial.println("==================== --------FB---createFirebaseUser----- ====================");
+
+  Serial.println("==================== --------FB--- createFirebaseUser ----- ====================");
 }
 
 void updateUserData(String item, String value) 
@@ -64,6 +69,8 @@ void updateUserData(String item, String value)
     Serial.println(firebaseData.dataPath());
     Serial.println(firebaseData.pushName());
     Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
+    printFirebaseResult(firebaseData);
+    printFirebaseError();
   } else {
     Serial.println(firebaseData.errorReason());
   }
@@ -82,6 +89,8 @@ void updateUserData(String item, int value)
     Serial.println(firebaseData.dataPath());
     Serial.println(firebaseData.pushName());
     Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
+    printFirebaseResult(firebaseData);
+    printFirebaseError();
   } else {
     Serial.println(firebaseData.errorReason());
   }
@@ -97,13 +106,11 @@ void addToDatabase()
   json.set("parent 002", json2);
 
   if (Firebase.pushJSON(firebaseData, "/test/append", json)) {
-
     Serial.println(firebaseData.dataPath());
-
     Serial.println(firebaseData.pushName());
-
     Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
-
+    printFirebaseResult(firebaseData);
+    printFirebaseError();
   } else {
     Serial.println(firebaseData.errorReason());
   }
@@ -117,6 +124,8 @@ void appendData(String location, FirebaseJson json)
     Serial.println(firebaseData.dataPath());
     Serial.println(firebaseData.pushName());
     Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
+    printFirebaseResult(firebaseData);
+    printFirebaseError();
   } else {
     Serial.println(firebaseData.errorReason());
   }
@@ -126,8 +135,10 @@ void appendData(String location, FirebaseJson json)
 
 void printFirebaseError() 
 {
-  Serial.println("FAILED");
-  Serial.println("REASON: " + firebaseData.errorReason());
+  if (firebaseData.errorReason() != "") {
+    Serial.println("FAILED");
+    Serial.println("REASON: " + firebaseData.errorReason());
+  }
 }
 
 void printFirebaseResult(FirebaseData &data)
@@ -155,27 +166,27 @@ void printFirebaseResult(FirebaseData &data)
         json.toString(jsonStr, true);
         Serial.println(jsonStr);
         Serial.println();
-        Serial.println("Iterate JSON data:");
-        Serial.println();
-        size_t len = json.iteratorBegin();
-        String key, value = "";
-        int type = 0;
-        for (size_t i = 0; i < len; i++)
-        {
-            json.iteratorGet(i, type, key, value);
-            Serial.print(i);
-            Serial.print(", ");
-            Serial.print("Type: ");
-            Serial.print(type == FirebaseJson::JSON_OBJECT ? "object" : "array");
-            if (type == FirebaseJson::JSON_OBJECT)
-            {
-                Serial.print(", Key: ");
-                Serial.print(key);
-            }
-            Serial.print(", Value: ");
-            Serial.println(value);
-        }
-        json.iteratorEnd();
+        // Serial.println("Iterate JSON data:");
+        // Serial.println();
+        // size_t len = json.iteratorBegin();
+        // String key, value = "";
+        // int type = 0;
+        // for (size_t i = 0; i < len; i++)
+        // {
+        //     json.iteratorGet(i, type, key, value);
+        //     Serial.print(i);
+        //     Serial.print(", ");
+        //     Serial.print("Type: ");
+        //     Serial.print(type == FirebaseJson::JSON_OBJECT ? "object" : "array");
+        //     if (type == FirebaseJson::JSON_OBJECT)
+        //     {
+        //         Serial.print(", Key: ");
+        //         Serial.print(key);
+        //     }
+        //     Serial.print(", Value: ");
+        //     Serial.println(value);
+        // }
+        // json.iteratorEnd();
     }
     else if (data.dataType() == "array")
     {

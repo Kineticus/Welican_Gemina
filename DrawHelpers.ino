@@ -151,7 +151,7 @@ void drawBottom()
 {
   int tempMode = globals.mode;
 
-  if (globals.mode == 5) //favorites
+  if (globals.mode == 0) //favorites
   {
     tempMode = patternSettings.favoriteMode[patternSettings.pattern[globals.mode]];
   }
@@ -159,31 +159,35 @@ void drawBottom()
   switch (tempMode)
   {
   case 0:
-    //movingTriangles();
-    lavaLamp(5, 128, 0, 0, millis() / 50);
+    //Will show favorite category
     break;
   case 1:
+    gravityWell();
+    break;
+  case 2:
+    lavaLamp(5, 128, 0, millis() / 50, 0);
+    break;
+  case 3:
+    lavaLampFast(20, 128, 0, 0, millis() / 33);
+    break;
+  case 4:
+    movingTriangles();
+    break;
+  case 5:
+    lavaLamp(10, 128, 0, millis() / 50, 0);
+    break;
+  case 6:
+    starBounce();
+    break;
+  case 7:
     drawCircleEQ();
     drawDiscSectionsEQ();
     drawEQ();
     break;
-  case 2:
-    gravityWell();
+  case 8:
+    lavaLamp(15, 128, 0, millis() / 50, 0);
+    drawCircleEQ();
     break;
-  case 3:
-    drawIPAddress();
-    //lavaLampFast(20, 128, 0, 0, millis() / 33);
-    break;
-  case 4:
-    starBounce();
-    break;
-  case 5:
-    //Will show favorite category
-    break;
-  case 6:
-    lavaLamp(5, 128, 0, millis() / 50, 0);
-    break;
-
   }
 }
 

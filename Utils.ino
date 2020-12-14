@@ -1329,6 +1329,7 @@ void saveTimeCheck()
     {
       if ((millis() - globalTime.touchTime) > globalTime.timeOut)
       {
+        globalTime.currentHour = 100;
         globals.runMode = 3;
       }
     }

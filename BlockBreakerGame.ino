@@ -131,7 +131,7 @@ void blockbreaker_game()
                         //Blink the Status LED and give the player a point
                         if (blockBreaker.block[i].Health == 0)
                         {                          
-                            blockBreaker.++;
+                            blockBreaker.score++;
                             ledcWrite(STATUS_LED, 4095);
                         }
                     } 
@@ -158,7 +158,7 @@ void blockbreaker_game()
                         //Blink the Status LED and give the player a point
                         if (blockBreaker.block[i].Health == 0)
                         {                          
-                            blockBreaker.++;
+                            blockBreaker.score++;
                             ledcWrite(STATUS_LED, 4095);
                         }
                     }
@@ -185,7 +185,7 @@ void blockbreaker_game()
                         //Blink the Status LED and give the player a point
                         if (blockBreaker.block[i].Health == 0)
                         {                          
-                            blockBreaker.++;
+                            blockBreaker.score++;
                             ledcWrite(STATUS_LED, 4095);
                         }
                     }
@@ -212,7 +212,7 @@ void blockbreaker_game()
                         //Blink the Status LED and give the player a point
                         if (blockBreaker.block[i].Health == 0)
                         {                          
-                            blockBreaker.++;
+                            blockBreaker.score++;
                             ledcWrite(STATUS_LED, 4095);
                         }
                     } 

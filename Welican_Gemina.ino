@@ -1377,33 +1377,33 @@ void loop()
 
     switch (globals.mode)
     {
-    case 0: // FAVORITES
-      favorites_category(patternSettings.displayPattern);
-      break;
-    case 1: // BASIC
-      basic_category(patternSettings.displayPattern);
-      break;
-    case 2: // DECOR
-      palette_category(patternSettings.displayPattern);
-      break;
-    case 3: // PARTY
-      moving_colors_category(patternSettings.displayPattern);
-      break;
-    case 4: // ADVANCED
-      chill_category(patternSettings.displayPattern);
-      break;
-    case 5: // COMPLEX
-      palette_category(patternSettings.displayPattern);
-      break;
-    case 6: // SPECIAL
-      special_category(patternSettings.displayPattern);
-      break;
-    case 7: // WEATHER REACTIVE
-      weatherReactive_category(patternSettings.displayPattern);
-      break;
-    case 8: // SOUND REACTIVE
-      soundReactive_category(patternSettings.displayPattern);
-      break;
+      case 0: // FAVORITES
+        favorites_category(patternSettings.displayPattern);
+        break;
+      case 1: // BASIC
+        basic_category(patternSettings.displayPattern);
+        break;
+      case 2: // DECOR
+        palette_category(patternSettings.displayPattern);
+        break;
+      case 3: // PARTY
+        moving_colors_category(patternSettings.displayPattern);
+        break;
+      case 4: // ADVANCED
+        chill_category(patternSettings.displayPattern);
+        break;
+      case 5: // COMPLEX
+        palette_category(patternSettings.displayPattern);
+        break;
+      case 6: // SPECIAL
+        special_category(patternSettings.displayPattern);
+        break;
+      case 7: // WEATHER REACTIVE
+        weatherReactive_category(patternSettings.displayPattern);
+        break;
+      case 8: // SOUND REACTIVE
+        soundReactive_category(patternSettings.displayPattern);
+        break;
     }
 
     //Detect mode changes and apply interfading

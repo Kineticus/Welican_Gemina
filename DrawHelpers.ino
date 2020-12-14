@@ -186,7 +186,7 @@ void drawBottom()
     break;
   case 8: // SOUND REACTIVE
     lavaLamp(15, 128, 0, millis() / 50, 0);
-    drawCircleEQ();
+    drawEQ();
     break;
   }
 }

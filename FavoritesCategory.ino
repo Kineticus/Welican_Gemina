@@ -29,7 +29,7 @@ void favorites_category(int patternMode)
     moving_colors_category(patternSettings.displayPattern);
     break;
   case 4:
-    legacy_category(patternSettings.displayPattern);
+    chill_category(patternSettings.displayPattern);
     break;
   case 6:
     palette_category(patternSettings.displayPattern);

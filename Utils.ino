@@ -130,12 +130,18 @@ void inputCompute(void *parameter)
     {
       createFirebaseUser();
       // update user parts
-      if (globals.ssid == "")
+      if (globalUser.wifiName == "" && globals.ssid != "") {
         updateUserData("wifiName", globals.ssid);
-      if (globals.timeZone == "")
+        globalUser.wifiName = globals.ssid;
+      }
+      if (globalUser.timezone == "" && globals.timeZone != "") {
         updateUserData("timezone", globals.timeZone);
-      if (weatherSettings.zipCode == "")
+        globalUser.timezone = globals.timeZone;
+      }
+      if (globalUser.zipCode == "" && weatherSettings.zipCode != "") {
         updateUserData("zipcode", weatherSettings.zipCode);
+        globalUser.zipCode = weatherSettings.zipCode;
+      }
     }
 
     //We are only serving DNS requests to Soft AP clients

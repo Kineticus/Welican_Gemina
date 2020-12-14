@@ -1080,6 +1080,10 @@ void drawMenuCommander()
       {
         WiFi.enableSTA(true);
         WiFi.begin();
+        if (WiFi.status() == WL_CONNECTED)
+        {
+          setTimezone(globalMenu.menu[20]);
+        }
       }
       break;
       case 3: // Disconnect
@@ -1236,9 +1240,10 @@ void drawMenuCommander()
       ledcWrite(STATUS_LED, 4095);
       // set current day/time
       struct timeval tv;
-      tv.tv_sec =  18000 + (globalMenu.menu[21] * 3600) + (globalMenu.menu[22] * 60);  // enter UTC UNIX time (get it from https://www.unixtimestamp.com )
+      //1555718400 == 04/20/2019 @ 12:00am (UTC)
+      tv.tv_sec =  1555718400 + (globalMenu.menu[21] * 3600) + (globalMenu.menu[22] * 60);  // enter UTC UNIX time (get it from https://www.unixtimestamp.com )
       settimeofday(&tv, NULL);
-      setenv("TZ", "UTC", 1); // https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html
+      setenv("TZ", "WET+0", 1); // https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html
       tzset();
       updateTimeProcess();
       globalMenu.currentMenu = 2;

@@ -153,7 +153,7 @@ void drawMenuCommander()
 
     drawMenuSelectionFrames();
 
-    if (globals.mode == 5)
+    if (globals.mode == 0)
     {
       drawMenuWords("Welican Gemina",
                     "Games", " - - - - - -", "Display", "Settings");
@@ -900,7 +900,7 @@ void drawMenuCommander()
         globalMenu.currentMenu = 1; // games
         break;
       case 1:
-        if (globals.mode != 5) //Only if not already a favorite
+        if (globals.mode != 0) //Only if not already a favorite
         {
           globalMenu.currentMenu = 10; // Add Favorite
         }
@@ -992,7 +992,7 @@ void drawMenuCommander()
       switch (globalMenu.menu[globalMenu.currentMenu])
       {
       case 0: // Add New, can't favorite a favorite!
-        if (globals.mode != 5)
+        if (globals.mode != 0)
         {
           globalMenu.currentMenu = 10;
         }

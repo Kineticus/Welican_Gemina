@@ -57,9 +57,9 @@ CRGBPalette16 pal_rasta_flag = rasta_flag;
 // -------------------------------------------------------
 // FUNCTIONS
 // -------------------------------------------------------
-void palette_category(int patternMode)
+void decor_category(int patternMode)
 {
-    globalStrings.categoryName = "Palettes";
+    globalStrings.categoryName = "DECOR";
 
     switch (patternMode)
     {

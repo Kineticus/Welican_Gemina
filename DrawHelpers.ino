@@ -2,7 +2,7 @@
 
 void drawDebug()
 {
-  u8g2.setFont(u8g2_font_ncenB08_tr);
+  u8g2.setFont(u8g2_font_b12_b_t_japanese1);
 
   drawMenuTop(VERSION_INFO);
 
@@ -84,11 +84,23 @@ void drawTop()
     u8g2.print(patternSettings.pattern[globals.mode]);
   }
 
-  u8g2.setCursor(32, 8);
-  u8g2.print(globalStrings.functionNameOutString);
-  //u8g2.drawXBMP(42,0,DONUT_WIDTH, DONUT_HEIGHT, DONUT);
-  //u8g2.drawXBMP(54,0,MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
-  //u8g2.drawXBMP(68,0,HEART_WIDTH, HEART_HEIGHT, HEART);
+  if (globals.topNameIndex % 2) {
+    u8g2.setFont(u8g2_font_7Segments_26x42_mn);
+    u8g2.setCursor(26, 8);
+    u8g2.print(globalStrings.categoryNameOutString);
+  } else {
+    u8g2.setFont(u8g2_font_tinytim_tr);
+    u8g2.setCursor(60, 8);
+    u8g2.print(globalStrings.functionNameOutString);
+  }
+  EVERY_N_SECONDS(3)
+  {
+   globals.topNameIndex++;
+  }
+
+  if (globals.topNameIndex > 9000) {
+    globals.topNameIndex = 0;
+  }
 
   //Hosting our own AP?
   if (globals.softAPEnable == 1)

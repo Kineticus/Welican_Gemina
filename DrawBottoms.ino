@@ -83,8 +83,6 @@ void drawCircleEQ()
 
 void drawIPAddress()
 {
-  //u8g2.setFont(u8g2_font_ncenB08_tr);
- 
   if (WiFi.status() == WL_CONNECTED)
   {
     globals.ipAddress = WiFi.localIP().toString();

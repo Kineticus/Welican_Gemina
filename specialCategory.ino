@@ -41,7 +41,7 @@ CRGBPalette16 pal_halloween_2 = halloween_2;
 // -------------------------------------------------------
 void special_category(int patternMode)
 {
-    globalStrings.categoryName = "Palettes";
+    globalStrings.categoryName = "SPECIAL";
 
     switch (patternMode)
     {

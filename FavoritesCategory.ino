@@ -32,7 +32,7 @@ void favorites_category(int patternMode)
     chill_category(patternSettings.displayPattern);
     break;
   case 6:
-    palette_category(patternSettings.displayPattern);
+    decor_category(patternSettings.displayPattern);
     break;
   }
 }

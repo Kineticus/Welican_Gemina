@@ -164,6 +164,7 @@ struct Globals
   int signalStrength;
   int softAPEnable;
   const char *ntpServer;
+  int topNameIndex;
 
   ESP32Encoder encoder;
   ESP32Encoder encoder2;
@@ -198,7 +199,8 @@ Globals globals = {
     .networkScan = 0,
     .signalStrength = 0,
     .softAPEnable = 0,
-    .ntpServer = "pool.ntp.org"};
+    .ntpServer = "pool.ntp.org",
+    .topNameIndex = 0};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
 
 struct DevEnvironment
@@ -1225,7 +1227,6 @@ void setup()
   {
     globals.mode = 0;
   }
-    globals.mode = 0;
 
   //Random Times
   EEPROM.get(90, globalMenu.menu[29]);
@@ -1401,7 +1402,7 @@ void loop()
         basic_category(patternSettings.displayPattern);
         break;
       case 2: // DECOR
-        palette_category(patternSettings.displayPattern);
+        decor_category(patternSettings.displayPattern);
         break;
       case 3: // PARTY
         moving_colors_category(patternSettings.displayPattern);
@@ -1410,7 +1411,7 @@ void loop()
         chill_category(patternSettings.displayPattern);
         break;
       case 5: // COMPLEX
-        palette_category(patternSettings.displayPattern);
+        decor_category(patternSettings.displayPattern);
         break;
       case 6: // SPECIAL
         special_category(patternSettings.displayPattern);

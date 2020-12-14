@@ -13,12 +13,6 @@ DEFINE_GRADIENT_PALETTE(christmas_2){
     255, 0, 57, 1};
 CRGBPalette16 pal_christmas_2 = christmas_2;
 
-DEFINE_GRADIENT_PALETTE(rasta_flag){
-    0, 255, 0, 0,
-    125, 232, 255, 0,
-    255, 0, 93, 1};
-CRGBPalette16 pal_rasta_flag = rasta_flag;
-
 DEFINE_GRADIENT_PALETTE(hanukkah){
     0, 1, 0, 255,
     127, 255, 255, 255,
@@ -45,7 +39,7 @@ CRGBPalette16 pal_halloween_2 = halloween_2;
 // -------------------------------------------------------
 // FUNCTIONS
 // -------------------------------------------------------
-void palette_category(int patternMode)
+void special_category(int patternMode)
 {
     globalStrings.categoryName = "Palettes";
 

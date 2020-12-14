@@ -64,7 +64,7 @@ void drawTop()
       u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
       break;
     case 6: // SPECIAL
-      u8g2.drawXBMP(0, 0, HEART_WIDTH, HEART_HEIGHT, STAR_SHAPE);
+      u8g2.drawXBMP(0, 0, STAR_WIDTH, STAR_WIDTH, STAR_SHAPE);
       break;
     case 7: // WEATHER REACTIVE
       u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);

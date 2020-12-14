@@ -483,7 +483,7 @@ MenuModel globalMenu = {
     .menuMax = {
         3,                                 //Main
         5,                                 //Game
-        6,                                 //Settings
+        7,                                 //Settings
         3,                                 //LED Settings
         1,                                 //ZIP Code
         3,                                 //Favorites Menu

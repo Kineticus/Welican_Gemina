@@ -131,15 +131,15 @@ void inputCompute(void *parameter)
       createFirebaseUser();
       // update user parts
       if (globalUser.wifiName == "" && globals.ssid != "") {
-        updateUserData("wifiName", globals.ssid);
+        updateUserData("/wifiName", globals.ssid);
         globalUser.wifiName = globals.ssid;
       }
       if (globalUser.timezone == "") {
-        updateUserData("timezone", globals.timeZone);
+        updateUserData("/timezone", globals.timeZone);
         globalUser.timezone = globals.timeZone;
       }
       if (globalUser.zipcode == "" && weatherSettings.zipCode != "") {
-        updateUserData("zipcode", weatherSettings.zipCode);
+        updateUserData("/zipcode", weatherSettings.zipCode);
         globalUser.zipcode = weatherSettings.zipCode;
       }
     }

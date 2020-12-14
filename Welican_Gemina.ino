@@ -526,12 +526,12 @@ MenuModel globalMenu = {
         13,                                //Basic Category
         6,                                 //Decor Category
         66,                                //Party Category
-        19,                                //Advanced Category
+        18,                                //Advanced Category
         18,                                //Complex Category
         6,                                 //Special Category
         20,                                //Weather Reactive Category
         20,                                //Sound Reactive Category
-        82,                                //Legacy
+        81,                                //Legacy
     },
     .currentMenu = 0,
     .currentMenuMultiplier = 1,

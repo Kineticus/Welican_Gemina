@@ -275,7 +275,6 @@ float GetHTemp_BouncingWithLimits(float _speed, float _hHigh, float _hLow)
 
 void SimplexNoisePatternInterpolated(float spaceInc, float timeInc, float yoffset, float xoffset)
 {
-
   // Simplex noise for whole strip of LEDs.
   // (Well, it's simplex noise for set number of LEDs and cubic interpolation between those nodes.)
 
@@ -283,7 +282,6 @@ void SimplexNoisePatternInterpolated(float spaceInc, float timeInc, float yoffse
   // Store raw values from simplex function (-0.347 to 0.347)
   //float simplexNoise.xoffset = 0.0;
   float xoffset_holder = simplexNoise.xoffset;
-
   for (int i = 0; i <= NUM_LEDS; i = i + simplexNoise.nodeSpacing)
   {
     simplexNoise.xoffset += simplexNoise.spaceInc;
@@ -291,7 +289,6 @@ void SimplexNoisePatternInterpolated(float spaceInc, float timeInc, float yoffse
     simplexNoise.ledArrayGreen[i] = SimplexNoise(simplexNoise.xoffset, simplexNoise.yoffset, 1);
     simplexNoise.ledArrayBlue[i] = SimplexNoise(simplexNoise.xoffset, simplexNoise.yoffset, 2);
   }
-
   simplexNoise.xoffset = xoffset_holder;
 
   // Interpolate values for LEDs between nodes
@@ -319,7 +316,6 @@ void SimplexNoisePatternInterpolated(float spaceInc, float timeInc, float yoffse
       simplexNoise.ledArrayBlue[i] = simplexNoise.ledArrayBlue[last_node] * (t_cubedx2 - t_squaredx3 + 1.0) + simplexNoise.ledArrayBlue[next_node] * (-t_cubedx2 + t_squaredx3);
     }
   }
-
   // Convert values from raw noise to scaled r,g,b and feed to strip
   for (int i = 0; i < NUM_LEDS; i++)
   {
@@ -357,7 +353,6 @@ void SimplexNoisePatternInterpolated(float spaceInc, float timeInc, float yoffse
 
     patternSettings.leds[i] = CRGB(r, g, b);
   }
-
   if (simplexNoise.yoffset >= 16000)
   {
     simplexNoise.yoffset = -26000;

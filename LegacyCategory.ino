@@ -8,6 +8,8 @@
 
 void legacy_category(int patternMode)
 {
+  globalStrings.categoryName = "LEGACY";
+  
   switch (patternMode)
   {
   case 0:

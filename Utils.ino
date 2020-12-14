@@ -813,6 +813,10 @@ void readNumberOfLEDs()
 
   //Recalculate spacing
   simplexNoise.nodeSpacing = (NUM_LEDS / LEDS_FOR_SIMPLEX);
+  if (simplexNoise.nodeSpacing <= 0)
+  {
+    simplexNoise.nodeSpacing = 1;
+  }
 }
 
 void saveNumberOfLEDs()

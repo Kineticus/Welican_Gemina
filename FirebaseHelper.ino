@@ -9,13 +9,13 @@ void createFirebaseUser()
   String path = "users/" + String(WiFi.macAddress());
   Serial.println("<<<<<<<<<<<<<<< --------FB---createFirebaseUser----- >>>>>>>>>>>>>>>>");
 
-  if (Firebase.getJSON(firebaseData, path)) {
-    if (firebaseData.dataType() != ""){
-      Serial.println("USER ALREADY EXISTS");
-      printFirebaseResult(firebaseData);
-    }
-    return;
-  }
+  // if (Firebase.getJSON(firebaseData, path)) {
+  //   if (firebaseData.dataType() != NULL){
+  //     Serial.println("USER ALREADY EXISTS");
+  //     printFirebaseResult(firebaseData);
+  //   }
+  //   return;
+  // }
 
   printFirebaseError();
 
@@ -24,6 +24,7 @@ void createFirebaseUser()
   userJson.set("wifiName", globals.ssid);
   userJson.set("timezone", globals.timeZone);
   userJson.set("zipcode", weatherSettings.zipCode);
+  userJson.set(".sv", "timestamp");
   // userJson.set("games/snake/highscore", 0);
   // userJson.set("games/fallios/highscore", 0);
   // userJson.set("games/brick-breaker/highscore", 0);
@@ -64,6 +65,8 @@ void updateUserData(String item, String value)
     Serial.println(firebaseData.dataPath());
     Serial.println(firebaseData.pushName());
     Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
+    printFirebaseResult(firebaseData);
+    printFirebaseError();
   } else {
     Serial.println(firebaseData.errorReason());
   }
@@ -82,6 +85,8 @@ void updateUserData(String item, int value)
     Serial.println(firebaseData.dataPath());
     Serial.println(firebaseData.pushName());
     Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
+    printFirebaseResult(firebaseData);
+    printFirebaseError();
   } else {
     Serial.println(firebaseData.errorReason());
   }
@@ -97,13 +102,11 @@ void addToDatabase()
   json.set("parent 002", json2);
 
   if (Firebase.pushJSON(firebaseData, "/test/append", json)) {
-
     Serial.println(firebaseData.dataPath());
-
     Serial.println(firebaseData.pushName());
-
     Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
-
+    printFirebaseResult(firebaseData);
+    printFirebaseError();
   } else {
     Serial.println(firebaseData.errorReason());
   }
@@ -117,6 +120,8 @@ void appendData(String location, FirebaseJson json)
     Serial.println(firebaseData.dataPath());
     Serial.println(firebaseData.pushName());
     Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
+    printFirebaseResult(firebaseData);
+    printFirebaseError();
   } else {
     Serial.println(firebaseData.errorReason());
   }
@@ -126,8 +131,10 @@ void appendData(String location, FirebaseJson json)
 
 void printFirebaseError() 
 {
-  Serial.println("FAILED");
-  Serial.println("REASON: " + firebaseData.errorReason());
+  if (firebaseData.errorReason() != "") {
+    Serial.println("FAILED");
+    Serial.println("REASON: " + firebaseData.errorReason());
+  }
 }
 
 void printFirebaseResult(FirebaseData &data)

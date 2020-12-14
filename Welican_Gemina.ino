@@ -232,7 +232,6 @@ struct GlobalUser
   String wifiName;
   String timezone;
   String zipcode;
-  bool hasUpdated;
   int highscore_snake;
   int highscore_fallios;
   int highscore_brickBreaker;
@@ -247,7 +246,6 @@ GlobalUser globalUser = {
     .wifiName = "",
     .timezone = "",
     .zipcode = "",
-    .hasUpdated = false,
     .highscore_snake = 0,
     .highscore_fallios = 0,
     .highscore_brickBreaker = 0,

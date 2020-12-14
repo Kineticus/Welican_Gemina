@@ -3,21 +3,23 @@ FirebaseJson json2;
 
 void createFirebaseUser()
 {
-  globalUser.updateInitial = 0;
-  globalUser.timerDelay = millis();
-
+  if (globalUser.exists == true) {
+    return;
+  }
+  
   String path = "users/" + String(WiFi.macAddress());
   Serial.println("<<<<<<<<<<<<<<< --------FB--- createFirebaseUser ----- >>>>>>>>>>>>>>>>");
 
-  // if (Firebase.getJSON(firebaseData, path)) {
-  //   if (firebaseData.dataType() != NULL){
-  //     Serial.println("USER ALREADY EXISTS");
-  //     printFirebaseResult(firebaseData);
-  //   }
-  //   return;
-  // }
+  if (Firebase.pathExist(firebaseData, path)) {
+    Serial.println("USER ALREADY EXISTS");
+    globalUser.exists = true;
+    printFirebaseResult(firebaseData);
+    Serial.println("==================== --------FB--- createFirebaseUser ----- ====================");
+    return;
+  }
 
-  printFirebaseError();
+  globalUser.updateInitial = 0;
+  globalUser.timerDelay = millis();
 
   FirebaseJson userJson;
   userJson.set("name", "");
@@ -30,28 +32,24 @@ void createFirebaseUser()
   // userJson.set("games/brick-breaker/highscore", 0);
   // userJson.set("games/pong/highscore", 0);
   
-  if (Firebase.get(firebaseData, path)) {
-    if (Firebase.set(firebaseData, path, userJson)) {
-      Serial.println("????????????????? --------FB--- USER CREATED .set() ----- ?????????????????");
-      Serial.println(firebaseData.dataPath());
-      Serial.println(firebaseData.pushName());
-      Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
+  if (Firebase.set(firebaseData, path, userJson)) {
+    Serial.println("????????????????? --------FB--- USER CREATED .set() ----- ?????????????????");
+    Serial.println(firebaseData.dataPath());
+    Serial.println(firebaseData.pushName());
+    Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
 
-      printFirebaseResult(firebaseData);
-      printFirebaseError();
+    printFirebaseResult(firebaseData);
+    printFirebaseError();
 
-      globalUser.id = firebaseData.pushName();
-      globalUser.wifiName = globals.ssid;
-      globalUser.timezone = globals.timeZone;
-      globalUser.zipcode = weatherSettings.zipCode;
+    globalUser.id = firebaseData.pushName();
+    globalUser.wifiName = globals.ssid;
+    globalUser.timezone = globals.timeZone;
+    globalUser.zipcode = weatherSettings.zipCode;
 
-      globalUser.updateInitial = 0;
+    globalUser.updateInitial = 0;
 
-    } else {
-      Serial.println(firebaseData.errorReason());
-    }
   } else {
-      Serial.println(firebaseData.errorReason());
+    Serial.println(firebaseData.errorReason());
   }
 
 

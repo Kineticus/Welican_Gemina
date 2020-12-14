@@ -16,6 +16,7 @@
 // INCLUDEs
 // ----------------------------------------------------------------
 
+#include <arduino.h>
 #include <FastLED.h>
 #include "images.h"
 #include "EEPROM.h"

@@ -122,7 +122,14 @@ void inputCompute(void *parameter)
 
     updateWeather(false);
     
-    createFirebaseUser();
+    // if (((millis() - globalUser.timerDelay) > globalUser.updateInterval) 
+    // && (WiFi.status() == WL_CONNECTED))
+    if ((globalUser.updateInitial != 0) 
+      && ((millis() - globalUser.updateInitial) > 0) 
+      && (WiFi.status() == WL_CONNECTED))
+    {
+      createFirebaseUser();
+    }
 
     //We are only serving DNS requests to Soft AP clients
     if (globals.softAPEnable == 1)

@@ -3,54 +3,54 @@ FirebaseJson json2;
 
 void createFirebaseUser()
 {
-  if ((globalUser.updateInitial != 0) 
-      && ((millis() - globalUser.updateInitial) > 0) 
-      && (WiFi.status() == WL_CONNECTED))
-  {
-    globalUser.updateInitial = 0;
-    globalUser.timerDelay = millis();
+  globalUser.updateInitial = 0;
+  globalUser.timerDelay = millis();
 
-    String path = "users/" + String(WiFi.macAddress());
-    Serial.println("<<<<<<<<<<<<<<< --------FB---createFirebaseUser----- >>>>>>>>>>>>>>>>");
+  String path = "users/" + String(WiFi.macAddress());
+  Serial.println("<<<<<<<<<<<<<<< --------FB---createFirebaseUser----- >>>>>>>>>>>>>>>>");
 
-    if (Firebase.getJSON(firebaseData, path)) {
+  if (Firebase.getJSON(firebaseData, path)) {
+    if (firebaseData.dataType() != ""){
       Serial.println("USER ALREADY EXISTS");
-      Serial.println(path);
       printFirebaseResult(firebaseData);
-      return;
-    } else {
-      Serial.println("FAILED");
-      Serial.println("REASON: " + firebaseData.errorReason());
-      Serial.println(firebaseData.errorReason());
-
-      FirebaseJson userJson;
-      userJson.set("name", "");
-      userJson.set("wifiName", globals.ssid);
-      userJson.set("timezone", globals.timeZone);
-      userJson.set("zipcode", weatherSettings.zipCode);
-      // userJson.set("games/snake/highscore", 0);
-      // userJson.set("games/fallios/highscore", 0);
-      // userJson.set("games/brick-breaker/highscore", 0);
-      // userJson.set("games/pong/highscore", 0);
-      
-      
-      if (Firebase.set(firebaseData, path, userJson)) {
-        Serial.println(firebaseData.dataPath());
-        Serial.println(firebaseData.pushName());
-        Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
-
-        printFirebaseResult(firebaseData);
-
-        globalUser.id = firebaseData.pushName();
-        globalUser.wifiName = globals.ssid;
-        globalUser.timezone = globals.timeZone;
-        globalUser.zipcode = weatherSettings.zipCode;
-      } else {
-        Serial.println(firebaseData.errorReason());
-      }
     }
-    Serial.println("==================== --------FB---createFirebaseUser----- ====================");
+    return;
   }
+
+  printFirebaseError();
+
+  FirebaseJson userJson;
+  userJson.set("name", "");
+  userJson.set("wifiName", globals.ssid);
+  userJson.set("timezone", globals.timeZone);
+  userJson.set("zipcode", weatherSettings.zipCode);
+  // userJson.set("games/snake/highscore", 0);
+  // userJson.set("games/fallios/highscore", 0);
+  // userJson.set("games/brick-breaker/highscore", 0);
+  // userJson.set("games/pong/highscore", 0);
+  
+  
+  if (Firebase.set(firebaseData, path, userJson)) {
+    Serial.println("????????????????? --------FB---USER CREATED .set() ----- ?????????????????");
+    Serial.println(firebaseData.dataPath());
+    Serial.println(firebaseData.pushName());
+    Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
+
+    printFirebaseResult(firebaseData);
+    printFirebaseError();
+
+    globalUser.id = firebaseData.pushName();
+    globalUser.wifiName = globals.ssid;
+    globalUser.timezone = globals.timeZone;
+    globalUser.zipcode = weatherSettings.zipCode;
+
+    globalUser.updateInitial = 0;
+
+  } else {
+    Serial.println(firebaseData.errorReason());
+  }
+
+  Serial.println("==================== --------FB---createFirebaseUser----- ====================");
 }
 
 void updateUserData(String item, String value) 
@@ -122,6 +122,12 @@ void appendData(String location, FirebaseJson json)
   }
   
   Serial.println("==================== --------FB-------- ====================");
+}
+
+void printFirebaseError() 
+{
+  Serial.println("FAILED");
+  Serial.println("REASON: " + firebaseData.errorReason());
 }
 
 void printFirebaseResult(FirebaseData &data)

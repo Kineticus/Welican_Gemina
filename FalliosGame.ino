@@ -15,7 +15,6 @@ void fallios_game()
     //Display high score
     u8g2.setCursor(SCREEN_WIDTH - 30, SCREEN_HEIGHT);
     u8g2.print(fallios.scoreTop);
-    updateUserData("games/fallios/highscore", fallios.scoreTop);
 
     //Build barriers, repeating once for each row of screen height
     for (int i = 1; i < SCREEN_HEIGHT + 1; i++)

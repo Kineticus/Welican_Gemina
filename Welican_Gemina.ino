@@ -645,7 +645,7 @@ Player player = {
 struct Fallios
 {
   unsigned int score;
-  unsigned int scoreTop;
+  int scoreTop;
   int motion;
   int motionHistory;
   int Y;

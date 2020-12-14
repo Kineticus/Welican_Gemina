@@ -524,6 +524,8 @@ void pickRandom()
 
 void endGameMode()
 {
+  updateUserScores();
+
   //Run update encoder to sync encoders
   updateEncoders();
 

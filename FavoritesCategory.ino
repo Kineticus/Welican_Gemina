@@ -20,7 +20,7 @@ void favorites_category(int patternMode)
     basic_category(patternSettings.displayPattern);
     break;
   case 1:
-    music_category(patternSettings.displayPattern);
+    soundReactive_category(patternSettings.displayPattern);
     break;
   case 2:
     chill_category(patternSettings.displayPattern);

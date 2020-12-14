@@ -888,6 +888,7 @@ void setTimezone(int inputTimezone)
       break;
   }
 
+  tzset();
 }
 
 void updateTime()

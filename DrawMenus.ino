@@ -156,7 +156,7 @@ void drawMenuCommander()
     if (globals.mode == 5)
     {
       drawMenuWords("Welican Gemina",
-                    "Games", "- - - - - -", "Display", "Settings");
+                    "Games", " - - - - - -", "Display", "Settings");
     }
     else
     {
@@ -179,8 +179,8 @@ void drawMenuCommander()
     //drawMenuWords("Settings",
     //              "LEDs", "Time", "ZIP Code", "WiFi");
 
-    drawMenu(7, globalMenu.menu[globalMenu.currentMenu], "Settings",
-      "LED Configuration", "Timezone", "ZIP Code", "WiFi","Max Favorites","Randomizer Time","System Information");
+    drawMenu(8, globalMenu.menu[globalMenu.currentMenu], "Settings",
+      "LED Configuration", "Timezone", "Time (No Internet)", "ZIP Code", "WiFi","Max Favorites","Randomizer Time","System Information");
     //drawMenuSelectionFrames();
   }
   break;
@@ -512,13 +512,33 @@ void drawMenuCommander()
 
   case 21: //Manual Time Entry
   {
-
+      u8g2.setFont(u8g2_font_fub30_tn);
+      u8g2.setCursor(0, 64);
+      u8g2.print(globalMenu.menu[21]);
+      u8g2.setCursor(50, 60);
+      u8g2.print(":");
+      u8g2.setCursor(68, 64);
+      if (globalMenu.menu[22] < 10)
+      {
+        u8g2.print("0");
+      }
+      u8g2.print(globalMenu.menu[22]);
   }
   break;
 
   case 22: //Manual Date Entry
   {
-      
+      u8g2.setFont(u8g2_font_fub30_tn);
+      u8g2.setCursor(0, 64);
+      u8g2.print(globalMenu.menu[21]);
+      u8g2.setCursor(50, 60);
+      u8g2.print(":");
+      u8g2.setCursor(68, 64);
+      if (globalMenu.menu[22] < 10)
+      {
+        u8g2.print("0");
+      }
+      u8g2.print(globalMenu.menu[22]);
   }
   break;
 
@@ -774,14 +794,14 @@ void drawMenuCommander()
       globalMenu.currentMenu = 2;
     }
     break;
-    case 21: //
+    case 21: //Manual Time Entry 1
     {
-
+      globalMenu.currentMenu = 2;
     }
     break;
-    case 22: //
+    case 22: //Manual Time Entry 2
     {
-
+      globalMenu.currentMenu = 21;
     }
     break;
     case 23: //
@@ -908,20 +928,23 @@ void drawMenuCommander()
       case 0: //LED Settings
         globalMenu.currentMenu = 3;
         break;
-      case 1: //Time menu
+      case 1: //Timezone menu
         globalMenu.currentMenu = 20;
         break;
-      case 2: // ZIP Code
+      case 2: //Manual time entry
+        globalMenu.currentMenu = 21;
+        break;
+      case 3: // ZIP Code
         globalMenu.currentMenu = 4;
         break;
-      case 3: // Wifi
+      case 4: // Wifi
         globalMenu.currentMenu = 8;
         break;
-      case 4:
+      case 5:
         globalMenu.currentMenu = 6;
         globalMenu.menu[6] = patternSettings.numberOfFavorites;
         break;
-      case 5:
+      case 6:
         globalMenu.currentMenu = 29;
         break;
       }
@@ -1192,6 +1215,25 @@ void drawMenuCommander()
       globalMenu.currentMenu = 2;
     }
     break;
+
+    case 21:
+    {
+      globalMenu.currentMenu = 22;
+    }
+    break;
+
+    case 22:
+    {
+      ledcWrite(STATUS_LED, 4095);
+      // set current day/time
+      struct timeval tv;
+      tv.tv_sec =  (globalMenu.menu[21] * 3600) + (globalMenu.menu[22] * 60);  // enter UTC UNIX time (get it from https://www.unixtimestamp.com )
+      settimeofday(&tv, NULL);
+
+      setenv("TZ", "UTC", 1); // https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html
+      tzset();
+      globalMenu.currentMenu = 2;
+    }
 
     case 24:
     {

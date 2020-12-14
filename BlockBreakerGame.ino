@@ -474,7 +474,7 @@ void blockbreaker_reset()
     blockBreaker.running = 0;
 
     //Current  is back to 0
-    blockBreaker. = 0;
+    blockBreaker.score = 0;
 
     blockBreaker.message = 0;
     blockBreaker.messageTimer = 0;

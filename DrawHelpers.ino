@@ -86,7 +86,13 @@ void drawTop()
 
   if (globals.topNameIndex % 2) {
     u8g2.setCursor(28, 8);
-    u8g2.setFont(u8g2_font_ncenB08_tr);
+  
+    if (sizeof(globalStrings.categoryNameOutString)/sizeof(globalStrings.categoryNameOutString[0]) > 7) {
+      u8g2.setFont(u8g2_font_ncenB08_tr);
+    } else {
+      u8g2.setFont(u8g2_font_blipfest_07_tr);
+    }
+    
     u8g2.print(globalStrings.categoryNameOutString);
   } else {
     u8g2.setFont(u8g2_font_blipfest_07_tr);

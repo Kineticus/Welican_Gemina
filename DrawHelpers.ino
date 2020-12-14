@@ -85,15 +85,15 @@ void drawTop()
   }
 
   if (globals.topNameIndex % 2) {
-    u8g2.setFont(u8g2_font_ncenB08_tr);
     u8g2.setCursor(28, 8);
+    u8g2.setFont(u8g2_font_ncenB08_tr);
     u8g2.print(globalStrings.categoryNameOutString);
   } else {
     u8g2.setFont(u8g2_font_blipfest_07_tr);
     u8g2.setCursor(69, 8);
     u8g2.print(globalStrings.functionNameOutString);
   }
-  EVERY_N_MILLISECONDS(500)
+  EVERY_N_MILLISECONDS(1500)
   {
    globals.topNameIndex++;
   }

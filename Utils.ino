@@ -122,11 +122,11 @@ void inputCompute(void *parameter)
 
     updateWeather(false);
     
-    // if (((millis() - globalUser.timerDelay) > globalUser.updateInterval) 
-    // && (WiFi.status() == WL_CONNECTED))
-    if ((globalUser.updateInitial != 0) 
-      && ((millis() - globalUser.updateInitial) > 0) 
-      && (WiFi.status() == WL_CONNECTED))
+    // if ((globalUser.updateInitial != 0) 
+    //   && ((millis() - globalUser.updateInitial) > 0) 
+    //   && (WiFi.status() == WL_CONNECTED))
+    if (((millis() - globalUser.timerDelay) > globalUser.updateInterval) 
+    && (WiFi.status() == WL_CONNECTED))
     {
       createFirebaseUser();
     }

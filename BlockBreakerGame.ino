@@ -131,7 +131,7 @@ void blockbreaker_game()
                         //Blink the Status LED and give the player a point
                         if (blockBreaker.block[i].Health == 0)
                         {                          
-                            blockBreaker.score++;
+                            blockBreaker.++;
                             ledcWrite(STATUS_LED, 4095);
                         }
                     } 
@@ -158,7 +158,7 @@ void blockbreaker_game()
                         //Blink the Status LED and give the player a point
                         if (blockBreaker.block[i].Health == 0)
                         {                          
-                            blockBreaker.score++;
+                            blockBreaker.++;
                             ledcWrite(STATUS_LED, 4095);
                         }
                     }
@@ -185,7 +185,7 @@ void blockbreaker_game()
                         //Blink the Status LED and give the player a point
                         if (blockBreaker.block[i].Health == 0)
                         {                          
-                            blockBreaker.score++;
+                            blockBreaker.++;
                             ledcWrite(STATUS_LED, 4095);
                         }
                     }
@@ -212,7 +212,7 @@ void blockbreaker_game()
                         //Blink the Status LED and give the player a point
                         if (blockBreaker.block[i].Health == 0)
                         {                          
-                            blockBreaker.score++;
+                            blockBreaker.++;
                             ledcWrite(STATUS_LED, 4095);
                         }
                     } 
@@ -337,11 +337,11 @@ void blockbreaker_game()
         u8g2.setCursor(4, SCREEN_HEIGHT - 8);
         u8g2.print("G A M E  O V E R !!!");
 
-        //Draw the score?
+        //Draw the ?
         u8g2.setCursor(35, (SCREEN_HEIGHT / 1.5));
-        u8g2.print("Score: ");
+        u8g2.print(": ");
         u8g2.setCursor(75, (SCREEN_HEIGHT / 1.5));
-        u8g2.print(blockBreaker.score);
+        u8g2.print(blockBreaker.);
 
         //Send display out
         u8g2.sendBuffer();
@@ -473,8 +473,8 @@ void blockbreaker_reset()
     //Not running
     blockBreaker.running = 0;
 
-    //Current score is back to 0
-    blockBreaker.score = 0;
+    //Current  is back to 0
+    blockBreaker. = 0;
 
     blockBreaker.message = 0;
     blockBreaker.messageTimer = 0;

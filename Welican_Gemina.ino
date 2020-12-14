@@ -237,9 +237,9 @@ struct GlobalUser
   String timezone;
   String zipcode;
   int highscore_snake;
+  int highscore_snake2;
   int highscore_fallios;
   int highscore_brickBreaker;
-  int highscore_pong;
   int timerDelay;
   int updateInitial;
   int updateInterval;
@@ -252,9 +252,9 @@ GlobalUser globalUser = {
     .timezone = "",
     .zipcode = "",
     .highscore_snake = 0,
+    .highscore_snake2 = 0,
     .highscore_fallios = 0,
     .highscore_brickBreaker = 0,
-    .highscore_pong = 0,
     .timerDelay = 0,
     .updateInitial = 30000, // 30 seconds after boot
     .updateInterval = 15000 // every 15 after that

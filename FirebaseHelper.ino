@@ -54,6 +54,11 @@ void createFirebaseUser()
 
 void updateUserScores() 
 {
+  globalUser.highscore_snake = snake.score;
+  globalUser.highscore_snake2 = snake.score2;
+  globalUser.highscore_fallios = fallios.scoreTop;
+  globalUser.highscore_brickBreaker = blockBreaker.score;
+
   FirebaseJson updateData;
   updateData.set("games/daddy-worm/highscore", snake.score);
   updateData.set("games/daddy-worm/highscore-2p", snake.score2);

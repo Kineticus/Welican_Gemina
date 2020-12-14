@@ -16,6 +16,7 @@
 // INCLUDEs
 // ----------------------------------------------------------------
 
+#include <arduino.h>
 #include <FastLED.h>
 #include "images.h"
 #include "EEPROM.h"
@@ -646,7 +647,7 @@ Player player = {
 struct Fallios
 {
   unsigned int score;
-  unsigned int scoreTop;
+  int scoreTop;
   int motion;
   int motionHistory;
   int Y;

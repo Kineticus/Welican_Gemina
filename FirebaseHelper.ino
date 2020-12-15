@@ -107,22 +107,24 @@ void updateUserData(String item, String value)
 
 void updateUserData(String item, int value) 
 {
-  FirebaseJson updateData;
-  updateData.set(item, value);
+  if (globalUser.id != "") {
+    FirebaseJson updateData;
+    updateData.set(item, value);
 
-  Serial.println("<<<<<<<<<<<<<<< --------FB---updateUserData----- >>>>>>>>>>>>>>>>");
-  
-  if (Firebase.updateNode(firebaseData, "users/" + globalUser.id, updateData)) {
-    Serial.println(firebaseData.dataPath());
-    Serial.println(firebaseData.pushName());
-    Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
-    printFirebaseResult(firebaseData);
-    printFirebaseError();
-  } else {
-    Serial.println(firebaseData.errorReason());
+    Serial.println("<<<<<<<<<<<<<<< --------FB---updateUserData----- >>>>>>>>>>>>>>>>");
+    
+    if (Firebase.updateNode(firebaseData, "users/" + globalUser.id, updateData)) {
+      Serial.println(firebaseData.dataPath());
+      Serial.println(firebaseData.pushName());
+      Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
+      printFirebaseResult(firebaseData);
+      printFirebaseError();
+    } else {
+      Serial.println(firebaseData.errorReason());
+    }
+    
+    Serial.println("==================== --------FB---updateUserData----- ====================");
   }
-  
-  Serial.println("==================== --------FB---updateUserData----- ====================");
 }
 
 void addToDatabase()

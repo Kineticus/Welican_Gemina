@@ -1220,7 +1220,7 @@ void setup()
   }  
   globals.timeZone = globalMenu.menu[20] - 12;
 
-  globalUser.exists = EEPROM.read(3);
+  // globalUser.exists = EEPROM.read(3);
   globals.mode = EEPROM.read(0);
   brightness.target = EEPROM.read(1);
   brightness.current = brightness.target;

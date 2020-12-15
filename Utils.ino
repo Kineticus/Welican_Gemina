@@ -131,8 +131,6 @@ void inputCompute(void *parameter)
       createFirebaseUser();
     }
 
-    globals.ssid = WiFi.SSID();
-    
     // update user parts
     if (globalUser.wifiName == "" && globals.ssid != "") {
       updateUserData("/wifiName", globals.ssid);

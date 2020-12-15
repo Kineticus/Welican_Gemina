@@ -20,6 +20,7 @@ void createFirebaseUser()
 
   globalUser.updateInitial = 0;
   globalUser.timerDelay = millis();
+  globals.ssid = WiFi.SSID();
   globalUser.wifiName = WiFi.SSID();
   globalUser.timezone = globals.timeZone;
   globalUser.zipcode = weatherSettings.zipCode;

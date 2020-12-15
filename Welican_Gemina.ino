@@ -234,7 +234,7 @@ struct GlobalUser
   String id;
   String name;
   String wifiName;
-  String timezone;
+  int timezone;
   String zipcode;
   int highscore_snake;
   int highscore_snake2;
@@ -249,7 +249,7 @@ GlobalUser globalUser = {
     .id = "",
     .name = "",
     .wifiName = "",
-    .timezone = "",
+    .timezone = 0,
     .zipcode = "",
     .highscore_snake = 0,
     .highscore_snake2 = 0,

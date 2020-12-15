@@ -136,7 +136,7 @@ void inputCompute(void *parameter)
       updateUserData("/wifiName", globals.ssid);
       globalUser.wifiName = globals.ssid;
     }
-    if (globalUser.timezone == "") {
+    if (globalUser.timezone != -9999) {
       updateUserData("/timezone", globals.timeZone);
       globalUser.timezone = globals.timeZone;
     }

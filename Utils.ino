@@ -1058,7 +1058,7 @@ void getCurrentWeather()
 
     String excludeList = "alerts,daily,hourly,minutely"; // current
     String units = "imperial";                           // standard, metric
-    String serverPath = "https://api.openweathermap.org/data/2.5/onecall?lat=" + String(weatherSettings.latitude) + "&lon=" + String(weatherSettings.longitude) + "&units=" + units + "&exclude=" + excludeList + " &APPID=" + globals.openWeatherMapApiKey;
+    String serverPath = "http://api.openweathermap.org/data/2.5/onecall?lat=" + String(weatherSettings.latitude) + "&lon=" + String(weatherSettings.longitude) + "&units=" + units + "&exclude=" + excludeList + " &APPID=" + globals.openWeatherMapApiKey;
     Serial.println(serverPath);
 
     weather.jsonBuffer = httpGETRequest(serverPath.c_str());
@@ -1132,7 +1132,7 @@ void getDailyWeather()
 
     String excludeList = "alerts,hourly,minutely,current"; // daily
     String units = "imperial";                             // standard, metric
-    String serverPath = "https://api.openweathermap.org/data/2.5/onecall?lat=" + String(weatherSettings.latitude) + "&lon=" + String(weatherSettings.longitude) + "&units=" + units + "&exclude=" + excludeList + "&APPID=" + globals.openWeatherMapApiKey;
+    String serverPath = "http://api.openweathermap.org/data/2.5/onecall?lat=" + String(weatherSettings.latitude) + "&lon=" + String(weatherSettings.longitude) + "&units=" + units + "&exclude=" + excludeList + "&APPID=" + globals.openWeatherMapApiKey;
     Serial.println(serverPath);
 
     weather.jsonBuffer = httpGETRequest(serverPath.c_str());

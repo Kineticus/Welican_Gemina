@@ -1,10 +1,20 @@
 import firebase from "../firebase";
 
 const db = firebase.database();
+const usersRef = db.ref('users');
+const hsRef = db.ref('highscores');
 
 class UsersDataService {
   getAll() {
-    return db.ref('users').once('value');
+    return usersRef.once('value');
+  }
+
+  getHighscores() {
+    return hsRef.once('value');
+  }
+
+  getSpecificHighscores(game) {
+    return hsRef.child(game).once('value');
   }
 
   create(user) {

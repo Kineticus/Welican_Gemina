@@ -1,31 +1,28 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand navbar-dark bg-dark">
-      <img src="./assets/logo.png">
-      <router-link to="/" class="navbar-brand">Welican</router-link>
-      <div class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <router-link to="/users" class="nav-link">Users</router-link>
-        </li>
-      </div>
-    </nav>
-
-    <div class="container mt-3">
-      <h2>Welican Gemina Highscores</h2>
-      <router-view />
-    </div>
+    <Navbar></Navbar>
+    <router-view class="section"></router-view>
   </div>
 </template>
 
 <script>
+import Navbar from './components/Navbar';
+
 export default {
-  name: "app"
-};
+  name: 'App',
+  components: {
+    Navbar
+  }
+}
 </script>
 
-<style scoped>
-.container h2 {
+<style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  margin: 25px auto;
+  color: #2c3e50;
+  margin-top: 60px;
 }
 </style>

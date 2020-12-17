@@ -1,18 +1,23 @@
-import Vue from "vue";
-import Router from "vue-router";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+Vue.use(VueRouter);
+import Home from "@/components/Home.vue";
+import UsersList from "@/components/UsersList.vue";
 
-import UsersList from './components/UsersList.vue';
+const routes = [
+  {
+    path: "/",
+    name: "home",
+    component: Home,
+  },
+  {
+    path: "/users",
+    name: "users",
+    component: UsersList,
+  },
+];
 
-Vue.use(Router);
-
-export default new Router({
+export default new VueRouter({
   mode: "history",
-  routes: [
-    {
-      path: "/",
-      alias: "/users",
-      name: "users",
-      component: UsersList
-    }
-  ]
-});
+  routes: routes
+})

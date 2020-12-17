@@ -67,7 +67,7 @@ void updateUserScores()
 
   FirebaseJson updateData;
   updateData.set("games/daddy-worm/highscore", snake.score);
-  updateData.set("games/daddy-worm/highscore-2p", snake.score2);
+  updateData.set("games/daddy-worm/highscore2p", snake.score2);
   updateData.set("games/fallios/highscore", fallios.scoreTop);
   updateData.set("games/block-breaker/highscore", blockBreaker.score);
 

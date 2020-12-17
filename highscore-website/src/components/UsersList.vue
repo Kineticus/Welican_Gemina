@@ -51,7 +51,7 @@ Block Breaker: {{value.highscore}}
       </div>
     </section>
     <footer class="modal-card-foot">
-      <button class="button is-success">Save changes</button>
+      <!-- <button class="button is-success">Save changes</button> -->
       <button class="button">Cancel</button>
     </footer>
   </div>

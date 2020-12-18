@@ -44,7 +44,7 @@ FASTLED_USING_NAMESPACE
 #if defined(FASTLED_VERSION) && (FASTLED_VERSION < 3001000)
 #warning "Requires FastLED 3.1 or later; check github for latest code."
 #endif
-#define VERSION_INFO "Build 0.530 - 11/16/20"
+#define VERSION_INFO "Beta 1.0 - 12/18/20"
 #define KNOB_1C 25 //Program
 #define KNOB_2C 4  //Brightness 14
 #define MAX_MODES 9
@@ -520,10 +520,11 @@ MenuModel globalMenu = {
         60,                                //Display 2 Duration
         60,                                //Display 3 Duration
         10,                                //Display Brightness
+        1,                                 //System Information
     },
     .patternMax = {
         patternSettings.numberOfFavorites, //Favorites (dynamic)
-        13,                                //Basic Category
+        23,                                //Basic Category
         6,                                 //Decor Category
         66,                                //Party Category
         18,                                //Advanced Category

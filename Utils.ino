@@ -1434,7 +1434,11 @@ void readPatternSettings()
 
 void seedThings()
 {
-  //Seed variables
+   //Seed variables
+   
+  simplexNoise.xoffset = random(0, 10000);
+  simplexNoise.yoffset = random(0, 10000);
+
   for (int i = 0; i < MAX_STARS; i++)
   {
     ball.x[i] = random(0, VISUALIZER_X);

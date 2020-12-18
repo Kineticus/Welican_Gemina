@@ -84,13 +84,19 @@ void drawTop()
     u8g2.print(patternSettings.pattern[globals.mode]);
   }
 
+  //Simple style top
+  u8g2.setCursor(32, 8);
+  u8g2.print(globalStrings.functionNameOutString);
+
+  //Advanced style
+  /* 
   if (globals.topNameIndex % 2) {
     u8g2.setCursor(28, 8);
   
     if (sizeof(globalStrings.categoryNameOutString)/sizeof(globalStrings.categoryNameOutString[0]) > 7) {
       u8g2.setFont(u8g2_font_ncenB08_tr);
     } else {
-      u8g2.setFont(u8g2_font_blipfest_07_tr);
+      u8g2.setFont(u8g2_font_blipfest_07_tr);c
     }
     
     u8g2.print(globalStrings.categoryNameOutString);
@@ -107,6 +113,7 @@ void drawTop()
   if (globals.topNameIndex > 9000) {
     globals.topNameIndex = 0;
   }
+  */
 
   //Hosting our own AP?
   if (globals.softAPEnable == 1)

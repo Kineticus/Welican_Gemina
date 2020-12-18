@@ -97,7 +97,7 @@ void legacy_category(int patternMode)
     break;
   case 21:
     globalStrings.functionName = "MovingHue 85.002";
-    MovingHue(85, .002);
+    MovingHue(patternSettings.gHue, .002);
     break;
   case 22:
     globalStrings.functionName = "MovingHue 42.008";
@@ -617,7 +617,7 @@ void RainbowOneYoffset()
 {
   globalStrings.functionName = "RainbowOneYoffset";
   simplexNoise.spaceInc = 0.03;
-  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  simplexNoise.timeInc = (0.0001 *  patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
   simplexNoise.yoffset += simplexNoise.timeInc;
   //simplexNoise.xoffset += simplexNoise.timeInc;
   SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
@@ -626,7 +626,7 @@ void RainbowTwoYoffset()
 {
   globalStrings.functionName = "RainbowTwoYoffset";
   simplexNoise.spaceInc = 0.07;
-  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  simplexNoise.timeInc = (0.0001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
   simplexNoise.yoffset += simplexNoise.timeInc;
   //simplexNoise.xoffset += simplexNoise.timeInc;
   SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
@@ -635,7 +635,7 @@ void RainbowThreeXoffset()
 {
   globalStrings.functionName = "RainbowThreeXoffset";
   simplexNoise.spaceInc = 0.07;
-  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  simplexNoise.timeInc = (0.0001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
   //simplexNoise.yoffset += simplexNoise.timeInc;
   simplexNoise.xoffset += simplexNoise.timeInc;
   SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
@@ -644,7 +644,7 @@ void RainbowFourXoffset()
 {
   globalStrings.functionName = "RainbowFourXoffset";
   simplexNoise.spaceInc = 0.03;
-  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  simplexNoise.timeInc = (0.0001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
   //simplexNoise.yoffset += simplexNoise.timeInc;
   simplexNoise.xoffset += simplexNoise.timeInc;
   SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
@@ -653,7 +653,7 @@ void RainbowBigXoffset()
 {
   globalStrings.functionName = "RainbowBigXoffset";
   simplexNoise.spaceInc = 0.12;
-  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  simplexNoise.timeInc = (0.0001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
   //simplexNoise.yoffset += simplexNoise.timeInc;
   simplexNoise.xoffset += simplexNoise.timeInc;
   SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
@@ -662,7 +662,7 @@ void RainbowBigYoffset()
 {
   globalStrings.functionName = "RainbowBigYoffset";
   simplexNoise.spaceInc = 0.12;
-  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  simplexNoise.timeInc = (0.0001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
   simplexNoise.yoffset += simplexNoise.timeInc;
   //simplexNoise.xoffset += simplexNoise.timeInc;
   SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);

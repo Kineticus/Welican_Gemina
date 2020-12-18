@@ -880,8 +880,10 @@ struct OpenWeatherSettings
   String latitude;
   String longitude;
   unsigned long weatherTimerDelay;
+  unsigned long weatherTimerDelayBig;
   unsigned long weatherUpdateInitial;
   unsigned long weatherUpdateInterval;
+  unsigned long weatherUpdateIntervalBig;
   bool gotDailyWeather;
 };
 OpenWeatherSettings weatherSettings = {
@@ -890,8 +892,10 @@ OpenWeatherSettings weatherSettings = {
     .latitude = "33.441792",
     .longitude = "94.037689",
     .weatherTimerDelay = 0,           //Set by system
+    .weatherTimerDelayBig = 0,
     .weatherUpdateInitial = 10000,    //10 seconds after boot
     .weatherUpdateInterval = 1800000, //Every 30 minutes after that
+    .weatherUpdateIntervalBig = 14400000, //Every 4 hours do a "daily" check
     .gotDailyWeather = false};
 
 struct OpenWeatherObject
@@ -1423,7 +1427,7 @@ void loop()
         special_category(patternSettings.displayPattern);
         break;
       case 7: // WEATHER REACTIVE
-        weatherReactive_category(patternSettings.displayPattern);
+        //weatherReactive_category(patternSettings.displayPattern);
         break;
       case 8: // SOUND REACTIVE
         soundReactive_category(patternSettings.displayPattern);
@@ -1490,6 +1494,7 @@ void loop()
   // Serial.println(eqBands.bandValues[4]);
   //Serial.print(" ");
   
+  /*
   EVERY_N_MILLISECONDS(10000)
   {
     Serial.print("FPS: ");
@@ -1503,12 +1508,10 @@ void loop()
     Serial.print("MIN: ");
     Serial.println(((millis() / 1000) / 60));
   }
+  */
   
   // slowly cycle the "base color" through the rainbow
   EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; }
-
-    // slowly cycle the "base color" through the rainbow
-    EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; }
 
     autoConnect();
     //vTaskDelay(1);

@@ -22,6 +22,6 @@ void objectBounce(BounceModel *item1, u8g2_uint_t objectWidth, u8g2_uint_t objec
     item1->vx = -1;
   }
 
-  u8g2.drawXBMP(item1->y, item1->x + 32,
+  u8g2.drawXBMP(item1->y, item1->x + 18,
                 objectWidth, objectHeight, object);
 }

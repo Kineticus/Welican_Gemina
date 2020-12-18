@@ -348,7 +348,7 @@ void drawClock(int Selection)
 
     //Row 4
     u8g2.setCursor(0, 42);
-    u8g2.print("Preci ");
+    u8g2.print("Rain ");
     u8g2.print(String(int(weatherDay1.pop * 100)));
     u8g2.print("%  Humid ");
     u8g2.print(weather.currentHumidity);

@@ -44,7 +44,7 @@ FASTLED_USING_NAMESPACE
 #if defined(FASTLED_VERSION) && (FASTLED_VERSION < 3001000)
 #warning "Requires FastLED 3.1 or later; check github for latest code."
 #endif
-#define VERSION_INFO "Build 0.530 - 11/16/20"
+#define VERSION_INFO "Beta 1.0 - 12/18/20"
 #define KNOB_1C 25 //Program
 #define KNOB_2C 4  //Brightness 14
 #define MAX_MODES 9
@@ -520,10 +520,11 @@ MenuModel globalMenu = {
         60,                                //Display 2 Duration
         60,                                //Display 3 Duration
         10,                                //Display Brightness
+        1,                                 //System Information
     },
     .patternMax = {
         patternSettings.numberOfFavorites, //Favorites (dynamic)
-        13,                                //Basic Category
+        23,                                //Basic Category
         6,                                 //Decor Category
         66,                                //Party Category
         18,                                //Advanced Category
@@ -879,8 +880,10 @@ struct OpenWeatherSettings
   String latitude;
   String longitude;
   unsigned long weatherTimerDelay;
+  unsigned long weatherTimerDelayBig;
   unsigned long weatherUpdateInitial;
   unsigned long weatherUpdateInterval;
+  unsigned long weatherUpdateIntervalBig;
   bool gotDailyWeather;
 };
 OpenWeatherSettings weatherSettings = {
@@ -889,8 +892,10 @@ OpenWeatherSettings weatherSettings = {
     .latitude = "33.441792",
     .longitude = "94.037689",
     .weatherTimerDelay = 0,           //Set by system
+    .weatherTimerDelayBig = 0,
     .weatherUpdateInitial = 10000,    //10 seconds after boot
     .weatherUpdateInterval = 1800000, //Every 30 minutes after that
+    .weatherUpdateIntervalBig = 14400000, //Every 4 hours do a "daily" check
     .gotDailyWeather = false};
 
 struct OpenWeatherObject
@@ -938,7 +943,7 @@ struct OpenWeatherDayObject
   String weatherMain;
   String weatherDescription;
   String cloudiness;
-  String pop;
+  float pop;
   String rain;
   String uvi;
 };
@@ -1422,7 +1427,7 @@ void loop()
         special_category(patternSettings.displayPattern);
         break;
       case 7: // WEATHER REACTIVE
-        weatherReactive_category(patternSettings.displayPattern);
+        //weatherReactive_category(patternSettings.displayPattern);
         break;
       case 8: // SOUND REACTIVE
         soundReactive_category(patternSettings.displayPattern);
@@ -1489,6 +1494,7 @@ void loop()
   // Serial.println(eqBands.bandValues[4]);
   //Serial.print(" ");
   
+  /*
   EVERY_N_MILLISECONDS(10000)
   {
     Serial.print("FPS: ");
@@ -1502,12 +1508,10 @@ void loop()
     Serial.print("MIN: ");
     Serial.println(((millis() / 1000) / 60));
   }
+  */
   
   // slowly cycle the "base color" through the rainbow
   EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; }
-
-    // slowly cycle the "base color" through the rainbow
-    EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; }
 
     autoConnect();
     //vTaskDelay(1);

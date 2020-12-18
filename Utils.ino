@@ -1013,6 +1013,7 @@ void getWeather()
     weather.sunrise = convertUnixToTime((int)weather.weatherJson["sys"]["sunrise"]);
     weather.sunset = convertUnixToTime((int)weather.weatherJson["sys"]["sunset"]);
 
+    /*
     Serial.print("Temperature: ");
     Serial.println(weather.weatherJson["main"]["temp"]);
 
@@ -1042,84 +1043,12 @@ void getWeather()
 
     Serial.print("currentWeatherDescription: ");
     Serial.println(weather.currentWeatherDescription);
+    */
+    Serial.println("Current Weather - Updated");
   }
   else
   {
-    Serial.println("Weather - No Connection");
-  }
-}
-
-void getCurrentWeather()
-{
-  if (WiFi.status() == WL_CONNECTED)
-  {
-    Serial.println("GETTING CURRENT WEATHER");
-    weatherSettings.zipCode = globalMenu.menu[11];
-
-    String excludeList = "alerts,daily,hourly,minutely"; // current
-    String units = "imperial";                           // standard, metric
-    String serverPath = "http://api.openweathermap.org/data/2.5/onecall?lat=" + String(weatherSettings.latitude) + "&lon=" + String(weatherSettings.longitude) + "&units=" + units + "&exclude=" + excludeList + " &APPID=" + globals.openWeatherMapApiKey;
-    Serial.println(serverPath);
-
-    weather.jsonBuffer = httpGETRequest(serverPath.c_str());
-    weather.weatherJson = JSON.parse(weather.jsonBuffer);
-
-    // JSON.typeof(jsonVar) can be used to get the type of the var
-    if (JSON.typeof(weather.weatherJson) == "undefined")
-    {
-      Serial.println("Parsing input failed!");
-      return;
-    }
-
-    Serial.println("JSON object = ");
-    Serial.println(weather.weatherJson);
-
-    weatherSettings.latitude = String((int)weather.weatherJson["coord"]["lat"]);
-    weatherSettings.longitude = String((int)weather.weatherJson["coord"]["lon"]);
-    globals.timeZoneOffset = weather.weatherJson["timezone_offset"];
-
-    weather.sunrise = convertUnixToTime((int)weather.weatherJson["current"]["sunrise"]);
-    weather.sunset = convertUnixToTime((int)weather.weatherJson["current"]["sunset"]);
-    weather.currentTemperature = String((int)weather.weatherJson["current"]["temp"]);
-    weather.currentFeelsLike = String((int)weather.weatherJson["current"]["feels_like"]);
-    weather.currentHumidity = String((int)weather.weatherJson["current"]["humidity"]);
-    weather.currentUvi = String((int)weather.weatherJson["current"]["uvi"]);
-    weather.currentCloudiness = String((int)weather.weatherJson["current"]["clouds"]);
-    weather.currentVisibility = String((int)weather.weatherJson["current"]["visibility"]);
-    weather.currentWindSpeed = String((int)weather.weatherJson["current"]["wind_speed"]);
-    weather.currentWindDegree = String((int)weather.weatherJson["current"]["wind_deg"]);
-
-    weather.currentWeatherId = String((int)weather.weatherJson["weather"][0]["id"]);
-    weather.currentWeatherTitle = weather.weatherJson["weather"][0]["main"];
-    weather.currentWeatherDescription = weather.weatherJson["weather"][0]["description"];
-
-    Serial.print("Temperature: ");
-    Serial.println(weather.weatherJson["current"]["temp"]);
-
-    Serial.print("Humidity: ");
-    Serial.println(weather.weatherJson["current"]["humidity"]);
-
-    Serial.print("Wind Speed: ");
-    Serial.println(weather.weatherJson["current"]["wind_speed"]);
-
-    Serial.print("currentWeatherId: ");
-    Serial.println(weather.weatherJson["weather"][0]["id"]);
-
-    Serial.print("currentUvi: ");
-    Serial.println(weather.currentUvi);
-
-    Serial.print("currentCloudiness: ");
-    Serial.println(weather.currentCloudiness);
-
-    Serial.print("currentWeatherTitle: ");
-    Serial.println(weather.currentWeatherTitle);
-
-    Serial.print("currentWeatherDescription: ");
-    Serial.println(weather.currentWeatherDescription);
-  }
-  else
-  {
-    Serial.println("Weather - No Connection");
+    Serial.println("Current Weather - No Connection");
   }
 }
 
@@ -1204,24 +1133,30 @@ void getDailyWeather()
 
 void updateWeather(bool force)
 {
-  if ((force == true) && (millis() > 10000))
+  if (force == true)
   {
-    if ((millis() - weatherSettings.weatherTimerDelay) > weatherSettings.weatherUpdateInterval)
-    {
-      Serial.println("FORCED NORMAL WEATHER CHECK");
-      getWeather();
-      weatherSettings.weatherTimerDelay = millis();
-    }
+    Serial.println("FORCED NORMAL WEATHER CHECK");
+    getWeather();
+    getDailyWeather();
+
   }
   else
   {
     if (globals.runMode == 3)
     {
-      // Normal run check
+      // Normal run check, Current Weather
       if ((millis() - weatherSettings.weatherTimerDelay) > weatherSettings.weatherUpdateInterval)
       {
         getWeather();
         weatherSettings.weatherTimerDelay = millis();
+      }
+
+      
+      // Normal run check, Daily Weather
+      if ((millis() - weatherSettings.weatherTimerDelayBig) > weatherSettings.weatherUpdateIntervalBig)
+      {
+        getDailyWeather();
+        weatherSettings.weatherTimerDelayBig = millis();
       }
 
       // Initial run check
@@ -1240,7 +1175,6 @@ void updateWeather(bool force)
           weatherSettings.gotDailyWeather == false)
       {
         getDailyWeather();
-        // getCurrentWeather();
         weatherSettings.gotDailyWeather = true;
       }
     }
@@ -1277,12 +1211,12 @@ void populateWeatherForDay(int dayNumber, JSONVar weatherJson, OpenWeatherDayObj
   dayObject.weatherDescription = weatherJson["daily"][dayNumber]["weather"][0]["description"];
 
   dayObject.cloudiness = String((int)weatherJson["daily"][dayNumber]["clouds"]);
-  dayObject.pop = String((int)weatherJson["daily"][dayNumber]["pop"]);
+  dayObject.pop = float((int)weatherJson["daily"][dayNumber]["pop"]);
   dayObject.rain = String((int)weatherJson["daily"][dayNumber]["rain"]);
   dayObject.uvi = String((int)weatherJson["daily"][dayNumber]["uvi"]);
 
   Serial.println("-------- PARSED WEATHER DAY " + String((int)dayNumber) + " --------");
-
+  /*
   Serial.print("tempDay: ");
   Serial.println(dayObject.tempDay);
 
@@ -1318,6 +1252,7 @@ void populateWeatherForDay(int dayNumber, JSONVar weatherJson, OpenWeatherDayObj
 
   Serial.print("pop: ");
   Serial.println(dayObject.pop);
+  */
 }
 
 void saveTimeCheck()
@@ -1434,7 +1369,11 @@ void readPatternSettings()
 
 void seedThings()
 {
-  //Seed variables
+   //Seed variables
+   
+  simplexNoise.xoffset = random(0, 10000);
+  simplexNoise.yoffset = random(0, 10000);
+
   for (int i = 0; i < MAX_STARS; i++)
   {
     ball.x[i] = random(0, VISUALIZER_X);

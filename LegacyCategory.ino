@@ -16,26 +16,77 @@ void legacy_category(int patternMode)
     globalStrings.functionName = "Random";
     break;
   case 1:
-    globalStrings.functionName = "RainbowTwoYoffset";
-    RainbowTwoYoffset();
-    break;
-  case 2:
-    globalStrings.functionName = "RainbowThreeXoffset";
-    RainbowThreeXoffset();
-    break;
-  case 3:
-    globalStrings.functionName = "RainbowFourXoffset";
-    RainbowFourXoffset();
-    break;
-  case 4:
-    globalStrings.functionName = "RainbowBigXoffset";
     RainbowBigXoffset();
     break;
+  case 2:
+    RainbowBigXoffset();
+    AmberSmatter(4);
+    break;
+  case 3:
+    RainbowBigXoffset(); 
+    AmberSmatter(6);
+    break;
+  case 4:
+    RainbowBigXoffset();
+    AmberSmatter(10);
+    break;
   case 5:
-    globalStrings.functionName = "RainbowBigYoffset";
-    RainbowBigYoffset();
+    RainbowBigYoffset(); 
     break;
   case 6:
+    RainbowBigYoffset();	
+    AmberSmatter(3);
+    break;
+  case 7:
+    RainbowBigYoffset(); 
+    AmberSmatter(10);
+    break;
+  case 8:
+    RainbowTwoYoffset();
+    break;
+  case 9:
+    RainbowTwoYoffset();
+    AmberSmatter(5);
+    break;
+  case 10:
+    RainbowTwoYoffset();
+    AmberSmatter(7);
+    break;	
+  case 11:
+    RainbowFourXoffset();
+    break;
+  case 12:
+    RainbowFourXoffset();
+    AmberSmatter(2);
+    break;
+  case 13:
+    RainbowFourXoffset();
+    AmberSmatter(5);
+    break;	
+  case 14:
+    RainbowOneYoffset();
+    break;
+  case 15:
+    RainbowOneYoffset();
+    AmberSmatter(4);
+    break;
+  case 16:
+    RainbowOneYoffset();
+    AmberSmatter(6);
+    break;	
+  case 17:
+    RainbowThreeXoffset();
+    break;
+  case 18:
+    RainbowThreeXoffset();
+    AmberSmatter(3);
+    break;
+  case 19:
+    RainbowThreeXoffset();
+    AmberSmatter(6);
+    break;
+    /*
+  case 20:
     globalStrings.functionName = "RbowY 0.000025, 0.3";
     RainbowYoffset(0.000025, 0.3, true);
     break;
@@ -91,13 +142,15 @@ void legacy_category(int patternMode)
     globalStrings.functionName = "SteadyAltClrs OB";
     SteadyAlternatingColors(CRGB::Orange, CRGB::Blue);
     break;
+
+    */
   case 20:
     globalStrings.functionName = "SteadyAltClrs OP";
     SteadyAlternatingColors(CRGB::Orange, CRGB::Purple);
     break;
   case 21:
     globalStrings.functionName = "MovingHue 85.002";
-    MovingHue(85, .002);
+    MovingHue(patternSettings.gHue, .0001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
     break;
   case 22:
     globalStrings.functionName = "MovingHue 42.008";
@@ -133,195 +186,191 @@ void legacy_category(int patternMode)
     break;
   case 30:
     globalStrings.functionName = "MovingHue 128.7 3";
-    MovingHue(128, .7, 3);
+    MovingHue(patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .7, 3);
     break;
   case 31:
     globalStrings.functionName = "DLCLRflo2 .00009.9";
-    DualColorFlowTwo(.00009, .9);
-    break;
-  case 32:
-    globalStrings.functionName = "DLCLRflo2 .0009.9";
-    DualColorFlowTwo(.0009, .9);
+    DualColorFlowTwo(.000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .9);
     break;
   case 33:
     globalStrings.functionName = "DLCLRflo2 .0009.4";
-    DualColorFlowTwo(.0009, .4);
+    DualColorFlowTwo(.00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .4);
     break;
   case 34:
     globalStrings.functionName = "DLCLRflo2 .00009.1";
-    DualColorFlowTwo(.00009, .1);
+    DualColorFlowTwo(.00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1);
     break;
   case 35:
     globalStrings.functionName = "DLCLRflo2 .0007.5";
-    DualColorFlowTwo(.0007, .5);
+    DualColorFlowTwo(.00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .5);
     break;
   case 36:
     globalStrings.functionName = "DLCLRflo2 .0075.7";
-    DualColorFlowTwo(.00075, .7);
+    DualColorFlowTwo(.00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .7);
     break;
   case 37:
     globalStrings.functionName = "DLCLRflo2 .0001.3";
-    DualColorFlowTwo(.0001, .3);
+    DualColorFlowTwo(.00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .3);
     break;
   case 38:
     globalStrings.functionName = "DLCLRflo2 .0009.6";
-    DualColorFlowTwo(.0009, .6);
+    DualColorFlowTwo(.00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .6);
     break;
   case 39:
     globalStrings.functionName = "DLCLRflo2 .0007.1";
-    DualColorFlowTwo(.0007, .1);
+    DualColorFlowTwo(.00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1);
     break;
   case 40:
     globalStrings.functionName = "DLCLRflo2 .0005.9";
-    DualColorFlowTwo(.0005, .9);
+    DualColorFlowTwo(.00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .9);
     break;
   case 41:
     globalStrings.functionName = "DLCLRflo 1";
-    DualColorFlow(.85, .58, .46, .09, .00009, .9);
+    DualColorFlow(.85, .58, .46, .09, .000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .9);
     break;
   case 42:
     globalStrings.functionName = "DLCLRflo 2";
-    DualColorFlow(.45, .20, .24, .03, .0009, .5);
+    DualColorFlow(.45, .20, .24, .03, .000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .5);
     break;
   case 43:
     globalStrings.functionName = "DLCLRflo 3";
-    DualColorFlow(.7, .3, .85, .6, .0005, .1);
+    DualColorFlow(.7, .3, .85, .6, .000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1);
     break;
   case 44:
     globalStrings.functionName = "DLCLRflo 4";
-    DualColorFlow(.9, .5, .85, .6, .0007, .1);
+    DualColorFlow(.9, .5, .85, .6, .000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1);
     break;
   case 45:
     globalStrings.functionName = "DLCLRflo 5";
-    DualColorFlow(.15, .05, .4, .059, .0029, .1);
+    DualColorFlow(.15, .05, .4, .059, .000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1);
     break;
   case 46:
     globalStrings.functionName = "DLCLRflo 6";
-    DualColorFlow(.9, .5, .85, .6, .0007, .7);
+    DualColorFlow(.9, .5, .85, .6, .000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .7);
     break;
   case 47:
     globalStrings.functionName = "DLCLRflo 7";
-    DualColorFlow(.9, .5, .4, .1, .00069, .1);
+    DualColorFlow(.9, .5, .4, .1, .000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1);
     break;
   case 48:
     globalStrings.functionName = "DLCLRflo 8";
-    DualColorFlow(.9, .6, .85, .6, .000420, .1);
+    DualColorFlow(.9, .6, .85, .6, .000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1);
     break;
   case 49:
     globalStrings.functionName = "DLCLRflo 9";
-    DualColorFlow(.8, .5, .5, .2, .00042, .5);
+    DualColorFlow(.8, .5, .5, .2, .000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .5);
     break;
   case 50:
     globalStrings.functionName = "DLCLRflo 10";
-    DualColorFlow(.8, .5, .5, .2, .00042, .1);
+    DualColorFlow(.8, .5, .5, .2, .000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1);
     break;
   case 51:
     globalStrings.functionName = "DLCLRfloB 1";
-    DualColorFlowBounce(.85, .58, .00009, .1, 2);
+    DualColorFlowBounce(.85, .58, .000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1, 2);
     break;
   case 52:
     globalStrings.functionName = "DLCLRfloB 2";
-    DualColorFlowBounce(.17, .02, .00009, .1, 2);
+    DualColorFlowBounce(.17, .02, .000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1, 2);
     break;
   case 53:
     globalStrings.functionName = "DLCLRfloB 3";
-    DualColorFlowBounce(.9, .7, .00042, .1, 2);
+    DualColorFlowBounce(.9, .7, .000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1, 2);
     break;
   case 54:
     globalStrings.functionName = "DLCLRfloB 4";
-    DualColorFlowBounce(.3, .1, .00042, .1, 2);
+    DualColorFlowBounce(.3, .1, .000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1, 2);
     break;
   case 55:
     globalStrings.functionName = "DLCLRfloB 5";
-    DualColorFlowBounce(.7, .4, .00069, .5, 2);
+    DualColorFlowBounce(.7, .4, .00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .5, 2);
     break;
   case 56:
     globalStrings.functionName = "DLCLRfloB 6";
-    DualColorFlowBounce(.5, .2, .00009, .7, 2);
+    DualColorFlowBounce(.5, .2, .00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .7, 2);
     break;
   case 57:
     globalStrings.functionName = "DLCLRfloB 7";
-    DualColorFlowBounce(.42, .1, .0009, .1, 4);
+    DualColorFlowBounce(.42, .1, .00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1, 4);
     break;
   case 58:
     globalStrings.functionName = "DLCLRfloB 8";
-    DualColorFlowBounce(.85, .24, .00009, .5, 4);
+    DualColorFlowBounce(.85, .24, .00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .5, 4);
     break;
   case 59:
     globalStrings.functionName = "DLCLRfloB 9";
-    DualColorFlowBounce(.55, .21, .0001, .1, 6);
+    DualColorFlowBounce(.55, .21, .00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1, 6);
     break;
   case 60:
     globalStrings.functionName = "DLCLRfloB 10";
-    DualColorFlowBounce(.84, .42, .0007, .5, 6);
+    DualColorFlowBounce(.84, .42, .00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .5, 6);
     break;
   case 61:
     globalStrings.functionName = "LGFloB 1";
-    LargeGroupColorFlowBounce(.85, .58, .00009, .1, 2);
+    LargeGroupColorFlowBounce(.85, .58, .00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1, 2);
     break;
   case 62:
     globalStrings.functionName = "LGFloB 2";
-    LargeGroupColorFlowBounce(.17, .02, .00009, .1, 2);
+    LargeGroupColorFlowBounce(.17, .02, .00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1, 2);
     break;
   case 63:
     globalStrings.functionName = "LGFloB 3";
-    LargeGroupColorFlowBounce(.9, .7, .00042, .1, 2);
+    LargeGroupColorFlowBounce(.9, .7, .00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1, 2);
     break;
   case 64:
     globalStrings.functionName = "LGFloB 4";
-    LargeGroupColorFlowBounce(.3, .1, .00042, .1, 4);
+    LargeGroupColorFlowBounce(.3, .1, .00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1, 4);
     break;
   case 65:
     globalStrings.functionName = "LGFloB 5";
-    LargeGroupColorFlowBounce(.7, .4, .00069, .5, 6);
+    LargeGroupColorFlowBounce(.7, .4, .00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .5, 6);
     break;
   case 66:
     globalStrings.functionName = "RainbowFlow 1";
-    RainbowFlow(.98, .01, .00025, .01);
+    RainbowFlow(.98, .01, .00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .01);
     break;
   case 67:
     globalStrings.functionName = "RainbowFlow 2";
-    RainbowFlow(.98, .01, .00007, .002);
+    RainbowFlow(.98, .01, .00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .002);
     break;
   case 68:
     globalStrings.functionName = "RainbowFlow 3";
-    RainbowFlow(.98, .01, .00025, .1);
+    RainbowFlow(.98, .01, .00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .1);
     break;
   case 69:
     globalStrings.functionName = "RainbowFlow 4";
-    RainbowFlow(.98, .01, .00042, .25);
+    RainbowFlow(.98, .01, .00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .25);
     break;
   case 70:
     globalStrings.functionName = "RainbowNoFlow 1";
-    RainbowNoFlow(.042);
+    RainbowNoFlow(float(patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]] / 255));
     break;
   case 71:
     globalStrings.functionName = "RainbowFlowSlow 1";
-    RainbowFlowSlow(.0005, .0045);
+    RainbowFlowSlow(.00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .0045);
     break;
   case 72:
     globalStrings.functionName = "RainbowFlowSlow 2";
-    RainbowFlowSlow(.0005, .007);
+    RainbowFlowSlow(.00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .007);
     break;
   case 73:
     globalStrings.functionName = "RainbowFlowSlow 3";
-    RainbowFlowSlow(.0001, .0045);
+    RainbowFlowSlow(.00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .0045);
     break;
   case 74:
     globalStrings.functionName = "RainbowHsv 1";
-    RainbowHsv(.00009, .98, .75);
+    RainbowHsv(.00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .98, .75);
     break;
   case 75:
     globalStrings.functionName = "RainbowHsv 2";
-    RainbowHsv(.00009, .98, .55);
+    RainbowHsv(.00001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .98, .55);
     break;
   case 76:
     globalStrings.functionName = "RainbowHsv 3";
-    RainbowHsv(.000009, .75, .55);
+    RainbowHsv(.000001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .75, .55);
     break;
   case 77:
     globalStrings.functionName = "RainbowHsv 3";
-    RainbowHsv(.000009, .98, .01);
+    RainbowHsv(.000001 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]], .98, .01);
     break;
   case 78:
     globalStrings.functionName = "RainbowHsv 4";
@@ -341,6 +390,13 @@ void legacy_category(int patternMode)
     break;
   }
 }
+
+void AmberSmatter(int Spacing){
+  for(uint16_t i = 0; i < NUM_LEDS; i = i + Spacing) {
+    setPixel(i, 255, 32,0); //Amber 
+  }
+}
+
 
 void LargeGroupColorFlowBounce(float hHigh, float hLow, float speed, float colorSpacing, int ledSpacing)
 {
@@ -617,7 +673,7 @@ void RainbowOneYoffset()
 {
   globalStrings.functionName = "RainbowOneYoffset";
   simplexNoise.spaceInc = 0.03;
-  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  simplexNoise.timeInc = (0.000025 *  patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
   simplexNoise.yoffset += simplexNoise.timeInc;
   //simplexNoise.xoffset += simplexNoise.timeInc;
   SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
@@ -626,7 +682,7 @@ void RainbowTwoYoffset()
 {
   globalStrings.functionName = "RainbowTwoYoffset";
   simplexNoise.spaceInc = 0.07;
-  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  simplexNoise.timeInc = (0.000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
   simplexNoise.yoffset += simplexNoise.timeInc;
   //simplexNoise.xoffset += simplexNoise.timeInc;
   SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
@@ -635,7 +691,7 @@ void RainbowThreeXoffset()
 {
   globalStrings.functionName = "RainbowThreeXoffset";
   simplexNoise.spaceInc = 0.07;
-  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  simplexNoise.timeInc = (0.000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
   //simplexNoise.yoffset += simplexNoise.timeInc;
   simplexNoise.xoffset += simplexNoise.timeInc;
   SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
@@ -644,7 +700,7 @@ void RainbowFourXoffset()
 {
   globalStrings.functionName = "RainbowFourXoffset";
   simplexNoise.spaceInc = 0.03;
-  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  simplexNoise.timeInc = (0.000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
   //simplexNoise.yoffset += simplexNoise.timeInc;
   simplexNoise.xoffset += simplexNoise.timeInc;
   SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
@@ -653,7 +709,7 @@ void RainbowBigXoffset()
 {
   globalStrings.functionName = "RainbowBigXoffset";
   simplexNoise.spaceInc = 0.12;
-  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  simplexNoise.timeInc = (0.000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
   //simplexNoise.yoffset += simplexNoise.timeInc;
   simplexNoise.xoffset += simplexNoise.timeInc;
   SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);
@@ -662,7 +718,7 @@ void RainbowBigYoffset()
 {
   globalStrings.functionName = "RainbowBigYoffset";
   simplexNoise.spaceInc = 0.12;
-  simplexNoise.timeInc = (0.000025 * globals.currentSpeed);
+  simplexNoise.timeInc = (0.000025 * patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]);
   simplexNoise.yoffset += simplexNoise.timeInc;
   //simplexNoise.xoffset += simplexNoise.timeInc;
   SimplexNoisePatternInterpolated(simplexNoise.spaceInc, simplexNoise.timeInc, simplexNoise.yoffset, simplexNoise.xoffset);

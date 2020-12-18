@@ -683,6 +683,21 @@ void drawMenuCommander()
   }
   break;
 
+  case 34: //System Information
+  {
+    drawMenuTop("Welican Gemina");
+    u8g2.setCursor(0, 25);
+    u8g2.print(VERSION_INFO);
+    u8g2.setCursor(10, 42);
+    u8g2.print("Brian Schimke");
+    u8g2.setCursor(10, 53);
+    u8g2.print("Matt Taylor");
+    u8g2.setCursor(10, 64);
+    u8g2.print("Sam Millard");
+  }
+  break;
+
+
   } //End of Display
 
   // Back Button Action
@@ -884,6 +899,12 @@ void drawMenuCommander()
       globalMenu.currentMenu = 24;
     }
     break;
+
+    case 34:
+    {
+      globalMenu.currentMenu = 24;
+    }
+    break;
     }
   }
 
@@ -949,13 +970,15 @@ void drawMenuCommander()
       case 4: // Wifi
         globalMenu.currentMenu = 8;
         break;
-      case 5:
+      case 5: // Max Favoirtes
         globalMenu.currentMenu = 6;
         globalMenu.menu[6] = patternSettings.numberOfFavorites;
         break;
-      case 6:
+      case 6: //Randomizer Time
         globalMenu.currentMenu = 29;
         break;
+      case 7: //System Information
+        globalMenu.currentMenu = 34;
       }
     }
     break;
@@ -1380,6 +1403,12 @@ void drawMenuCommander()
       globalMenu.currentMenu = 24;
     }
     break;
+    case 34:
+    {
+      globalMenu.currentMenu = 24;
+    }
+    break;
+    
     }
   }
 }

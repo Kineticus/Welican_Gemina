@@ -62,7 +62,7 @@ void drawEQ()
 
     u8g2.drawBox(0, patternSettings.pos + (8 * i), globals.temp[i], 7);
     globals.temp[i] = eqBands.peak[i] / AMPLITUDE;
-    u8g2.drawBox(globals.temp[i], patternSettings.pos, 1, 7);
+    u8g2.drawBox(globals.temp[i], patternSettings.pos + (8 * i), 1, 7);
   }
 }
 

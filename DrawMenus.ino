@@ -726,6 +726,9 @@ void drawMenuCommander()
     case 6: //Favorites Set Max
       globalMenu.currentMenu = 2;
       break;
+    case 7:
+      globalMenu.currentMenu = 34;
+      break;
     case 8: //WiFi Menu
       globalMenu.currentMenu = 2;
       break;
@@ -1405,7 +1408,7 @@ void drawMenuCommander()
     break;
     case 34:
     {
-      globalMenu.currentMenu = 24;
+      globalMenu.currentMenu = 7;
     }
     break;
     

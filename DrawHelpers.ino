@@ -66,12 +66,16 @@ void drawTop()
     case 6: // SPECIAL
       u8g2.drawXBMP(0, 0, STAR_WIDTH, STAR_WIDTH, STAR_SHAPE);
       break;
-    case 7: // WEATHER REACTIVE
-      u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
-      break;
-    case 8: // SOUND REACTIVE
+    case 7: // SOUND REACTIVE
       u8g2.drawXBMP(0, 0, MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
       break;
+    case 8: // LEGACY
+      u8g2.drawXBMP(0, 0, HEART_WIDTH, HEART_HEIGHT, HEART);
+      break;
+    case 9: // WEATHER REACTIVE
+      u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+      break;
+    
   }
 
   u8g2.setCursor(12, 8);
@@ -209,8 +213,12 @@ void drawBottom()
     drawDiscSectionsEQ();
     drawEQ();
     break;
-  case 8: // SOUND REACTIVE
-    lavaLamp(15, 128, 0, millis() / 50, 0);
+  case 8: // BASIC
+    dvdBounce();
+    lavaLamp(10, 128, 0, millis() / 50, 0);
+    break;
+  case 9: // SOUND REACTIVE
+    //lavaLamp(15, 128, 0, millis() / 50, 0);
     drawEQ();
     break;
   }
@@ -746,11 +754,14 @@ void newFavoritesMenu()
     case 6: // SPECIAL
       u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_WIDTH, STAR_SHAPE);
       break;
-    case 7: // WEATHER REACTIVE
-      u8g2.drawXBMP(2, 53, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
-      break;
-    case 8: // SOUND REACTIVE
+    case 7: // SOUND REACTIVE
       u8g2.drawXBMP(2, 53, MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
+      break;
+    case 8: // LEGACY
+      u8g2.drawXBMP(2, 53, HEART_WIDTH, HEART_HEIGHT, HEART);
+      break;
+    case 9: // WEATHER REACTIVE
+      u8g2.drawXBMP(2, 53, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
       break;
   }
   u8g2.setCursor(12, 60);

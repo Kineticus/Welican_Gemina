@@ -90,44 +90,44 @@ void moving_colors_category(int patternMode)
     CandyCane(400, 3, 5, CRGB::Purple, CRGB::Blue, CRGB::White);
     break;
   case 18:
-    globalStrings.functionName = "Blend Rainbow 1";
+    globalStrings.functionName = "Blend 1";
     BlendIntoRainbow(CRGB::Purple, CRGB::Blue, CRGB::Green);
     break;
   case 19:
-    globalStrings.functionName = "Blend Rainbow 2";
+    globalStrings.functionName = "Blend 2";
     BlendIntoRainbow(CRGB::Red, CRGB::Blue, CRGB::White);
     break;
   case 20:
-    globalStrings.functionName = "Blend Rainbow 3";
+    globalStrings.functionName = "Blend 3";
     BlendIntoRainbow(CRGB::Purple, CRGB::Orange, CRGB::White);
     break;
   case 21:
-    globalStrings.functionName = "Blend Rainbow 4";
+    globalStrings.functionName = "Blend 4";
     BlendIntoRainbow(CRGB::Green, CRGB::Blue, CRGB::Yellow);
     break;
   case 22:
-    globalStrings.functionName = "Blend Rainbow 5";
-    BlendIntoRainbow(CRGB::Orange, CRGB::Purple, CRGB::Green);
+    globalStrings.functionName = "Blend 5";
+    BlendIntoRainbow(CRGB::Orange, CRGB::Purple, CRGB::Blue);
     break;
   case 23:
-    globalStrings.functionName = "HeartBeat 1";
-    HeartBeat(100, 255);
+    globalStrings.functionName = "Blend 6";
+    BlendIntoRainbow(CRGB::Orange, CRGB::Purple, CRGB::Green);
     break;
   case 24:
-    globalStrings.functionName = "HeartBeat 2";
-    HeartBeat(20, 255);
+    globalStrings.functionName = "Blend 7";
+    BlendIntoRainbow(CRGB::Red, CRGB::Blue, CRGB::Green);
     break;
   case 25:
-    globalStrings.functionName = "HeartBeat 3";
-    HeartBeat(155, 255);
+    globalStrings.functionName = "Blend 8";
+    BlendIntoRainbow(CRGB::Blue, CRGB::Purple, CRGB::Yellow);
     break;
   case 26:
-    globalStrings.functionName = "HeartBeat 4";
-    HeartBeat(75, 255);
+    globalStrings.functionName = "Blend 9";
+    BlendIntoRainbow(CRGB::Purple, CRGB::Red, CRGB::Pink);
     break;
   case 27:
-    globalStrings.functionName = "HeartBeat 5";
-    HeartBeat(225, 255);
+    globalStrings.functionName = "Blend 10";
+    BlendIntoRainbow(CRGB::Red, CRGB::Orange, CRGB::Yellow);
     break;
   case 28:
     globalStrings.functionName = "Fire 1";
@@ -161,15 +161,15 @@ void moving_colors_category(int patternMode)
     RepeatingPattern(200, 155, 20, 500);
     break;
   case 34:
-    globalStrings.functionName = "RepeatingBlockPattern 1";
+    globalStrings.functionName = "BlockPattern 1";
     RepeatingBlockPattern(100, 80, 5, 0, 5);
     break;
   case 35:
-    globalStrings.functionName = "RepeatingBlockPattern 2";
+    globalStrings.functionName = "BlockPattern 2";
     RepeatingBlockPattern(10, 120, 10, 20, 10);
     break;
   case 36:
-    globalStrings.functionName = "RepeatingBlockPattern 3";
+    globalStrings.functionName = "BlockPattern 3";
     RepeatingBlockPattern(200, 155, 20, 40, 20);
     break;
   case 37:
@@ -253,42 +253,66 @@ void moving_colors_category(int patternMode)
     Plasma(RainbowColors_p, PartyColors_p, LINEARBLEND);
     break;
   case 57:
+    globalStrings.functionName = "Plasma 4";
+    Plasma(PartyColors_p, LavaColors_p, LINEARBLEND);
+    break;
+  case 58:
+    globalStrings.functionName = "Plasma 5";
+    Plasma(HeatColors_p, LavaColors_p, LINEARBLEND);
+    break;
+  case 59:
+    globalStrings.functionName = "Plasma 6";
+    Plasma(CloudColors_p, PartyColors_p, LINEARBLEND);
+    break;
+  case 60:
+    globalStrings.functionName = "Plasma 7";
+    Plasma(ForestColors_p, pal_rasta_flag, LINEARBLEND);
+    break;
+  case 61:
+    globalStrings.functionName = "Plasma 8";
+    Plasma(ForestColors_p, pal_GreenYellowBlue, LINEARBLEND);
+    break;
+  case 62:
+    globalStrings.functionName = "Plasma 9";
+    Plasma(pal_Outrun, CloudColors_p, LINEARBLEND);
+    break;
+  case 63:
     globalStrings.functionName = "RainbowMarch 1";
     RainbowMarch(200, 10);
     break;
-  case 58:
+  case 64:
     globalStrings.functionName = "RainbowMarch 2";
     RainbowMarch(100, 10);
     break;
-  case 59:
+  case 65:
     globalStrings.functionName = "RainbowMarch 3";
     RainbowMarch(50, 100);
     break;
-  case 60:
+  case 66:
     globalStrings.functionName = "BlendWave 1";
     BlendWave(60, 10);
     break;
-  case 61:
+  case 67:
     globalStrings.functionName = "BlendWave 2";
     BlendWave(40, 20);
     break;
-  case 62:
+  case 68:
     globalStrings.functionName = "BlendWave 3";
     BlendWave(20, 20);
     break;
-  case 63:
+  case 69:
     globalStrings.functionName = "BeatWave 1";
     BeatWave(RainbowColors_p, PartyColors_p, LINEARBLEND);
     break;
-  case 64:
+  case 70:
     globalStrings.functionName = "BeatWave 2";
     BeatWave(OceanColors_p, LavaColors_p, LINEARBLEND);
     break;
-  case 65:
+  case 71:
     globalStrings.functionName = "BeatWave 3";
     BeatWave(ForestColors_p, CloudColors_p, LINEARBLEND);
     break;
-  case 66:
+  case 72:
     {
     globalStrings.functionName = "MC 0";
     long pattern[] = {CRGB::Green, CRGB::Grey, CRGB::Red, CRGB::Grey, CRGB::Red, CRGB::Grey, CRGB::Red, CRGB::Green, CRGB::Green, CRGB::Green};
@@ -750,7 +774,7 @@ void RepeatingBlockPattern(uint8_t hue, uint8_t saturation, uint8_t blockSize, u
       patternSettings.leds[i] = CHSV(patternSettings.hue, saturation, 255);
     }
 
-    FastLED.show();
+    //FastLED.show();
 
     for (uint16_t i = loopStart; i < loopEnd; i++)
     {
@@ -1065,7 +1089,7 @@ void Marqueev2(uint8_t spacing, uint16_t holdTime)
       patternSettings.leds[patternSettings.pos] = CHSV(patternSettings.hue, 255, 255);
     }
 
-    FastLED.show();
+    //FastLED.show();
 
     // Fade out tail or set back to black for next loop around.
     if (patternSettings.fadingTail == true)
@@ -1148,7 +1172,7 @@ void Marqueev3(uint8_t spacing, uint16_t holdTime, uint8_t width, uint8_t hue2Sh
       }
     }
 
-    FastLED.show();
+    //FastLED.show();
 
   } //end_every_n
 }

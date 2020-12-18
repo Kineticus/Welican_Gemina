@@ -34,11 +34,14 @@ void favorites_category(int patternMode)
     case 6: // SPECIAL
       special_category(patternSettings.displayPattern);
       break;
-    case 7: // WEATHER REACTIVE
-      weatherReactive_category(patternSettings.displayPattern);
-      break;
-    case 8: // SOUND REACTIVE
+    case 7: // SOUND REACTIVE
       soundReactive_category(patternSettings.displayPattern);
+      break;
+    case 8: // LEGACY
+      legacy_category(patternSettings.displayPattern);
+      break;
+    case 9: // WEATHER REACTIVE
+      weatherReactive_category(patternSettings.displayPattern);
       break;
   }
 }

@@ -1,6 +1,20 @@
 <template>
-  <div class="container">
-<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+<div>
+  <section class="hero is-info container">
+    <div class="hero-body">
+      <h2 class="title">USERS</h2>
+      <b-table 
+      :bordered="false"
+      :striped="true"
+      :narrowed="true"
+      :hoverable="true"
+      :loading="isLoading"
+      :focusable="false"
+      :mobile-cards="false"
+      :data="users" :columns="columns"></b-table>
+    </div>
+  </section>
+<!-- <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
     <thead>
       <tr>
         <th><abbr title="Id">Id</abbr></th>
@@ -21,7 +35,7 @@
           <td>{{user.timezone}}</td>
         </tr>
     </tbody>
-  </table>
+  </table> -->
 
 <div id="user-modal" class="modal">
   <div class="modal-background"></div>
@@ -56,7 +70,7 @@ Block Breaker: {{value.highscore}}
     </footer>
   </div>
 </div>
-  </div>
+</div>
 </template>
 
 <script>
@@ -68,8 +82,41 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       selectedUser: {},
-      users: []
+      users: [],
+      columns: [
+          {
+            field: 'id',
+            label: 'ID',
+            width: '40',
+          },
+          {
+            field: 'name',
+            label: 'Name',
+            numeric: false
+          },
+          {
+            field: 'wifiName',
+            label: 'Wifi Name',
+            numeric: false
+          },
+          {
+            field: 'createdDate',
+            label: 'Created Date',
+            numeric: false
+          },
+          {
+            field: 'zipcode',
+            label: 'Zipcode',
+            numeric: false
+          },
+          {
+            field: 'timezone',
+            label: 'Timezone',
+            numeric: false
+          }
+      ]
     };
   },
   methods: {
@@ -92,10 +139,12 @@ export default {
           zipcode: user.zipcode,
         });
       });
+      this.isLoading = false;
       this.users = _users;
     },
   },
   mounted() {
+    this.isLoading = true;
     UsersDataService.getAll().then((snapshot) => {
         console.log("/Users", snapshot.val());
         this.onDataChange(snapshot);

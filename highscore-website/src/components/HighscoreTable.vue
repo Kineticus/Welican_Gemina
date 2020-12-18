@@ -1,15 +1,19 @@
 <template>
 <div>
-  <h2>{{this.game}} HIGHSCORES</h2>
-  <b-table 
-  :bordered="false"
-  :striped="true"
-  :narrowed="true"
-  :hoverable="true"
-  :loading="isLoading"
-  :focusable="false"
-  :mobile-cards="false"
-  :data="highscores" :columns="columns"></b-table>
+  <section class="hero is-light">
+    <div class="hero-body">
+      <h2 class="title">{{this.game}} HIGHSCORES</h2>
+      <b-table 
+      :bordered="false"
+      :striped="true"
+      :narrowed="true"
+      :hoverable="true"
+      :loading="isLoading"
+      :focusable="false"
+      :mobile-cards="false"
+      :data="highscores" :columns="columns"></b-table>
+    </div>
+  </section>
 </div>
    <!-- <div>
       <h2>{{this.game}} HIGHSCORES</h2>
@@ -61,7 +65,6 @@ export default {
             numeric: true
           }
       ]
-            
     };
   },
   methods: {
@@ -91,5 +94,7 @@ export default {
 </script>
 
 <style>
-
+  h2.title {
+    text-transform: uppercase;
+  }
 </style>

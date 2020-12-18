@@ -20,5 +20,11 @@ npm run build
 npm run lint
 ```
 
+## DEPLOYING
+
+```
+firebase deploy --only hosting:welican-gemina-18f94
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

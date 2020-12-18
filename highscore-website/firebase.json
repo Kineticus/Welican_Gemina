@@ -1,0 +1,18 @@
+{
+  "rulesFile": "database.rules.json",
+  "hosting": {
+    "site": "welican-gemina-18f94",
+    "public": "./dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

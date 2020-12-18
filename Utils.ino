@@ -1277,7 +1277,7 @@ void populateWeatherForDay(int dayNumber, JSONVar weatherJson, OpenWeatherDayObj
   dayObject.weatherDescription = weatherJson["daily"][dayNumber]["weather"][0]["description"];
 
   dayObject.cloudiness = String((int)weatherJson["daily"][dayNumber]["clouds"]);
-  dayObject.pop = String((int)weatherJson["daily"][dayNumber]["pop"]);
+  dayObject.pop = float((int)weatherJson["daily"][dayNumber]["pop"]);
   dayObject.rain = String((int)weatherJson["daily"][dayNumber]["rain"]);
   dayObject.uvi = String((int)weatherJson["daily"][dayNumber]["uvi"]);
 

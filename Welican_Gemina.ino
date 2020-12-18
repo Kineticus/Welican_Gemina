@@ -939,7 +939,7 @@ struct OpenWeatherDayObject
   String weatherMain;
   String weatherDescription;
   String cloudiness;
-  String pop;
+  float pop;
   String rain;
   String uvi;
 };

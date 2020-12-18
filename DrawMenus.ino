@@ -694,7 +694,6 @@ void drawMenuCommander()
     u8g2.print("Matt Taylor");
     u8g2.setCursor(10, 64);
     u8g2.print("Sam Millard");
-
   }
   break;
 

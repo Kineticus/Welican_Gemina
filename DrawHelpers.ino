@@ -96,7 +96,7 @@ void drawTop()
     if (sizeof(globalStrings.categoryNameOutString)/sizeof(globalStrings.categoryNameOutString[0]) > 7) {
       u8g2.setFont(u8g2_font_ncenB08_tr);
     } else {
-      u8g2.setFont(u8g2_font_blipfest_07_tr);c
+      u8g2.setFont(u8g2_font_blipfest_07_tr);
     }
     
     u8g2.print(globalStrings.categoryNameOutString);
@@ -319,29 +319,56 @@ void drawClock(int Selection)
   case 10: //Weather 1
   {
     u8g2.setFont(u8g2_font_profont12_mf);
-    u8g2.setCursor(10, 10);
+    u8g2.setFontMode(1);
+
+    //Row 1
+    u8g2.setCursor(0, 9);
+    char buf[80];
+    strftime(buf, sizeof(buf), "%a %b %e", &timeinfo);
+    u8g2.print(buf);
+    u8g2.print(dateOrdinal());
+    u8g2.print("    ");
+    u8g2.print(String(weather.currentTemperature));
+    u8g2.print("\xb0 "); //Degree symbol
+
+    //Row 2
+    u8g2.setCursor(0, 20);
     u8g2.print(weather.currentWeatherTitle);
-    u8g2.setCursor(10, 20);
+    u8g2.print(", ");
     u8g2.print(weather.currentWeatherDescription);
 
-    u8g2.setCursor(10, 30);
-    u8g2.print(String(weather.currentTemperature));
-    u8g2.setCursor(40, 30);
-    u8g2.print(String(weather.currentTemperatureMin));
-    u8g2.setCursor(55, 30);
-    u8g2.print(" - ");
-    u8g2.setCursor(70, 30);
-    u8g2.print(String(weather.currentTemperatureMax));
+    //Row 3
+    u8g2.setCursor(0, 31);
+    u8g2.print("High ");
+    u8g2.print(String(weatherDay1.tempMax));
+    u8g2.print("\xb0 "); //Degree symbol
+    u8g2.print(" Low ");
+    u8g2.print(String(weatherDay1.tempMin));
+    u8g2.print("\xb0 "); //Degree symbol
 
-    String sunrise = "rise: ";
+    //Row 4
+    u8g2.setCursor(0, 42);
+    u8g2.print("Preci ");
+    u8g2.print(String(int(weatherDay1.pop * 100)));
+    u8g2.print("%  Humid ");
+    u8g2.print(weather.currentHumidity);
+    u8g2.print("%");
+
+    //Row 5
+    String sunrise = "Sunrise ";
     sunrise += String(weather.sunrise);
-    String sunset = "set: ";
-    sunset += String(weather.sunset);
-
-    u8g2.setCursor(10, 40);
+    u8g2.setCursor(0, 53);
     u8g2.print(sunrise);
-    u8g2.setCursor(10, 60);
+
+    //Row 6
+    u8g2.setCursor(0, 64);
+    String sunset = "Sunset  ";
+    sunset += String(weather.sunset);
     u8g2.print(sunset);
+
+  
+    
+    
   }
   break;
   case 11: //Weather 2

@@ -348,16 +348,16 @@ void drawClock(int Selection)
     //Row 3
     u8g2.setCursor(0, 31);
     u8g2.print("High ");
-    u8g2.print(String(weatherDay1.tempMax));
+    u8g2.print(String(weatherCurrentDay.tempMax));
     u8g2.print("\xb0 "); //Degree symbol
     u8g2.print(" Low ");
-    u8g2.print(String(weatherDay1.tempMin));
+    u8g2.print(String(weatherCurrentDay.tempMin));
     u8g2.print("\xb0 "); //Degree symbol
 
     //Row 4
     u8g2.setCursor(0, 42);
     u8g2.print("Rain ");
-    u8g2.print(String(int(weatherDay1.pop * 100)));
+    u8g2.print(String(int(weatherCurrentDay.pop * 100)));
     u8g2.print("%  Humid ");
     u8g2.print(weather.currentHumidity);
     u8g2.print("%");

@@ -47,7 +47,7 @@ FASTLED_USING_NAMESPACE
 #define VERSION_INFO "Beta 1.0 - 12/18/20"
 #define KNOB_1C 25 //Program
 #define KNOB_2C 4  //Brightness 14
-#define MAX_MODES 8
+#define MAX_MODES 9
 #define SAMPLES 512         // Must be a power of 2. FAST 256 (40fps), NORMAL 512 (20fps), ACCURATE 1024 (10fps)
 #define SAMPLING_FREQ 40000 // Hz, must be 40000 or less due to ADC conversion time. Determines maximum frequency that can be analysed by the FFT Fmax=sampleF/2.
 #define AMPLITUDE 3000      // Depending on your audio source level, you may need to alter this value. Can be used as a 'sensitivity' control.
@@ -532,7 +532,7 @@ MenuModel globalMenu = {
         6,                                 //Special Category
         20,                                //Sound Reactive Category
         85,                                //Legacy
-        //20,                                //Weather Reactive Category        
+        20,                                //Weather Reactive Category        
     },
     .currentMenu = 0,
     .currentMenuMultiplier = 1,

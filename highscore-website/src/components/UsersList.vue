@@ -4,6 +4,9 @@
     <div class="hero-body">
       <h2 class="title">USERS</h2>
       <b-table 
+      :data="users" 
+      :paginated="true"
+      :per-page="10"
       :bordered="false"
       :striped="true"
       :narrowed="true"
@@ -11,31 +14,38 @@
       :loading="isLoading"
       :focusable="false"
       :mobile-cards="false"
-      :data="users" :columns="columns"></b-table>
+      :pagination-simple="false"
+      :pagination-position="paginationPosition"
+      :default-sort-direction="defaultSortDirection"
+      :sort-icon="sortIcon"
+      :sort-icon-size="sortIconSize"
+      default-sort="highscore"
+      aria-next-label="Next page"
+      aria-previous-label="Previous page"
+      aria-page-label="Page"
+      aria-current-label="Current page"
+      >
+        <b-table-column field="id" label="ID" width="40" v-slot="props">
+            {{ props.row.id }}
+        </b-table-column>
+        <b-table-column field="name" label="Name" sortable numeric v-slot="props">
+            {{ props.row.name }}
+        </b-table-column>
+        <b-table-column field="wifiName" label="Wifi Name" sortable numeric v-slot="props">
+            {{ props.row.wifiName }}
+        </b-table-column>
+        <b-table-column field="createdDate" label="Created Date" sortable numeric v-slot="props">
+            {{ props.row.createdDate }}
+        </b-table-column>
+        <b-table-column field="zipcode" label="Zipcode" sortable numeric v-slot="props">
+            {{ props.row.zipcode }}
+        </b-table-column>
+        <b-table-column field="timezone" label="timezone" sortable numeric v-slot="props">
+            {{ props.row.timezone }}
+        </b-table-column>
+      </b-table>
     </div>
   </section>
-<!-- <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-    <thead>
-      <tr>
-        <th><abbr title="Id">Id</abbr></th>
-        <th><abbr title="name">Name</abbr></th>
-        <th><abbr title="wifiName">WiFi Name</abbr></th>
-        <th><abbr title="createdDate">Created Date</abbr></th>
-        <th><abbr title="zipcode">Zipcode</abbr></th>
-        <th><abbr title="timezone">Timezone</abbr></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr v-for="user in users" :key="user.id" class="modal-button" data-target="user-modal" v-on:click="userClicked(user)">
-          <td>{{user.id}}</td>
-          <td>{{user.name}}</td>
-          <td>{{user.wifiName}}</td>
-          <td>{{user.createdDate}}</td>
-          <td>{{user.zipcode}}</td>
-          <td>{{user.timezone}}</td>
-        </tr>
-    </tbody>
-  </table> -->
 
 <div id="user-modal" class="modal">
   <div class="modal-background"></div>
@@ -83,6 +93,10 @@ export default {
   data() {
     return {
       isLoading: false,
+      paginationPosition: 'bottom',
+      defaultSortDirection: 'desc',
+      sortIcon: 'arrow-up',
+      sortIconSize: 'is-small',
       selectedUser: {},
       users: [],
       columns: [

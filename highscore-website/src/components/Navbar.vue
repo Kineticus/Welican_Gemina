@@ -2,7 +2,8 @@
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" href="/">
-      <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+      <img :src="image" class="logo">
+      <h2 class="title">WELICAN</h2>
     </a>
 
     <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
@@ -63,21 +64,25 @@
 </nav>
 </template>
 <script>
+import logoImage from '../assets/logo.png';
 
 export default {
   name: 'Navbar',
+  data() {
+    return {
+      image: logoImage
+    }
+  },
   components: {
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.logo {
+  width: 50px;
+}
+.navbar-item .title {
+  margin-left: 10px;
 }
 </style>

@@ -1,0 +1,12 @@
+{
+  "rules": {
+    "users": {
+      ".read": true,
+      ".write": false
+    },
+    "highscores": {
+      ".read": true,
+      ".write": false
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-   <div>
+   <div class="container">
      <HighscoreTable game="fallios"></HighscoreTable>
      <HighscoreTable game="block-breaker"></HighscoreTable>
      <HighscoreTable game="daddy-worm-1p"></HighscoreTable>

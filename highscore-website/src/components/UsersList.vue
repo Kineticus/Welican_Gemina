@@ -1,27 +1,51 @@
 <template>
-  <div class="container">
-<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-    <thead>
-      <tr>
-        <th><abbr title="Id">Id</abbr></th>
-        <th><abbr title="name">Name</abbr></th>
-        <th><abbr title="wifiName">WiFi Name</abbr></th>
-        <th><abbr title="createdDate">Created Date</abbr></th>
-        <th><abbr title="zipcode">Zipcode</abbr></th>
-        <th><abbr title="timezone">Timezone</abbr></th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr v-for="user in users" :key="user.id" class="modal-button" data-target="user-modal" v-on:click="userClicked(user)">
-          <td>{{user.id}}</td>
-          <td>{{user.name}}</td>
-          <td>{{user.wifiName}}</td>
-          <td>{{user.createdDate}}</td>
-          <td>{{user.zipcode}}</td>
-          <td>{{user.timezone}}</td>
-        </tr>
-    </tbody>
-  </table>
+<div>
+  <section class="hero is-info container">
+    <div class="hero-body">
+      <h2 class="title">USERS</h2>
+      <b-table 
+      :data="users" 
+      :paginated="true"
+      :per-page="10"
+      :bordered="false"
+      :striped="true"
+      :narrowed="true"
+      :hoverable="true"
+      :loading="isLoading"
+      :focusable="false"
+      :mobile-cards="false"
+      :pagination-simple="false"
+      :pagination-position="paginationPosition"
+      :default-sort-direction="defaultSortDirection"
+      :sort-icon="sortIcon"
+      :sort-icon-size="sortIconSize"
+      default-sort="highscore"
+      aria-next-label="Next page"
+      aria-previous-label="Previous page"
+      aria-page-label="Page"
+      aria-current-label="Current page"
+      >
+        <b-table-column field="id" label="ID" width="40" v-slot="props">
+            {{ props.row.id }}
+        </b-table-column>
+        <b-table-column field="name" label="Name" sortable numeric v-slot="props">
+            {{ props.row.name }}
+        </b-table-column>
+        <b-table-column field="wifiName" label="Wifi Name" sortable numeric v-slot="props">
+            {{ props.row.wifiName }}
+        </b-table-column>
+        <b-table-column field="createdDate" label="Created Date" sortable numeric v-slot="props">
+            {{ props.row.createdDate }}
+        </b-table-column>
+        <b-table-column field="zipcode" label="Zipcode" sortable numeric v-slot="props">
+            {{ props.row.zipcode }}
+        </b-table-column>
+        <b-table-column field="timezone" label="timezone" sortable numeric v-slot="props">
+            {{ props.row.timezone }}
+        </b-table-column>
+      </b-table>
+    </div>
+  </section>
 
 <div id="user-modal" class="modal">
   <div class="modal-background"></div>
@@ -56,7 +80,7 @@ Block Breaker: {{value.highscore}}
     </footer>
   </div>
 </div>
-  </div>
+</div>
 </template>
 
 <script>
@@ -68,8 +92,45 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
+      paginationPosition: 'bottom',
+      defaultSortDirection: 'desc',
+      sortIcon: 'arrow-up',
+      sortIconSize: 'is-small',
       selectedUser: {},
-      users: []
+      users: [],
+      columns: [
+          {
+            field: 'id',
+            label: 'ID',
+            width: '40',
+          },
+          {
+            field: 'name',
+            label: 'Name',
+            numeric: false
+          },
+          {
+            field: 'wifiName',
+            label: 'Wifi Name',
+            numeric: false
+          },
+          {
+            field: 'createdDate',
+            label: 'Created Date',
+            numeric: false
+          },
+          {
+            field: 'zipcode',
+            label: 'Zipcode',
+            numeric: false
+          },
+          {
+            field: 'timezone',
+            label: 'Timezone',
+            numeric: false
+          }
+      ]
     };
   },
   methods: {
@@ -92,10 +153,12 @@ export default {
           zipcode: user.zipcode,
         });
       });
+      this.isLoading = false;
       this.users = _users;
     },
   },
   mounted() {
+    this.isLoading = true;
     UsersDataService.getAll().then((snapshot) => {
         console.log("/Users", snapshot.val());
         this.onDataChange(snapshot);

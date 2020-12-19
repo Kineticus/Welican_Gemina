@@ -429,15 +429,15 @@ void drawClock(int Selection)
   break;
   case 14: //Test
   {
-    byte posX = 40;
-    byte posY = 40;
+    byte posX = 30;
+    byte posY = 20;
 
     if (globals.animationFrame % 2) {
       u8g2.drawXBMP(posX, posY, FACE_SMIRK_0_WIDTH, FACE_SMIRK_0_HEIGHT, FACE_SMIRK_0);
     } else {    
       u8g2.drawXBMP(posX, posY, FACE_SMIRK_1_WIDTH, FACE_SMIRK_1_HEIGHT, FACE_SMIRK_1);
     }
-    EVERY_N_MILLISECONDS(1500)
+    EVERY_N_MILLISECONDS(600)
     {
       globals.animationFrame++;
       if (globals.animationFrame > 10) {

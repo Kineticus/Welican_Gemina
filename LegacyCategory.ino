@@ -816,16 +816,16 @@ void SteadyAlternatingColors(CRGB color1, CRGB color2, int Spacing)
     Spacing = 1;
   }
   
-  for (uint16_t i = 0; i < NUM_LEDS; i = i + Spacing * 2)
+  for (int i = 0; i < NUM_LEDS; i = i + (Spacing * 2))
   {
-    for (uint16_t ii = 0; i < Spacing; i++)
+    for (int ii = 0; ii <= Spacing; ii++)
     {
       setPixel(i + ii, color1);
     }
 
-    for (uint16_t ii = 0; i < Spacing; i++)
+    for (int ii = 0; ii <= Spacing; ii++)
     {
-      setPixel((i * 2) + ii, color2);
+      setPixel((i + Spacing) + ii, color2);
     }
   }
 }

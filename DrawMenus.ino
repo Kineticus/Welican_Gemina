@@ -224,7 +224,7 @@ void drawMenuCommander()
   break;
   case 7: // Favorites Reset Menu
   {
-    drawYesNoMenuFrame("Reset All Favorites?");
+    drawYesNoMenuFrame("Facotory Reset?");
   }
   break;
   case 8: // WIFI Menu
@@ -905,7 +905,7 @@ void drawMenuCommander()
 
     case 34:
     {
-      globalMenu.currentMenu = 24;
+      globalMenu.currentMenu = 2;
     }
     break;
     }

@@ -94,7 +94,7 @@ void drawTop()
 
   //Advanced style
   /* 
-  if (globals.topNameIndex % 2) {
+  if (globals.animationFrame % 2) {
     u8g2.setCursor(28, 8);
   
     if (sizeof(globalStrings.categoryNameOutString)/sizeof(globalStrings.categoryNameOutString[0]) > 7) {
@@ -111,11 +111,11 @@ void drawTop()
   }
   EVERY_N_MILLISECONDS(1500)
   {
-   globals.topNameIndex++;
+   globals.animationFrame++;
   }
 
-  if (globals.topNameIndex > 9000) {
-    globals.topNameIndex = 0;
+  if (globals.animationFrame > 10) {
+    globals.animationFrame = 0;
   }
   */
 
@@ -429,8 +429,21 @@ void drawClock(int Selection)
   break;
   case 14: //Test
   {
-    u8g2.drawXBMP(20, 20, FACE_SMIRK_0_WIDTH, FACE_SMIRK_0_HEIGHT, FACE_SMIRK_0);
-    u8g2.drawXBMP(60, 20, FACE_SMIRK_1_WIDTH, FACE_SMIRK_1_HEIGHT, FACE_SMIRK_1);
+    byte posX = 30;
+    byte posY = 20;
+
+    if (globals.animationFrame % 2) {
+      u8g2.drawXBMP(posX, posY, FACE_SMIRK_0_WIDTH, FACE_SMIRK_0_HEIGHT, FACE_SMIRK_0);
+    } else {    
+      u8g2.drawXBMP(posX, posY, FACE_SMIRK_1_WIDTH, FACE_SMIRK_1_HEIGHT, FACE_SMIRK_1);
+    }
+    EVERY_N_MILLISECONDS(600)
+    {
+      globals.animationFrame++;
+      if (globals.animationFrame > 10) {
+        globals.animationFrame = 0;
+      }
+    }
   }
   }
 }

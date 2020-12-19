@@ -165,7 +165,7 @@ struct Globals
   int signalStrength;
   int softAPEnable;
   const char *ntpServer;
-  int topNameIndex;
+  int animationFrame;
 
   ESP32Encoder encoder;
   ESP32Encoder encoder2;
@@ -201,7 +201,7 @@ Globals globals = {
     .signalStrength = 0,
     .softAPEnable = 0,
     .ntpServer = "pool.ntp.org",
-    .topNameIndex = 0};
+    .animationFrame = 0};
 arduinoFFT FFT = arduinoFFT(globals.vReal, globals.vImag, SAMPLES, SAMPLING_FREQ);
 
 struct DevEnvironment

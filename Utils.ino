@@ -1009,6 +1009,8 @@ void getWeather()
     weather.currentWeatherId = String((int)weather.weatherJson["weather"][0]["id"]);
     weather.currentWeatherTitle = weather.weatherJson["weather"][0]["main"];
     weather.currentWeatherDescription = weather.weatherJson["weather"][0]["description"];
+    Serial.print("weather.currentWeatherId: ");
+    Serial.println(weather.currentWeatherId);
 
     weather.sunrise = convertUnixToTime((int)weather.weatherJson["sys"]["sunrise"]);
     weather.sunset = convertUnixToTime((int)weather.weatherJson["sys"]["sunset"]);

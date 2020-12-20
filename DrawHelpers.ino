@@ -1,4 +1,13 @@
-
+void debugScreenOutline(bool on = false) 
+{
+  if (on)
+  {
+    u8g2.drawVLine(0, 0, SCREEN_HEIGHT);
+    u8g2.drawVLine(SCREEN_WIDTH, 0, SCREEN_HEIGHT);
+    u8g2.drawHLine(0, 0, SCREEN_WIDTH);
+    u8g2.drawHLine(0, SCREEN_HEIGHT, SCREEN_WIDTH + 1);
+  }
+}
 
 void drawDebug()
 {
@@ -33,6 +42,28 @@ void drawDebug()
   u8g2.print(globals.mode);
 }
 
+void drawWeatherIcon(int posX, int posY)
+{
+  if (weather.currentWeatherId.startsWith("2")) 
+  {
+    animateImages(posX, posY, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_SUNNY_0, WEATHER_SUNNY_1);
+  } else if (weather.currentWeatherId.startsWith("3")) 
+  {
+    animateImages(posX, posY, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_LIGHT_RAIN_0, WEATHER_LIGHT_RAIN_1);
+  } else if (weather.currentWeatherId.startsWith("5")) 
+  {
+    animateImages(posX, posY, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_RAINY_DAY_0, WEATHER_RAINY_DAY_1);
+  } else if (weather.currentWeatherId.startsWith("6")) 
+  {
+    animateImages(posX, posY, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_SNOW_0, WEATHER_SNOW_1);
+  } else if (weather.currentWeatherId == "800") 
+  {
+    animateImages(posX, posY, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_SUNNY_0, WEATHER_SUNNY_1);
+  } else if (weather.currentWeatherId.startsWith("80")) 
+  {
+    animateImages(posX, posY, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_PARTLY_CLOUDY_0, WEATHER_PARTLY_CLOUDY_1);
+  }
+}
 void drawTop()
 {
   //Only use top 16 rows!!
@@ -257,15 +288,7 @@ void drawClock(int Selection)
   u8g2.setDrawColor(1);
   
   //Draw borders for testing if desired
-  if (1 == 0)
-  {
-    u8g2.drawVLine(0, 0, SCREEN_HEIGHT);
-    u8g2.drawVLine(SCREEN_WIDTH, 0, SCREEN_HEIGHT);
-    u8g2.drawHLine(0, 0, SCREEN_WIDTH);
-    u8g2.drawHLine(0, SCREEN_HEIGHT, SCREEN_WIDTH + 1);
-  }
-
-
+  debugScreenOutline(true);
 
   switch (Selection)
   {
@@ -373,10 +396,6 @@ void drawClock(int Selection)
     String sunset = "Sunset  ";
     sunset += String(weather.sunset);
     u8g2.print(sunset);
-
-  
-    
-    
   }
   break;
   case 11: //Weather 2
@@ -429,22 +448,80 @@ void drawClock(int Selection)
   break;
   case 14: //Test
   {
-    byte posX = 30;
-    byte posY = 20;
-
-    if (globals.animationFrame % 2) {
-      u8g2.drawXBMP(posX, posY, FACE_SMIRK_0_WIDTH, FACE_SMIRK_0_HEIGHT, FACE_SMIRK_0);
-    } else {    
-      u8g2.drawXBMP(posX, posY, FACE_SMIRK_1_WIDTH, FACE_SMIRK_1_HEIGHT, FACE_SMIRK_1);
-    }
-    EVERY_N_MILLISECONDS(600)
-    {
-      globals.animationFrame++;
-      if (globals.animationFrame > 10) {
-        globals.animationFrame = 0;
-      }
-    }
+    animateImages(0, 0, FACE_SMIRK_0_WIDTH, FACE_SMIRK_0_HEIGHT, FACE_SMIRK_0, FACE_SMIRK_1);
   }
+  break;
+  case 15: //Test
+  {
+    drawWeatherIcon(0, 0);
+    u8g2.setFont(u8g2_font_profont12_mf);
+    u8g2.setFontMode(1);
+
+    int posX = 37; // 5 Xpadding
+    int posY = 0;
+    u8g2.setCursor(posX, posY + 10);
+    u8g2.print(weather.currentWeatherTitle);
+    u8g2.setCursor(posX, posY + 20);
+    u8g2.print(weather.currentWeatherDescription);
+
+    u8g2.setFont(u8g2_font_profont10_mf);
+    u8g2.setCursor(posX - 32, posY + 37);
+    u8g2.print("Range: ");
+    u8g2.setFont(u8g2_font_fub14_tn);
+    u8g2.setCursor(posX - 1, posY + 37);
+    u8g2.print(String(weatherCurrentDay.tempMin));
+    // u8g2.print("\xb0 "); //Degree symbol
+    u8g2.setCursor(posX + 20, posY + 37);
+    u8g2.print(" - ");
+    u8g2.setCursor(posX + 36, posY + 37);
+    u8g2.print(String(weatherCurrentDay.tempMax));
+    // u8g2.print("\xb0 "); //Degree symbol
+
+    // bottom row
+    char buf[80];
+    strftime(buf, sizeof(buf), "%m/%d/%Y", &timeinfo);
+    u8g2.setFont(u8g2_font_profont12_mf);
+    u8g2.setCursor(3, 60); 
+    u8g2.print(buf);
+    // u8g2.print(dateOrdinal());
+    u8g2.setFont(u8g2_font_profont10_mf);
+    u8g2.setCursor(80, 60); 
+    u8g2.print("Temp:");
+    u8g2.print(String(weather.currentTemperature));
+    u8g2.print("\xb0 "); //Degree symbol
+  }
+  break;
+  case 16: //Test
+  {
+    animateImages(0, 0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_PARTLY_CLOUDY_0, WEATHER_PARTLY_CLOUDY_1);
+  }
+  break;
+  case 17: //Test
+  {
+    animateImages(0, 0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_RAINY_DAY_0, WEATHER_RAINY_DAY_1);
+  }
+  break;
+  case 18: //Test
+  {
+    animateImages(0, 0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_SNOW_0, WEATHER_SNOW_1);
+  }
+  break;
+  }
+}
+
+void animateImages(byte posX, byte posY, int imageWidth, int imageHeight, const unsigned char* image1, const unsigned char* image2) 
+{
+  if (globals.animationFrame % 2) {
+    u8g2.drawXBMP(posX, posY, imageWidth, imageHeight, image1);
+  } else {    
+    u8g2.drawXBMP(posX, posY, imageWidth, imageHeight, image2);
+  }
+  EVERY_N_MILLISECONDS(600)
+  {
+    globals.animationFrame++;
+    if (globals.animationFrame > 10) {
+      globals.animationFrame = 0;
+    }
   }
 }
 
@@ -877,3 +954,4 @@ void showBrightnessDisplay()
     */
   }
 }
+

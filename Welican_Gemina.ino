@@ -1,14 +1,14 @@
 /**************************************************************************
- * 
+ *
  * Collaborative Project for a Next Generation WS LED Control Box
- * 
+ *
  * Beta Version
- * 
+ *
  * August 2020
- * 
+ *
  * Brian Schimke (brs0906@gmail.com)
  * Matt Taylor (maylortaylor@gmail.com)
- * 
+ *
  *************************************************************************
 */
 
@@ -116,13 +116,13 @@ public:
 TaskHandle_t inputComputeTask = NULL;
 
 //1.3" OLED, small glitch on 2.4"
-//U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
+U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
 //2.4" OLED, ORIGINAL BOARDS, small glitch on 1.3"
 //U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
 //2.4" OLED, MODERN BOARDS, small glitch on 1.3"
-U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/19);
+// U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/19);
 
 /*
 For EST - UTC -5.00 : -5 * 60 * 60 : -18000
@@ -512,9 +512,9 @@ MenuModel globalMenu = {
         1,                                 //NTP
         7,                                 //Customize Display
         71,                                //Customize Timeout
-        15,                                //Display 1
-        15,                                //Display 2
-        15,                                //Display 3
+        18,                                //Display 1
+        18,                                //Display 2
+        18,                                //Display 3
         71,                                //Random Timeout
         60,                                //Display 1 Duration
         60,                                //Display 2 Duration
@@ -532,7 +532,7 @@ MenuModel globalMenu = {
         6,                                 //Special Category
         20,                                //Sound Reactive Category
         85,                                //Legacy
-        20,                                //Weather Reactive Category        
+        20,                                //Weather Reactive Category
     },
     .currentMenu = 0,
     .currentMenuMultiplier = 1,
@@ -1051,16 +1051,16 @@ void setup()
   // setting PWM properties
   const int freq = 5000;
   const int resolution = 13;
-  
+
   // Google Firebase Database setup
   Firebase.begin(FIREBASE_URL, FIREBASE_DATABASE_SECRET_KEY);
   // Optional, set number of error retry
   Firebase.setMaxRetry(firebaseData, 3);
   // Optional, set number of error resumable queues
   Firebase.setMaxErrorQueue(firebaseData, 20);
-  // Optional, use classic HTTP GET and POST requests. 
-  // This option allows get and delete functions (PUT and DELETE HTTP requests) works for 
-  // device connected behind the Firewall that allows only GET and POST requests.   
+  // Optional, use classic HTTP GET and POST requests.
+  // This option allows get and delete functions (PUT and DELETE HTTP requests) works for
+  // device connected behind the Firewall that allows only GET and POST requests.
   Firebase.enableClassicRequest(firebaseData, true);
 
   //pinMode(ledChannel, OUTPUT); //LED Status Light
@@ -1189,7 +1189,7 @@ void setup()
 
   //Display 3
   EEPROM.get(53, globalMenu.menu[28]);
-  
+
   //Display 1 Duration
   EEPROM.get(57, globalMenu.menu[30]);
   if (globalMenu.menu[30] > globalMenu.menuMax[30])
@@ -1215,14 +1215,14 @@ void setup()
   if (globalMenu.menu[33] > globalMenu.menuMax[33])
   {
     globalMenu.menu[33] = 10;
-  }  
+  }
   u8g2.setContrast(globalMenu.menu[33] * 25.5);
 
   EEPROM.get(73, globalMenu.menu[20]);
   if (globalMenu.menu[20] > globalMenu.menuMax[20])
   {
     globalMenu.menu[20] = 0;
-  }  
+  }
   globals.timeZone = globalMenu.menu[20] - 12;
 
   // globalUser.exists = EEPROM.read(3);
@@ -1367,7 +1367,7 @@ void loop()
       }
       break;
     case 3: //Clock/Weather/Info modes
-      displayTimer();      
+      displayTimer();
       showBrightnessDisplay();
       break;
     case -1:                           //Reset
@@ -1495,7 +1495,7 @@ void loop()
   // Serial.print(" ");
   // Serial.println(eqBands.bandValues[4]);
   //Serial.print(" ");
-  
+
   /*
   EVERY_N_MILLISECONDS(10000)
   {
@@ -1511,7 +1511,7 @@ void loop()
     Serial.println(((millis() / 1000) / 60));
   }
   */
-  
+
   // slowly cycle the "base color" through the rainbow
   EVERY_N_MILLISECONDS(200) { patternSettings.gHue++; }
 

@@ -570,14 +570,14 @@ void drawClock(int Selection)
       u8g2.setCursor(posX, posYUnderIcon);
       u8g2.print("humidity");
       u8g2.setFont(u8g2_font_fub14_tn);
-      u8g2.setCursor(posXRightOfIcon + 4, posYUnderIcon);
+      u8g2.setCursor(posXRightOfIcon + 5, posYUnderIcon);
       u8g2.print(String(weatherCurrentDay.humidity));
       
       u8g2.setFont(u8g2_font_profont10_mf);
       u8g2.setCursor(posXRightOfIcon + 30, posYUnderIcon);
       u8g2.print("dew pnt");
       u8g2.setFont(u8g2_font_fub14_tn);
-      u8g2.setCursor(posXRightOfIcon + 64, posYUnderIcon);
+      u8g2.setCursor(posXRightOfIcon + 65, posYUnderIcon);
       u8g2.print(String(weatherCurrentDay.dewPoint));
       
       // bottom row
@@ -596,23 +596,25 @@ void drawClock(int Selection)
     case 17: //Test
     {
       animateImages(0, 0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_PARTLY_CLOUDY_0, WEATHER_PARTLY_CLOUDY_1);
+      lavaLamp(10, 100, 0, millis() / 100, 0);
     }
     break;
     case 18: //Test
     {
       animateImages(32, -5, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_CLOUDY_0, WEATHER_CLOUDY_1, WEATHER_CLOUDY_2, WEATHER_CLOUDY_3);
+      lavaLamp(6, 69, 0, millis() / 50, 0);
     }
     break;
     case 19: //Test
     {
       animateImages(64, -5, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_MIST_0, WEATHER_MIST_1);
-
+      lavaLamp(10, 100, 0, millis() / 100, 0);
     }
     break;
     case 20: //Test
     {
       animateImages(0, 20, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_SUNNY_0, WEATHER_SUNNY_1);
-      lavaLamp(10, 255, 0, millis() / 100, 0);
+      lavaLamp(10, 100, 0, millis() / 100, 0);
     }
     break;
     case 21: //Test
@@ -630,7 +632,7 @@ void drawClock(int Selection)
     case 23: //Test
     {
       animateImages(0, 40, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_CLOUDY_20, WEATHER_CLOUDY_21, WEATHER_CLOUDY_22, WEATHER_CLOUDY_23);
-      lavaLamp(2, 64, 0, millis() / 10, 0);
+      lavaLamp(4, 128, 0, millis() / 10, 0);
     }
     break;
     case 24: //Test

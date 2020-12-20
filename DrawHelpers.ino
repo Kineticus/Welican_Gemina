@@ -446,44 +446,94 @@ void drawClock(int Selection)
       u8g2.print(sunset);
     }
     break;
-    case 14: //Test
+    case 14: //Weather  - rain % and UVI and cloudiness
     {
-      animateImages(0, 0, FACE_SMIRK_WIDTH, FACE_SMIRK_HEIGHT, FACE_SMIRK_0, FACE_SMIRK_1);
+      drawWeatherIcon(0, 0);
+      u8g2.setFont(u8g2_font_blipfest_07_tr);
+      u8g2.setFontMode(1);
+
+      int posXRightOfIcon = 37; // 5px padding
+      int posX = 2; // 2x padding (under icon)
+      int posYUnderIcon = 44;
+
+      // first row
+      u8g2.setCursor(posXRightOfIcon, 10);
+      u8g2.print(weather.currentWeatherDescription);
+
+      // second row - large font
+      u8g2.setFont(u8g2_font_fub14_tn);
+      u8g2.setCursor(posXRightOfIcon, 26);
+      u8g2.print(String(weatherCurrentDay.pop));
+      // second row - small font
+      u8g2.setFont(u8g2_font_profont10_mf);
+      u8g2.setCursor(posXRightOfIcon + 42, 26);
+      u8g2.print("% rain");
+      
+      // Under Animated Icon
+      u8g2.setFont(u8g2_font_profont10_mf);
+      u8g2.setCursor(posX, posYUnderIcon);
+      u8g2.print("uvi: ");
+      // Under Animated Icon - large font
+      u8g2.setFont(u8g2_font_fub14_tn);
+      u8g2.setCursor(posX + 20, posYUnderIcon);
+      u8g2.print(String(weatherCurrentDay.uvi));
+      
+      // Under Animated Icon - UVI large font
+      // u8g2.setFont(u8g2_font_fub14_tn);
+      // u8g2.setCursor(posX + 55, posYUnderIcon);
+      // u8g2.print(String(weatherCurrentDay.uvi));
+      // u8g2.setFont(u8g2_font_profont10_mf);
+      // u8g2.setCursor(posX + 75, posYUnderIcon);
+      // u8g2.print("% cloudy");
+
+      // bottom row
+      // Date time
+      char buf[80];
+      strftime(buf, sizeof(buf), "%a %D", &timeinfo);
+      u8g2.setFont(u8g2_font_profont12_mf);
+      u8g2.setCursor(3, 60); 
+      u8g2.print(buf);
+
+      // Bottom Right - Temp
+      largeTemp(100, 60);
     }
     break;
-    case 15: //Test
+    case 15: //Weather - Temps
     {
       drawWeatherIcon(0, 0);
       u8g2.setFont(u8g2_font_profont12_mf);
       u8g2.setFontMode(1);
 
-      int posX = 37; // 5 Xpadding
-      int posY = 0;
-      u8g2.setCursor(posX, 10);
+      int posXRightOfIcon = 37; // 5 Xpadding
+      int posX = 3; // 2x padding (under icon)
+      int posYUnderIcon = 44;
+
+      u8g2.setCursor(posXRightOfIcon, 10);
       u8g2.print(weather.currentWeatherTitle);
-      u8g2.setCursor(posX, 20);
+      u8g2.setFont(u8g2_font_profont12_mf);
+      u8g2.setCursor(posXRightOfIcon, 20);
       u8g2.print(weather.currentWeatherDescription);
 
       // Under Animated Icon
       u8g2.setFont(u8g2_font_profont10_mf);
-      u8g2.setCursor(posX - 32, 37);
+      u8g2.setCursor(posX, posYUnderIcon);
       u8g2.print("Range: ");
       u8g2.setFont(u8g2_font_fub14_tn);
-      u8g2.setCursor(posX - 1, 37);
+      u8g2.setCursor(posXRightOfIcon - 4, posYUnderIcon);
       u8g2.print(String(weatherCurrentDay.tempMin));
       
       u8g2.setFont(u8g2_font_profont10_mf);
-      u8g2.setCursor(posX + 20, 28);
+      u8g2.setCursor(posXRightOfIcon + 18, posYUnderIcon - 9);
       u8g2.print("\xb0 "); //Degree symbol
       
       u8g2.setFont(u8g2_font_fub14_tn);
-      u8g2.setCursor(posX + 20, 37);
+      u8g2.setCursor(posXRightOfIcon + 20, posYUnderIcon);
       u8g2.print(" - ");
-      u8g2.setCursor(posX + 36, 37);
+      u8g2.setCursor(posXRightOfIcon + 38, posYUnderIcon);
       u8g2.print(String(weatherCurrentDay.tempMax));
       
       u8g2.setFont(u8g2_font_profont10_mf);
-      u8g2.setCursor(posX + 57, 28);
+      u8g2.setCursor(posXRightOfIcon + 60, posYUnderIcon - 9);
       u8g2.print("\xb0 "); //Degree symbol
 
       // bottom row
@@ -491,74 +541,132 @@ void drawClock(int Selection)
       char buf[80];
       strftime(buf, sizeof(buf), "%m/%d/%Y", &timeinfo);
       u8g2.setFont(u8g2_font_profont12_mf);
-      u8g2.setCursor(3, 60); 
+      u8g2.setCursor(posX, 60); 
+      u8g2.print(buf);
+      // u8g2.print(dateOrdinal());
+
+      // Temp
+      largeTemp(100, 60);
+    }
+    break;
+    case 16: //Weather - Humidity D
+    {
+      drawWeatherIcon(0, 0);
+      u8g2.setFont(u8g2_font_profont12_mf);
+      u8g2.setFontMode(1);
+
+      int posXRightOfIcon = 37; // 5 Xpadding
+      int posX = 3; // 2x padding (under icon)
+      int posYUnderIcon = 44;
+
+      u8g2.setCursor(posXRightOfIcon, 10);
+      u8g2.print(weather.currentWeatherTitle);
+      u8g2.setFont(u8g2_font_profont12_mf);
+      u8g2.setCursor(posXRightOfIcon, 20);
+      u8g2.print(weather.currentWeatherDescription);
+
+      // Under Animated Icon
+      u8g2.setFont(u8g2_font_profont10_mf);
+      u8g2.setCursor(posX, posYUnderIcon);
+      u8g2.print("humidity");
+      u8g2.setFont(u8g2_font_fub14_tn);
+      u8g2.setCursor(posXRightOfIcon + 4, posYUnderIcon);
+      u8g2.print(String(weatherCurrentDay.humidity));
+      
+      u8g2.setFont(u8g2_font_profont10_mf);
+      u8g2.setCursor(posXRightOfIcon + 30, posYUnderIcon);
+      u8g2.print("dew pnt");
+      u8g2.setFont(u8g2_font_fub14_tn);
+      u8g2.setCursor(posXRightOfIcon + 64, posYUnderIcon);
+      u8g2.print(String(weatherCurrentDay.dewPoint));
+      
+      // bottom row
+      // Date time
+      char buf[80];
+      strftime(buf, sizeof(buf), "%m/%d/%Y", &timeinfo);
+      u8g2.setFont(u8g2_font_profont12_mf);
+      u8g2.setCursor(posX, 60); 
       u8g2.print(buf);
       // u8g2.print(dateOrdinal());
 
       // Temp: 
-      u8g2.setFont(u8g2_font_profont10_mf);
-      u8g2.setCursor(74, 60); 
-      u8g2.print("Temp:");
-      u8g2.setFont(u8g2_font_fub14_tn);
-      u8g2.print(String(weather.currentTemperature));
-      u8g2.setCursor(120, 51); 
-      u8g2.setFont(u8g2_font_profont10_mf);
-      u8g2.print("\xb0 "); //Degree symbol
-    }
-    break;
-    case 16: //Test
-    {
-      animateImages(0, 0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_PARTLY_CLOUDY_0, WEATHER_PARTLY_CLOUDY_1);
+      largeTemp(100, 60);
     }
     break;
     case 17: //Test
     {
-      animateImages(0, 0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_RAINY_DAY_0, WEATHER_RAINY_DAY_1);
+      animateImages(0, 0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_PARTLY_CLOUDY_0, WEATHER_PARTLY_CLOUDY_1);
     }
     break;
     case 18: //Test
     {
-      animateImages(0, 0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_SNOW_0, WEATHER_SNOW_1);
+      animateImages(32, -5, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_CLOUDY_0, WEATHER_CLOUDY_1, WEATHER_CLOUDY_2, WEATHER_CLOUDY_3);
     }
     break;
     case 19: //Test
     {
-      animateImages(0, 0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_THUNDERSTORM_0, WEATHER_THUNDERSTORM_1);
+      animateImages(64, -5, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_MIST_0, WEATHER_MIST_1);
+
     }
     break;
     case 20: //Test
     {
-      animateImages(2, -5, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_CLOUDY_20, WEATHER_CLOUDY_21, WEATHER_CLOUDY_22, WEATHER_CLOUDY_23);
+      animateImages(0, 20, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_SUNNY_0, WEATHER_SUNNY_1);
+      lavaLamp(10, 255, 0, millis() / 100, 0);
     }
     break;
     case 21: //Test
     {
-      animateImages(0,0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_LIGHT_RAIN_0, WEATHER_LIGHT_RAIN_1);
+      animateImages(32, 20, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_PARTLY_CLOUDY_20, WEATHER_PARTLY_CLOUDY_21, WEATHER_PARTLY_CLOUDY_22, WEATHER_PARTLY_CLOUDY_23);
+      lavaLamp(6, 69, 0, millis() / 50, 0);
     }
     break;
     case 22: //Test
     {
-      animateImages(0,0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_SUNNY_0, WEATHER_SUNNY_1);
+      animateImages(64, 20, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_LIGHT_RAIN_0, WEATHER_LIGHT_RAIN_1);
+      lavaLamp(8, 128, 0, millis() / 20, 0);
     }
     break;
     case 23: //Test
     {
-      animateImages(2, -5, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_MIST_0, WEATHER_MIST_1);
+      animateImages(0, 40, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_CLOUDY_20, WEATHER_CLOUDY_21, WEATHER_CLOUDY_22, WEATHER_CLOUDY_23);
+      lavaLamp(2, 64, 0, millis() / 10, 0);
     }
     break;
     case 24: //Test
     {
-      animateImages(2, -5, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_CLOUDY_0, WEATHER_CLOUDY_1, WEATHER_CLOUDY_2, WEATHER_CLOUDY_3);
+      animateImages(32, 40, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_THUNDERSTORM_0, WEATHER_THUNDERSTORM_1);
     }
     break;
     case 25: //Test
     {
-      animateImages(0,0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_PARTLY_CLOUDY_20, WEATHER_PARTLY_CLOUDY_21, WEATHER_PARTLY_CLOUDY_22, WEATHER_PARTLY_CLOUDY_23);
+      animateImages(96, 40, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_RAINY_DAY_0, WEATHER_RAINY_DAY_1);
+    }
+    break;
+    case 26: //Test
+    {
+      animateImages(64, 40, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_SNOW_0, WEATHER_SNOW_1);
+    }
+    break;
+    case 27: //Test
+    {
+      animateImages(96, 20, FACE_SMIRK_WIDTH, FACE_SMIRK_HEIGHT, FACE_SMIRK_0, FACE_SMIRK_1);
+      lavaLamp(5, 128, 0, millis() / 50, 0);
     }
     break;
   }
 }
 
+void largeTemp(byte posX, byte posY) 
+{
+  u8g2.setFont(u8g2_font_fub14_tn); // large font
+  u8g2.setCursor(posX, posY);
+  u8g2.print(String(weather.currentTemperature)); // print current Temp
+
+  u8g2.setFont(u8g2_font_profont10_mf); // change font for better symbol
+  u8g2.setCursor(posX + 22, posY - 8); // move symbol up & to right
+  u8g2.print("\xb0 "); //Degree symbol  
+}
 void animateImages(byte posX, byte posY, int imageWidth, int imageHeight, const unsigned char* image1, const unsigned char* image2) 
 {
   int maxFrames = 2;

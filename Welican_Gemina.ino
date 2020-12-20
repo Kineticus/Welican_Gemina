@@ -944,8 +944,8 @@ struct OpenWeatherDayObject
   String weatherDescription;
   String cloudiness;
   float pop;
-  String rain;
-  String uvi;
+  float rain;
+  float uvi;
 };
 OpenWeatherDayObject weatherCurrentDay;
 OpenWeatherDayObject weatherDay1;

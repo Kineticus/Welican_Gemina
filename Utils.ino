@@ -1214,8 +1214,8 @@ void populateWeatherForDay(int dayNumber, JSONVar weatherJson, OpenWeatherDayObj
 
   dayObject.cloudiness = String((int)weatherJson["daily"][dayNumber]["clouds"]);
   dayObject.pop = float((int)weatherJson["daily"][dayNumber]["pop"]);
-  dayObject.rain = String((int)weatherJson["daily"][dayNumber]["rain"]);
-  dayObject.uvi = String((int)weatherJson["daily"][dayNumber]["uvi"]);
+  dayObject.rain = float((int)weatherJson["daily"][dayNumber]["rain"]);
+  dayObject.uvi = float((int)weatherJson["daily"][dayNumber]["uvi"]);
 
   Serial.println("-------- PARSED WEATHER DAY " + String((int)dayNumber) + " --------");
   /*

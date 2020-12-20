@@ -288,7 +288,7 @@ void drawClock(int Selection)
   u8g2.setDrawColor(1);
   
   //Draw borders for testing if desired
-  debugScreenOutline(true);
+  debugScreenOutline(false);
 
   switch (Selection)
   {
@@ -463,7 +463,7 @@ void drawClock(int Selection)
       // second row - large font
       u8g2.setFont(u8g2_font_fub14_tn);
       u8g2.setCursor(posXRightOfIcon, 26);
-      u8g2.print(String(weatherCurrentDay.pop));
+      u8g2.print(String(int(weatherCurrentDay.pop * 100)));
       // second row - small font
       u8g2.setFont(u8g2_font_profont10_mf);
       u8g2.setCursor(posXRightOfIcon + 42, 26);

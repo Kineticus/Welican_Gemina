@@ -493,7 +493,7 @@ MenuModel globalMenu = {
         1,                                 //ZIP Code
         3,                                 //Favorites Menu
         50,                                //Max Favorites
-        2,                                 //Reset Favorites
+        1,                                 //Reset Favorites
         3,                                 //Wifi Menu
         3,                                 //Customize Menu
         patternSettings.numberOfFavorites, //Add Favorite

@@ -80,31 +80,31 @@ void drawTop()
       u8g2.drawXBMP(0, 0, STAR_WIDTH, STAR_HEIGHT, STAR_SHAPE);
       break;
     case 1: // BASIC
-      u8g2.drawXBMP(0, 0, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);    
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_0);
       break;
     case 2: // DECOR
-      u8g2.drawXBMP(0, 0, DVD_WIDTH, DVD_HEIGHT, DVD);
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_1);
       break;
     case 3: // PARTY
-      u8g2.drawXBMP(0, 0, DONUT_WIDTH, DONUT_HEIGHT, DONUT);
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_2);
       break;
     case 4: // ADVANCED
-      u8g2.drawXBMP(0, 0, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);    
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_3);
       break;
     case 5: // COMPLEX
-      u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_4);
       break;
     case 6: // SPECIAL
-      u8g2.drawXBMP(0, 0, STAR_WIDTH, STAR_WIDTH, STAR_SHAPE);
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_5);
       break;
     case 7: // SOUND REACTIVE
-      u8g2.drawXBMP(0, 0, MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_6);
       break;
     case 8: // LEGACY
-      u8g2.drawXBMP(0, 0, HEART_WIDTH, HEART_HEIGHT, HEART);
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_7);
       break;
     case 9: // WEATHER REACTIVE
-      u8g2.drawXBMP(0, 0, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_8);
       break;
     
   }
@@ -400,17 +400,27 @@ void drawClock(int Selection)
     break;
     case 11: //Weather 2
     {
-      u8g2.setCursor(10, 10);
+      drawWeatherIcon(0, 0);
+      lavaLamp(5, 128, 0, millis() / 50, 0);
+
+      u8g2.setFont(u8g2_font_profont12_mf);
+      u8g2.setFontMode(1);
+
+      int posXRightOfIcon = 37; // 5px padding
+      int posX = 2; // 2x padding (under icon)
+      int posYUnderIcon = 44;
+
+      // first row
+      u8g2.setCursor(posXRightOfIcon, 10);
+      u8g2.print(weather.currentWeatherTitle);
+      u8g2.setCursor(posXRightOfIcon, 20);
       u8g2.print(weather.currentWeatherDescription);
 
-      u8g2.setCursor(10, 20);
-      u8g2.print(String(weather.currentTemperature));
-      u8g2.setCursor(40, 20);
-      u8g2.print(String(weather.currentTemperatureMin));
-      u8g2.setCursor(55, 20);
-      u8g2.print(" - ");
-      u8g2.setCursor(70, 20);
-      u8g2.print(String(weather.currentTemperatureMax));
+      // Under Animated Icon
+      showLargeTime(3, 60);
+
+      // Bottom Right - Temp
+      largeTemp(100, 60, weather.currentTemperature);
     }
     break;
     case 12: //Weather 3

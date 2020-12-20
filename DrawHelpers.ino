@@ -506,7 +506,16 @@ void drawClock(int Selection)
     animateImages(0, 0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_SNOW_0, WEATHER_SNOW_1);
   }
   break;
+  case 19: //Test
+  {
+    animateImages(0, 0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_THUNDERSTORM_0, WEATHER_THUNDERSTORM_1);
   }
+  break;
+  case 20: //Test
+  {
+    animateImages(0, 0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_MIST_0, WEATHER_MIST_1);
+  }
+  break;
 }
 
 void animateImages(byte posX, byte posY, int imageWidth, int imageHeight, const unsigned char* image1, const unsigned char* image2) 
@@ -524,6 +533,22 @@ void animateImages(byte posX, byte posY, int imageWidth, int imageHeight, const 
     }
   }
 }
+
+// void animateImages(byte posX, byte posY, int imageWidth, int imageHeight, const unsigned char* image1, const unsigned char* image2, const unsigned char* image3, const unsigned char* image4) 
+// {
+//   if (globals.animationFrame % 2) {
+//     u8g2.drawXBMP(posX, posY, imageWidth, imageHeight, image1);
+//   } else {    
+//     u8g2.drawXBMP(posX, posY, imageWidth, imageHeight, image2);
+//   }
+//   EVERY_N_MILLISECONDS(600)
+//   {
+//     globals.animationFrame++;
+//     if (globals.animationFrame > 10) {
+//       globals.animationFrame = 0;
+//     }
+//   }
+// }
 
 void dateTemp1()
 {

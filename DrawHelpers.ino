@@ -459,35 +459,50 @@ void drawClock(int Selection)
 
       int posX = 37; // 5 Xpadding
       int posY = 0;
-      u8g2.setCursor(posX, posY + 10);
+      u8g2.setCursor(posX, 10);
       u8g2.print(weather.currentWeatherTitle);
-      u8g2.setCursor(posX, posY + 20);
+      u8g2.setCursor(posX, 20);
       u8g2.print(weather.currentWeatherDescription);
 
+      // Under Animated Icon
       u8g2.setFont(u8g2_font_profont10_mf);
-      u8g2.setCursor(posX - 32, posY + 37);
+      u8g2.setCursor(posX - 32, 37);
       u8g2.print("Range: ");
       u8g2.setFont(u8g2_font_fub14_tn);
-      u8g2.setCursor(posX - 1, posY + 37);
+      u8g2.setCursor(posX - 1, 37);
       u8g2.print(String(weatherCurrentDay.tempMin));
-      // u8g2.print("\xb0 "); //Degree symbol
-      u8g2.setCursor(posX + 20, posY + 37);
+      
+      u8g2.setFont(u8g2_font_profont10_mf);
+      u8g2.setCursor(posX + 20, 28);
+      u8g2.print("\xb0 "); //Degree symbol
+      
+      u8g2.setFont(u8g2_font_fub14_tn);
+      u8g2.setCursor(posX + 20, 37);
       u8g2.print(" - ");
-      u8g2.setCursor(posX + 36, posY + 37);
+      u8g2.setCursor(posX + 36, 37);
       u8g2.print(String(weatherCurrentDay.tempMax));
-      // u8g2.print("\xb0 "); //Degree symbol
+      
+      u8g2.setFont(u8g2_font_profont10_mf);
+      u8g2.setCursor(posX + 57, 28);
+      u8g2.print("\xb0 "); //Degree symbol
 
       // bottom row
+      // Date time
       char buf[80];
       strftime(buf, sizeof(buf), "%m/%d/%Y", &timeinfo);
       u8g2.setFont(u8g2_font_profont12_mf);
       u8g2.setCursor(3, 60); 
       u8g2.print(buf);
       // u8g2.print(dateOrdinal());
+
+      // Temp: 
       u8g2.setFont(u8g2_font_profont10_mf);
-      u8g2.setCursor(80, 60); 
+      u8g2.setCursor(74, 60); 
       u8g2.print("Temp:");
+      u8g2.setFont(u8g2_font_fub14_tn);
       u8g2.print(String(weather.currentTemperature));
+      u8g2.setCursor(119, 50); 
+      u8g2.setFont(u8g2_font_profont10_mf);
       u8g2.print("\xb0 "); //Degree symbol
     }
     break;
@@ -513,7 +528,7 @@ void drawClock(int Selection)
     break;
     case 20: //Test
     {
-      animateImages(0, 0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_MIST_0, WEATHER_MIST_1);
+      animateImages(2, -5, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_CLOUDY_20, WEATHER_CLOUDY_21, WEATHER_CLOUDY_22, WEATHER_CLOUDY_23);
     }
     break;
   }
@@ -521,35 +536,45 @@ void drawClock(int Selection)
 
 void animateImages(byte posX, byte posY, int imageWidth, int imageHeight, const unsigned char* image1, const unsigned char* image2) 
 {
-  if (globals.animationFrame % 2) {
+  int maxFrames = 2;
+
+  if (globals.animationFrame % maxFrames) {
     u8g2.drawXBMP(posX, posY, imageWidth, imageHeight, image1);
   } else {    
     u8g2.drawXBMP(posX, posY, imageWidth, imageHeight, image2);
   }
+
   EVERY_N_MILLISECONDS(600)
   {
     globals.animationFrame++;
-    if (globals.animationFrame > 10) {
+    if (globals.animationFrame > maxFrames) {
       globals.animationFrame = 0;
     }
   }
 }
 
-// void animateImages(byte posX, byte posY, int imageWidth, int imageHeight, const unsigned char* image1, const unsigned char* image2, const unsigned char* image3, const unsigned char* image4) 
-// {
-//   if (globals.animationFrame % 2) {
-//     u8g2.drawXBMP(posX, posY, imageWidth, imageHeight, image1);
-//   } else {    
-//     u8g2.drawXBMP(posX, posY, imageWidth, imageHeight, image2);
-//   }
-//   EVERY_N_MILLISECONDS(600)
-//   {
-//     globals.animationFrame++;
-//     if (globals.animationFrame > 10) {
-//       globals.animationFrame = 0;
-//     }
-//   }
-// }
+void animateImages(byte posX, byte posY, int imageWidth, int imageHeight, const unsigned char* image1, const unsigned char* image2, const unsigned char* image3,  const unsigned char* image4) 
+{
+  int maxFrames = 3;
+
+  if (globals.animationFrame == 0) {
+    u8g2.drawXBMP(posX, posY, imageWidth, imageHeight, image1);
+  } else if (globals.animationFrame == 1) {    
+    u8g2.drawXBMP(posX, posY, imageWidth, imageHeight, image2);
+  } else if (globals.animationFrame == 2) {
+    u8g2.drawXBMP(posX, posY, imageWidth, imageHeight, image3);
+  } else if (globals.animationFrame == 3) {
+    u8g2.drawXBMP(posX, posY, imageWidth, imageHeight, image4);
+  }
+
+  EVERY_N_MILLISECONDS(600)
+  {
+    globals.animationFrame++;
+    if (globals.animationFrame > maxFrames) {
+      globals.animationFrame = 0;
+    }
+  }
+}
 
 void dateTemp1()
 {

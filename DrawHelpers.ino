@@ -501,7 +501,7 @@ void drawClock(int Selection)
       u8g2.print("Temp:");
       u8g2.setFont(u8g2_font_fub14_tn);
       u8g2.print(String(weather.currentTemperature));
-      u8g2.setCursor(119, 50); 
+      u8g2.setCursor(120, 51); 
       u8g2.setFont(u8g2_font_profont10_mf);
       u8g2.print("\xb0 "); //Degree symbol
     }

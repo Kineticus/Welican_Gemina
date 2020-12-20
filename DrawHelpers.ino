@@ -448,7 +448,7 @@ void drawClock(int Selection)
     break;
     case 14: //Test
     {
-      animateImages(0, 0, FACE_SMIRK_0_WIDTH, FACE_SMIRK_0_HEIGHT, FACE_SMIRK_0, FACE_SMIRK_1);
+      animateImages(0, 0, FACE_SMIRK_WIDTH, FACE_SMIRK_HEIGHT, FACE_SMIRK_0, FACE_SMIRK_1);
     }
     break;
     case 15: //Test

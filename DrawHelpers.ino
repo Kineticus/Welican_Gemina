@@ -484,7 +484,7 @@ void drawClock(int Selection)
       u8g2.print(weather.currentWeatherDescription);
 
       // second row - large font
-      u8g2.setFont(u8g2_font_fub14_tn);
+      u8g2.setFont(u8g2_font_fub14_tr);
       u8g2.setCursor(posXRightOfIcon, 26);
       u8g2.print(String(int(weatherCurrentDay.pop * 100)));
       // second row - small font
@@ -497,7 +497,7 @@ void drawClock(int Selection)
       u8g2.setCursor(posX, posYUnderIcon);
       u8g2.print("wind speed: ");
       // Under Animated Icon - large font
-      u8g2.setFont(u8g2_font_fub14_tn);
+      u8g2.setFont(u8g2_font_fub14_tr);
       u8g2.setCursor(posX + 54, posYUnderIcon);
       u8g2.print(String(weatherCurrentDay.windSpeed));
       u8g2.setFont(u8g2_font_profont10_mf);
@@ -538,7 +538,7 @@ void drawClock(int Selection)
       u8g2.print("Range: ");
       largeTemp(posXRightOfIcon - 4, posYUnderIcon, weather.currentTemperatureMin);
 
-      u8g2.setFont(u8g2_font_fub14_tn);
+      u8g2.setFont(u8g2_font_fub14_tr);
       u8g2.setCursor(posXRightOfIcon + 18, posYUnderIcon);
       u8g2.print(" - ");
       
@@ -577,14 +577,14 @@ void drawClock(int Selection)
       u8g2.setFont(u8g2_font_profont10_mf);
       u8g2.setCursor(posX, posYUnderIcon);
       u8g2.print("humidity");
-      u8g2.setFont(u8g2_font_fub14_tn);
+      u8g2.setFont(u8g2_font_fub14_tr);
       u8g2.setCursor(posXRightOfIcon + 6, posYUnderIcon);
       u8g2.print(String(weatherCurrentDay.humidity));
       
       u8g2.setFont(u8g2_font_profont10_mf);
       u8g2.setCursor(posXRightOfIcon + 30, posYUnderIcon);
       u8g2.print("dew pnt");
-      u8g2.setFont(u8g2_font_fub14_tn);
+      u8g2.setFont(u8g2_font_fub14_tr);
       u8g2.setCursor(posXRightOfIcon + 65, posYUnderIcon);
       u8g2.print(String(weatherCurrentDay.dewPoint));
       
@@ -621,7 +621,7 @@ void drawClock(int Selection)
       u8g2.setCursor(posXRightOfIcon, 26);
       u8g2.print("uvi: ");
       // Under Animated Icon - large font
-      u8g2.setFont(u8g2_font_fub14_tn);
+      u8g2.setFont(u8g2_font_fub14_tr);
       u8g2.setCursor(posXRightOfIcon + 16, 26);
       u8g2.print(String(weatherCurrentDay.uvi));
       
@@ -711,7 +711,7 @@ void drawClock(int Selection)
 
 void largeTemp(byte posX, byte posY, String tempVal) 
 {
-  u8g2.setFont(u8g2_font_fub14_tn); // large font
+  u8g2.setFont(u8g2_font_fub14_tr); // large font
   u8g2.setCursor(posX, posY);
   u8g2.print(String(tempVal)); // print current Temp
 

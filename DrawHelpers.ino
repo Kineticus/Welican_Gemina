@@ -583,10 +583,51 @@ void drawClock(int Selection)
       largeTemp(100, 60, weather.currentTemperature);
     }
     break;
-    case 17: //Test
+    case 17: //Weather - Sunrise/Set
     {
-      animateImages(0, 0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_PARTLY_CLOUDY_0, WEATHER_PARTLY_CLOUDY_1);
-      lavaLamp(10, 100, 0, millis() / 100, 0);
+      drawWeatherIcon(0, 0);
+
+      u8g2.setFont(u8g2_font_blipfest_07_tr);
+      u8g2.setFontMode(1);
+
+      int posXRightOfIcon = 37; // 5px padding
+      int posX = 2; // 2x padding (under icon)
+      int posYUnderIcon = 44;
+
+      // first row
+      u8g2.setCursor(posXRightOfIcon, 10);
+      u8g2.print(weather.currentWeatherDescription);
+
+      u8g2.setFont(u8g2_font_profont10_mf);
+      u8g2.setCursor(posXRightOfIcon, 26);
+      u8g2.print("uvi: ");
+      // Under Animated Icon - large font
+      u8g2.setFont(u8g2_font_fub14_tn);
+      u8g2.setCursor(posXRightOfIcon + 16, 26);
+      u8g2.print(String(weatherCurrentDay.uvi));
+      
+      // Under Animated Icon
+      String sunrise = "rise: ";
+      sunrise += String(weather.sunrise);
+      String sunset = "set: ";
+      sunset += String(weather.sunset);
+
+      u8g2.setFont(u8g2_font_blipfest_07_tr);
+      u8g2.setCursor(posX, posYUnderIcon);
+      u8g2.print(sunrise);
+      u8g2.setCursor(posX + 42, posYUnderIcon);
+      u8g2.print(sunset);
+
+      // bottom row
+      // Date time
+      char buf[80];
+      strftime(buf, sizeof(buf), "%a %D", &timeinfo);
+      u8g2.setFont(u8g2_font_profont12_mf);
+      u8g2.setCursor(3, 60); 
+      u8g2.print(buf);
+
+      // Bottom Right - Temp
+      largeTemp(100, 60, weather.currentTemperature);
     }
     break;
     case 18: //Test

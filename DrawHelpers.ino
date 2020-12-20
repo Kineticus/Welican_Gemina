@@ -106,7 +106,6 @@ void drawTop()
     case 9: // WEATHER REACTIVE
       u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_8);
       break;
-    
   }
 
   u8g2.setCursor(12, 8);
@@ -1137,31 +1136,31 @@ void newFavoritesMenu()
   switch (patternSettings.favoriteMode[globalMenu.menu[globalMenu.currentMenu]])
   {
     case 1: // BASIC
-      u8g2.drawXBMP(2, 53, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);    
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_0);
       break;
     case 2: // DECOR
-      u8g2.drawXBMP(2, 53, DVD_WIDTH, DVD_HEIGHT, DVD);
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_1);
       break;
     case 3: // PARTY
-      u8g2.drawXBMP(2, 53, DONUT_WIDTH, DONUT_HEIGHT, DONUT);
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_2);
       break;
     case 4: // ADVANCED
-      u8g2.drawXBMP(2, 53, HASHTAG_WIDTH, HASHTAG_HEIGHT, HASHTAG);    
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_3);
       break;
     case 5: // COMPLEX
-      u8g2.drawXBMP(2, 53, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_4);
       break;
     case 6: // SPECIAL
-      u8g2.drawXBMP(2, 53, STAR_WIDTH, STAR_WIDTH, STAR_SHAPE);
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_5);
       break;
     case 7: // SOUND REACTIVE
-      u8g2.drawXBMP(2, 53, MUSIC_NOTE_WIDTH, MUSIC_NOTE_HEIGHT, MUSIC_NOTE);
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_6);
       break;
     case 8: // LEGACY
-      u8g2.drawXBMP(2, 53, HEART_WIDTH, HEART_HEIGHT, HEART);
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_7);
       break;
     case 9: // WEATHER REACTIVE
-      u8g2.drawXBMP(2, 53, WAVE_WIDTH, WAVE_HEIGHT, WAVE);
+      u8g2.drawXBMP(0, 0, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_ICON_WIDTH, CATEGORY_MENU_8);
       break;
   }
   u8g2.setCursor(12, 60);

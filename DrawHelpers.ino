@@ -531,6 +531,31 @@ void drawClock(int Selection)
       animateImages(2, -5, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_CLOUDY_20, WEATHER_CLOUDY_21, WEATHER_CLOUDY_22, WEATHER_CLOUDY_23);
     }
     break;
+    case 21: //Test
+    {
+      animateImages(2, -5, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_LIGHT_RAIN_0, WEATHER_LIGHT_RAIN_1);
+    }
+    break;
+    case 22: //Test
+    {
+      animateImages(2, -5, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_SUNNY_0, WEATHER_SUNNY_1);
+    }
+    break;
+    case 23: //Test
+    {
+      animateImages(2, -5, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_MIST_0, WEATHER_MIST_1);
+    }
+    break;
+    case 24: //Test
+    {
+      animateImages(2, -5, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_CLOUDY_0, WEATHER_CLOUDY_1, WEATHER_CLOUDY_2, WEATHER_CLOUDY_3);
+    }
+    break;
+    case 25: //Test
+    {
+      animateImages(2, -5, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_PARTLY_CLOUDY_20, WEATHER_PARTLY_CLOUDY_21, WEATHER_PARTLY_CLOUDY_22, WEATHER_PARTLY_CLOUDY_23);
+    }
+    break;
   }
 }
 

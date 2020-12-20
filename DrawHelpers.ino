@@ -415,35 +415,48 @@ void drawClock(int Selection)
     break;
     case 12: //Weather 3
     {
-      u8g2.setCursor(10, 10);
-      u8g2.print(weather.currentWeatherTitle);
+      drawWeatherIcon(0, 0);
+      u8g2.setFont(u8g2_font_profont12_mf);
+      u8g2.setFontMode(1);
 
-      u8g2.setCursor(10, 20);
-      u8g2.print(String(weather.currentTemperature));
-      u8g2.setCursor(40, 20);
-      u8g2.print(String(weather.currentTemperatureMin));
-      u8g2.setCursor(55, 20);
-      u8g2.print(" - ");
-      u8g2.setCursor(70, 20);
-      u8g2.print(String(weather.currentTemperatureMax));
+      int posXRightOfIcon = 37; // 5px padding
+      int posX = 2; // 2x padding (under icon)
+      int posYUnderIcon = 44;
+
+      // first row
+      u8g2.setCursor(posXRightOfIcon, 10);
+      u8g2.print(weather.currentWeatherTitle);
+      u8g2.setCursor(posXRightOfIcon, 20);
+      u8g2.print(weather.currentWeatherDescription);
+
+      // Under Animated Icon
+      showLargeTimeSegment(3, 60);
+
+      // Bottom Right - Temp
+      largeTemp(100, 60, weather.currentTemperature);
     }
     break;
     case 13: //Weather 4
     {
-      u8g2.setCursor(10, 0);
+      drawWeatherIcon(0, 0);
+      u8g2.setFont(u8g2_font_profont12_mf);
+      u8g2.setFontMode(1);
+
+      int posXRightOfIcon = 37; // 5px padding
+      int posX = 2; // 2x padding (under icon)
+      int posYUnderIcon = 44;
+
+      // first row
+      u8g2.setCursor(posXRightOfIcon, 10);
       u8g2.print(weather.currentWeatherTitle);
-      u8g2.setCursor(10, 20);
+      u8g2.setCursor(posXRightOfIcon, 20);
       u8g2.print(weather.currentWeatherDescription);
 
-      String sunrise = "rise: ";
-      sunrise += String(weather.sunrise);
-      String sunset = "set: ";
-      sunset += String(weather.sunset);
+      // Under Animated Icon
+      showLargeTime(3, 60);
 
-      u8g2.setCursor(10, 30);
-      u8g2.print(sunrise);
-      u8g2.setCursor(10, 50);
-      u8g2.print(sunset);
+      // Bottom Right - Temp
+      largeTemp(100, 60, weather.currentTemperature);
     }
     break;
     case 14: //Weather  - rain % and UVI and cloudiness
@@ -472,19 +485,14 @@ void drawClock(int Selection)
       // Under Animated Icon
       u8g2.setFont(u8g2_font_profont10_mf);
       u8g2.setCursor(posX, posYUnderIcon);
-      u8g2.print("uvi: ");
+      u8g2.print("wind speed: ");
       // Under Animated Icon - large font
       u8g2.setFont(u8g2_font_fub14_tn);
-      u8g2.setCursor(posX + 20, posYUnderIcon);
-      u8g2.print(String(weatherCurrentDay.uvi));
-      
-      // Under Animated Icon - UVI large font
-      // u8g2.setFont(u8g2_font_fub14_tn);
-      // u8g2.setCursor(posX + 55, posYUnderIcon);
-      // u8g2.print(String(weatherCurrentDay.uvi));
-      // u8g2.setFont(u8g2_font_profont10_mf);
-      // u8g2.setCursor(posX + 75, posYUnderIcon);
-      // u8g2.print("% cloudy");
+      u8g2.setCursor(posX + 54, posYUnderIcon);
+      u8g2.print(String(weatherCurrentDay.windSpeed));
+      u8g2.setFont(u8g2_font_profont10_mf);
+      u8g2.setCursor(posX + 78, posYUnderIcon);
+      u8g2.print("mph");
 
       // bottom row
       // Date time
@@ -586,6 +594,7 @@ void drawClock(int Selection)
     case 17: //Weather - Sunrise/Set
     {
       drawWeatherIcon(0, 0);
+      animateImages(96, 0, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_SUNNY_0, WEATHER_SUNNY_1);
 
       u8g2.setFont(u8g2_font_blipfest_07_tr);
       u8g2.setFontMode(1);
@@ -615,7 +624,7 @@ void drawClock(int Selection)
       u8g2.setFont(u8g2_font_blipfest_07_tr);
       u8g2.setCursor(posX, posYUnderIcon);
       u8g2.print(sunrise);
-      u8g2.setCursor(posX + 42, posYUnderIcon);
+      u8g2.setCursor(posX + 66, posYUnderIcon);
       u8g2.print(sunset);
 
       // bottom row
@@ -742,6 +751,43 @@ void animateImages(byte posX, byte posY, int imageWidth, int imageHeight, const 
   }
 }
 
+void showLargeTime(byte posX, byte posY) 
+{
+  u8g2.setFont(u8g2_font_fub30_tn);
+  if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
+  {
+    u8g2.setCursor(posX, posY);
+
+    if ((globalTime.currentHour > 9) || (globalTime.currentHour == 0))
+    {
+      u8g2.setCursor(posX - 30, posY);
+    }
+
+    if (globalTime.currentHour == 0)
+    {
+      u8g2.print("12");
+    }
+    else
+    {
+      u8g2.print(globalTime.currentHour);
+    }
+
+    u8g2.setCursor(posX + 20, posY - 4);
+    u8g2.print(":");
+
+    u8g2.setCursor(posX + 38, posY);
+    if (globalTime.currentMinute < 10)
+    {
+      u8g2.print("0");
+    }
+    u8g2.print(globalTime.currentMinute);
+  }
+  else
+  {
+    //u8g2.print("0:00");
+    //Decided to just show nothing if we don't have a time sync
+  }
+}
 void dateTemp1()
 {
   u8g2.setFont(u8g2_font_profont12_mf);
@@ -824,7 +870,44 @@ void dateTemp5()
   u8g2.print(weather.currentTemperature);
   u8g2.print("\xb0 "); //Degree symbol
 }
+  
+void showLargeTimeSegment(byte posX, byte posY) 
+{
+  u8g2.setFont(u8g2_font_7Segments_26x42_mn);
+  if (globalTime.currentHour != 100) //Default setting is 100, so we know time is set
+  {
+    u8g2.setCursor(posX,posY);
 
+    if ((globalTime.currentHour > 9) || (globalTime.currentHour == 0))
+    {
+      u8g2.setCursor(posX - 34, posY);
+    }
+
+    if (globalTime.currentHour == 0)
+    {
+      u8g2.print("12");
+    }
+    else
+    {
+      u8g2.print(globalTime.currentHour);
+    }
+
+    u8g2.setCursor(posX + 30,posY);
+    u8g2.print(":");
+
+    u8g2.setCursor(posX + 48, posY);
+    if (globalTime.currentMinute < 10)
+    {
+      u8g2.print("0");
+    }
+    u8g2.print(globalTime.currentMinute);
+  }
+  else
+  {
+    //u8g2.print("0:00");
+    //Decided to just show nothing if we don't have a time sync
+  }
+}
 
 void timeSegment()
 {

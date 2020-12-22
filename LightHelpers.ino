@@ -132,7 +132,7 @@ void setSmoothOperator(int fadeTime)
   //Set distance of each step
   globalLED.interfadeSpeed = (255 / fadeTime);
 
-  EEPROM.write(52, globalMenu.menu[17]);
+  EEPROM.write(207, globalMenu.menu[17]);
   EEPROM.commit();
 }
 
@@ -143,7 +143,7 @@ void readSmoothOperator()
   //globalLED.interfadeMax * globalLED.interfadeSpeed <= 255
 
   //255 / fadeTime;
-  globalMenu.menu[17] = EEPROM.read(52);
+  globalMenu.menu[17] = EEPROM.read(207);
 
   if (globalMenu.menu[17] < 1)
   {

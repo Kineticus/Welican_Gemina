@@ -685,13 +685,13 @@ void setZipCodeMenu()
 
 void putZipCode()
 {
-  EEPROM.put(210, globalMenu.menu[11]);
+  EEPROM.put(220, globalMenu.menu[11]);
   EEPROM.commit();
 }
 
 void getZipCode()
 {
-  EEPROM.get(210, globalMenu.menu[11]);
+  EEPROM.get(220, globalMenu.menu[11]);
 
   //Make sure data is in range. If not, set to default ZIP code
   if ((globalMenu.menu[11] > 99999) || (globalMenu.menu[11] == 0))
@@ -777,10 +777,10 @@ void resetFavorites()
 void readNumberOfLEDs()
 {
   //Set the # LEDs menu to what the value is
-  globalMenu.menu[15] = EEPROM.read(50);
+  globalMenu.menu[15] = EEPROM.read(205);
 
   //Get the Color Order
-  globalLED.colorOrder = EEPROM.read(51);
+  globalLED.colorOrder = EEPROM.read(206);
 
   //Multiply by 5 to find NUM_LEDS
   NUM_LEDS = globalMenu.menu[15] * 5;
@@ -811,8 +811,8 @@ void readNumberOfLEDs()
 
 void saveNumberOfLEDs()
 {
-  EEPROM.write(50, globalMenu.menu[15]);
-  EEPROM.write(51, globalLED.colorOrder);
+  EEPROM.write(205, globalMenu.menu[15]);
+  EEPROM.write(206, globalLED.colorOrder);
   EEPROM.commit();
   ESP.restart();
 }
@@ -1345,6 +1345,8 @@ void readSettingsFromEEPROM()
       patternSettings.pattern[i] = 0;
     }
 
+    //300 - 1200
+    //Pattern Adjust, 100 for each Mode
     for (int ii = 0; ii <= globalMenu.patternMax[i]; ii++)
     {
       patternSettings.patternAdjust[i][ii] = EEPROM.read(300 + (i * 100) + ii);
@@ -1388,11 +1390,19 @@ void readSettingsFromEEPROM()
     }
   }
 
-  //210 - 229
+  //205 - 219
+  //# of LEDs, Color Order, fade time
+  readNumberOfLEDs();
+
+  readSmoothOperator();
+
+  //220 - 229
   //Weather stuff
   getZipCode();
 
-  //230 - 300
+  updateZipCodeString();
+
+  //230 - 299
   //Screen Timeout / Settings
 
   //Brightness
@@ -1460,6 +1470,11 @@ void readSettingsFromEEPROM()
   {
     globalMenu.menu[32] = 0;
   }
+
+
+  //300 - 1200
+  //Pattern Adjust, 100 for each Mode, see above
+
 
 }
 

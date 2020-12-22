@@ -1166,10 +1166,7 @@ void setup()
 
   // globalUser.exists = EEPROM.read(3);  
 
-  readSettingsFromEEPROM();
-
-
-  
+  readSettingsFromEEPROM();  
 
   //Set master brightness control
   FastLED.setBrightness(brightness.current);
@@ -1177,14 +1174,6 @@ void setup()
   //Set first Weather check value
   weatherSettings.weatherTimerDelay = weatherSettings.weatherUpdateInitial;
   globalUser.timerDelay = globalUser.updateInitial;
-
-  updateZipCodeString();
-
-  //Set Smooth Operator fade time
-  readSmoothOperator();
-
-  //Read # of LEDs to use
-  readNumberOfLEDs();
 
   if (NUM_LEDS > 100)
   {

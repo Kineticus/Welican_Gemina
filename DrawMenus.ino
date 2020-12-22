@@ -817,7 +817,7 @@ void drawMenuCommander()
     break;
     case 20: //
     {
-      EEPROM.get(73, globalMenu.menu[20]);
+      EEPROM.get(234, globalMenu.menu[20]);
       globalMenu.currentMenu = 2;
     }
     break;
@@ -843,57 +843,59 @@ void drawMenuCommander()
     break;
     case 25: //
     {
+      EEPROM.get(242, globalMenu.menu[globalMenu.currentMenu]);
       globalMenu.currentMenu = 24;
     }
     break;
     case 26: //
     {
-      EEPROM.get(45, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.get(254, globalMenu.menu[globalMenu.currentMenu]);
       globalMenu.currentMenu = 24;
     }
     break;
     case 27: //
     {
-      EEPROM.get(49, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.get(262, globalMenu.menu[globalMenu.currentMenu]);
       globalMenu.currentMenu = 24;
     }
     break;
 
     case 28: //
     {
-      EEPROM.get(53, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.get(270, globalMenu.menu[globalMenu.currentMenu]);
       globalMenu.currentMenu = 24;
     }
     break;
 
     case 29: //Random Time
     {
+      EEPROM.get(238, globalMenu.menu[globalMenu.currentMenu]);
       globalMenu.currentMenu = 2;
     }
     break;
 
     case 30:
     {
-      EEPROM.get(57, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.get(258, globalMenu.menu[globalMenu.currentMenu]);
       globalMenu.currentMenu = 24;
     }
     break;
     case 31:
     {
-      EEPROM.get(61, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.get(266, globalMenu.menu[globalMenu.currentMenu]);
       globalMenu.currentMenu = 24;
     }
     break;
     case 32:
     {
-      EEPROM.get(65, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.get(274, globalMenu.menu[globalMenu.currentMenu]);
       globalMenu.currentMenu = 24;
     }
     break;
 
     case 33:
     {
-      EEPROM.get(69, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.get(258, globalMenu.menu[globalMenu.currentMenu]);
       if (globalMenu.menu[33] > globalMenu.menuMax[33])
       {
         globalMenu.menu[33] = 10;
@@ -1247,7 +1249,7 @@ void drawMenuCommander()
     case 20:
     {
       ledcWrite(STATUS_LED, 4095);
-      EEPROM.put(73, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.put(234, globalMenu.menu[globalMenu.currentMenu]);
       EEPROM.commit();
       setTimezone(globalMenu.menu[20]);
       updateTimeProcess();
@@ -1329,7 +1331,7 @@ void drawMenuCommander()
       ledcWrite(STATUS_LED, 4095);
       globalTime.timeOut = timeOutConverter(globalMenu.menu[globalMenu.currentMenu]);
 
-      EEPROM.put(40, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.put(242, globalMenu.menu[globalMenu.currentMenu]);
       EEPROM.commit();
       globalMenu.currentMenu = 24;    
     }
@@ -1338,7 +1340,7 @@ void drawMenuCommander()
     case 26:
     {
       ledcWrite(STATUS_LED, 4095);
-      EEPROM.put(45, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.put(254, globalMenu.menu[globalMenu.currentMenu]);
       EEPROM.commit();
       globalMenu.currentMenu = 24;  
     }
@@ -1347,7 +1349,7 @@ void drawMenuCommander()
     case 27:
     {
       ledcWrite(STATUS_LED, 4095);
-      EEPROM.put(49, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.put(262, globalMenu.menu[globalMenu.currentMenu]);
       EEPROM.commit();
       globalMenu.currentMenu = 24;  
     }
@@ -1356,7 +1358,7 @@ void drawMenuCommander()
     case 28:
     {
       ledcWrite(STATUS_LED, 4095);
-      EEPROM.put(53, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.put(270, globalMenu.menu[globalMenu.currentMenu]);
       EEPROM.commit();
       globalMenu.currentMenu = 24;  
     }
@@ -1365,7 +1367,7 @@ void drawMenuCommander()
     case 29: //Random Time
     {
       ledcWrite(STATUS_LED, 4095);
-      EEPROM.put(60, globalMenu.menu[29]);
+      EEPROM.put(238, globalMenu.menu[29]);
       EEPROM.commit();
       globals.randomMin = timeOutConverter(globalMenu.menu[29]);
       globals.randomMax = globals.randomMin * 2;
@@ -1376,7 +1378,7 @@ void drawMenuCommander()
     case 30:
     {
       ledcWrite(STATUS_LED, 4095);
-      EEPROM.put(57, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.put(258, globalMenu.menu[globalMenu.currentMenu]);
       EEPROM.commit();
       globalMenu.currentMenu = 24;
     }
@@ -1385,7 +1387,7 @@ void drawMenuCommander()
     case 31:
     {
       ledcWrite(STATUS_LED, 4095);
-      EEPROM.put(61, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.put(266, globalMenu.menu[globalMenu.currentMenu]);
       EEPROM.commit();
       globalMenu.currentMenu = 24;
     }
@@ -1393,7 +1395,7 @@ void drawMenuCommander()
     case 32:
     {
       ledcWrite(STATUS_LED, 4095);
-      EEPROM.put(65, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.put(274, globalMenu.menu[globalMenu.currentMenu]);
       EEPROM.commit();
       globalMenu.currentMenu = 24;
     }
@@ -1401,7 +1403,7 @@ void drawMenuCommander()
     case 33:
     {
       ledcWrite(STATUS_LED, 4095);
-      EEPROM.put(69, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.put(230, globalMenu.menu[globalMenu.currentMenu]);
       EEPROM.commit();
       globalMenu.currentMenu = 24;
     }

@@ -1164,96 +1164,15 @@ void setup()
   --------------------*/
   EEPROM.begin(2048);
 
-  //EEPROM.write(20, 0);
-  //EEPROM.write(21, 0);
-  //EEPROM.commit();
+  // globalUser.exists = EEPROM.read(3);  
 
-  //fallios.scoreTop = EEPROM.read(20) + EEPROM.read(21) * 256;
-  EEPROM.get(20, fallios.scoreTop);
+  readSettingsFromEEPROM();
 
-  //Screen Time out
-  EEPROM.get(40, globalMenu.menu[25]);
 
-  if (globalMenu.menu[25] > globalMenu.menuMax[25])
-  {
-    globalMenu.menu[25] = 0;
-  }
-
-  globalTime.timeOut = timeOutConverter(globalMenu.menu[25]);
-
-  //Display 1
-  EEPROM.get(45, globalMenu.menu[26]);
-
-  //Display 2
-  EEPROM.get(49, globalMenu.menu[27]);
-
-  //Display 3
-  EEPROM.get(53, globalMenu.menu[28]);
-
-  //Display 1 Duration
-  EEPROM.get(57, globalMenu.menu[30]);
-  if (globalMenu.menu[30] > globalMenu.menuMax[30])
-  {
-    globalMenu.menu[30] = 0;
-  }
-  //Display 2 Duration
-  EEPROM.get(61, globalMenu.menu[31]);
-  if (globalMenu.menu[31] > globalMenu.menuMax[31])
-  {
-    globalMenu.menu[31] = 0;
-  }
-
-  //Display 3 Duration
-  EEPROM.get(65, globalMenu.menu[32]);
-  if (globalMenu.menu[32] > globalMenu.menuMax[32])
-  {
-    globalMenu.menu[32] = 0;
-  }
-
-  //Brightness
-  EEPROM.get(69, globalMenu.menu[33]);
-  if (globalMenu.menu[33] > globalMenu.menuMax[33])
-  {
-    globalMenu.menu[33] = 10;
-  }
-  u8g2.setContrast(globalMenu.menu[33] * 25.5);
-
-  EEPROM.get(73, globalMenu.menu[20]);
-  if (globalMenu.menu[20] > globalMenu.menuMax[20])
-  {
-    globalMenu.menu[20] = 0;
-  }
-  globals.timeZone = globalMenu.menu[20] - 12;
-
-  // globalUser.exists = EEPROM.read(3);
-  globals.mode = EEPROM.read(0);
-  brightness.target = EEPROM.read(1);
-  brightness.current = brightness.target;
-
-  readPatternSettings();
-
-  //Make sure values aren't out of range
-  if (globals.mode > globals.modeMax)
-  {
-    globals.mode = 0;
-  }
-
-  //Random Times
-  EEPROM.get(90, globalMenu.menu[29]);
-  if (globalMenu.menu[29] > globalMenu.menuMax[29])
-  {
-    globalMenu.menu[29] = 12;
-  }
-
-  globals.randomMin = timeOutConverter(globalMenu.menu[29]);
-  globals.randomMax = globals.randomMin * 2;
+  
 
   //Set master brightness control
   FastLED.setBrightness(brightness.current);
-
-  readFavorites();
-
-  getZipCode();
 
   //Set first Weather check value
   weatherSettings.weatherTimerDelay = weatherSettings.weatherUpdateInitial;

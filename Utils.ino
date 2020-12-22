@@ -685,13 +685,13 @@ void setZipCodeMenu()
 
 void putZipCode()
 {
-  EEPROM.put(90, globalMenu.menu[11]);
+  EEPROM.put(210, globalMenu.menu[11]);
   EEPROM.commit();
 }
 
 void getZipCode()
 {
-  EEPROM.get(90, globalMenu.menu[11]);
+  EEPROM.get(210, globalMenu.menu[11]);
 
   //Make sure data is in range. If not, set to default ZIP code
   if ((globalMenu.menu[11] > 99999) || (globalMenu.menu[11] == 0))
@@ -748,30 +748,6 @@ void writeFavorites()
   //Copy over Pattern Adjust to that favorite slot
   //patternSettings.favoritePatternAdjust[globalMenu.menu[globalMenu.currentMenu]] = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
   //globalTime.save = 3;
-}
-
-void readFavorites()
-{
-  //Read the favorites from EEPROM
-  for (int i = 0; i < 50; i++)
-  {
-    patternSettings.favoritePattern[i] = EEPROM.read(100 + i * 2);
-    patternSettings.favoriteMode[i] = EEPROM.read(101 + i * 2);
-    //check for out of range data, 255 indicates default setting
-    if (patternSettings.favoritePattern[i] == 255 || patternSettings.favoriteMode[i] == 255)
-    {
-      patternSettings.favoritePattern[i] = 0;
-      patternSettings.favoriteMode[i] = 0;
-    }
-  }
-
-  patternSettings.numberOfFavorites = EEPROM.read(99);
-  if (patternSettings.numberOfFavorites == 0)
-  {
-    patternSettings.numberOfFavorites = 25;
-  }
-  globalMenu.patternMax[0] = patternSettings.numberOfFavorites;
-  globalMenu.menuMax[10] = patternSettings.numberOfFavorites;
 }
 
 void resetFavorites()
@@ -1340,9 +1316,25 @@ void startBreathing()
   }
 }
 
-void readPatternSettings()
+void readSettingsFromEEPROM()
 {
-  //Read the pattern setting for each mode
+  //We could detect a new board here, all new EEPROM is 255 each slot
+  //2048 byets is generally the max we will use
+  //0 - Mode we are in
+  globals.mode = EEPROM.read(0);
+  
+  //Make sure we aren't out of range
+  if (globals.mode > globals.modeMax)
+  {
+    globals.mode = 0;
+  }
+
+  //1 - Brightness
+  brightness.target = EEPROM.read(1);
+  brightness.current = brightness.target;
+
+  //2 - 19 (Max Modes)
+  //Read where we were in each mode
   for (int i = 0; i <= globals.modeMax; i++)
   {
     patternSettings.pattern[i] = EEPROM.read(2 + i);
@@ -1362,11 +1354,113 @@ void readPatternSettings()
     }
   }
 
-  //Read the adjust value for each pattern
-  //
-  //globalMenu.patternMax[i]
+  //20 - 49
+  //Game Scores
+  EEPROM.get(20, fallios.scoreTop);
 
-  //globals.modeMax
+
+  //99-202
+  //Favorites
+  
+  //Read Max favorites
+  patternSettings.numberOfFavorites = EEPROM.read(99);
+
+  //Range check
+  if (patternSettings.numberOfFavorites == 0)
+  {
+    patternSettings.numberOfFavorites = 25;
+  }
+
+
+  globalMenu.patternMax[0] = patternSettings.numberOfFavorites;
+  globalMenu.menuMax[10] = patternSettings.numberOfFavorites;
+
+  //Read favorite pattern + modes
+  for (int i = 0; i < 50; i++)
+  {
+    patternSettings.favoritePattern[i] = EEPROM.read(100 + i * 2);
+    patternSettings.favoriteMode[i] = EEPROM.read(101 + i * 2);
+    //check for out of range data, 255 indicates default setting
+    if (patternSettings.favoritePattern[i] == 255 || patternSettings.favoriteMode[i] == 255)
+    {
+      patternSettings.favoritePattern[i] = 0;
+      patternSettings.favoriteMode[i] = 0;
+    }
+  }
+
+  //210 - 229
+  //Weather stuff
+  getZipCode();
+
+  //230 - 300
+  //Screen Timeout / Settings
+
+  //Brightness
+  EEPROM.get(230, globalMenu.menu[33]);
+  if (globalMenu.menu[33] > globalMenu.menuMax[33])
+  {
+    globalMenu.menu[33] = 10;
+  }
+  u8g2.setContrast(globalMenu.menu[33] * 25.5);
+
+  EEPROM.get(234, globalMenu.menu[20]);
+  if (globalMenu.menu[20] > globalMenu.menuMax[20])
+  {
+    globalMenu.menu[20] = 0;
+  }
+  globals.timeZone = globalMenu.menu[20] - 12;
+
+  //Random Times
+  EEPROM.get(238, globalMenu.menu[29]);
+  if (globalMenu.menu[29] > globalMenu.menuMax[29])
+  {
+    globalMenu.menu[29] = 12;
+  }
+
+  globals.randomMin = timeOutConverter(globalMenu.menu[29]);
+  globals.randomMax = globals.randomMin * 2;
+
+  EEPROM.get(242, globalMenu.menu[25]);
+
+  //Range check
+  if (globalMenu.menu[25] > globalMenu.menuMax[25])
+  {
+    globalMenu.menu[25] = 0;
+  }
+
+  globalTime.timeOut = timeOutConverter(globalMenu.menu[25]);
+
+  //Display 1
+  EEPROM.get(254, globalMenu.menu[26]);
+
+  
+  //Display 1 Duration
+  EEPROM.get(258, globalMenu.menu[30]);
+  if (globalMenu.menu[30] > globalMenu.menuMax[30])
+  {
+    globalMenu.menu[30] = 0;
+  }
+
+  //Display 2
+  EEPROM.get(262, globalMenu.menu[27]);
+
+  //Display 2 Duration
+  EEPROM.get(266, globalMenu.menu[31]);
+  if (globalMenu.menu[31] > globalMenu.menuMax[31])
+  {
+    globalMenu.menu[31] = 0;
+  }
+
+  //Display 3
+  EEPROM.get(270, globalMenu.menu[28]);
+
+  //Display 3 Duration
+  EEPROM.get(274, globalMenu.menu[32]);
+  if (globalMenu.menu[32] > globalMenu.menuMax[32])
+  {
+    globalMenu.menu[32] = 0;
+  }
+
 }
 
 void seedThings()

@@ -13,8 +13,6 @@ void createFirebaseUser()
   if (Firebase.pathExist(firebaseData, path)) {
     Serial.println("USER ALREADY EXISTS");
     globalUser.exists = true;
-    EEPROM.write(3, globalUser.exists);
-    EEPROM.commit();  
     printFirebaseResult(firebaseData);
     Serial.println("==================== --------FB--- createFirebaseUser ----- ====================");
     return;

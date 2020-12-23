@@ -1167,8 +1167,6 @@ void setup()
   --------------------*/
   EEPROM.begin(2048);
 
-  // globalUser.exists = EEPROM.read(3);  
-
   readSettingsFromEEPROM();  
 
   //Set master brightness control

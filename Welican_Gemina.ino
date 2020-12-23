@@ -116,7 +116,7 @@ public:
 TaskHandle_t inputComputeTask = NULL;
 
 //1.3" OLED, small glitch on 2.4"
-// U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
+//U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
 //2.4" OLED, ORIGINAL BOARDS, small glitch on 1.3"
 //U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
@@ -1032,6 +1032,7 @@ struct WebsiteModel
 WebsiteModel website = {
     .returnText = ""};
 
+bool coverInput = false;
 // ----------------------------------------------------------------
 // SETUP
 // ----------------------------------------------------------------
@@ -1079,6 +1080,8 @@ void setup()
   // Enabke internal pull up resistors for buttons
   pinMode(KNOB_1C, INPUT_PULLUP); //Knob 1 Click, internal Pull Up (button connects to ground)
   pinMode(KNOB_2C, INPUT_PULLUP); //Knob 2 Click, internal Pull Up (button connects to ground)
+
+  pinMode(AUDIO_IN_PIN, INPUT);
 
   // Enable the weak pull up resistors for encoders
   ESP32Encoder::useInternalWeakPullResistors = UP;
@@ -1234,7 +1237,10 @@ void loop()
 
   EVERY_N_MILLISECONDS(33) //Enforce Max Frame Rate 33 = 30FPS
   {
-
+    if (coverInput == true)
+    {
+      updateEncoders();
+    }
     globalStrings.functionName.toCharArray(globalStrings.functionNameOutString, 20);
     globalStrings.categoryName.toCharArray(globalStrings.categoryNameOutString, 20);
 

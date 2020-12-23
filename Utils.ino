@@ -116,6 +116,8 @@ void inputCompute(void *parameter)
     //Update variables compared to current encoder location
     updateEncoders();
 
+    coverInput = true;
+
     //autoConnect();
 
     updateTime();
@@ -154,6 +156,7 @@ void inputCompute(void *parameter)
     devEnv.fftps++; //Debug, tracking loops per second
 
     //Serial.println(xPortGetFreeHeapSize()); //How much memory is left in the task heap? If out we get a panic with "Stack canary watchpoint triggered"
+    coverInput = false;
     vTaskDelay(1); //Give some time back to the scheduler. Normally this task never lets up. Use this to share resousrces better on assigned core.
   }
 }

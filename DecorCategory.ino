@@ -1,5 +1,15 @@
 // https://cssgradient.io/
 // Copy CSS code to https://palette-library.vercel.app/
+
+
+         
+DEFINE_GRADIENT_PALETTE( amber_warmwhite ) {
+    0, 255, 0, 0,
+    127, 255, 50, 0,
+    255, 255, 100, 42
+};
+CRGBPalette16 pal_AWW = amber_warmwhite;
+
 // converted for FastLED with gammas (2.6, 2.2, 2.5)
 
 DEFINE_GRADIENT_PALETTE(matt_test){
@@ -81,6 +91,26 @@ void decor_category(int patternMode)
     case 6:
         RastaFlag();
         break;
+    case 7:
+        paletteAmberWarmWhite();
+        break;
+    }
+}
+
+void paletteAmberWarmWhite()
+{
+    globalStrings.functionName = "Amber - Warm White";
+    byte poop = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
+
+    //fill_palette(patternSettings.leds, NUM_LEDS, 0, 255 / NUM_LEDS, pal_AWW, 255, LINEARBLEND);
+    
+    if (poop != 0)
+    {
+        fill_palette(patternSettings.leds, NUM_LEDS, poop, 0, pal_AWW, 255, LINEARBLEND);
+    }
+    else
+    {
+        fill_palette(patternSettings.leds, NUM_LEDS, 0, 255 / NUM_LEDS, pal_AWW, 255, LINEARBLEND);
     }
 }
 

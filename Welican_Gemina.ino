@@ -115,6 +115,9 @@ public:
 
 TaskHandle_t inputComputeTask = NULL;
 
+//0.96" OLED
+//U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
+
 //1.3" OLED, small glitch on 2.4"
 //U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
@@ -525,7 +528,7 @@ MenuModel globalMenu = {
     .patternMax = {
         patternSettings.numberOfFavorites, //Favorites (dynamic)
         23,                                //Basic Category
-        6,                                 //Decor Category
+        7,                                 //Decor Category
         72,                                //Party Category
         18,                                //Advanced Category
         18,                                //Complex Category

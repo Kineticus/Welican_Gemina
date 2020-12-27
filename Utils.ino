@@ -788,11 +788,8 @@ void readNumberOfLEDs()
   //Multiply by 5 to find NUM_LEDS
   NUM_LEDS = globalMenu.menu[15] * 5;
 
-  //Finding weird issue when using over 100 where the last LED glitches? Doesn't seem to happen lower.
-  if (NUM_LEDS > 99)
-  {
-    NUM_LEDS += 1;
-  }
+  //Finding weird issue where the last LED glitches?
+  NUM_LEDS += 1;
 
   //Make sure we are within tested range
   if (NUM_LEDS > 500)
@@ -803,6 +800,23 @@ void readNumberOfLEDs()
   {
     NUM_LEDS = 5;
   }
+
+  //Read if there is any power limit
+  globalMenu.menu[35] = EEPROM.read(212);
+
+  if (globalMenu.menu[35] > globalMenu.menuMax[35])
+  {
+    globalMenu.menu[35] = 0;
+  }
+
+  if (globalMenu.menu[35] != 0)
+  {
+    FastLED.setMaxPowerInMilliWatts(globalMenu.menu[35] * 1000);
+    Serial.print("Power has been limited to ");
+    Serial.print(globalMenu.menu[35]);
+    Serial.println(" watts");
+  }
+
 
   //Recalculate spacing
   simplexNoise.nodeSpacing = (NUM_LEDS / LEDS_FOR_SIMPLEX);

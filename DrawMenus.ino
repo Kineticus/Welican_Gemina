@@ -697,6 +697,24 @@ void drawMenuCommander()
   }
   break;
 
+  case 35: //Power Limit
+  {
+    if (globalMenu.menu[globalMenu.currentMenu] == 0)
+    {
+      drawMenuTop("Settings > LED > Power");
+      u8g2.setCursor(40, 50);
+      u8g2.print("Not Limited");
+    }
+    else
+    {
+      drawNumberInput("Settings > LED > Power", globalMenu.menu[globalMenu.currentMenu]);
+      u8g2.setFont(u8g2_font_profont12_mf);
+      u8g2.setCursor(45, 64);
+      u8g2.print("Watts");
+    }
+  }
+  break;
+
 
   } //End of Display
 
@@ -896,9 +914,9 @@ void drawMenuCommander()
     case 33:
     {
       EEPROM.get(258, globalMenu.menu[globalMenu.currentMenu]);
-      if (globalMenu.menu[33] > globalMenu.menuMax[33])
+      if (globalMenu.menu[globalMenu.currentMenu] > globalMenu.menuMax[globalMenu.currentMenu])
       {
-        globalMenu.menu[33] = 10;
+        globalMenu.menu[globalMenu.currentMenu] = 10;
       }
       u8g2.setContrast(globalMenu.menu[33] * 25.5);
       globalMenu.currentMenu = 24;
@@ -910,6 +928,18 @@ void drawMenuCommander()
       globalMenu.currentMenu = 2;
     }
     break;
+
+    case 35:
+    {
+      EEPROM.get(212, globalMenu.menu[globalMenu.currentMenu]);
+      if (globalMenu.menu[globalMenu.currentMenu] > globalMenu.menuMax[globalMenu.currentMenu])
+      {
+        globalMenu.menu[globalMenu.currentMenu] = 0;
+      }
+      globalMenu.currentMenu = 2;
+    }
+    break;
+
     }
   }
 
@@ -1411,6 +1441,14 @@ void drawMenuCommander()
     case 34:
     {
       globalMenu.currentMenu = 7;
+    }
+    break;
+    case 35:
+    {
+      ledcWrite(STATUS_LED, 4095);
+      EEPROM.put(212, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.commit();
+      globalMenu.currentMenu = 2;
     }
     break;
     

@@ -67,7 +67,7 @@ FASTLED_USING_NAMESPACE
 #define DATA_PIN_A 12
 #define LED_TYPE WS2811
 #define COLOR_ORDER RGB
-#define MAX_LEDS 500
+#define MAX_LEDS 512
 int NUM_LEDS = 200;
 #define LEDS_FOR_SIMPLEX 6
 #define VISUALIZER_X 48
@@ -119,13 +119,13 @@ TaskHandle_t inputComputeTask = NULL;
 //U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
 
 //1.3" OLED, small glitch on 2.4"
-//U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
+U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
 //2.4" OLED, ORIGINAL BOARDS, small glitch on 1.3"
 //U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 5);
 
 //2.4" OLED, MODERN BOARDS, small glitch on 1.3"
-U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/19);
+//U8G2_SSD1309_128X64_NONAME0_F_HW_I2C u8g2(U8G2_R0, /* reset=*/19);
 
 /*
 For EST - UTC -5.00 : -5 * 60 * 60 : -18000
@@ -472,8 +472,8 @@ HSV2RGB globalHSV2RGB;
 
 struct MenuModel
 {
-  int menu[35];
-  int menuMax[35];
+  int menu[36];
+  int menuMax[36];
   int patternMax[MAX_MODES + 1];
   int currentMenu;
   int currentMenuMultiplier;
@@ -524,6 +524,7 @@ MenuModel globalMenu = {
         60,                                //Display 3 Duration
         10,                                //Display Brightness
         1,                                 //System Information
+        60,                                //Power Limit
     },
     .patternMax = {
         patternSettings.numberOfFavorites, //Favorites (dynamic)
@@ -1360,6 +1361,7 @@ void loop()
     //Check to see if there are recent knob changes to store in memory
     saveTimeCheck();
 
+    Serial.println(float(brightness.current * float(calculate_unscaled_power_mW(patternSettings.leds, NUM_LEDS) / 255)) / 1000);
     //Output data to LED strip
     FastLED.show();
 

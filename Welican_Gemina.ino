@@ -1218,6 +1218,10 @@ void setup()
     patternSettings.colorIndex[i] = random8();
   }
 
+  //Disable dithering as we are running at a lower FPS
+  //https://github.com/FastLED/FastLED/wiki/FastLED-Temporal-Dithering
+  FastLED.setDither(0);
+
   //Begin a task named 'fftComputeTask' to handle FFT on the other core
   //This task also takes care of reading the button inputs and computing encoder positions
   //https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/freertos.html

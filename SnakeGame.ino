@@ -99,10 +99,21 @@ void snake_game()
     }
     
     //Draw borders
-    u8g2.drawVLine(0, 0, SCREEN_HEIGHT);
-    u8g2.drawVLine(SCREEN_WIDTH, 0, SCREEN_HEIGHT);
+    u8g2.drawVLine(0, 0, SCREEN_HEIGHT - 6);
+    u8g2.drawVLine(SCREEN_WIDTH, 0, SCREEN_HEIGHT - 6);
     u8g2.drawHLine(0, 0, SCREEN_WIDTH);
-    u8g2.drawHLine(0, SCREEN_HEIGHT, SCREEN_WIDTH + 1);
+    //u8g2.drawHLine(0, SCREEN_HEIGHT, SCREEN_WIDTH + 1);
+    u8g2.drawHLine(0, SCREEN_HEIGHT - 6, SCREEN_WIDTH + 1);
+
+    //Draw the score
+    u8g2.setFont(u8g2_font_blipfest_07_tr);
+    u8g2.setCursor(3, SCREEN_HEIGHT + 1);
+    u8g2.print("Score: ");
+    u8g2.print(snake.score);
+
+    u8g2.setCursor(64, SCREEN_HEIGHT + 1);
+    u8g2.print("Length: ");
+    u8g2.print(snake.num);
 
     //Draw the snake
     for (int i = 0; i <= snake.num; i++)
@@ -216,10 +227,20 @@ void snake2_game()
     }
     
     //Draw borders
-    u8g2.drawVLine(0, 0, SCREEN_HEIGHT);
-    u8g2.drawVLine(SCREEN_WIDTH, 0, SCREEN_HEIGHT);
+    u8g2.drawVLine(0, 0, SCREEN_HEIGHT - 6);
+    u8g2.drawVLine(SCREEN_WIDTH, 0, SCREEN_HEIGHT - 6);
     u8g2.drawHLine(0, 0, SCREEN_WIDTH);
-    u8g2.drawHLine(0, SCREEN_HEIGHT, SCREEN_WIDTH + 1);
+    //u8g2.drawHLine(0, SCREEN_HEIGHT, SCREEN_WIDTH + 1);
+    u8g2.drawHLine(0, SCREEN_HEIGHT - 6, SCREEN_WIDTH + 1);
+
+    //Draw the scores
+    u8g2.setFont(u8g2_font_blipfest_07_tr);
+    u8g2.setCursor(2, SCREEN_HEIGHT + 1);
+    u8g2.print("Left: ");
+    u8g2.print(snake.score2);
+    u8g2.setCursor(64, SCREEN_HEIGHT + 1);
+    u8g2.print("Right: ");
+    u8g2.print(snake.score);
 
     //Draw the snakes
     for (int i = 0; i <= snake.num; i++)
@@ -403,14 +424,14 @@ void snake_manageOrchard()
                 //enable it!
                 snake.apple[i].active = true;
                 snake.apple[i].x = random(3, SCREEN_WIDTH - 3);
-                snake.apple[i].y = random(3, SCREEN_HEIGHT - 3);
+                snake.apple[i].y = random(3, SCREEN_HEIGHT - 9);
                 snake.apple[i].size = random(1, snake.maxAppleSize);
 
                 //Make sure it isn't on the snake. If so, try again
                 while (snake_checkBlock(snake.apple[i].x,snake.apple[i].y))
                 {
                     snake.apple[i].x = random(3, SCREEN_WIDTH - 3);
-                    snake.apple[i].y = random(3, SCREEN_HEIGHT - 3);
+                    snake.apple[i].y = random(3, SCREEN_HEIGHT - 9);
                 }
                 
                 //Meet exit condition for loop
@@ -436,7 +457,7 @@ bool snake_checkCollisions1()
     bool hitSomething = false;
 
     //Top and Bottom border collision
-    if ((snake.segment[snake.num].y <= 0) || (snake.segment[snake.num].y >= 63))
+    if ((snake.segment[snake.num].y <= 0) || (snake.segment[snake.num].y >= 56))
     {
         hitSomething = true;
     }
@@ -648,7 +669,7 @@ bool snake_checkCollisions2()
     bool hitSomething = false;
 
     //Top and Bottom border collision
-    if ((snake.segment2[snake.num2].y <= 0) || (snake.segment2[snake.num2].y >= 63))
+    if ((snake.segment2[snake.num2].y <= 0) || (snake.segment2[snake.num2].y >= 56))
     {
         hitSomething = true;
     }

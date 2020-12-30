@@ -704,13 +704,15 @@ void drawMenuCommander()
       drawMenuTop("Settings > LED > Power");
       u8g2.setCursor(40, 50);
       u8g2.print("Not Limited");
+      FastLED.setMaxPowerInMilliWatts(4200000000);
     }
     else
     {
       drawNumberInput("Settings > LED > Power", globalMenu.menu[globalMenu.currentMenu]);
       u8g2.setFont(u8g2_font_profont12_mf);
-      u8g2.setCursor(45, 64);
+      u8g2.setCursor(60, 64);
       u8g2.print("Watts");
+      FastLED.setMaxPowerInMilliWatts(globalMenu.menu[35] * 1000);
     }
   }
   break;
@@ -932,11 +934,22 @@ void drawMenuCommander()
     case 35:
     {
       EEPROM.get(212, globalMenu.menu[globalMenu.currentMenu]);
+
       if (globalMenu.menu[globalMenu.currentMenu] > globalMenu.menuMax[globalMenu.currentMenu])
       {
         globalMenu.menu[globalMenu.currentMenu] = 0;
       }
-      globalMenu.currentMenu = 2;
+
+      if (globalMenu.menu[35] == 0)
+      {
+        FastLED.setMaxPowerInMilliWatts(4200000000);
+      }
+      else
+      {
+        FastLED.setMaxPowerInMilliWatts(globalMenu.menu[35] * 1000);
+      }
+
+      globalMenu.currentMenu = 3;
     }
     break;
 
@@ -1032,8 +1045,8 @@ void drawMenuCommander()
       case 2: //Fade
         globalMenu.currentMenu = 17;
         break;
-      case 3: //Speed
-        globalMenu.currentMenu = 18;
+      case 3: //Power Limit
+        globalMenu.currentMenu = 35;
         break;
       }
     }
@@ -1448,7 +1461,7 @@ void drawMenuCommander()
       ledcWrite(STATUS_LED, 4095);
       EEPROM.put(212, globalMenu.menu[globalMenu.currentMenu]);
       EEPROM.commit();
-      globalMenu.currentMenu = 2;
+      globalMenu.currentMenu = 3;
     }
     break;
     

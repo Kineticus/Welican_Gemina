@@ -7,8 +7,11 @@ Brian Schimke, 2020
 
 void pong_game()
 {   
-    //Detect click
-
+    //Detect click to exit game
+    if ((knob1.heldTime > 10) && (knob2.heldTime > 10))
+    {
+        pong_gameOver(); 
+    }
 
 
     //Increment tick counter
@@ -165,6 +168,7 @@ void pong_game()
                     pong.ball[i].active = false;
                     pong.score2++;
                     pong.recent = 2;
+                    pong.bounceCount = 0;
                 }
 
 
@@ -173,6 +177,7 @@ void pong_game()
                     pong.ball[i].active = false;
                     pong.score1++;
                     pong.recent = 1;
+                    pong.bounceCount = 0;
                 }
             }
         }

@@ -915,7 +915,7 @@ void drawMenuCommander()
 
     case 33:
     {
-      EEPROM.get(258, globalMenu.menu[globalMenu.currentMenu]);
+      EEPROM.get(230, globalMenu.menu[globalMenu.currentMenu]); //Display Brightness
       if (globalMenu.menu[globalMenu.currentMenu] > globalMenu.menuMax[globalMenu.currentMenu])
       {
         globalMenu.menu[globalMenu.currentMenu] = 10;

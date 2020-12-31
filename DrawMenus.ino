@@ -702,17 +702,23 @@ void drawMenuCommander()
     if (globalMenu.menu[globalMenu.currentMenu] == 0)
     {
       drawMenuTop("Settings > LED > Power");
-      u8g2.setCursor(40, 50);
+      u8g2.setFont(u8g2_font_profont12_mf);
+      u8g2.setCursor(40, 32);
       u8g2.print("Not Limited");
       FastLED.setMaxPowerInMilliWatts(4200000000);
+      u8g2.setCursor(30, 64);
+      u8g2.print(String((float(calculate_unscaled_power_mW(patternSettings.leds, NUM_LEDS) / 1000.00) * (brightness.current / 200) + NUM_LEDS * 0.025)));
+      u8g2.print(" Watts");
     }
     else
     {
+      FastLED.setMaxPowerInMilliWatts(globalMenu.menu[35] * 1000);
       drawNumberInput("Settings > LED > Power", globalMenu.menu[globalMenu.currentMenu]);
       u8g2.setFont(u8g2_font_profont12_mf);
-      u8g2.setCursor(60, 64);
-      u8g2.print("Watts");
-      FastLED.setMaxPowerInMilliWatts(globalMenu.menu[35] * 1000);
+      u8g2.setCursor(90, 32);
+      u8g2.print("Watt");
+      u8g2.setCursor(90, 52);
+      u8g2.print("Limit");
     }
   }
   break;

@@ -7,13 +7,6 @@ Brian Schimke, 2020
 
 void pong_game()
 {   
-    //Detect click to exit game
-    if ((knob1.heldTime > 10) && (knob2.heldTime > 10))
-    {
-        pong_gameOver(); 
-    }
-
-
     //Increment tick counter
     pong.tick++;
 
@@ -213,6 +206,12 @@ void pong_game()
         {
             pong_spawnBall();           
         }
+    }
+
+    //Detect click to exit game
+    if ((knob1.heldTime > 10) && (knob2.heldTime > 10))
+    {
+        pong_gameOver(); 
     }
 }
 

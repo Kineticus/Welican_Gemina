@@ -1365,7 +1365,6 @@ void loop()
     //Check to see if there are recent knob changes to store in memory
     saveTimeCheck();
 
-    Serial.println(float(brightness.current * float(calculate_unscaled_power_mW(patternSettings.leds, NUM_LEDS) / 255)) / 1000);
     //Output data to LED strip
     FastLED.show();
 

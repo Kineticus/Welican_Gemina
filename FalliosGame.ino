@@ -146,10 +146,10 @@ void fallios_game()
 void fallios_scoreMarker(byte scoreStep, byte scoreSide)
 {
     //Draw the lines on either side of the tunnel walls
-    if (scoreStep <= 64)
+    if (scoreStep < 63)
     {
-        u8g2.drawHLine(0, scoreStep, fallios.tunnel1[scoreStep]);
-        u8g2.drawHLine(fallios.tunnel2[scoreStep], scoreStep, SCREEN_WIDTH);
+        u8g2.drawHLine(0, scoreStep, fallios.tunnel1[scoreStep + 1]);
+        u8g2.drawHLine(fallios.tunnel2[scoreStep + 1], scoreStep, SCREEN_WIDTH);
     }
 
     //Figure out which side to show the score on
@@ -183,6 +183,9 @@ void fallios_reset()
     fallios.motion = 0;
     fallios.motionHistory = 0;
 
+    //Get rid of markers
+    fallios.scoreMarkerStep = 0;
+    
     //Wide tunnel width
     fallios.tunnelWidth = SCREEN_WIDTH / 2;
 

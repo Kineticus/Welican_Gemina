@@ -8,13 +8,34 @@ Brian Schimke, 2020
 void fallios_game()
 {
     //Display current score
-    u8g2.setFont(u8g2_font_profont12_mf);
-    u8g2.setCursor(0, SCREEN_HEIGHT);
-    u8g2.print(fallios.score);
+    //u8g2.setFont(u8g2_font_profont12_mf);
+    //u8g2.setCursor(0, SCREEN_HEIGHT);
+    //u8g2.print(fallios.score);
 
     //Display high score
-    u8g2.setCursor(SCREEN_WIDTH - 30, SCREEN_HEIGHT);
-    u8g2.print(fallios.scoreTop);
+    //u8g2.setCursor(SCREEN_WIDTH - 30, SCREEN_HEIGHT);
+    //u8g2.print(fallios.scoreTop);
+
+    if (fallios.scoreMarkerStep > 0)
+    {
+        fallios.scoreMarkerStep--;
+        fallios_scoreMarker(fallios.scoreMarkerStep, fallios.scoreMarkerSide);
+    }
+
+    if (((fallios.score + 70) % 100) == 0)
+    {
+        fallios.scoreMarkerStep = 80;
+
+        //Figure out which side has more room to show the score on
+        if (fallios.tunnel1[63] > (128 - fallios.tunnel2[63]))
+        {   
+            fallios.scoreMarkerSide = 0;
+        }
+        else
+        {
+            fallios.scoreMarkerSide = 1;
+        }
+    }
 
     //Build barriers, repeating once for each row of screen height
     for (int i = 1; i < SCREEN_HEIGHT + 1; i++)
@@ -72,8 +93,11 @@ void fallios_game()
     if ((player.X > fallios.tunnel2[fallios.Y] - 3) || (player.X < fallios.tunnel1[fallios.Y] + 3))
     {
         //Place the cursor and draw some game over message
+        u8g2.setFont(u8g2_font_profont12_mf);
         u8g2.setCursor(8, SCREEN_HEIGHT / 1.5);
         u8g2.print("G A M E  O V E R !!!");
+        u8g2.setCursor(40, SCREEN_HEIGHT);
+        u8g2.print(fallios.score);
 
         //Did we beat the top score?
         if (fallios.score > fallios.scoreTop)
@@ -117,6 +141,30 @@ void fallios_game()
 
         fallios.tunnelTracker = 0;
     }
+}
+
+void fallios_scoreMarker(byte scoreStep, byte scoreSide)
+{
+    //Draw the lines on either side of the tunnel walls
+    if (scoreStep <= 64)
+    {
+        u8g2.drawHLine(0, scoreStep, fallios.tunnel1[scoreStep]);
+        u8g2.drawHLine(fallios.tunnel2[scoreStep], scoreStep, SCREEN_WIDTH);
+    }
+
+    //Figure out which side to show the score on
+    if (scoreSide == 0)
+    {
+        u8g2.setCursor(0, scoreStep - 1);
+    }
+    else
+    {
+        u8g2.setCursor(110, scoreStep - 1);
+    }
+
+    //Print the score
+    u8g2.setFont(u8g2_font_blipfest_07_tr);
+    u8g2.print(fallios.score + scoreStep - 10);
 }
 
 void fallios_reset()

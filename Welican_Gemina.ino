@@ -653,6 +653,8 @@ struct Fallios
 {
   unsigned int score;
   int scoreTop;
+  byte scoreMarkerStep;
+  byte scoreMarkerSide;
   int motion;
   int motionHistory;
   int Y;
@@ -667,6 +669,8 @@ struct Fallios
 Fallios fallios = {
     .score = 0,
     .scoreTop = 0,
+    .scoreMarkerStep = 0,
+    .scoreMarkerSide = 0,
     .motion = 0,
     .motionHistory = 0,
     .Y = 8,

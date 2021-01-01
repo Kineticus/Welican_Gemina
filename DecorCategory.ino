@@ -99,19 +99,22 @@ void decor_category(int patternMode)
 
 void paletteAmberWarmWhite()
 {
+    // REF: https://gist.github.com/Tejkaran/dcc4db20f00d8bcb3cef830f9f3c72e8
+    static uint8_t brightness = 255;
+    static uint8_t startPoint = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]]; // read mod-knob setting
+    static uint8_t paletteQuantityLength = 255 / NUM_LEDS; //value between 0 and 10, how much of the lights should be lit up at once, 0 being all
+    TBlendType blendingType = LINEARBLEND; //tBlendType is a type of value like int/char/uint8_t etc., use to choose LINERBLEND and NOBLEND
     globalStrings.functionName = "Amber - Warm White";
-    byte poop = patternSettings.patternAdjust[globals.mode][patternSettings.pattern[globals.mode]];
-
-    //fill_palette(patternSettings.leds, NUM_LEDS, 0, 255 / NUM_LEDS, pal_AWW, 255, LINEARBLEND);
-    
-    if (poop != 0)
-    {
-        fill_palette(patternSettings.leds, NUM_LEDS, poop, 0, pal_AWW, 255, LINEARBLEND);
-    }
-    else
-    {
-        fill_palette(patternSettings.leds, NUM_LEDS, 0, 255 / NUM_LEDS, pal_AWW, 255, LINEARBLEND);
-    }
+    startPoint = startPoint + 1;   //if it is 0, then it will all stay the same
+    // if (startPoint != 0)
+    // {
+    //     fill_palette(patternSettings.leds, NUM_LEDS, startPoint, 0, pal_AWW, 255, LINEARBLEND);
+    // }
+    // else
+    // {
+    //     fill_palette(patternSettings.leds, NUM_LEDS, 0, 255 / NUM_LEDS, pal_AWW, 255, LINEARBLEND);
+    // }
+    fill_palette(patternSettings.leds, NUM_LEDS, startPoint, paletteQuantityLength, pal_AWW, brightness, blendingType);
 }
 
 void paletteOne()

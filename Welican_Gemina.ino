@@ -655,13 +655,14 @@ struct Fallios
   int scoreTop;
   byte scoreMarkerStep;
   byte scoreMarkerSide;
+  byte speed;
   int motion;
   int motionHistory;
   int Y;
 
   float tunnelGenerator;
-  int tunnel1[SCREEN_HEIGHT + 1];
-  int tunnel2[SCREEN_HEIGHT + 1];
+  int tunnel1[SCREEN_HEIGHT + 11];
+  int tunnel2[SCREEN_HEIGHT + 11];
   int tunnelWidth;
   int tunnelTracker;
   int tunnelWildcard;
@@ -671,6 +672,7 @@ Fallios fallios = {
     .scoreTop = 0,
     .scoreMarkerStep = 0,
     .scoreMarkerSide = 0,
+    .speed = 2,
     .motion = 0,
     .motionHistory = 0,
     .Y = 8,

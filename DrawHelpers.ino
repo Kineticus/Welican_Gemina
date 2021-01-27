@@ -56,6 +56,9 @@ void drawWeatherIcon(int posX, int posY)
   } else if (weather.currentWeatherId.startsWith("6")) 
   {
     animateImages(posX, posY, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_SNOW_0, WEATHER_SNOW_1);
+  } else if (weather.currentWeatherId == "701" || weather.currentWeatherId == "711" || weather.currentWeatherId == "721" || weather.currentWeatherId == "741") 
+  {
+    animateImages(posX, posY, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_MIST_0, WEATHER_MIST_1);
   } else if (weather.currentWeatherId == "800") 
   {
     animateImages(posX, posY, WEATHER_ICON_WIDTH, WEATHER_ICON_HEIGHT, WEATHER_SUNNY_0, WEATHER_SUNNY_1);
